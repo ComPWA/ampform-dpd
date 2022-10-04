@@ -1,0 +1,21 @@
+{
+  "include": ["src", "tests"],
+  "reportGeneralTypeIssues": false,
+  "reportImportCycles": false,
+  "reportMissingParameterType": false,
+  "reportMissingTypeArgument": false,
+  "reportMissingTypeStubs": false,
+  "reportPrivateImportUsage": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownLambdaType": false,
+  "reportUnknownMemberType": false,
+  "reportUnknownParameterType": false,
+  "reportUnknownVariableType": false,
+  "reportUnnecessaryContains": false,
+  "reportUnnecessaryIsInstance": false,
+  "reportUnusedClass": true,
+  "reportUnusedFunction": true,
+  "reportUnusedImport": true,
+  "reportUnusedVariable": true,
+  "typeCheckingMode": "strict"
+}

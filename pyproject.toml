@@ -1,0 +1,79 @@
+[build-system]
+requires = [
+    "setuptools>=36.2.1",  # environment markers
+    "setuptools_scm",
+    "wheel",
+]
+
+[tool.setuptools_scm]
+write_to = "src/ampform_dpd/version.py"
+
+[tool.black]
+exclude = '''
+/(
+    .*\.egg-info
+    | .*build
+    | \.eggs
+    | \.git
+    | \.pytest_cache
+    | \.tox
+    | \.venv
+    | \.vscode
+    | dist
+)/
+'''
+include = '\.pyi?$'
+preview = true
+target-version = [
+    "py37",
+    "py38",
+    "py39",
+    "py310",
+]
+
+[tool.isort]
+profile = "black"
+src_paths = [
+    "src",
+]
+known_third_party = "THIRDPARTY,sympy"
+
+[tool.nbqa.addopts]
+black = [
+    "--line-length=85",
+]
+flake8 = [
+    "--extend-ignore=E501,E731",
+]
+isort = [
+    "--line-length=85",
+]
+
+[tool.nbqa.exclude]
+flake8 = "^docs/appendix/benchmark.ipynb"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--color=yes",
+    "--doctest-continue-on-failure",
+    "--doctest-modules",
+    "--durations=3",
+    "--ignore=docs/conf.py",
+    "-m not slow",
+]
+filterwarnings = [
+  "error",
+  "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
+  "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
+]
+markers = [
+    "slow: marks tests as slow (select with '-m slow')",
+]
+norecursedirs = [
+  ".ipynb_checkpoints",
+  "_build",
+]
+testpaths = [
+    "src",
+    "tests",
+]

@@ -1,0 +1,37 @@
+{
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [],
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 80,
+    "editor.wrappingIndent": "same",
+    "editor.wrappingStrategy": "advanced"
+  },
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.enabled": true,
+  "editor.formatOnSave": true,
+  "editor.rulers": [88],
+  "files.eol": "\n",
+  "python.analysis.autoImportCompletions": false,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+  "python.testing.pytestArgs": ["--color=no"],
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "rewrap.wrappingColumn": 88,
+  "telemetry.telemetryLevel": "off"
+}
