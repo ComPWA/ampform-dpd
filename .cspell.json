@@ -42,9 +42,13 @@
     "MAINT",
     "arange",
     "autoupdate",
+    "codecov",
+    "commitlint",
+    "gcov",
     "mathcal",
     "mathrm",
     "phasespace",
+    "redeboer",
     "xreplace"
   ],
   "language": "en-US",
@@ -53,11 +57,13 @@
     "AmpForm",
     "Clebsch",
     "Dalitz",
+    "doctests",
     "Gordan",
     "helicities",
     "helicity",
     "LHCb",
     "pyright",
+    "pytest",
     "PYTHONHASHSEED",
     "SymPy"
   ]
