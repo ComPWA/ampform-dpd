@@ -43,9 +43,11 @@
     "arange",
     "autoupdate",
     "codecov",
+    "commitlint",
     "mathcal",
     "mathrm",
     "phasespace",
+    "redeboer",
     "xreplace"
   ],
   "language": "en-US",
