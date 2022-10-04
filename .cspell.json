@@ -42,6 +42,7 @@
     "MAINT",
     "arange",
     "autoupdate",
+    "codecov",
     "mathcal",
     "mathrm",
     "phasespace",
@@ -53,11 +54,13 @@
     "AmpForm",
     "Clebsch",
     "Dalitz",
+    "doctests",
     "Gordan",
     "helicities",
     "helicity",
     "LHCb",
     "pyright",
+    "pytest",
     "PYTHONHASHSEED",
     "SymPy"
   ]

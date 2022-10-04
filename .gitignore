@@ -23,6 +23,7 @@ version.py
 .mypy*/
 .pytest_cache/
 __pycache__/
+coverage.*
 htmlcov/
 prof/
 
