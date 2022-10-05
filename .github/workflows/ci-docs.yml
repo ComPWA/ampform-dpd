@@ -1,0 +1,66 @@
+name: CI-docs
+
+on:
+  push:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+  pull_request:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+  workflow_dispatch:
+
+jobs:
+  documentation:
+    name: Build documentation and run notebooks
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[doc] tox -c .constraints/py3.8.txt
+          sudo apt-get -y install pandoc
+      - name: Build documentation and run notebooks
+        run: tox -e docnb
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: html
+          path: docs/_build/html
+
+  gh-pages:
+    name: Upload to GitHub Pages
+    needs: documentation
+    if: >
+      github.repository == 'ComPWA/ampform-dpd' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT }}
+      - name: Remove all existing files
+        run: find . ! -regex '^./.git\(/.*\)?' -delete | true
+      - uses: actions/download-artifact@v3
+        with:
+          name: html
+          path: .
+      - name: Commit to gh-pages orphan branch
+        run: |
+          git checkout --orphan gh-pages
+          git add -A
+          git config --global user.name "GitHub"
+          git config --global user.email "noreply@github.com"
+          git status -s
+          git commit -m "Upload documentation build files"
+      - name: Force-push changes
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
+          git push origin gh-pages --force
