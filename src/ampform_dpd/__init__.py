@@ -130,7 +130,7 @@ class DalitzPlotDecompositionBuilder:
             formulate_dynamics = self.dynamics_choices.get_builder(chain.resonance.name)
             dynamics, new_parameters = formulate_dynamics(chain)
             parameter_defaults.update(new_parameters)
-            R = Str(chain.resonance.name)
+            R = Str(chain.resonance.latex)
             resonance_spin = sp.Rational(chain.resonance.spin)
             resonance_helicities = create_spin_range(resonance_spin)
             for λR_val in resonance_helicities:
