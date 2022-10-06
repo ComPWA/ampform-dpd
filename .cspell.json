@@ -37,6 +37,7 @@
     "tox.ini"
   ],
   "ignoreWords": [
+    "Jpsi",
     "Kallen",
     "MAINT",
     "arange",
@@ -60,6 +61,7 @@
     "nbformat",
     "noreply",
     "pandoc",
+    "pbar",
     "phasespace",
     "prereleased",
     "pygments",

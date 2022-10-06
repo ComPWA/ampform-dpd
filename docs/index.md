@@ -63,6 +63,7 @@ where you should replace the `3.x` with the version of Python you want to use.
 maxdepth: 1
 ---
 lc2pkpi
+jpsi2ksp
 ```
 
 ```{toctree}
