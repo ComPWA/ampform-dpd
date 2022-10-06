@@ -128,6 +128,11 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "sympy": ("https://docs.sympy.org/latest", None),
 }
+linkcheck_anchors = False
+linkcheck_ignore = [
+    "https://github.com/ComPWA/polarimetry",
+    "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=9",
+]
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",
