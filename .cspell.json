@@ -54,6 +54,7 @@
     "ipython",
     "itertools",
     "kernelspec",
+    "linkcheck",
     "mathcal",
     "mathrm",
     "maxdepth",
