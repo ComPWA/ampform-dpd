@@ -1,4 +1,12 @@
-# Installation
+# Welcome to AmpForm-DPD!
+
+```{title} Welcome
+
+```
+
+This Python package is a (temporary) extension of [AmpForm](https://ampform.rtfd.io) and provides a symbolic implementation of Dalitz-plot decomposition ([10.1103/PhysRevD.101.034033](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033)) with [SymPy](https://www.sympy.org/en/index.html). It has been extracted from the [ComPWA/polarimetry](https://github.com/ComPWA/polarimetry) repository, which is not yet public.
+
+## Installation
 
 The fastest way of installing this package is through PyPI:
 
@@ -45,3 +53,22 @@ python3 -m pip install -e .[dev] -c .constraints/py3.x.txt
 where you should replace the `3.x` with the version of Python you want to use.
 
 :::
+
+<!-- cspell:ignore pkpi -->
+
+## Examples
+
+```{toctree}
+---
+maxdepth: 1
+---
+lc2pkpi
+jpsi2ksp
+```
+
+```{toctree}
+---
+hidden:
+---
+API <api/ampform_dpd>
+```
