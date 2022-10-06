@@ -124,6 +124,7 @@ intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
     "ampform": (f"https://ampform.readthedocs.io/en/stable", None),
     "attrs": ("https://www.attrs.org/en/stable", None),
+    "compwa-org": (f"https://compwa-org.readthedocs.io", None),
     "python": ("https://docs.python.org/3", None),
     "sympy": ("https://docs.sympy.org/latest", None),
 }
