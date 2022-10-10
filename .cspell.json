@@ -52,6 +52,7 @@
     "gcov",
     "ipykernel",
     "ipython",
+    "isinstance",
     "itertools",
     "kernelspec",
     "linkcheck",
