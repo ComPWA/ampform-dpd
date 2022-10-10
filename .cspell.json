@@ -44,6 +44,7 @@
     "arange",
     "aslatex",
     "autoupdate",
+    "caplog",
     "codecov",
     "codemirror",
     "commitlint",
