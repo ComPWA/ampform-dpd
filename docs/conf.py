@@ -125,8 +125,11 @@ intersphinx_mapping = {
     "ampform": ("https://ampform.readthedocs.io/en/stable", None),
     "attrs": ("https://www.attrs.org/en/stable", None),
     "compwa-org": ("https://compwa-org.readthedocs.io", None),
+    "jax": ("https://jax.readthedocs.io/en/latest", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
     "python": ("https://docs.python.org/3", None),
     "sympy": ("https://docs.sympy.org/latest", None),
+    "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
 }
 linkcheck_anchors = False
 linkcheck_ignore = [
