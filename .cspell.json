@@ -82,6 +82,7 @@
     "startswith",
     "textwrap",
     "toctree",
+    "tqdm",
     "wspace",
     "xlabel",
     "xreplace",
