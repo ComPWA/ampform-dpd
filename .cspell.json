@@ -57,6 +57,7 @@
     "ipykernel",
     "ipython",
     "isinstance",
+    "isnan",
     "itertools",
     "kernelspec",
     "linkcheck",
