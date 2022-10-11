@@ -43,7 +43,9 @@
     "absl",
     "arange",
     "aslatex",
+    "autoscale",
     "autoupdate",
+    "axvline",
     "caplog",
     "codecov",
     "codemirror",
@@ -53,6 +55,7 @@
     "docnb",
     "elif",
     "figsize",
+    "fontsize",
     "gcov",
     "ipykernel",
     "ipython",
@@ -88,7 +91,8 @@
     "xlabel",
     "xreplace",
     "xrightarrow",
-    "ylabel"
+    "ylabel",
+    "ylim"
   ],
   "language": "en-US",
   "version": "0.2",
