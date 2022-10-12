@@ -111,7 +111,7 @@ html_theme_options = {
         "binderhub_url": "https://mybinder.org",
     },
     "path_to_docs": "docs",
-    "repository_url": "https://github.com/ComPWA/ampform_dpd",
+    "repository_url": "https://github.com/ComPWA/ampform-dpd",
     "repository_branch": "main",
     "show_navbar_depth": 2,
     "show_toc_level": 2,
