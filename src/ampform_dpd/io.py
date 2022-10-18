@@ -266,7 +266,7 @@ def perform_cached_lambdify(
 
 def perform_cached_lambdify(
     expr,
-    parameters,
+    parameters=None,
     backend="jax",
     directory=None,
 ) -> ParametrizedFunction | Function:
