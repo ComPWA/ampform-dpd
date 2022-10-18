@@ -25,10 +25,14 @@ from collections import abc
 from functools import lru_cache
 from os.path import abspath, dirname, expanduser
 from textwrap import dedent
-from typing import Iterable, Mapping, Sequence
+from typing import Iterable, Mapping, Sequence, overload
 
+import cloudpickle
 import sympy as sp
 from ampform.io import aslatex
+from tensorwaves.function import ParametrizedBackendFunction, PositionalArgumentFunction
+from tensorwaves.function.sympy import create_function, create_parametrized_function
+from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
 from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
@@ -220,6 +224,8 @@ def perform_cached_doit(
     .. tip:: For a faster cache, set `PYTHONHASHSEED
         <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
         fixed value.
+
+    .. seealso:: :func:`perform_cached_lambdify`
     """
     if directory is None:
         main_cache_dir = _get_main_cache_dir()
@@ -237,6 +243,74 @@ def perform_cached_doit(
     with open(filename, "wb") as f:
         pickle.dump(unfolded_expr, f)
     return unfolded_expr
+
+
+@overload
+def perform_cached_lambdify(
+    expr: sp.Expr,
+    backend: str = "jax",
+    directory: str | None = None,
+) -> PositionalArgumentFunction:
+    ...
+
+
+@overload
+def perform_cached_lambdify(
+    expr: sp.Expr,
+    parameters: Mapping[sp.Symbol, ParameterValue],
+    backend: str = "jax",
+    directory: str | None = None,
+) -> ParametrizedBackendFunction:
+    ...
+
+
+def perform_cached_lambdify(
+    expr,
+    parameters,
+    backend,
+    directory,
+) -> ParametrizedFunction | Function:
+    """Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.
+
+    The cached result is fetched from disk if the hash of the expression is the same as
+    the hash embedded in the filename.
+
+    Args:
+        expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
+            :func:`~tensorwaves.function.sympy.create_function` or
+            :func:`~tensorwaves.function.sympy.create_parametrized_function`.
+        parameters: Specify this argument in order to create a
+            `~tensorwaves.function.ParametrizedBackendFunction` instead of a
+            `~tensorwaves.function.PositionalArgumentFunction`.
+        backend: The choice of backend for the created numerical function. **WARNING**:
+            this function has only been tested for :code:`backend="jax"`!
+        directory: The directory in which to cache the result. If `None`, the cache
+            directory will be put under the home directory, or to the path specified by
+            the environment variable :code:`SYMPY_CACHE_DIR`.
+
+    .. tip:: For a faster cache, set `PYTHONHASHSEED
+        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
+        fixed value.
+
+    .. seealso:: :func:`perform_cached_doit`
+    """
+    if directory is None:
+        main_cache_dir = _get_main_cache_dir()
+        directory = abspath(f"{main_cache_dir}/.sympy-cache-{backend}")
+    h = get_readable_hash(expr)
+    filename = f"{directory}/{h}.pkl"
+    if os.path.exists(filename):
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    _LOGGER.warning(f"Cached function file {filename} not found, lambdifying...")
+    if parameters is None:
+        func = create_function(expr, backend)
+    else:
+        func = create_parametrized_function(expr, parameters, backend)
+    os.makedirs(dirname(filename), exist_ok=True)
+    with open(filename, "wb") as f:
+        cloudpickle.dump(func, f)
+    return func
 
 
 def _get_main_cache_dir() -> str:
