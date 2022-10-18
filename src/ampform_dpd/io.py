@@ -267,8 +267,8 @@ def perform_cached_lambdify(
 def perform_cached_lambdify(
     expr,
     parameters,
-    backend,
-    directory,
+    backend="jax",
+    directory=None,
 ) -> ParametrizedFunction | Function:
     """Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.
 
