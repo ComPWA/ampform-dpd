@@ -26,6 +26,7 @@ from functools import lru_cache
 from os.path import abspath, dirname, expanduser
 from textwrap import dedent
 from typing import Iterable, Mapping, Sequence, overload
+from warnings import warn
 
 import cloudpickle
 import sympy as sp
@@ -226,7 +227,16 @@ def perform_cached_doit(
         fixed value.
 
     .. seealso:: :func:`perform_cached_lambdify`
+
+    .. deprecated:: 0.2
+        Use :func:`ampform.sympy.perform_cached_doit` instead. See `ComPWA/ampform#24
+        <https://github.com/ComPWA/ampform-dpd/issues/24>`_
     """
+    warn(
+        "Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. "
+        "See https://github.com/ComPWA/ampform-dpd/issues/24",
+        category=PendingDeprecationWarning,
+    )
     if directory is None:
         main_cache_dir = _get_main_cache_dir()
         directory = abspath(f"{main_cache_dir}/.sympy-cache")
@@ -292,7 +302,7 @@ def perform_cached_lambdify(
         <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
         fixed value.
 
-    .. seealso:: :func:`perform_cached_doit`
+    .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
     if directory is None:
         main_cache_dir = _get_main_cache_dir()
