@@ -235,7 +235,7 @@ def perform_cached_doit(
     warn(
         "Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. "
         "See https://github.com/ComPWA/ampform-dpd/issues/24",
-        DeprecationWarning,
+        category=PendingDeprecationWarning,
     )
     if directory is None:
         main_cache_dir = _get_main_cache_dir()
