@@ -12,7 +12,7 @@ aquirdturtle-collapsible-headings==3.1.0
 argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
 attrs==22.1.0
-babel==2.10.3
+babel==2.11.0
 backcall==0.2.0
 beautifulsoup4==4.11.1
 black==22.10.0
