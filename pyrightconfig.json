@@ -1,8 +1,15 @@
 {
-  "pythonVersion": "3.10",
-  "include": ["src", "tests"],
+  "exclude": [
+    "**/__pycache__",
+    "**/_build",
+    "**/.git",
+    "**/.ipynb_checkpoints",
+    "**/.mypy_cache",
+    "**/.pytest_cache",
+    "**/.tox"
+  ],
   "reportGeneralTypeIssues": false,
-  "reportImportCycles": false,
+  "reportIncompatibleMethodOverride": false,
   "reportMissingParameterType": false,
   "reportMissingTypeArgument": false,
   "reportMissingTypeStubs": false,
