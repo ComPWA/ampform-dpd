@@ -19,12 +19,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
-        python-version: ["3.7"]
+        os:
+          - ubuntu-20.04
+        python-version:
+          - "3.7"
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - uses: actions/cache@v3
+        with:
+          key: |
+            ${{ github.workflow }}-${{ github.job }}-${{ matrix.os }}-py${{ matrix.python-version }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          path: |
+            .pytest_cache
+            ~/.cache/pip/
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -62,8 +70,14 @@ jobs:
             python-version: "3.7"
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - uses: actions/cache@v3
+        with:
+          key: |
+            ${{ github.workflow }}-${{ github.job }}-${{ matrix.os }}-py${{ matrix.python-version }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          path: |
+            .pytest_cache
+            ~/.cache/pip/
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -72,3 +86,8 @@ jobs:
           pip install -c .constraints/py${{ matrix.python-version }}.txt -e .[test]
       - name: Run unit tests and doctests with pytest
         run: pytest -n auto
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: test_output_${{ matrix.os }}_${{ matrix.python-version }}
+          path: tests/output
