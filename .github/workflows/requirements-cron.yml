@@ -2,7 +2,7 @@ name: Requirements (scheduled)
 
 on:
   schedule:
-    - cron: "0 3 1 */2 *"
+    - cron: "0 3 7 */2 *"
   workflow_dispatch:
 
 jobs:
@@ -49,7 +49,7 @@ jobs:
             cd artifact
             ls -A
             [[ -f .pre-commit-config.yaml ]] && mv -f .pre-commit-config.yaml ..
-            [[ "$(ls)" != "" ]] && mkdir -p ../.constraints/ && mv -f * ../.constraints/
+            [[ "$(ls)" != "" ]] && mv -f * ../.constraints/
           fi
       - run: git status -s
       - name: Create Pull Request

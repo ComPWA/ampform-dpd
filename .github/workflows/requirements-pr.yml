@@ -80,7 +80,7 @@ jobs:
             cd artifact
             ls -A
             [[ -f .pre-commit-config.yaml ]] && mv -f .pre-commit-config.yaml ..
-            [[ "$(ls)" != "" ]] && mkdir -p ../.constraints/ && mv -f * ../.constraints/
+            [[ "$(ls)" != "" ]] && mv -f * ../.constraints/
           fi
       - run: git status -s
       - name: Commit and push changes

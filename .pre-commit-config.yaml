@@ -3,6 +3,7 @@ ci:
   autoupdate_schedule: quarterly # already done by requirements-cron.yml
   skip:
     # hooks that don't work on pre-commit.ci
+    - editorconfig-checker
     - pyright
 
 repos:
@@ -26,6 +27,17 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
 
+  - repo: https://github.com/ComPWA/repo-maintenance
+    rev: 0.0.157
+    hooks:
+      - id: check-dev-files
+        args:
+          - --no-cd
+          - --no-docs
+          - --no-prettierrc
+          - --pin-requirements=bimonthly
+      - id: format-setup-cfg
+
   - repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
@@ -35,6 +47,16 @@ repos:
     rev: v6.13.0
     hooks:
       - id: cspell
+
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 2.6.1
+    hooks:
+      - id: editorconfig-checker
+        name: editorconfig
+        exclude: >
+          (?x)^(
+            .*\.py
+          )$
 
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1

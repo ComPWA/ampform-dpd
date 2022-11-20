@@ -9,6 +9,7 @@
     "**/.tox"
   ],
   "reportGeneralTypeIssues": false,
+  "reportImportCycles": false,
   "reportIncompatibleMethodOverride": false,
   "reportMissingParameterType": false,
   "reportMissingTypeArgument": false,

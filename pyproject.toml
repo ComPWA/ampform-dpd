@@ -62,16 +62,16 @@ addopts = [
     "-m not slow",
 ]
 filterwarnings = [
-  "error",
-  "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
-  "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
+    "error",
+    "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
+    "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = [
     "slow: marks tests as slow (select with '-m slow')",
 ]
 norecursedirs = [
-  ".ipynb_checkpoints",
-  "_build",
+    ".ipynb_checkpoints",
+    "_build",
 ]
 testpaths = [
     "src",
