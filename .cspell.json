@@ -53,6 +53,9 @@
     "typings"
   ],
   "ignoreWords": [
+    "Jpsi",
+    "Kallen",
+    "MAINT",
     "absl",
     "arange",
     "aslatex",
@@ -78,12 +81,9 @@
     "isinstance",
     "isnan",
     "itertools",
-    "Jpsi",
-    "Kallen",
     "kernelspec",
     "linkcheck",
     "linspace",
-    "MAINT",
     "mathcal",
     "mathrm",
     "maxdepth",
