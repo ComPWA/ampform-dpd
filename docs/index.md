@@ -29,7 +29,7 @@ However, we highly recommend using the more dynamic, {ref}`'editable installatio
    cd ampform-dpd
    ```
 
-2. **[Recommended]** Create a virtual environment (see {ref}`here <compwa-org:develop:Virtual environment>` or the tip below).
+2. **\[Recommended\]** Create a virtual environment (see {ref}`here <compwa-org:develop:Virtual environment>` or the tip below).
 
 3. Install the project in {ref}`'editable installation' <compwa-org:develop:Editable installation>` with {ref}`additional dependencies <compwa-org:develop:Optional dependencies>` for the developer:
 

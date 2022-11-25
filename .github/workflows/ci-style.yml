@@ -5,10 +5,13 @@ on:
     branches:
       - main
       - epic/*
+      - "[0-9]+.[0-9]+.x"
   pull_request:
     branches:
       - main
       - epic/*
+      - "[0-9]+.[0-9]+.x"
+  workflow_dispatch:
 
 jobs:
   style:
@@ -16,8 +19,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v4
+      - uses: actions/cache@v3
+        with:
+          key: |
+            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', '.pre-commit-config.yaml') }}
+          path: |
+            ~/.cache/pip/
+            ~/.cache/pre-commit/
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.8"
       - name: Install dependencies
@@ -25,5 +34,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -c .constraints/py3.8.txt -e .[sty]
       - name: Run pre-commit hooks that don't work on pre-commit.ci
-        run: |
+        run: |-
+          pre-commit run editorconfig-checker -a --color always
           pre-commit run pyright -a --color always

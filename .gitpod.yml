@@ -1,0 +1,31 @@
+tasks:
+  - init: pip install -c .constraints/py3.8.txt -e .[dev]
+
+github:
+  prebuilds:
+    master: true
+    branches: false
+    pullRequests: true
+    pullRequestsFromForks: true
+    addComment: false
+    addBadge: false
+    addLabel: false
+
+vscode:
+  extensions:
+    - bungcip.better-toml
+    - eamodio.gitlens
+    - editorconfig.editorconfig
+    - esbenp.prettier-vscode
+    - github.vscode-pull-request-github
+    - ms-python.python
+    - ms-python.vscode-pylance
+    - ms-toolsai.vscode-jupyter-cell-tags
+    - ms-vsliveshare.vsliveshare
+    - oijaz.unicode-latex
+    - redhat.vscode-yaml
+    - stkb.rewrap
+    - streetsidesoftware.code-spell-checker
+    - travisillig.vscode-json-stable-stringify
+    - tyriar.sort-lines
+    - yzhang.markdown-all-in-one
