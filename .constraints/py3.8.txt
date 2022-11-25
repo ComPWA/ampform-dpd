@@ -45,7 +45,7 @@ identify==2.5.9
 idna==3.4
 imagesize==1.4.1
 iminuit==2.17.0
-importlib-metadata==5.0.0
+importlib-metadata==5.1.0
 importlib-resources==5.10.0
 iniconfig==1.1.1
 ipykernel==6.17.1
@@ -58,7 +58,7 @@ jaxlib==0.3.25
 jedi==0.18.2
 jinja2==3.1.2
 json5==0.9.10
-jsonschema==4.17.0
+jsonschema==4.17.1
 jupyter-cache==0.5.0
 jupyter-client==7.4.7
 jupyter-core==5.0.0
@@ -161,7 +161,7 @@ tox==3.27.1
 tqdm==4.64.1
 traitlets==5.5.0
 typing-extensions==4.4.0
-urllib3==1.26.12
+urllib3==1.26.13
 virtualenv==20.16.7
 wcwidth==0.2.5
 webencodings==0.5.1
