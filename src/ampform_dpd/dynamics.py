@@ -93,7 +93,9 @@ class BreitWignerMinL(UnevaluatedExpression):
 
     def _latex(self, printer, *args) -> str:
         s = printer._print(self.args[0])
-        return Rf"\mathcal{{R}}\left({s}\right)"
+        l_dec = printer._print(self.args[7])
+        l_prod = printer._print(self.args[8])
+        return Rf"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
 
 @make_commutative
@@ -114,7 +116,7 @@ class BuggBreitWigner(UnevaluatedExpression):
 
     def _latex(self, printer, *args) -> str:
         s = printer._print(self.args[0], *args)
-        return Rf"\mathcal{{R}}_\mathrm{{Bugg}}\left({s}\right)"
+        return Rf"\mathcal{{R}}^\mathrm{{Bugg}}\left({s}\right)"
 
 
 @make_commutative
@@ -137,7 +139,7 @@ class FlattéSWave(UnevaluatedExpression):
 
     def _latex(self, printer, *args) -> str:
         s = printer._print(self.args[0])
-        return Rf"\mathcal{{R}}_\mathrm{{Flatté}}\left({s}\right)"
+        return Rf"\mathcal{{R}}^\mathrm{{Flatté}}\left({s}\right)"
 
 
 @make_commutative
