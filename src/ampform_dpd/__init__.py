@@ -136,7 +136,11 @@ class DalitzPlotDecompositionBuilder:
             for λR_val in resonance_helicities:
                 if λ[0] == λR_val - λ[k]:  # Kronecker delta
                     if self.min_ls:
-                        parameter_defaults[H_prod[R, λR_val, λ[k]]] = 1
+                        parameter_defaults[H_prod[R, λR_val, λ[k]]] = 1 + 0j
+                    else:
+                        L = chain.incoming_ls.L
+                        S = chain.incoming_ls.S
+                        parameter_defaults[H_prod[R, L, S]] = 1 + 0j
                     parameter_defaults[H_dec[R, λ[i], λ[j]]] = 1
             sub_amp_expr = (
                 sp.KroneckerDelta(λ[0], λR - λ[k])
