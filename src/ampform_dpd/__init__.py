@@ -64,15 +64,15 @@ class DalitzPlotDecompositionBuilder:
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
         if isinstance(use_helicity_couplings, bool):
-            self.use_decay_helicity_couplings = use_helicity_couplings
             self.use_production_helicity_couplings = use_helicity_couplings
+            self.use_decay_helicity_couplings = use_helicity_couplings
         elif (
             isinstance(use_helicity_couplings, tuple)
             and len(use_helicity_couplings) == 2
         ):
             (
-                self.use_decay_helicity_couplings,
                 self.use_production_helicity_couplings,
+                self.use_decay_helicity_couplings,
             ) = use_helicity_couplings
         else:
             raise NotImplementedError(
