@@ -16,6 +16,7 @@ from sympy.physics.quantum.spin import WignerD
 
 from ampform_dpd.decay import (
     IsobarNode,
+    LSCoupling,
     Particle,
     ThreeBodyDecay,
     ThreeBodyDecayChain,
@@ -45,10 +46,40 @@ class AmplitudeModel:
 
 
 class DalitzPlotDecompositionBuilder:
-    def __init__(self, decay: ThreeBodyDecay, min_ls: bool = True) -> None:
+    def __init__(
+        self,
+        decay: ThreeBodyDecay,
+        use_helicity_couplings: tuple[bool, bool] | bool = True,
+    ) -> None:
+        """Amplitude builder for the helicity formalism with Dalitz-plot decomposition.
+
+        Args:
+            decay: The `.ThreeBodyDecay` over which to formulate the amplitude model.
+            use_helicity_couplings: Use helicity couplings instead of
+                :math:`LS`-couplings. If setting this boolean with a `tuple`, the first
+                element of the `tuple` defines whether to use helicity couplings on the
+                **production** `.IsobarNode` and the second configures the **decay**
+                `.IsobarNode`.
+        """
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
-        self.min_ls = min_ls
+        if isinstance(use_helicity_couplings, bool):
+            self.use_decay_helicity_couplings = use_helicity_couplings
+            self.use_production_helicity_couplings = use_helicity_couplings
+        elif (
+            isinstance(use_helicity_couplings, tuple)
+            and len(use_helicity_couplings) == 2
+        ):
+            (
+                self.use_decay_helicity_couplings,
+                self.use_production_helicity_couplings,
+            ) = use_helicity_couplings
+        else:
+            raise NotImplementedError(
+                "Cannot configure helicity couplings with a"
+                f" {type(use_helicity_couplings).__name__}",
+                use_helicity_couplings,
+            )
 
     def formulate(
         self,
@@ -118,11 +149,6 @@ class DalitzPlotDecompositionBuilder:
             self.decay.final_state[2].spin,
             self.decay.final_state[3].spin,
         ]
-        if self.min_ls:
-            H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
-        else:
-            H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{LS,production}")
-        H_dec = sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
         λR = sp.Symbol(R"\lambda_R", rational=True)
         terms = []
         parameter_defaults = {}
@@ -135,33 +161,54 @@ class DalitzPlotDecompositionBuilder:
             resonance_helicities = create_spin_range(resonance_spin)
             for λR_val in resonance_helicities:
                 if λ[0] == λR_val - λ[k]:  # Kronecker delta
-                    if self.min_ls:
-                        parameter_defaults[H_prod[R, λR_val, λ[k]]] = 1 + 0j
-                    else:
-                        L = chain.incoming_ls.L
-                        S = chain.incoming_ls.S
-                        parameter_defaults[H_prod[R, L, S]] = 1 + 0j
-                    parameter_defaults[H_dec[R, λ[i], λ[j]]] = 1
+                    h_prod = _create_coupling_symbol(
+                        self.use_production_helicity_couplings,
+                        resonance=R,
+                        helicities=(λR_val, λ[k]),
+                        interaction=chain.incoming_ls,
+                        typ="production",
+                    )
+                    h_dec = _create_coupling_symbol(
+                        self.use_decay_helicity_couplings,
+                        resonance=R,
+                        helicities=(λ[i], λ[j]),
+                        interaction=chain.outgoing_ls,
+                        typ="decay",
+                    )
+                    parameter_defaults[h_prod] = 1 + 0j
+                    parameter_defaults[h_dec] = 1
             sub_amp_expr = (
                 sp.KroneckerDelta(λ[0], λR - λ[k])
                 * (-1) ** (spin[k] - λ[k])
                 * dynamics
                 * Wigner.d(resonance_spin, λR, λ[i] - λ[j], θij)
-                * H_dec[R, λ[i], λ[j]]
+                * _create_coupling_symbol(
+                    self.use_production_helicity_couplings,
+                    resonance=R,
+                    helicities=(λR, λ[k]),
+                    interaction=chain.incoming_ls,
+                    typ="production",
+                )
+                * _create_coupling_symbol(
+                    self.use_decay_helicity_couplings,
+                    resonance=R,
+                    helicities=(λ[i], λ[j]),
+                    interaction=chain.outgoing_ls,
+                    typ="decay",
+                )
                 * (-1) ** (spin[j] - λ[j])
             )
-            if self.min_ls:
-                sub_amp_expr *= H_prod[R, λR, λ[k]]
-            else:
-                production_isobar = chain.decay
+            if not self.use_decay_helicity_couplings:
                 resonance_isobar = chain.decay.child1
-                assert production_isobar.interaction is not None
                 assert resonance_isobar.interaction is not None
-                sub_amp_expr *= H_prod[
-                    R,
-                    production_isobar.interaction.L,
-                    production_isobar.interaction.S,
-                ]
+                sub_amp_expr *= _formulate_clebsch_gordan_factor(
+                    resonance_isobar,
+                    child1_helicity=λ[i],
+                    child2_helicity=λ[j],
+                )
+            if not self.use_production_helicity_couplings:
+                production_isobar = chain.decay
+                assert production_isobar.interaction is not None
                 sub_amp_expr *= _formulate_clebsch_gordan_factor(
                     production_isobar,
                     child1_helicity=λR,
@@ -369,3 +416,26 @@ def _to_index(helicity):
         (1, sp.LessThan(helicity, 0)),
         (0, True),
     )
+
+
+def _create_coupling_symbol(
+    helicity_coupling: bool,
+    resonance: Str,
+    helicities: tuple[sp.Basic, sp.Basic],
+    interaction: LSCoupling,
+    typ: Literal["production", "decay"],
+) -> sp.Indexed:
+    H = _get_coupling_base(helicity_coupling, typ)
+    if helicity_coupling:
+        λi, λj = helicities
+        return H[resonance, λi, λj]
+    return H[resonance, interaction.L, interaction.S]
+
+
+@lru_cache(maxsize=None)
+def _get_coupling_base(
+    helicity_coupling: bool, typ: Literal["production", "decay"]
+) -> sp.IndexedBase:
+    if helicity_coupling:
+        return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{{typ}}}")
+    return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{LS,{typ}}}")
