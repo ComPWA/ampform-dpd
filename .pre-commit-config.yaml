@@ -32,7 +32,6 @@ repos:
     hooks:
       - id: check-dev-files
         args:
-          - --no-cd
           - --no-docs
           - --no-prettierrc
           - --pin-requirements=bimonthly
