@@ -15,10 +15,17 @@ This Python package is a (temporary) extension of [AmpForm](https://ampform.rtfd
 The fastest way of installing this package is through PyPI:
 
 ```shell
-python3 -m pip install git+https://github.com/ComPWA/ampform-dpd@stable
+python3 -m pip install ampform-dpd
 ```
 
-This installs the latest version that you can find on the [`stable`](https://github.com/ComPWA/ampform-dpd/tree/stable) branch. You can substitute `stable` in the above command with `main` or any of the [tags](https://github.com/ComPWA/ampform-dpd/tags) listed under the [releases](https://github.com/ComPWA/ampform-dpd/releases). In a similar way, you can list `ampform-dpd` as a dependency of your application in either `setup.cfg` or a `requirements.txt` file as:
+This installs the latest version that you can find on the [`stable`](https://github.com/ComPWA/ampform-dpd/tree/stable) branch. The latest version on the [`main`](https://github.com/ComPWA/ampform/tree/main) branch
+can be installed as follows:
+
+```shell
+python3 -m pip install git+https://github.com/ComPWA/ampform@main
+```
+
+You can substitute `stable` in the above command with `main` or any of the [tags](https://github.com/ComPWA/ampform-dpd/tags) listed under the [releases](https://github.com/ComPWA/ampform-dpd/releases). In a similar way, you can list `ampform-dpd` as a dependency of your application in either `setup.cfg` or a `requirements.txt` file as:
 
 ```text
 ampform-dpd @ git+https://github.com/ComPWA/ampform-dpd@main
