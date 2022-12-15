@@ -4,6 +4,10 @@
 
 ```
 
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/ampform-dpd)](https://pypi.org/project/ampform-dpd)
+[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ComPWA/ampform/blob/main)
+[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ComPWA/ampform/main?filepath=docs)
+
 This Python package is a (temporary) extension of [AmpForm](https://ampform.rtfd.io) and provides a symbolic implementation of Dalitz-plot decomposition ([10.1103/PhysRevD.101.034033](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033)) with [SymPy](https://www.sympy.org/en/index.html). It has been extracted from the [ComPWA/polarimetry](https://github.com/ComPWA/polarimetry) repository, which is not yet public.
 
 ## Installation
@@ -11,10 +15,17 @@ This Python package is a (temporary) extension of [AmpForm](https://ampform.rtfd
 The fastest way of installing this package is through PyPI:
 
 ```shell
-python3 -m pip install git+https://github.com/ComPWA/ampform-dpd@stable
+python3 -m pip install ampform-dpd
 ```
 
-This installs the latest version that you can find on the [`stable`](https://github.com/ComPWA/ampform-dpd/tree/stable) branch. You can substitute `stable` in the above command with `main` or any of the [tags](https://github.com/ComPWA/ampform-dpd/tags) listed under the [releases](https://github.com/ComPWA/ampform-dpd/releases). In a similar way, you can list `ampform-dpd` as a dependency of your application in either `setup.cfg` or a `requirements.txt` file as:
+This installs the latest version that you can find on the [`stable`](https://github.com/ComPWA/ampform-dpd/tree/stable) branch. The latest version on the [`main`](https://github.com/ComPWA/ampform/tree/main) branch
+can be installed as follows:
+
+```shell
+python3 -m pip install git+https://github.com/ComPWA/ampform@main
+```
+
+You can substitute `stable` in the above command with `main` or any of the [tags](https://github.com/ComPWA/ampform-dpd/tags) listed under the [releases](https://github.com/ComPWA/ampform-dpd/releases). In a similar way, you can list `ampform-dpd` as a dependency of your application in either `setup.cfg` or a `requirements.txt` file as:
 
 ```text
 ampform-dpd @ git+https://github.com/ComPWA/ampform-dpd@main
