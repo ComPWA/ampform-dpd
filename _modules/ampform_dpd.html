@@ -1,0 +1,683 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ampform_dpd &#8212; Symbolic Dalitz-Plot Decomposition</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Symbolic Dalitz-Plot Decomposition</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../lc2pkpi.html">
+   Λc⁺ → pπ⁺K⁻
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../jpsi2ksp.html">
+   J/ψ → K⁰Σ⁺p̅
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api/ampform_dpd.html">
+   API
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/ampform_dpd.angles.html">
+     angles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/ampform_dpd.decay.html">
+     decay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/ampform_dpd.dynamics.html">
+     dynamics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/ampform_dpd.io.html">
+     io
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/ampform_dpd.spin.html">
+     spin
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            <p>Version 0.1.dev1+g441a6ea (15/12/2022 11:34:11)</p>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/ComPWA/ampform-dpd"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/ComPWA/ampform-dpd/issues/new?title=Issue%20on%20page%20%2F_modules/ampform_dpd.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for ampform_dpd</h1><div class="highlight"><pre>
+<span></span><span class="c1"># cspell:ignore msigma</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+
+<span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">ampform.sympy</span> <span class="kn">import</span> <span class="n">PoolSum</span>
+<span class="kn">from</span> <span class="nn">attrs</span> <span class="kn">import</span> <span class="n">field</span><span class="p">,</span> <span class="n">frozen</span>
+<span class="kn">from</span> <span class="nn">sympy.core.symbol</span> <span class="kn">import</span> <span class="n">Str</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.matrices</span> <span class="kn">import</span> <span class="n">msigma</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.spin</span> <span class="kn">import</span> <span class="n">CG</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.spin</span> <span class="kn">import</span> <span class="n">Rotation</span> <span class="k">as</span> <span class="n">Wigner</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.spin</span> <span class="kn">import</span> <span class="n">WignerD</span>
+
+<span class="kn">from</span> <span class="nn">ampform_dpd.decay</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IsobarNode</span><span class="p">,</span>
+    <span class="n">Particle</span><span class="p">,</span>
+    <span class="n">ThreeBodyDecay</span><span class="p">,</span>
+    <span class="n">ThreeBodyDecayChain</span><span class="p">,</span>
+    <span class="n">get_decay_product_ids</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ampform_dpd.spin</span> <span class="kn">import</span> <span class="n">create_spin_range</span>
+
+<span class="kn">from</span> <span class="nn">.angles</span> <span class="kn">import</span> <span class="n">formulate_scattering_angle</span><span class="p">,</span> <span class="n">formulate_zeta_angle</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Protocol</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Protocol</span>
+
+
+<div class="viewcode-block" id="AmplitudeModel"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.AmplitudeModel">[docs]</a><span class="nd">@frozen</span>
+<span class="k">class</span> <span class="nc">AmplitudeModel</span><span class="p">:</span>
+    <span class="n">decay</span><span class="p">:</span> <span class="n">ThreeBodyDecay</span>
+    <span class="n">intensity</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">One</span>
+    <span class="n">amplitudes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Indexed</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">variables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">parameter_defaults</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">full_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">intensity</span><span class="o">.</span><span class="n">doit</span><span class="p">()</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DalitzPlotDecompositionBuilder"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DalitzPlotDecompositionBuilder">[docs]</a><span class="k">class</span> <span class="nc">DalitzPlotDecompositionBuilder</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decay</span><span class="p">:</span> <span class="n">ThreeBodyDecay</span><span class="p">,</span> <span class="n">min_ls</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decay</span> <span class="o">=</span> <span class="n">decay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamics_choices</span> <span class="o">=</span> <span class="n">DynamicsConfigurator</span><span class="p">(</span><span class="n">decay</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_ls</span> <span class="o">=</span> <span class="n">min_ls</span>
+
+<div class="viewcode-block" id="DalitzPlotDecompositionBuilder.formulate"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DalitzPlotDecompositionBuilder.formulate">[docs]</a>    <span class="k">def</span> <span class="nf">formulate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">reference_subsystem</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">cleanup_summations</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AmplitudeModel</span><span class="p">:</span>
+        <span class="n">helicity_symbols</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s2">&quot;lambda:4&quot;</span><span class="p">,</span> <span class="n">rational</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">allowed_helicities</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">symbol</span><span class="p">:</span> <span class="n">create_spin_range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">spin</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">helicity_symbols</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">amplitude_definitions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">angle_definitions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">parameter_defaults</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">allowed_helicities</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">sub_system</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+                <span class="n">chain_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formulate_subsystem_amplitude</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">sub_system</span><span class="p">)</span>
+                <span class="n">amplitude_definitions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chain_model</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">)</span>
+                <span class="n">angle_definitions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chain_model</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+                <span class="n">parameter_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chain_model</span><span class="o">.</span><span class="n">parameter_defaults</span><span class="p">)</span>
+        <span class="n">aligned_amp</span><span class="p">,</span> <span class="n">zeta_defs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formulate_aligned_amplitude</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">helicity_symbols</span><span class="p">,</span> <span class="n">reference_subsystem</span>
+        <span class="p">)</span>
+        <span class="n">angle_definitions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">zeta_defs</span><span class="p">)</span>
+        <span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">m3</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s2">&quot;m:4&quot;</span><span class="p">,</span> <span class="n">nonnegative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">masses</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">m0</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span>
+            <span class="n">m1</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span>
+            <span class="n">m2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span>
+            <span class="n">m3</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">parameter_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cleanup_summations</span><span class="p">:</span>
+            <span class="n">aligned_amp</span> <span class="o">=</span> <span class="n">aligned_amp</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+        <span class="n">intensity</span> <span class="o">=</span> <span class="n">PoolSum</span><span class="p">(</span>
+            <span class="n">sp</span><span class="o">.</span><span class="n">Abs</span><span class="p">(</span><span class="n">aligned_amp</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">allowed_helicities</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">cleanup_summations</span><span class="p">:</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">intensity</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">AmplitudeModel</span><span class="p">(</span>
+            <span class="n">decay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="p">,</span>
+            <span class="n">intensity</span><span class="o">=</span><span class="n">PoolSum</span><span class="p">(</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">Abs</span><span class="p">(</span><span class="n">aligned_amp</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">allowed_helicities</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
+            <span class="p">),</span>
+            <span class="n">amplitudes</span><span class="o">=</span><span class="n">amplitude_definitions</span><span class="p">,</span>
+            <span class="n">variables</span><span class="o">=</span><span class="n">angle_definitions</span><span class="p">,</span>
+            <span class="n">parameter_defaults</span><span class="o">=</span><span class="n">parameter_defaults</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude">[docs]</a>    <span class="k">def</span> <span class="nf">formulate_subsystem_amplitude</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">λ0</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">,</span>
+        <span class="n">λ1</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">,</span>
+        <span class="n">λ2</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">,</span>
+        <span class="n">λ3</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">,</span>
+        <span class="n">subsystem_id</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AmplitudeModel</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">subsystem_id</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">get_decay_product_ids</span><span class="p">(</span><span class="n">subsystem_id</span><span class="p">)</span>
+        <span class="n">θij</span><span class="p">,</span> <span class="n">θij_expr</span> <span class="o">=</span> <span class="n">formulate_scattering_angle</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+        <span class="n">λ</span> <span class="o">=</span> <span class="n">λ0</span><span class="p">,</span> <span class="n">λ1</span><span class="p">,</span> <span class="n">λ2</span><span class="p">,</span> <span class="n">λ3</span>
+        <span class="n">spin</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">initial_state</span><span class="o">.</span><span class="n">spin</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">final_state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spin</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">final_state</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">spin</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">final_state</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">spin</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_ls</span><span class="p">:</span>
+            <span class="n">H_prod</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">IndexedBase</span><span class="p">(</span><span class="sa">R</span><span class="s2">&quot;\mathcal</span><span class="si">{H}</span><span class="s2">^\mathrm</span><span class="si">{production}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">H_prod</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">IndexedBase</span><span class="p">(</span><span class="sa">R</span><span class="s2">&quot;\mathcal</span><span class="si">{H}</span><span class="s2">^\mathrm{LS,production}&quot;</span><span class="p">)</span>
+        <span class="n">H_dec</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">IndexedBase</span><span class="p">(</span><span class="sa">R</span><span class="s2">&quot;\mathcal</span><span class="si">{H}</span><span class="s2">^\mathrm</span><span class="si">{decay}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">λR</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="sa">R</span><span class="s2">&quot;\lambda_R&quot;</span><span class="p">,</span> <span class="n">rational</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">terms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">parameter_defaults</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">get_subsystem</span><span class="p">(</span><span class="n">subsystem_id</span><span class="p">)</span><span class="o">.</span><span class="n">chains</span><span class="p">:</span>
+            <span class="n">formulate_dynamics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamics_choices</span><span class="o">.</span><span class="n">get_builder</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">dynamics</span><span class="p">,</span> <span class="n">new_parameters</span> <span class="o">=</span> <span class="n">formulate_dynamics</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span>
+            <span class="n">parameter_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_parameters</span><span class="p">)</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="o">.</span><span class="n">latex</span><span class="p">)</span>
+            <span class="n">resonance_spin</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="o">.</span><span class="n">spin</span><span class="p">)</span>
+            <span class="n">resonance_helicities</span> <span class="o">=</span> <span class="n">create_spin_range</span><span class="p">(</span><span class="n">resonance_spin</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">λR_val</span> <span class="ow">in</span> <span class="n">resonance_helicities</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">λ</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">λR_val</span> <span class="o">-</span> <span class="n">λ</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>  <span class="c1"># Kronecker delta</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_ls</span><span class="p">:</span>
+                        <span class="n">parameter_defaults</span><span class="p">[</span><span class="n">H_prod</span><span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="n">λR_val</span><span class="p">,</span> <span class="n">λ</span><span class="p">[</span><span class="n">k</span><span class="p">]]]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">0</span><span class="n">j</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">L</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">incoming_ls</span><span class="o">.</span><span class="n">L</span>
+                        <span class="n">S</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">incoming_ls</span><span class="o">.</span><span class="n">S</span>
+                        <span class="n">parameter_defaults</span><span class="p">[</span><span class="n">H_prod</span><span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">S</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">0</span><span class="n">j</span>
+                    <span class="n">parameter_defaults</span><span class="p">[</span><span class="n">H_dec</span><span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="n">λ</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">λ</span><span class="p">[</span><span class="n">j</span><span class="p">]]]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">sub_amp_expr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">KroneckerDelta</span><span class="p">(</span><span class="n">λ</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">λR</span> <span class="o">-</span> <span class="n">λ</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">spin</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">λ</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="o">*</span> <span class="n">dynamics</span>
+                <span class="o">*</span> <span class="n">Wigner</span><span class="o">.</span><span class="n">d</span><span class="p">(</span><span class="n">resonance_spin</span><span class="p">,</span> <span class="n">λR</span><span class="p">,</span> <span class="n">λ</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">λ</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">θij</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">H_dec</span><span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="n">λ</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">λ</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+                <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">spin</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">λ</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_ls</span><span class="p">:</span>
+                <span class="n">sub_amp_expr</span> <span class="o">*=</span> <span class="n">H_prod</span><span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="n">λR</span><span class="p">,</span> <span class="n">λ</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">production_isobar</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">decay</span>
+                <span class="n">resonance_isobar</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">child1</span>
+                <span class="k">assert</span> <span class="n">production_isobar</span><span class="o">.</span><span class="n">interaction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">assert</span> <span class="n">resonance_isobar</span><span class="o">.</span><span class="n">interaction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="n">sub_amp_expr</span> <span class="o">*=</span> <span class="n">H_prod</span><span class="p">[</span>
+                    <span class="n">R</span><span class="p">,</span>
+                    <span class="n">production_isobar</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
+                    <span class="n">production_isobar</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">S</span><span class="p">,</span>
+                <span class="p">]</span>
+                <span class="n">sub_amp_expr</span> <span class="o">*=</span> <span class="n">_formulate_clebsch_gordan_factor</span><span class="p">(</span>
+                    <span class="n">production_isobar</span><span class="p">,</span>
+                    <span class="n">child1_helicity</span><span class="o">=</span><span class="n">λR</span><span class="p">,</span>
+                    <span class="n">child2_helicity</span><span class="o">=</span><span class="n">λ</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="n">sub_amp</span> <span class="o">=</span> <span class="n">PoolSum</span><span class="p">(</span>
+                <span class="n">sub_amp_expr</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">λR</span><span class="p">,</span> <span class="n">resonance_helicities</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_amp</span><span class="p">)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">_generate_amplitude_index_bases</span><span class="p">()</span>
+        <span class="n">amp_symbol</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">subsystem_id</span><span class="p">][</span><span class="n">λ0</span><span class="p">,</span> <span class="n">λ1</span><span class="p">,</span> <span class="n">λ2</span><span class="p">,</span> <span class="n">λ3</span><span class="p">]</span>
+        <span class="n">amp_expr</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="o">*</span><span class="n">terms</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AmplitudeModel</span><span class="p">(</span>
+            <span class="n">decay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="p">,</span>
+            <span class="n">intensity</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">Abs</span><span class="p">(</span><span class="n">amp_symbol</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">amplitudes</span><span class="o">=</span><span class="p">{</span><span class="n">amp_symbol</span><span class="p">:</span> <span class="n">amp_expr</span><span class="p">},</span>
+            <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="n">θij</span><span class="p">:</span> <span class="n">θij_expr</span><span class="p">},</span>
+            <span class="n">parameter_defaults</span><span class="o">=</span><span class="n">parameter_defaults</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DalitzPlotDecompositionBuilder.formulate_aligned_amplitude"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DalitzPlotDecompositionBuilder.formulate_aligned_amplitude">[docs]</a>    <span class="k">def</span> <span class="nf">formulate_aligned_amplitude</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">λ0</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span>
+        <span class="n">λ1</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span>
+        <span class="n">λ2</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span>
+        <span class="n">λ3</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span>
+        <span class="n">reference_subsystem</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PoolSum</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">]]:</span>
+        <span class="n">wigner_generator</span> <span class="o">=</span> <span class="n">_AlignmentWignerGenerator</span><span class="p">(</span><span class="n">reference_subsystem</span><span class="p">)</span>
+        <span class="n">_λ0</span><span class="p">,</span> <span class="n">_λ1</span><span class="p">,</span> <span class="n">_λ2</span><span class="p">,</span> <span class="n">_λ3</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">R</span><span class="s2">&quot;\lambda_(0:4)^{\prime}&quot;</span><span class="p">,</span> <span class="n">rational</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">j0</span><span class="p">,</span> <span class="n">j1</span><span class="p">,</span> <span class="n">j2</span><span class="p">,</span> <span class="n">j3</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">spin</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">states</span><span class="p">))</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">_generate_amplitude_index_bases</span><span class="p">()</span>
+        <span class="n">amp_expr</span> <span class="o">=</span> <span class="n">PoolSum</span><span class="p">(</span>
+            <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">_λ0</span><span class="p">,</span> <span class="n">_λ1</span><span class="p">,</span> <span class="n">_λ2</span><span class="p">,</span> <span class="n">_λ3</span><span class="p">]</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j0</span><span class="p">,</span> <span class="n">λ0</span><span class="p">,</span> <span class="n">_λ0</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span> <span class="n">_λ1</span><span class="p">,</span> <span class="n">λ1</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j2</span><span class="p">,</span> <span class="n">_λ2</span><span class="p">,</span> <span class="n">λ2</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j3</span><span class="p">,</span> <span class="n">_λ3</span><span class="p">,</span> <span class="n">λ3</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">_λ0</span><span class="p">,</span> <span class="n">_λ1</span><span class="p">,</span> <span class="n">_λ2</span><span class="p">,</span> <span class="n">_λ3</span><span class="p">]</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j0</span><span class="p">,</span> <span class="n">λ0</span><span class="p">,</span> <span class="n">_λ0</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span> <span class="n">_λ1</span><span class="p">,</span> <span class="n">λ1</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j2</span><span class="p">,</span> <span class="n">_λ2</span><span class="p">,</span> <span class="n">λ2</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j3</span><span class="p">,</span> <span class="n">_λ3</span><span class="p">,</span> <span class="n">λ3</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">_λ0</span><span class="p">,</span> <span class="n">_λ1</span><span class="p">,</span> <span class="n">_λ2</span><span class="p">,</span> <span class="n">_λ3</span><span class="p">]</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j0</span><span class="p">,</span> <span class="n">λ0</span><span class="p">,</span> <span class="n">_λ0</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span> <span class="n">_λ1</span><span class="p">,</span> <span class="n">λ1</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j2</span><span class="p">,</span> <span class="n">_λ2</span><span class="p">,</span> <span class="n">λ2</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">wigner_generator</span><span class="p">(</span><span class="n">j3</span><span class="p">,</span> <span class="n">_λ3</span><span class="p">,</span> <span class="n">λ3</span><span class="p">,</span> <span class="n">rotated_state</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_λ0</span><span class="p">,</span> <span class="n">create_spin_range</span><span class="p">(</span><span class="n">j0</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">_λ1</span><span class="p">,</span> <span class="n">create_spin_range</span><span class="p">(</span><span class="n">j1</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">_λ2</span><span class="p">,</span> <span class="n">create_spin_range</span><span class="p">(</span><span class="n">j2</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">_λ3</span><span class="p">,</span> <span class="n">create_spin_range</span><span class="p">(</span><span class="n">j3</span><span class="p">)),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">amp_expr</span><span class="p">,</span> <span class="n">wigner_generator</span><span class="o">.</span><span class="n">angle_definitions</span></div></div>
+
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_generate_amplitude_index_bases</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">sp</span><span class="o">.</span><span class="n">IndexedBase</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">R</span><span class="s2">&quot;A^(1:4)&quot;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">IndexedBase</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">_AlignmentWignerGenerator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_subsystem</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_definitions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">acos</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_subsystem</span> <span class="o">=</span> <span class="n">reference_subsystem</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">j</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">,</span>
+        <span class="n">m</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">,</span>
+        <span class="n">m_prime</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">,</span>
+        <span class="n">rotated_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">aligned_subsystem</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span> <span class="o">|</span> <span class="n">WignerD</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">zeta</span><span class="p">,</span> <span class="n">zeta_expr</span> <span class="o">=</span> <span class="n">formulate_zeta_angle</span><span class="p">(</span>
+            <span class="n">rotated_state</span><span class="p">,</span> <span class="n">aligned_subsystem</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_subsystem</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_definitions</span><span class="p">[</span><span class="n">zeta</span><span class="p">]</span> <span class="o">=</span> <span class="n">zeta_expr</span>
+        <span class="k">return</span> <span class="n">Wigner</span><span class="o">.</span><span class="n">d</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">m_prime</span><span class="p">,</span> <span class="n">zeta</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DynamicsConfigurator"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DynamicsConfigurator">[docs]</a><span class="k">class</span> <span class="nc">DynamicsConfigurator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decay</span><span class="p">:</span> <span class="n">ThreeBodyDecay</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__decay</span> <span class="o">=</span> <span class="n">decay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dynamics_builders</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ThreeBodyDecayChain</span><span class="p">,</span> <span class="n">DynamicsBuilder</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="DynamicsConfigurator.register_builder"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DynamicsConfigurator.register_builder">[docs]</a>    <span class="k">def</span> <span class="nf">register_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">builder</span><span class="p">:</span> <span class="n">DynamicsBuilder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_chain</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dynamics_builders</span><span class="p">[</span><span class="n">chain</span><span class="p">]</span> <span class="o">=</span> <span class="n">builder</span></div>
+
+<div class="viewcode-block" id="DynamicsConfigurator.get_builder"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DynamicsConfigurator.get_builder">[docs]</a>    <span class="k">def</span> <span class="nf">get_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DynamicsBuilder</span><span class="p">:</span>
+        <span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_chain</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dynamics_builders</span><span class="p">[</span><span class="n">chain</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">__get_chain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThreeBodyDecayChain</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">ThreeBodyDecayChain</span><span class="p">):</span>
+            <span class="n">chain</span> <span class="o">=</span> <span class="n">identifier</span>
+            <span class="k">if</span> <span class="n">chain</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__decay</span><span class="o">.</span><span class="n">chains</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Decay does not have chain with resonance </span><span class="si">{</span><span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">chain</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__decay</span><span class="o">.</span><span class="n">find_chain</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot get decay chain for identifier type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">decay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThreeBodyDecay</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__decay</span></div>
+
+
+<div class="viewcode-block" id="DynamicsBuilder"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.DynamicsBuilder">[docs]</a><span class="k">class</span> <span class="nc">DynamicsBuilder</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">decay_chain</span><span class="p">:</span> <span class="n">ThreeBodyDecayChain</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="o">...</span></div>
+
+
+<div class="viewcode-block" id="simplify_latex_rendering"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.simplify_latex_rendering">[docs]</a><span class="k">def</span> <span class="nf">simplify_latex_rendering</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_print_Indexed_latex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">printer</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">printer</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">printer</span><span class="o">.</span><span class="n">_print</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">))</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s2">_</span><span class="se">{{</span><span class="si">{</span><span class="n">indices</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+
+    <span class="n">sp</span><span class="o">.</span><span class="n">Indexed</span><span class="o">.</span><span class="n">_latex</span> <span class="o">=</span> <span class="n">_print_Indexed_latex</span></div>
+
+
+<span class="k">def</span> <span class="nf">_formulate_clebsch_gordan_factor</span><span class="p">(</span>
+    <span class="n">isobar</span><span class="p">:</span> <span class="n">IsobarNode</span><span class="p">,</span>
+    <span class="n">child1_helicity</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span>
+    <span class="n">child2_helicity</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">isobar</span><span class="o">.</span><span class="n">interaction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot formulate amplitude model in LS-basis if LS-couplings are missing&quot;</span>
+        <span class="p">)</span>
+    <span class="c1"># https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802</span>
+    <span class="c1"># and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)</span>
+    <span class="n">cg_ss</span> <span class="o">=</span> <span class="n">CG</span><span class="p">(</span>
+        <span class="n">j1</span><span class="o">=</span><span class="n">_get_particle</span><span class="p">(</span><span class="n">isobar</span><span class="o">.</span><span class="n">child1</span><span class="p">)</span><span class="o">.</span><span class="n">spin</span><span class="p">,</span>
+        <span class="n">m1</span><span class="o">=</span><span class="n">child1_helicity</span><span class="p">,</span>
+        <span class="n">j2</span><span class="o">=</span><span class="n">_get_particle</span><span class="p">(</span><span class="n">isobar</span><span class="o">.</span><span class="n">child2</span><span class="p">)</span><span class="o">.</span><span class="n">spin</span><span class="p">,</span>
+        <span class="n">m2</span><span class="o">=-</span><span class="n">child2_helicity</span><span class="p">,</span>
+        <span class="n">j3</span><span class="o">=</span><span class="n">isobar</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">S</span><span class="p">,</span>
+        <span class="n">m3</span><span class="o">=</span><span class="n">child1_helicity</span> <span class="o">-</span> <span class="n">child2_helicity</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">cg_ll</span> <span class="o">=</span> <span class="n">CG</span><span class="p">(</span>
+        <span class="n">j1</span><span class="o">=</span><span class="n">isobar</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
+        <span class="n">m1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">j2</span><span class="o">=</span><span class="n">isobar</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">S</span><span class="p">,</span>
+        <span class="n">m2</span><span class="o">=</span><span class="n">child1_helicity</span> <span class="o">-</span> <span class="n">child2_helicity</span><span class="p">,</span>
+        <span class="n">j3</span><span class="o">=</span><span class="n">isobar</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">spin</span><span class="p">,</span>
+        <span class="n">m3</span><span class="o">=</span><span class="n">child1_helicity</span> <span class="o">-</span> <span class="n">child2_helicity</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sqrt_factor</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">isobar</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">isobar</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">spin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">sqrt_factor</span> <span class="o">*</span> <span class="n">cg_ll</span> <span class="o">*</span> <span class="n">cg_ss</span>
+
+
+<span class="k">def</span> <span class="nf">_get_particle</span><span class="p">(</span><span class="n">isobar</span><span class="p">:</span> <span class="n">IsobarNode</span> <span class="o">|</span> <span class="n">Particle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Particle</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">isobar</span><span class="p">,</span> <span class="n">IsobarNode</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">isobar</span><span class="o">.</span><span class="n">parent</span>
+    <span class="k">return</span> <span class="n">isobar</span>
+
+
+<div class="viewcode-block" id="formulate_polarimetry"><a class="viewcode-back" href="../api/ampform_dpd.html#ampform_dpd.formulate_polarimetry">[docs]</a><span class="k">def</span> <span class="nf">formulate_polarimetry</span><span class="p">(</span>
+    <span class="n">builder</span><span class="p">:</span> <span class="n">DalitzPlotDecompositionBuilder</span><span class="p">,</span> <span class="n">reference_subsystem</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PoolSum</span><span class="p">,</span> <span class="n">PoolSum</span><span class="p">,</span> <span class="n">PoolSum</span><span class="p">]:</span>
+    <span class="n">half</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">builder</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">initial_state</span><span class="o">.</span><span class="n">spin</span> <span class="o">!=</span> <span class="n">half</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Can only formulate polarimetry for an initial state with spin 1/2, but&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; got </span><span class="si">{</span><span class="n">builder</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">initial_state</span><span class="o">.</span><span class="n">spin</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">formulate</span><span class="p">(</span><span class="n">reference_subsystem</span><span class="p">)</span>
+    <span class="n">λ0</span><span class="p">,</span> <span class="n">λ0_prime</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">R</span><span class="s2">&quot;lambda \lambda^{\prime}&quot;</span><span class="p">,</span> <span class="n">rational</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">λ</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;lambda</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rational</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> <span class="n">create_spin_range</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">spin</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="o">.</span><span class="n">decay</span><span class="o">.</span><span class="n">final_state</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">reference_subsystem</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">PoolSum</span><span class="p">(</span>
+            <span class="n">builder</span><span class="o">.</span><span class="n">formulate_aligned_amplitude</span><span class="p">(</span><span class="n">λ0</span><span class="p">,</span> <span class="o">*</span><span class="n">λ</span><span class="p">,</span> <span class="n">ref</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+            <span class="o">*</span> <span class="n">pauli_matrix</span><span class="p">[</span><span class="n">_to_index</span><span class="p">(</span><span class="n">λ0</span><span class="p">),</span> <span class="n">_to_index</span><span class="p">(</span><span class="n">λ0_prime</span><span class="p">)]</span>
+            <span class="o">*</span> <span class="n">builder</span><span class="o">.</span><span class="n">formulate_aligned_amplitude</span><span class="p">(</span><span class="n">λ0_prime</span><span class="p">,</span> <span class="o">*</span><span class="n">λ</span><span class="p">,</span> <span class="n">ref</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">λ0</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">half</span><span class="p">,</span> <span class="o">+</span><span class="n">half</span><span class="p">]),</span>
+            <span class="p">(</span><span class="n">λ0_prime</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">half</span><span class="p">,</span> <span class="o">+</span><span class="n">half</span><span class="p">]),</span>
+            <span class="o">*</span><span class="n">λ</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+        <span class="o">/</span> <span class="n">model</span><span class="o">.</span><span class="n">intensity</span>
+        <span class="k">for</span> <span class="n">pauli_matrix</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">msigma</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_to_index</span><span class="p">(</span><span class="n">helicity</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Symbolic conversion of half-value helicities to Pauli matrix indices.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Piecewise</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">LessThan</span><span class="p">(</span><span class="n">helicity</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Mikhail Mikhasenko, Remco de Boer<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

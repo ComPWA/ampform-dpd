@@ -1,0 +1,5865 @@
+{
+  "api/ampform_dpd": [
+    {
+      "source": "import ampform_dpd",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd"
+          ],
+          "code_str": "ampform_dpd",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd"
+        }
+      ],
+      "example": {
+        "document": "api/ampform_dpd",
+        "ref_id": "ampform-dpd",
+        "headings": [
+          "ampform_dpd"
+        ]
+      },
+      "doc_lineno": 6
+    }
+  ],
+  "api/ampform_dpd.angles": [
+    {
+      "source": "import ampform_dpd.angles",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "angles"
+          ],
+          "code_str": "ampform_dpd.angles",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.angles"
+        }
+      ],
+      "example": {
+        "document": "api/ampform_dpd.angles",
+        "ref_id": "angles",
+        "headings": [
+          "angles"
+        ]
+      },
+      "doc_lineno": 5
+    }
+  ],
+  "api/ampform_dpd.decay": [
+    {
+      "source": "import ampform_dpd.decay",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay"
+          ],
+          "code_str": "ampform_dpd.decay",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay"
+        }
+      ],
+      "example": {
+        "document": "api/ampform_dpd.decay",
+        "ref_id": "decay",
+        "headings": [
+          "decay"
+        ]
+      },
+      "doc_lineno": 5
+    }
+  ],
+  "api/ampform_dpd.dynamics": [
+    {
+      "source": "import ampform_dpd.dynamics",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics"
+          ],
+          "code_str": "ampform_dpd.dynamics",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.dynamics"
+        }
+      ],
+      "example": {
+        "document": "api/ampform_dpd.dynamics",
+        "ref_id": "dynamics",
+        "headings": [
+          "dynamics"
+        ]
+      },
+      "doc_lineno": 5
+    }
+  ],
+  "api/ampform_dpd.io": [
+    {
+      "source": "import ampform_dpd.io",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io"
+          ],
+          "code_str": "ampform_dpd.io",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.io"
+        }
+      ],
+      "example": {
+        "document": "api/ampform_dpd.io",
+        "ref_id": "io",
+        "headings": [
+          "io"
+        ]
+      },
+      "doc_lineno": 5
+    },
+    {
+      "source": ">>> from ampform_dpd.io import aslatex\n>>> @aslatex.register(int)\n... def _(obj: int) -> str:\n...     return \"my custom rendering\"\n>>> aslatex(1)\n'my custom rendering'\n>>> aslatex(3.4 - 2j)\n'3.4-2i'",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io"
+          ],
+          "code_str": "ampform_dpd.io",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.io"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "int"
+          ],
+          "code_str": "int",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "int"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "int"
+          ],
+          "code_str": "int",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "int"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        }
+      ],
+      "example": {
+        "document": "api/ampform_dpd.io",
+        "ref_id": "io",
+        "headings": [
+          "io"
+        ]
+      },
+      "doc_lineno": 13
+    }
+  ],
+  "api/ampform_dpd.spin": [
+    {
+      "source": "import ampform_dpd.spin",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin"
+          ],
+          "code_str": "ampform_dpd.spin",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.spin"
+        }
+      ],
+      "example": {
+        "document": "api/ampform_dpd.spin",
+        "ref_id": "spin",
+        "headings": [
+          "spin"
+        ]
+      },
+      "doc_lineno": 5
+    },
+    {
+      "source": ">>> generate_ls_couplings(1.5, 0.5, 0)\n[(1, 1/2), (2, 1/2)]",
+      "names": [],
+      "example": {
+        "document": "api/ampform_dpd.spin",
+        "ref_id": "spin",
+        "headings": [
+          "spin"
+        ]
+      },
+      "doc_lineno": 2
+    },
+    {
+      "source": ">>> LS = generate_ls_couplings(0.5, 1.5, 0)  # \u039bc \u2192 \u039b(1520)\u03c0\n>>> LS\n[(1, 3/2), (2, 3/2)]\n>>> filter_parity_violating_ls(LS, +1, -1, -1)\n[(2, 3/2)]",
+      "names": [],
+      "example": {
+        "document": "api/ampform_dpd.spin",
+        "ref_id": "spin",
+        "headings": [
+          "spin"
+        ]
+      },
+      "doc_lineno": 5
+    },
+    {
+      "source": ">>> create_spin_range(1.5)\n[-3/2, -1/2, 1/2, 3/2]",
+      "names": [],
+      "example": {
+        "document": "api/ampform_dpd.spin",
+        "ref_id": "spin",
+        "headings": [
+          "spin"
+        ]
+      },
+      "doc_lineno": 2
+    },
+    {
+      "source": ">>> create_rational_range(-0.5, +1.5)\n[-1/2, 1/2, 3/2]",
+      "names": [],
+      "example": {
+        "document": "api/ampform_dpd.spin",
+        "ref_id": "spin",
+        "headings": [
+          "spin"
+        ]
+      },
+      "doc_lineno": 2
+    }
+  ],
+  "index": [],
+  "jpsi2ksp": [
+    {
+      "source": "from __future__ import annotations\n\nimport itertools\nimport logging\nimport os\nfrom typing import Iterable\n\nimport jax.numpy as jnp\nimport matplotlib.pyplot as plt\nimport qrules\nimport sympy as sp\nfrom ampform.dynamics import EnergyDependentWidth, formulate_form_factor\nfrom ampform.kinematics.phasespace import compute_third_mandelstam\nfrom ampform.sympy import (\n    UnevaluatedExpression,\n    create_expression,\n    implement_doit_method,\n    make_commutative,\n    perform_cached_doit,\n)\nfrom IPython.display import Latex, Markdown\nfrom tensorwaves.data.transform import SympyDataTransformer\nfrom tensorwaves.interface import DataSample, ParametrizedFunction\nfrom tqdm.auto import tqdm\n\nfrom ampform_dpd import (\n    DalitzPlotDecompositionBuilder,\n    _get_particle,\n    simplify_latex_rendering,\n)\nfrom ampform_dpd.decay import (\n    IsobarNode,\n    Particle,\n    ThreeBodyDecay,\n    ThreeBodyDecayChain,\n)\nfrom ampform_dpd.io import as_markdown_table, aslatex, perform_cached_lambdify\nfrom ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings\n\nsimplify_latex_rendering()\nlogging.getLogger(\"absl\").setLevel(logging.ERROR)  # mute JAX\nNO_TQDM = \"EXECUTE_NB\" in os.environ\nif NO_TQDM:\n    logging.getLogger(\"ampform_dpd.io\").setLevel(logging.ERROR)",
+      "names": [
+        {
+          "import_components": [
+            "__future__"
+          ],
+          "code_str": "__future__",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_from",
+          "resolved_location": "__future__"
+        },
+        {
+          "import_components": [
+            "itertools"
+          ],
+          "code_str": "itertools",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "import_target",
+          "resolved_location": "itertools"
+        },
+        {
+          "import_components": [
+            "logging"
+          ],
+          "code_str": "logging",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "import_target",
+          "resolved_location": "logging"
+        },
+        {
+          "import_components": [
+            "os"
+          ],
+          "code_str": "os",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "import_target",
+          "resolved_location": "os"
+        },
+        {
+          "import_components": [
+            "typing"
+          ],
+          "code_str": "typing",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "import_from",
+          "resolved_location": "typing"
+        },
+        {
+          "import_components": [
+            "typing",
+            "Iterable"
+          ],
+          "code_str": "Iterable",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "import_target",
+          "resolved_location": "typing.Iterable"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy"
+          ],
+          "code_str": "jax.numpy",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "import_target",
+          "resolved_location": "jax.numpy"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot"
+          ],
+          "code_str": "matplotlib.pyplot",
+          "lineno": 9,
+          "end_lineno": 9,
+          "context": "import_target",
+          "resolved_location": "matplotlib.pyplot"
+        },
+        {
+          "import_components": [
+            "sympy"
+          ],
+          "code_str": "sympy",
+          "lineno": 11,
+          "end_lineno": 11,
+          "context": "import_target",
+          "resolved_location": "sympy"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "dynamics"
+          ],
+          "code_str": "ampform.dynamics",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "import_from",
+          "resolved_location": "ampform.dynamics"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "dynamics",
+            "EnergyDependentWidth"
+          ],
+          "code_str": "EnergyDependentWidth",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "import_target",
+          "resolved_location": "ampform.dynamics.EnergyDependentWidth"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "dynamics",
+            "formulate_form_factor"
+          ],
+          "code_str": "formulate_form_factor",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "import_target",
+          "resolved_location": "ampform.dynamics.formulate_form_factor"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "kinematics",
+            "phasespace"
+          ],
+          "code_str": "ampform.kinematics.phasespace",
+          "lineno": 13,
+          "end_lineno": 13,
+          "context": "import_from",
+          "resolved_location": "ampform.kinematics.phasespace"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "kinematics",
+            "phasespace",
+            "compute_third_mandelstam"
+          ],
+          "code_str": "compute_third_mandelstam",
+          "lineno": 13,
+          "end_lineno": 13,
+          "context": "import_target",
+          "resolved_location": "ampform.kinematics.phasespace.compute_third_mandelstam"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy"
+          ],
+          "code_str": "ampform.sympy",
+          "lineno": 14,
+          "end_lineno": 20,
+          "context": "import_from",
+          "resolved_location": "ampform.sympy"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "UnevaluatedExpression"
+          ],
+          "code_str": "UnevaluatedExpression",
+          "lineno": 14,
+          "end_lineno": 20,
+          "context": "import_target",
+          "resolved_location": "ampform.sympy.UnevaluatedExpression"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "create_expression"
+          ],
+          "code_str": "create_expression",
+          "lineno": 14,
+          "end_lineno": 20,
+          "context": "import_target",
+          "resolved_location": "ampform.sympy.create_expression"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "implement_doit_method"
+          ],
+          "code_str": "implement_doit_method",
+          "lineno": 14,
+          "end_lineno": 20,
+          "context": "import_target",
+          "resolved_location": "ampform.sympy.implement_doit_method"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "make_commutative"
+          ],
+          "code_str": "make_commutative",
+          "lineno": 14,
+          "end_lineno": 20,
+          "context": "import_target",
+          "resolved_location": "ampform.sympy.make_commutative"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "perform_cached_doit"
+          ],
+          "code_str": "perform_cached_doit",
+          "lineno": 14,
+          "end_lineno": 20,
+          "context": "import_target",
+          "resolved_location": "ampform.sympy.perform_cached_doit"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display"
+          ],
+          "code_str": "IPython.display",
+          "lineno": 21,
+          "end_lineno": 21,
+          "context": "import_from",
+          "resolved_location": "IPython.display"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 21,
+          "end_lineno": 21,
+          "context": "import_target",
+          "resolved_location": "IPython.core.display.Latex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Markdown"
+          ],
+          "code_str": "Markdown",
+          "lineno": 21,
+          "end_lineno": 21,
+          "context": "import_target",
+          "resolved_location": "IPython.core.display.Markdown"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "data",
+            "transform"
+          ],
+          "code_str": "tensorwaves.data.transform",
+          "lineno": 22,
+          "end_lineno": 22,
+          "context": "import_from",
+          "resolved_location": "tensorwaves.data.transform"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "data",
+            "transform",
+            "SympyDataTransformer"
+          ],
+          "code_str": "SympyDataTransformer",
+          "lineno": 22,
+          "end_lineno": 22,
+          "context": "import_target",
+          "resolved_location": "tensorwaves.data.transform.SympyDataTransformer"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface"
+          ],
+          "code_str": "tensorwaves.interface",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "import_from",
+          "resolved_location": "tensorwaves.interface"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "DataSample"
+          ],
+          "code_str": "DataSample",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "import_target",
+          "resolved_location": "tensorwaves.interface.DataSample"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "ParametrizedFunction"
+          ],
+          "code_str": "ParametrizedFunction",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "import_target",
+          "resolved_location": "tensorwaves.interface.ParametrizedFunction"
+        },
+        {
+          "import_components": [
+            "ampform_dpd"
+          ],
+          "code_str": "ampform_dpd",
+          "lineno": 26,
+          "end_lineno": 30,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder"
+          ],
+          "code_str": "DalitzPlotDecompositionBuilder",
+          "lineno": 26,
+          "end_lineno": 30,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "simplify_latex_rendering"
+          ],
+          "code_str": "simplify_latex_rendering",
+          "lineno": 26,
+          "end_lineno": 30,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.simplify_latex_rendering"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay"
+          ],
+          "code_str": "ampform_dpd.decay",
+          "lineno": 31,
+          "end_lineno": 36,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.decay"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 31,
+          "end_lineno": 36,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 31,
+          "end_lineno": 36,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecay"
+          ],
+          "code_str": "ThreeBodyDecay",
+          "lineno": 31,
+          "end_lineno": 36,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecay"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 31,
+          "end_lineno": 36,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io"
+          ],
+          "code_str": "ampform_dpd.io",
+          "lineno": 37,
+          "end_lineno": 37,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.io"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "as_markdown_table"
+          ],
+          "code_str": "as_markdown_table",
+          "lineno": 37,
+          "end_lineno": 37,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.io.as_markdown_table"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 37,
+          "end_lineno": 37,
+          "context": "import_target",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "perform_cached_lambdify"
+          ],
+          "code_str": "perform_cached_lambdify",
+          "lineno": 37,
+          "end_lineno": 37,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.io.perform_cached_lambdify"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin"
+          ],
+          "code_str": "ampform_dpd.spin",
+          "lineno": 38,
+          "end_lineno": 38,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "filter_parity_violating_ls"
+          ],
+          "code_str": "filter_parity_violating_ls",
+          "lineno": 38,
+          "end_lineno": 38,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.spin.filter_parity_violating_ls"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "generate_ls_couplings"
+          ],
+          "code_str": "generate_ls_couplings",
+          "lineno": 38,
+          "end_lineno": 38,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.spin.generate_ls_couplings"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "simplify_latex_rendering"
+          ],
+          "code_str": "simplify_latex_rendering",
+          "lineno": 40,
+          "end_lineno": 40,
+          "context": "none",
+          "resolved_location": "ampform_dpd.simplify_latex_rendering"
+        },
+        {
+          "import_components": [
+            "logging",
+            "getLogger"
+          ],
+          "code_str": "logging.getLogger",
+          "lineno": 41,
+          "end_lineno": 41,
+          "context": "none",
+          "resolved_location": "logging.getLogger"
+        },
+        {
+          "import_components": [
+            "os",
+            "environ"
+          ],
+          "code_str": "os.environ",
+          "lineno": 42,
+          "end_lineno": 42,
+          "context": "none",
+          "resolved_location": "os.environ"
+        },
+        {
+          "import_components": [
+            "logging",
+            "getLogger"
+          ],
+          "code_str": "logging.getLogger",
+          "lineno": 44,
+          "end_lineno": 44,
+          "context": "none",
+          "resolved_location": "logging.getLogger"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "j-k0-p",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305"
+        ]
+      },
+      "doc_lineno": 20002
+    },
+    {
+      "source": "PDG = qrules.load_pdg()\nPARTICLE_DB = {\n    p.name: Particle(\n        name=p.name,\n        latex=p.latex,\n        spin=p.spin,\n        parity=int(p.parity),\n        mass=p.mass,\n        width=p.width,\n    )\n    for p in PDG\n    if p.parity is not None\n}\nJpsi = PARTICLE_DB[\"J/psi(1S)\"]\nK = PARTICLE_DB[\"K0\"]\n\u03a3 = PARTICLE_DB[\"Sigma+\"]\npbar = PARTICLE_DB[\"p~\"]\nPARTICLE_TO_ID = {Jpsi: 0, K: 1, \u03a3: 2, pbar: 3}\nMarkdown(as_markdown_table(list(PARTICLE_TO_ID)))",
+      "names": [
+        {
+          "import_components": [
+            "int"
+          ],
+          "code_str": "int",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "int"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 19,
+          "end_lineno": 19,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "as_markdown_table"
+          ],
+          "code_str": "as_markdown_table",
+          "lineno": 19,
+          "end_lineno": 19,
+          "context": "none",
+          "resolved_location": "ampform_dpd.io.as_markdown_table"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Markdown"
+          ],
+          "code_str": "Markdown",
+          "lineno": 19,
+          "end_lineno": 19,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Markdown"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "decay-definition",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Decay definition"
+        ]
+      },
+      "doc_lineno": 50002
+    },
+    {
+      "source": "resonance_names = [\n    \"Sigma(1660)~-\",\n    \"Sigma(1670)~-\",\n    \"Sigma(1750)~-\",\n    \"Sigma(1775)~-\",\n    \"Sigma(1910)~-\",\n    \"N(1700)+\",\n    \"N(1710)+\",\n    \"N(1720)+\",\n]\nresonances = [PARTICLE_DB[name] for name in resonance_names]\nMarkdown(as_markdown_table(resonances))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "as_markdown_table"
+          ],
+          "code_str": "as_markdown_table",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "ampform_dpd.io.as_markdown_table"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Markdown"
+          ],
+          "code_str": "Markdown",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Markdown"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "decay-definition",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Decay definition"
+        ]
+      },
+      "doc_lineno": 60002
+    },
+    {
+      "source": "def load_three_body_decay(\n    resonance_names: Iterable[str],\n    particle_definitions: dict[str, Particle],\n    min_ls: bool = True,\n) -> ThreeBodyDecay:\n    resonances = [particle_definitions[name] for name in resonance_names]\n    chains: list[ThreeBodyDecayChain] = []\n    for res in resonances:\n        chains.extend(_create_isobar(res, min_ls))\n    return ThreeBodyDecay(\n        states={state_id: particle for particle, state_id in PARTICLE_TO_ID.items()},\n        chains=tuple(chains),\n    )\n\n\ndef _create_isobar(resonance: Particle, min_ls: bool) -> list[ThreeBodyDecayChain]:\n    if resonance.name.startswith(\"Sigma\"):\n        child1, child2, spectator = pbar, K, \u03a3\n    elif resonance.name.startswith(\"N\"):\n        child1, child2, spectator = K, \u03a3, pbar\n    elif resonance.name.startswith(\"K\"):\n        child1, child2, spectator = \u03a3, pbar, K\n    else:\n        raise NotImplementedError\n    prod_ls_couplings = _generate_ls(\n        Jpsi, resonance, spectator, conserve_parity=False\n    )\n    dec_ls_couplings = _generate_ls(resonance, child1, child2, conserve_parity=True)\n    if min_ls:\n        decay = IsobarNode(\n            parent=Jpsi,\n            child1=IsobarNode(\n                parent=resonance,\n                child1=child1,\n                child2=child2,\n                interaction=min(dec_ls_couplings),\n            ),\n            child2=spectator,\n            interaction=min(prod_ls_couplings),\n        )\n        return [ThreeBodyDecayChain(decay)]\n    chains = []\n    for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):\n        decay = IsobarNode(\n            parent=Jpsi,\n            child1=IsobarNode(\n                parent=resonance,\n                child1=child1,\n                child2=child2,\n                interaction=dec_ls,\n            ),\n            child2=spectator,\n            interaction=prod_ls,\n        )\n        chains.append(ThreeBodyDecayChain(decay))\n    return chains\n\n\ndef _generate_ls(\n    parent: Particle, child1: Particle, child2: Particle, conserve_parity: bool\n) -> list[tuple[int, sp.Rational]]:\n    ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)\n    if conserve_parity:\n        return filter_parity_violating_ls(\n            ls, parent.parity, child1.parity, child2.parity\n        )\n    return ls\n\n\nDECAY = load_three_body_decay(\n    resonance_names,\n    particle_definitions=PARTICLE_DB,\n    min_ls=True,\n)\nLatex(aslatex(DECAY, with_jp=True))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecay"
+          ],
+          "code_str": "ThreeBodyDecay",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecay"
+        },
+        {
+          "import_components": [
+            "typing",
+            "Iterable"
+          ],
+          "code_str": "Iterable",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "typing.Iterable"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "dict"
+          ],
+          "code_str": "dict",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "dict"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "bool"
+          ],
+          "code_str": "bool",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "bool"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecay"
+          ],
+          "code_str": "ThreeBodyDecay",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecay"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "bool"
+          ],
+          "code_str": "bool",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "bool"
+        },
+        {
+          "import_components": [
+            "NotImplementedError"
+          ],
+          "code_str": "NotImplementedError",
+          "lineno": 24,
+          "end_lineno": 24,
+          "context": "none",
+          "resolved_location": "NotImplementedError"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 26,
+          "end_lineno": 26,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 28,
+          "end_lineno": 28,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 33,
+          "end_lineno": 33,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "min"
+          ],
+          "code_str": "min",
+          "lineno": 36,
+          "end_lineno": 36,
+          "context": "none",
+          "resolved_location": "min"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 32,
+          "end_lineno": 32,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "min"
+          ],
+          "code_str": "min",
+          "lineno": 39,
+          "end_lineno": 39,
+          "context": "none",
+          "resolved_location": "min"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 30,
+          "end_lineno": 30,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 30,
+          "end_lineno": 30,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 41,
+          "end_lineno": 41,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 41,
+          "end_lineno": 41,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "itertools",
+            "product"
+          ],
+          "code_str": "itertools.product",
+          "lineno": 43,
+          "end_lineno": 43,
+          "context": "none",
+          "resolved_location": "itertools.product"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 47,
+          "end_lineno": 47,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 46,
+          "end_lineno": 46,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 44,
+          "end_lineno": 44,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 44,
+          "end_lineno": 44,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 55,
+          "end_lineno": 55,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 55,
+          "end_lineno": 55,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 61,
+          "end_lineno": 61,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 61,
+          "end_lineno": 61,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "int"
+          ],
+          "code_str": "int",
+          "lineno": 61,
+          "end_lineno": 61,
+          "context": "none",
+          "resolved_location": "int"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational"
+          ],
+          "code_str": "sp.Rational",
+          "lineno": 61,
+          "end_lineno": 61,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "parent",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "child1",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "child2",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "bool"
+          ],
+          "code_str": "bool",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "bool"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "spin"
+          ],
+          "code_str": "parent.spin",
+          "lineno": 62,
+          "end_lineno": 62,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "spin"
+          ],
+          "code_str": "child1.spin",
+          "lineno": 62,
+          "end_lineno": 62,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "spin"
+          ],
+          "code_str": "child2.spin",
+          "lineno": 62,
+          "end_lineno": 62,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "generate_ls_couplings"
+          ],
+          "code_str": "generate_ls_couplings",
+          "lineno": 62,
+          "end_lineno": 62,
+          "context": "none",
+          "resolved_location": "ampform_dpd.spin.generate_ls_couplings"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "parity"
+          ],
+          "code_str": "parent.parity",
+          "lineno": 65,
+          "end_lineno": 65,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.parity"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "parity"
+          ],
+          "code_str": "child1.parity",
+          "lineno": 65,
+          "end_lineno": 65,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.parity"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "parity"
+          ],
+          "code_str": "child2.parity",
+          "lineno": 65,
+          "end_lineno": 65,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.parity"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "filter_parity_violating_ls"
+          ],
+          "code_str": "filter_parity_violating_ls",
+          "lineno": 64,
+          "end_lineno": 64,
+          "context": "none",
+          "resolved_location": "ampform_dpd.spin.filter_parity_violating_ls"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 75,
+          "end_lineno": 75,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 75,
+          "end_lineno": 75,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "decay-definition",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Decay definition"
+        ]
+      },
+      "doc_lineno": 70002
+    },
+    {
+      "source": "@make_commutative\n@implement_doit_method\nclass RelativisticBreitWigner(UnevaluatedExpression):\n    def __new__(cls, s, mass0, gamma0, m1, m2, angular_momentum, meson_radius):\n        return create_expression(\n            cls, s, mass0, gamma0, m1, m2, angular_momentum, meson_radius\n        )\n\n    def evaluate(self):\n        s, m0, w0, m1, m2, angular_momentum, meson_radius = self.args\n        width = EnergyDependentWidth(\n            s=s,\n            mass0=m0,\n            gamma0=w0,\n            m_a=m1,\n            m_b=m2,\n            angular_momentum=angular_momentum,\n            meson_radius=meson_radius,\n            name=Rf\"\\Gamma_{{{sp.latex(angular_momentum)}}}\",\n        )\n        return (m0 * w0) / (m0**2 - s - width * m0 * sp.I)\n\n    def _latex(self, printer, *args) -> str:\n        s, m0, w0, _, _, L, *_ = map(printer._print, self.args)\n        return Rf\"\\mathcal{{R}}_{{{L}}}\\left({s}, {m0}, {w0}\\right)\"\n\n\nbw = RelativisticBreitWigner(*sp.symbols(\"s m0 Gamma0 m1 m2 L R\"))\nLatex(aslatex({bw: bw.doit(deep=False)}))",
+      "names": [
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "make_commutative"
+          ],
+          "code_str": "make_commutative",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform.sympy.make_commutative"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "implement_doit_method"
+          ],
+          "code_str": "implement_doit_method",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "ampform.sympy.implement_doit_method"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "UnevaluatedExpression"
+          ],
+          "code_str": "UnevaluatedExpression",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform.sympy.UnevaluatedExpression"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "create_expression"
+          ],
+          "code_str": "create_expression",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform.sympy.create_expression"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "dynamics",
+            "EnergyDependentWidth"
+          ],
+          "code_str": "EnergyDependentWidth",
+          "lineno": 11,
+          "end_lineno": 11,
+          "context": "none",
+          "resolved_location": "ampform.dynamics.EnergyDependentWidth"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "dynamics",
+            "EnergyDependentWidth",
+            "()"
+          ],
+          "code_str": "width",
+          "lineno": 11,
+          "end_lineno": 11,
+          "context": "none",
+          "resolved_location": "ampform.dynamics.EnergyDependentWidth"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "dynamics",
+            "EnergyDependentWidth",
+            "()"
+          ],
+          "code_str": "width",
+          "lineno": 21,
+          "end_lineno": 21,
+          "context": "none",
+          "resolved_location": "ampform.dynamics.EnergyDependentWidth"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "map"
+          ],
+          "code_str": "map",
+          "lineno": 24,
+          "end_lineno": 24,
+          "context": "none",
+          "resolved_location": "map"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 28,
+          "end_lineno": 28,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 29,
+          "end_lineno": 29,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 29,
+          "end_lineno": 29,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "lineshapes-for-dynamics",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Lineshapes for dynamics"
+        ]
+      },
+      "doc_lineno": 110002
+    },
+    {
+      "source": "@make_commutative\n@implement_doit_method\nclass FormFactor(UnevaluatedExpression):\n    def __new__(cls, s, m1, m2, angular_momentum, meson_radius):\n        return create_expression(cls, s, m1, m2, angular_momentum, meson_radius)\n\n    def evaluate(self):\n        s, m1, m2, angular_momentum, meson_radius = self.args\n        return formulate_form_factor(\n            s=s,\n            m_a=m1,\n            m_b=m2,\n            angular_momentum=angular_momentum,\n            meson_radius=meson_radius,\n        )\n\n    def _latex(self, printer, *args) -> str:\n        s, m1, m2, L, *_ = map(printer._print, self.args)\n        return Rf\"\\mathcal{{F}}_{{{L}}}\\left({s}, {m1}, {m1}\\right)\"\n\n\nff = FormFactor(*sp.symbols(\"s m1 m2 L R\"))\nLatex(aslatex({ff: ff.doit(deep=False)}))",
+      "names": [
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "make_commutative"
+          ],
+          "code_str": "make_commutative",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform.sympy.make_commutative"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "implement_doit_method"
+          ],
+          "code_str": "implement_doit_method",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "ampform.sympy.implement_doit_method"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "UnevaluatedExpression"
+          ],
+          "code_str": "UnevaluatedExpression",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform.sympy.UnevaluatedExpression"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "create_expression"
+          ],
+          "code_str": "create_expression",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform.sympy.create_expression"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "dynamics",
+            "formulate_form_factor"
+          ],
+          "code_str": "formulate_form_factor",
+          "lineno": 9,
+          "end_lineno": 9,
+          "context": "none",
+          "resolved_location": "ampform.dynamics.formulate_form_factor"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 17,
+          "end_lineno": 17,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "map"
+          ],
+          "code_str": "map",
+          "lineno": 18,
+          "end_lineno": 18,
+          "context": "none",
+          "resolved_location": "map"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 22,
+          "end_lineno": 22,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "lineshapes-for-dynamics",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Lineshapes for dynamics"
+        ]
+      },
+      "doc_lineno": 130002
+    },
+    {
+      "source": "def formulate_breit_wigner_with_ff(\n    decay_chain: ThreeBodyDecayChain,\n) -> tuple[sp.Expr, dict[sp.Symbol, float]]:\n    production_node = decay_chain.decay\n    assert isinstance(\n        production_node.child1, IsobarNode\n    ), \"Not a 3-body isobar decay\"\n    decay_node = production_node.child1\n\n    s = _get_mandelstam_s(decay_chain)\n    parameter_defaults = {}\n    production_ff, new_pars = _create_form_factor(s, production_node)\n    parameter_defaults.update(new_pars)\n    decay_ff, new_pars = _create_form_factor(s, decay_node)\n    parameter_defaults.update(new_pars)\n    breit_wigner, new_pars = _create_breit_wigner(s, decay_node)\n    parameter_defaults.update(new_pars)\n    return (\n        production_ff * decay_ff * breit_wigner,\n        parameter_defaults,\n    )\n\n\ndef _create_form_factor(\n    s: sp.Symbol, isobar: IsobarNode\n) -> tuple[sp.Expr, dict[sp.Symbol, float]]:\n    assert isobar.interaction is not None, \"Need LS-couplings\"\n    inv_mass = _create_mass_symbol(isobar.parent)\n    outgoing_state_mass1 = _create_mass_symbol(isobar.child1)\n    outgoing_state_mass2 = _create_mass_symbol(isobar.child2)\n    meson_radius = _create_meson_radius_symbol(isobar.parent)\n    form_factor = FormFactor(\n        s=inv_mass**2,\n        m1=outgoing_state_mass1,\n        m2=outgoing_state_mass2,\n        angular_momentum=isobar.interaction.L,\n        meson_radius=meson_radius,\n    )\n    parameter_defaults = {\n        meson_radius: 1,\n    }\n    return form_factor, parameter_defaults\n\n\ndef _create_breit_wigner(\n    s: sp.Symbol, isobar: IsobarNode\n) -> tuple[sp.Expr, dict[sp.Symbol, float]]:\n    assert isobar.interaction is not None, \"Need LS-couplings\"\n    outgoing_state_mass1 = _create_mass_symbol(isobar.child1)\n    outgoing_state_mass2 = _create_mass_symbol(isobar.child2)\n    angular_momentum = isobar.interaction.L\n    res_mass = _create_mass_symbol(isobar.parent)\n    res_width = sp.Symbol(Rf\"\\Gamma_{{{isobar.parent.latex}}}\", nonnegative=True)\n    meson_radius = _create_meson_radius_symbol(isobar.parent)\n\n    breit_wigner_expr = RelativisticBreitWigner(\n        s=s,\n        mass0=res_mass,\n        gamma0=res_width,\n        m1=outgoing_state_mass1,\n        m2=outgoing_state_mass2,\n        angular_momentum=angular_momentum,\n        meson_radius=meson_radius,\n    )\n    parameter_defaults = {\n        res_mass: isobar.parent.mass,\n        res_width: isobar.parent.width,\n        meson_radius: 1,\n    }\n    return breit_wigner_expr, parameter_defaults\n\n\ndef _create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:\n    if _get_particle(isobar) is Jpsi:\n        return sp.Symbol(R\"R_{J/\\psi}\")\n    return sp.Symbol(R\"R_\\mathrm{res}\")\n\n\ndef _create_mass_symbol(particle: IsobarNode | Particle) -> sp.Symbol:\n    particle = _get_particle(particle)\n    state_id = PARTICLE_TO_ID.get(particle)\n    if state_id is not None:\n        return sp.Symbol(f\"m{state_id}\", nonnegative=True)\n    return sp.Symbol(f\"m_{{{particle.latex}}}\", nonnegative=True)\n\n\ndef _get_mandelstam_s(decay: ThreeBodyDecayChain) -> sp.Symbol:\n    s1, s2, s3 = sp.symbols(\"sigma1:4\", nonnegative=True)\n    m1, m2, m3 = map(_create_mass_symbol, [K, \u03a3, pbar])\n    decay_masses = {_create_mass_symbol(p) for p in decay.decay_products}\n    if decay_masses == {m2, m3}:\n        return s1\n    if decay_masses == {m1, m3}:\n        return s2\n    if decay_masses == {m1, m2}:\n        return s3\n    raise NotImplementedError(\n        f\"Cannot find Mandelstam variable for {''.join(decay_masses)}\"\n    )",
+      "names": [
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Expr"
+          ],
+          "code_str": "sp.Expr",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "sympy.core.expr.Expr"
+        },
+        {
+          "import_components": [
+            "dict"
+          ],
+          "code_str": "dict",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "dict"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "float"
+          ],
+          "code_str": "float",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "float"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()"
+          ],
+          "code_str": "decay_chain",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay"
+          ],
+          "code_str": "decay_chain.decay",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay"
+          ],
+          "code_str": "production_node",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "isinstance"
+          ],
+          "code_str": "isinstance",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "isinstance"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()"
+          ],
+          "code_str": "decay_chain",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay"
+          ],
+          "code_str": "production_node",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay"
+        },
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 26,
+          "end_lineno": 26,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Expr"
+          ],
+          "code_str": "sp.Expr",
+          "lineno": 26,
+          "end_lineno": 26,
+          "context": "none",
+          "resolved_location": "sympy.core.expr.Expr"
+        },
+        {
+          "import_components": [
+            "dict"
+          ],
+          "code_str": "dict",
+          "lineno": 26,
+          "end_lineno": 26,
+          "context": "none",
+          "resolved_location": "dict"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 26,
+          "end_lineno": 26,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "float"
+          ],
+          "code_str": "float",
+          "lineno": 26,
+          "end_lineno": 26,
+          "context": "none",
+          "resolved_location": "float"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 25,
+          "end_lineno": 25,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "s",
+          "lineno": 25,
+          "end_lineno": 25,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 25,
+          "end_lineno": 25,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "isobar",
+          "lineno": 25,
+          "end_lineno": 25,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "interaction"
+          ],
+          "code_str": "isobar.interaction",
+          "lineno": 27,
+          "end_lineno": 27,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.interaction"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "parent"
+          ],
+          "code_str": "isobar.parent",
+          "lineno": 28,
+          "end_lineno": 28,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.parent"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "child1"
+          ],
+          "code_str": "isobar.child1",
+          "lineno": 29,
+          "end_lineno": 29,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.child1"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "child2"
+          ],
+          "code_str": "isobar.child2",
+          "lineno": 30,
+          "end_lineno": 30,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.child2"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "parent"
+          ],
+          "code_str": "isobar.parent",
+          "lineno": 31,
+          "end_lineno": 31,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.parent"
+        },
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 47,
+          "end_lineno": 47,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Expr"
+          ],
+          "code_str": "sp.Expr",
+          "lineno": 47,
+          "end_lineno": 47,
+          "context": "none",
+          "resolved_location": "sympy.core.expr.Expr"
+        },
+        {
+          "import_components": [
+            "dict"
+          ],
+          "code_str": "dict",
+          "lineno": 47,
+          "end_lineno": 47,
+          "context": "none",
+          "resolved_location": "dict"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 47,
+          "end_lineno": 47,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "float"
+          ],
+          "code_str": "float",
+          "lineno": 47,
+          "end_lineno": 47,
+          "context": "none",
+          "resolved_location": "float"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 46,
+          "end_lineno": 46,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "s",
+          "lineno": 46,
+          "end_lineno": 46,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 46,
+          "end_lineno": 46,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "isobar",
+          "lineno": 46,
+          "end_lineno": 46,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "interaction"
+          ],
+          "code_str": "isobar.interaction",
+          "lineno": 48,
+          "end_lineno": 48,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.interaction"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "child1"
+          ],
+          "code_str": "isobar.child1",
+          "lineno": 49,
+          "end_lineno": 49,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.child1"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "child2"
+          ],
+          "code_str": "isobar.child2",
+          "lineno": 50,
+          "end_lineno": 50,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.child2"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "parent"
+          ],
+          "code_str": "isobar.parent",
+          "lineno": 52,
+          "end_lineno": 52,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.parent"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 53,
+          "end_lineno": 53,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "res_width",
+          "lineno": 53,
+          "end_lineno": 53,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()",
+            "parent"
+          ],
+          "code_str": "isobar.parent",
+          "lineno": 54,
+          "end_lineno": 54,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode.parent"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "s",
+          "lineno": 57,
+          "end_lineno": 57,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "res_width",
+          "lineno": 59,
+          "end_lineno": 59,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "res_width",
+          "lineno": 67,
+          "end_lineno": 67,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 73,
+          "end_lineno": 73,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 73,
+          "end_lineno": 73,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "isobar",
+          "lineno": 73,
+          "end_lineno": 73,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "isobar",
+          "lineno": 74,
+          "end_lineno": 74,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 75,
+          "end_lineno": 75,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 76,
+          "end_lineno": 76,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 79,
+          "end_lineno": 79,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 79,
+          "end_lineno": 79,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 79,
+          "end_lineno": 79,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "_get_particle",
+            "()"
+          ],
+          "code_str": "particle",
+          "lineno": 80,
+          "end_lineno": 80,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "_get_particle",
+            "()"
+          ],
+          "code_str": "particle",
+          "lineno": 81,
+          "end_lineno": 81,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 83,
+          "end_lineno": 83,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "_get_particle",
+            "()",
+            "latex"
+          ],
+          "code_str": "particle.latex",
+          "lineno": 84,
+          "end_lineno": 84,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.latex"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 84,
+          "end_lineno": 84,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 87,
+          "end_lineno": 87,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 87,
+          "end_lineno": 87,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 87,
+          "end_lineno": 87,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 88,
+          "end_lineno": 88,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "map"
+          ],
+          "code_str": "map",
+          "lineno": 89,
+          "end_lineno": 89,
+          "context": "none",
+          "resolved_location": "map"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay_products"
+          ],
+          "code_str": "decay.decay_products",
+          "lineno": 90,
+          "end_lineno": 90,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay_products"
+        },
+        {
+          "import_components": [
+            "NotImplementedError"
+          ],
+          "code_str": "NotImplementedError",
+          "lineno": 97,
+          "end_lineno": 97,
+          "context": "none",
+          "resolved_location": "NotImplementedError"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "lineshapes-for-dynamics",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Lineshapes for dynamics"
+        ]
+      },
+      "doc_lineno": 150002
+    },
+    {
+      "source": "model_builder = DalitzPlotDecompositionBuilder(DECAY, min_ls=True)\nfor chain in model_builder.decay.chains:\n    model_builder.dynamics_choices.register_builder(\n        chain, formulate_breit_wigner_with_ff\n    )\nmodel = model_builder.formulate(reference_subsystem=1)\nmodel.intensity",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder"
+          ],
+          "code_str": "DalitzPlotDecompositionBuilder",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()"
+          ],
+          "code_str": "model_builder",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate"
+          ],
+          "code_str": "model_builder.formulate",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder.formulate"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()"
+          ],
+          "code_str": "model",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "intensity"
+          ],
+          "code_str": "model.intensity",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.intensity"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "model-formulation",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Model formulation"
+        ]
+      },
+      "doc_lineno": 180002
+    },
+    {
+      "source": "Latex(aslatex(model.variables))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "variables"
+          ],
+          "code_str": "model.variables",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.variables"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "model-formulation",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Model formulation"
+        ]
+      },
+      "doc_lineno": 200002
+    },
+    {
+      "source": "masses = {\n    _create_mass_symbol(Jpsi): Jpsi.mass,\n    _create_mass_symbol(K): K.mass,\n    _create_mass_symbol(\u03a3): \u03a3.mass,\n    _create_mass_symbol(pbar): pbar.mass,\n}\nmodel.parameter_defaults.update(masses)\nLatex(aslatex(masses))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "model-formulation",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Model formulation"
+        ]
+      },
+      "doc_lineno": 210002
+    },
+    {
+      "source": "Latex(aslatex(model.amplitudes))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "amplitudes"
+          ],
+          "code_str": "model.amplitudes",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.amplitudes"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "model-formulation",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Model formulation"
+        ]
+      },
+      "doc_lineno": 230002
+    },
+    {
+      "source": "unfolded_intensity_expr = perform_cached_doit(model.intensity)\nfull_intensity_expr = perform_cached_doit(\n    unfolded_intensity_expr.xreplace(model.amplitudes)\n)",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "intensity"
+          ],
+          "code_str": "model.intensity",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.intensity"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "perform_cached_doit"
+          ],
+          "code_str": "perform_cached_doit",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform.sympy.perform_cached_doit"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "amplitudes"
+          ],
+          "code_str": "model.amplitudes",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.amplitudes"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "sympy",
+            "perform_cached_doit"
+          ],
+          "code_str": "perform_cached_doit",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "ampform.sympy.perform_cached_doit"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "preparing-for-input-data",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Preparing for input data"
+        ]
+      },
+      "doc_lineno": 260002
+    },
+    {
+      "source": "couplings = {\n    s: 1\n    for s in full_intensity_expr.free_symbols\n    if isinstance(s, sp.Indexed)\n    if \"production\" in str(s) or \"decay\" in str(s)\n}\nmodel.parameter_defaults.update(couplings)",
+      "names": [
+        {
+          "import_components": [
+            "sympy",
+            "Indexed"
+          ],
+          "code_str": "sp.Indexed",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "sympy.tensor.indexed.Indexed"
+        },
+        {
+          "import_components": [
+            "isinstance"
+          ],
+          "code_str": "isinstance",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "isinstance"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "str"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "preparing-for-input-data",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Preparing for input data"
+        ]
+      },
+      "doc_lineno": 280002
+    },
+    {
+      "source": "sp.Array(full_intensity_expr.free_symbols - set(model.parameter_defaults))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "parameter_defaults"
+          ],
+          "code_str": "model.parameter_defaults",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.parameter_defaults"
+        },
+        {
+          "import_components": [
+            "set"
+          ],
+          "code_str": "set",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "set"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Array"
+          ],
+          "code_str": "sp.Array",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "sympy.tensor.array.dense_ndim_array.ImmutableDenseNDimArray"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "preparing-for-input-data",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Preparing for input data"
+        ]
+      },
+      "doc_lineno": 300002
+    },
+    {
+      "source": "masses_to_angles = SympyDataTransformer.from_sympy(model.variables, backend=\"jax\")\nmasses_to_angles.functions",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "variables"
+          ],
+          "code_str": "model.variables",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.variables"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "data",
+            "transform",
+            "SympyDataTransformer",
+            "from_sympy"
+          ],
+          "code_str": "SympyDataTransformer.from_sympy",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "tensorwaves.data.transform.SympyDataTransformer.from_sympy"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "data",
+            "transform",
+            "SympyDataTransformer",
+            "from_sympy",
+            "()"
+          ],
+          "code_str": "masses_to_angles",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "tensorwaves.data.transform.SympyDataTransformer"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "data",
+            "transform",
+            "SympyDataTransformer",
+            "from_sympy",
+            "()",
+            "functions"
+          ],
+          "code_str": "masses_to_angles.functions",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "tensorwaves.data.transform.SympyDataTransformer.functions"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "preparing-for-input-data",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Preparing for input data"
+        ]
+      },
+      "doc_lineno": 320002
+    },
+    {
+      "source": "dalitz_data = {str(s): float(v) for s, v in masses.items()}",
+      "names": [
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "float"
+          ],
+          "code_str": "float",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "float"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 350002
+    },
+    {
+      "source": "resolution = 500\nX, Y = jnp.meshgrid(\n    jnp.linspace(1.66**2, 2.18**2, num=resolution),\n    jnp.linspace(1.4**2, 1.93**2, num=resolution),\n)\ndalitz_data[\"sigma3\"] = X\ndalitz_data[\"sigma2\"] = Y",
+      "names": [
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "linspace"
+          ],
+          "code_str": "jnp.linspace",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "jax.numpy.linspace"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "linspace"
+          ],
+          "code_str": "jnp.linspace",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "jax.numpy.linspace"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "meshgrid"
+          ],
+          "code_str": "jnp.meshgrid",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "jax.numpy.meshgrid"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 370002
+    },
+    {
+      "source": "s1, s2, s3 = sp.symbols(\"sigma1:4\", nonnegative=True)\nm0, m1, m2, m3 = sorted(masses, key=str)\ns1_expr = compute_third_mandelstam(s3, s2, m0, m1, m2, m3)\nLatex(aslatex({s1: s1_expr}))",
+      "names": [
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "sorted"
+          ],
+          "code_str": "sorted",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "sorted"
+        },
+        {
+          "import_components": [
+            "ampform",
+            "kinematics",
+            "phasespace",
+            "compute_third_mandelstam"
+          ],
+          "code_str": "compute_third_mandelstam",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform.kinematics.phasespace.compute_third_mandelstam"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 390002
+    },
+    {
+      "source": "sigma1_func = perform_cached_lambdify(s1_expr, backend=\"jax\")\ndalitz_data[\"sigma1\"] = sigma1_func(dalitz_data)\ndalitz_data",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "perform_cached_lambdify"
+          ],
+          "code_str": "perform_cached_lambdify",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.io.perform_cached_lambdify"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 410002
+    },
+    {
+      "source": "angle_data = masses_to_angles(dalitz_data)\ndalitz_data.update(angle_data)",
+      "names": [
+        {
+          "import_components": [
+            "tensorwaves",
+            "data",
+            "transform",
+            "SympyDataTransformer",
+            "from_sympy",
+            "()"
+          ],
+          "code_str": "masses_to_angles",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "tensorwaves.data.transform.SympyDataTransformer"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 430002
+    },
+    {
+      "source": "free_parameters = {\n    k: v\n    for k, v in model.parameter_defaults.items()\n    if isinstance(k, sp.Indexed)\n    if \"production\" in str(k) or \"decay\" in str(k)\n}\nfixed_parameters = {\n    k: v for k, v in model.parameter_defaults.items() if k not in free_parameters\n}\nintensity_func = perform_cached_lambdify(\n    full_intensity_expr.xreplace(fixed_parameters),\n    parameters=free_parameters,\n    backend=\"jax\",\n)",
+      "names": [
+        {
+          "import_components": [
+            "sympy",
+            "Indexed"
+          ],
+          "code_str": "sp.Indexed",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "sympy.tensor.indexed.Indexed"
+        },
+        {
+          "import_components": [
+            "isinstance"
+          ],
+          "code_str": "isinstance",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "isinstance"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "perform_cached_lambdify"
+          ],
+          "code_str": "perform_cached_lambdify",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "ampform_dpd.io.perform_cached_lambdify"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 450002
+    },
+    {
+      "source": "plt.rc(\"font\", size=18)\nintensities = intensity_func(dalitz_data)\nI_tot = jnp.nansum(intensities)\nnormalized_intensities = intensities / I_tot\nassert not jnp.all(jnp.isnan(normalized_intensities)), \"All intensities are NaN\"\n\nfig, ax = plt.subplots(figsize=(14, 10))\nmesh = ax.pcolormesh(X, Y, normalized_intensities)\nax.set_aspect(\"equal\")\nc_bar = plt.colorbar(mesh, ax=ax, pad=0.01)\nc_bar.ax.set_ylabel(\"Normalized intensity (a.u.)\")\nax.set_xlabel(R\"$\\sigma_3 = M^2\\left(K^0\\Sigma^+\\right)$\")\nax.set_ylabel(R\"$\\sigma_2 = M^2\\left(K^0\\bar{p}\\right)$\")\nplt.show()",
+      "names": [
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "rc"
+          ],
+          "code_str": "plt.rc",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.rc"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "nansum"
+          ],
+          "code_str": "jnp.nansum",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "jax.numpy.nansum"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "isnan"
+          ],
+          "code_str": "jnp.isnan",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "jax.numpy.isnan"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "all"
+          ],
+          "code_str": "jnp.all",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "jax.numpy.all"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "subplots"
+          ],
+          "code_str": "plt.subplots",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.subplots"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "colorbar"
+          ],
+          "code_str": "plt.colorbar",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.colorbar"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "show"
+          ],
+          "code_str": "plt.show",
+          "lineno": 14,
+          "end_lineno": 14,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.show"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 470002
+    },
+    {
+      "source": "def compute_sub_intensity(\n    func: ParametrizedFunction, phsp: DataSample, resonance_latex: str\n) -> jnp.ndarray:\n    original_parameters = dict(func.parameters)\n    zero_parameters = {\n        k: 0\n        for k, v in func.parameters.items()\n        if R\"\\mathcal{H}\" in k\n        if resonance_latex not in k\n    }\n    func.update_parameters(zero_parameters)\n    intensities = func(phsp)\n    func.update_parameters(original_parameters)\n    return intensities\n\n\nplt.rc(\"font\", size=16)\nfig, axes = plt.subplots(figsize=(18, 6), ncols=2, sharey=True)\nfig.subplots_adjust(wspace=0.02)\nax1, ax2 = axes\nx = jnp.sqrt(X[0])\ny = jnp.sqrt(Y[:, 0])\nax1.fill_between(x, jnp.nansum(normalized_intensities, axis=0), alpha=0.5)\nax2.fill_between(y, jnp.nansum(normalized_intensities, axis=1), alpha=0.5)\nfor ax in axes:\n    _, y_max = ax.get_ylim()\n    ax.set_ylim(0, y_max)\n    ax.autoscale(enable=False, axis=\"x\")\nax1.set_ylabel(\"Normalized intensity (a.u.)\")\nax1.set_xlabel(R\"$M\\left(K^0\\Sigma^+\\right)$\")\nax2.set_xlabel(R\"$M\\left(K^0\\bar{p}\\right)$\")\ni1, i2 = 0, 0\nfor chain in tqdm(model.decay.chains, disable=NO_TQDM):\n    resonance = chain.resonance\n    decay_product = set(chain.decay_products)\n    if decay_product == {K, \u03a3}:\n        ax = ax1\n        i1 += 1\n        i = i1\n        projection_axis = 0\n        x_data = x\n    elif decay_product == {K, pbar}:\n        ax = ax2\n        i2 += 1\n        i = i2\n        projection_axis = 1\n        x_data = y\n    else:\n        continue\n    sub_intensities = compute_sub_intensity(\n        intensity_func, dalitz_data, resonance.latex\n    )\n    ax.plot(\n        x_data, jnp.nansum(sub_intensities / I_tot, axis=projection_axis), c=f\"C{i}\"\n    )\n    ax.axvline(resonance.mass, label=f\"${resonance.latex}$\", c=f\"C{i}\", ls=\"dashed\")\nfor ax in axes:\n    ax.legend(fontsize=12)\nplt.show()",
+      "names": [
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "ParametrizedFunction"
+          ],
+          "code_str": "ParametrizedFunction",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "tensorwaves.interface.ParametrizedFunction"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "ParametrizedFunction",
+            "()"
+          ],
+          "code_str": "func",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "tensorwaves.interface.ParametrizedFunction"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "DataSample"
+          ],
+          "code_str": "DataSample",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "tensorwaves.interface.DataSample"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "ParametrizedFunction",
+            "()",
+            "parameters"
+          ],
+          "code_str": "func.parameters",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "tensorwaves.interface.ParametrizedFunction.parameters"
+        },
+        {
+          "import_components": [
+            "dict"
+          ],
+          "code_str": "dict",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "dict"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "ParametrizedFunction",
+            "()",
+            "update_parameters"
+          ],
+          "code_str": "func.update_parameters",
+          "lineno": 11,
+          "end_lineno": 11,
+          "context": "none",
+          "resolved_location": "tensorwaves.interface.ParametrizedFunction.update_parameters"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "ParametrizedFunction",
+            "()"
+          ],
+          "code_str": "func",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "tensorwaves.interface.ParametrizedFunction"
+        },
+        {
+          "import_components": [
+            "tensorwaves",
+            "interface",
+            "ParametrizedFunction",
+            "()",
+            "update_parameters"
+          ],
+          "code_str": "func.update_parameters",
+          "lineno": 13,
+          "end_lineno": 13,
+          "context": "none",
+          "resolved_location": "tensorwaves.interface.ParametrizedFunction.update_parameters"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "rc"
+          ],
+          "code_str": "plt.rc",
+          "lineno": 17,
+          "end_lineno": 17,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.rc"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "subplots"
+          ],
+          "code_str": "plt.subplots",
+          "lineno": 18,
+          "end_lineno": 18,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.subplots"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "sqrt"
+          ],
+          "code_str": "jnp.sqrt",
+          "lineno": 21,
+          "end_lineno": 21,
+          "context": "none",
+          "resolved_location": "jax.numpy.sqrt"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "sqrt"
+          ],
+          "code_str": "jnp.sqrt",
+          "lineno": 22,
+          "end_lineno": 22,
+          "context": "none",
+          "resolved_location": "jax.numpy.sqrt"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "nansum"
+          ],
+          "code_str": "jnp.nansum",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "none",
+          "resolved_location": "jax.numpy.nansum"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "nansum"
+          ],
+          "code_str": "jnp.nansum",
+          "lineno": 24,
+          "end_lineno": 24,
+          "context": "none",
+          "resolved_location": "jax.numpy.nansum"
+        },
+        {
+          "import_components": [
+            "set"
+          ],
+          "code_str": "set",
+          "lineno": 35,
+          "end_lineno": 35,
+          "context": "none",
+          "resolved_location": "set"
+        },
+        {
+          "import_components": [
+            "jax",
+            "numpy",
+            "nansum"
+          ],
+          "code_str": "jnp.nansum",
+          "lineno": 54,
+          "end_lineno": 54,
+          "context": "none",
+          "resolved_location": "jax.numpy.nansum"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "show"
+          ],
+          "code_str": "plt.show",
+          "lineno": 59,
+          "end_lineno": 59,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.show"
+        }
+      ],
+      "example": {
+        "document": "jpsi2ksp",
+        "ref_id": "dalitz-plot",
+        "headings": [
+          "J/\u03c8 \u2192 K\u2070\u03a3\u207ap\u0305",
+          "Dalitz plot"
+        ]
+      },
+      "doc_lineno": 490002
+    }
+  ],
+  "lc2pkpi": [
+    {
+      "source": "from __future__ import annotations\n\nimport itertools\nfrom typing import Iterable\n\nimport qrules\nimport sympy as sp\nfrom IPython.display import Latex, Markdown\n\nfrom ampform_dpd import DalitzPlotDecompositionBuilder, simplify_latex_rendering\nfrom ampform_dpd.decay import (\n    IsobarNode,\n    Particle,\n    ThreeBodyDecay,\n    ThreeBodyDecayChain,\n)\nfrom ampform_dpd.dynamics import BreitWignerMinL\nfrom ampform_dpd.io import as_markdown_table, aslatex\nfrom ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings\n\nsimplify_latex_rendering()",
+      "names": [
+        {
+          "import_components": [
+            "__future__"
+          ],
+          "code_str": "__future__",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_from",
+          "resolved_location": "__future__"
+        },
+        {
+          "import_components": [
+            "itertools"
+          ],
+          "code_str": "itertools",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "import_target",
+          "resolved_location": "itertools"
+        },
+        {
+          "import_components": [
+            "typing"
+          ],
+          "code_str": "typing",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "import_from",
+          "resolved_location": "typing"
+        },
+        {
+          "import_components": [
+            "typing",
+            "Iterable"
+          ],
+          "code_str": "Iterable",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "import_target",
+          "resolved_location": "typing.Iterable"
+        },
+        {
+          "import_components": [
+            "sympy"
+          ],
+          "code_str": "sympy",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "import_target",
+          "resolved_location": "sympy"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display"
+          ],
+          "code_str": "IPython.display",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "import_from",
+          "resolved_location": "IPython.display"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "import_target",
+          "resolved_location": "IPython.core.display.Latex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Markdown"
+          ],
+          "code_str": "Markdown",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "import_target",
+          "resolved_location": "IPython.core.display.Markdown"
+        },
+        {
+          "import_components": [
+            "ampform_dpd"
+          ],
+          "code_str": "ampform_dpd",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder"
+          ],
+          "code_str": "DalitzPlotDecompositionBuilder",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "simplify_latex_rendering"
+          ],
+          "code_str": "simplify_latex_rendering",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.simplify_latex_rendering"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay"
+          ],
+          "code_str": "ampform_dpd.decay",
+          "lineno": 11,
+          "end_lineno": 16,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.decay"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 11,
+          "end_lineno": 16,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 11,
+          "end_lineno": 16,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecay"
+          ],
+          "code_str": "ThreeBodyDecay",
+          "lineno": 11,
+          "end_lineno": 16,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecay"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 11,
+          "end_lineno": 16,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics"
+          ],
+          "code_str": "ampform_dpd.dynamics",
+          "lineno": 17,
+          "end_lineno": 17,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.dynamics"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL"
+          ],
+          "code_str": "BreitWignerMinL",
+          "lineno": 17,
+          "end_lineno": 17,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io"
+          ],
+          "code_str": "ampform_dpd.io",
+          "lineno": 18,
+          "end_lineno": 18,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.io"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "as_markdown_table"
+          ],
+          "code_str": "as_markdown_table",
+          "lineno": 18,
+          "end_lineno": 18,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.io.as_markdown_table"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 18,
+          "end_lineno": 18,
+          "context": "import_target",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin"
+          ],
+          "code_str": "ampform_dpd.spin",
+          "lineno": 19,
+          "end_lineno": 19,
+          "context": "import_from",
+          "resolved_location": "ampform_dpd.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "filter_parity_violating_ls"
+          ],
+          "code_str": "filter_parity_violating_ls",
+          "lineno": 19,
+          "end_lineno": 19,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.spin.filter_parity_violating_ls"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "generate_ls_couplings"
+          ],
+          "code_str": "generate_ls_couplings",
+          "lineno": 19,
+          "end_lineno": 19,
+          "context": "import_target",
+          "resolved_location": "ampform_dpd.spin.generate_ls_couplings"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "simplify_latex_rendering"
+          ],
+          "code_str": "simplify_latex_rendering",
+          "lineno": 21,
+          "end_lineno": 21,
+          "context": "none",
+          "resolved_location": "ampform_dpd.simplify_latex_rendering"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "c-p-k",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b"
+        ]
+      },
+      "doc_lineno": 20002
+    },
+    {
+      "source": "PDG = qrules.load_pdg()\nPARTICLE_DB = {\n    p.name: Particle(\n        name=p.name,\n        latex=p.latex,\n        spin=p.spin,\n        parity=int(p.parity),\n        mass=p.mass,\n        width=p.width,\n    )\n    for p in PDG\n    if p.parity is not None\n}\nPARTICLE_DB[\"Lambda(2000)\"] = Particle(\n    name=\"Lambda(2000)\",\n    latex=R\"\\Lambda(2000)\",\n    spin=0.5,\n    parity=-1,\n    mass=2.0,\n    width=(0.020 + 0.400) / 2,\n)\n\u039bc = PARTICLE_DB[\"Lambda(c)+\"]\np = PARTICLE_DB[\"p\"]\n\u03c0 = PARTICLE_DB[\"pi+\"]\nK = PARTICLE_DB[\"K-\"]\nPARTICLE_TO_ID = {\u039bc: 0, p: 1, \u03c0: 2, K: 3}\nMarkdown(as_markdown_table(list(PARTICLE_TO_ID)))",
+      "names": [
+        {
+          "import_components": [
+            "int"
+          ],
+          "code_str": "int",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "int"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 14,
+          "end_lineno": 14,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 27,
+          "end_lineno": 27,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "as_markdown_table"
+          ],
+          "code_str": "as_markdown_table",
+          "lineno": 27,
+          "end_lineno": 27,
+          "context": "none",
+          "resolved_location": "ampform_dpd.io.as_markdown_table"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Markdown"
+          ],
+          "code_str": "Markdown",
+          "lineno": 27,
+          "end_lineno": 27,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Markdown"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "decay-definition",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b",
+          "Decay definition"
+        ]
+      },
+      "doc_lineno": 40002
+    },
+    {
+      "source": "resonance_names = [\n    \"Lambda(1405)\",\n    \"Lambda(1520)\",\n    \"Lambda(1600)\",\n    \"Lambda(1670)\",\n    \"Lambda(1690)\",\n    \"Lambda(2000)\",\n    \"Delta(1232)+\",\n    \"Delta(1600)+\",\n    \"Delta(1700)+\",\n    \"K(0)*(700)+\",\n    \"K*(892)0\",\n    \"K(2)*(1430)0\",\n]\nresonances = [PARTICLE_DB[name] for name in resonance_names]\nMarkdown(as_markdown_table(resonances))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "as_markdown_table"
+          ],
+          "code_str": "as_markdown_table",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "ampform_dpd.io.as_markdown_table"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Markdown"
+          ],
+          "code_str": "Markdown",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Markdown"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "decay-definition",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b",
+          "Decay definition"
+        ]
+      },
+      "doc_lineno": 50002
+    },
+    {
+      "source": "def load_three_body_decay(\n    resonance_names: Iterable[str],\n    particle_definitions: dict[str, Particle],\n    min_ls: bool = True,\n) -> ThreeBodyDecay:\n    resonances = [particle_definitions[name] for name in resonance_names]\n    chains: list[ThreeBodyDecayChain] = []\n    for res in resonances:\n        chains.extend(_create_isobar(res, min_ls))\n    return ThreeBodyDecay(\n        states={state_id: particle for particle, state_id in PARTICLE_TO_ID.items()},\n        chains=tuple(chains),\n    )\n\n\ndef _create_isobar(resonance: Particle, min_ls: bool) -> list[ThreeBodyDecayChain]:\n    if resonance.name.startswith(\"K\"):\n        child1, child2, spectator = \u03c0, K, p\n    elif resonance.name.startswith(\"L\"):\n        child1, child2, spectator = K, p, \u03c0\n    elif resonance.name.startswith(\"D\"):\n        child1, child2, spectator = p, \u03c0, K\n    else:\n        raise NotImplementedError\n    prod_ls_couplings = _generate_ls(\u039bc, resonance, spectator, conserve_parity=False)\n    dec_ls_couplings = _generate_ls(resonance, child1, child2, conserve_parity=True)\n    if min_ls:\n        decay = IsobarNode(\n            parent=\u039bc,\n            child1=IsobarNode(\n                parent=resonance,\n                child1=child1,\n                child2=child2,\n                interaction=min(dec_ls_couplings),\n            ),\n            child2=spectator,\n            interaction=min(prod_ls_couplings),\n        )\n        return [ThreeBodyDecayChain(decay)]\n    chains = []\n    for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):\n        decay = IsobarNode(\n            parent=\u039bc,\n            child1=IsobarNode(\n                parent=resonance,\n                child1=child1,\n                child2=child2,\n                interaction=dec_ls,\n            ),\n            child2=spectator,\n            interaction=prod_ls,\n        )\n        chains.append(ThreeBodyDecayChain(decay))\n    return chains\n\n\ndef _generate_ls(\n    parent: Particle, child1: Particle, child2: Particle, conserve_parity: bool\n) -> list[tuple[int, sp.Rational]]:\n    ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)\n    if conserve_parity:\n        return filter_parity_violating_ls(\n            ls, parent.parity, child1.parity, child2.parity\n        )\n    return ls\n\n\nDECAY = load_three_body_decay(\n    resonance_names,\n    particle_definitions=PARTICLE_DB,\n    min_ls=True,\n)\nLatex(aslatex(DECAY, with_jp=True))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecay"
+          ],
+          "code_str": "ThreeBodyDecay",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecay"
+        },
+        {
+          "import_components": [
+            "typing",
+            "Iterable"
+          ],
+          "code_str": "Iterable",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "typing.Iterable"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "dict"
+          ],
+          "code_str": "dict",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "dict"
+        },
+        {
+          "import_components": [
+            "str"
+          ],
+          "code_str": "str",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "str"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "bool"
+          ],
+          "code_str": "bool",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "bool"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecay"
+          ],
+          "code_str": "ThreeBodyDecay",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecay"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "bool"
+          ],
+          "code_str": "bool",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "bool"
+        },
+        {
+          "import_components": [
+            "NotImplementedError"
+          ],
+          "code_str": "NotImplementedError",
+          "lineno": 24,
+          "end_lineno": 24,
+          "context": "none",
+          "resolved_location": "NotImplementedError"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 25,
+          "end_lineno": 25,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 26,
+          "end_lineno": 26,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 31,
+          "end_lineno": 31,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "min"
+          ],
+          "code_str": "min",
+          "lineno": 34,
+          "end_lineno": 34,
+          "context": "none",
+          "resolved_location": "min"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 30,
+          "end_lineno": 30,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "min"
+          ],
+          "code_str": "min",
+          "lineno": 37,
+          "end_lineno": 37,
+          "context": "none",
+          "resolved_location": "min"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 28,
+          "end_lineno": 28,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 28,
+          "end_lineno": 28,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 39,
+          "end_lineno": 39,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 39,
+          "end_lineno": 39,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "itertools",
+            "product"
+          ],
+          "code_str": "itertools.product",
+          "lineno": 41,
+          "end_lineno": 41,
+          "context": "none",
+          "resolved_location": "itertools.product"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "resonance",
+          "lineno": 45,
+          "end_lineno": 45,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 44,
+          "end_lineno": 44,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode"
+          ],
+          "code_str": "IsobarNode",
+          "lineno": 42,
+          "end_lineno": 42,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 42,
+          "end_lineno": 42,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "IsobarNode",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 53,
+          "end_lineno": 53,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.IsobarNode"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 53,
+          "end_lineno": 53,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "list"
+          ],
+          "code_str": "list",
+          "lineno": 59,
+          "end_lineno": 59,
+          "context": "none",
+          "resolved_location": "list"
+        },
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 59,
+          "end_lineno": 59,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "int"
+          ],
+          "code_str": "int",
+          "lineno": 59,
+          "end_lineno": 59,
+          "context": "none",
+          "resolved_location": "int"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational"
+          ],
+          "code_str": "sp.Rational",
+          "lineno": 59,
+          "end_lineno": 59,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 58,
+          "end_lineno": 58,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "parent",
+          "lineno": 58,
+          "end_lineno": 58,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 58,
+          "end_lineno": 58,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "child1",
+          "lineno": 58,
+          "end_lineno": 58,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 58,
+          "end_lineno": 58,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "child2",
+          "lineno": 58,
+          "end_lineno": 58,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "bool"
+          ],
+          "code_str": "bool",
+          "lineno": 58,
+          "end_lineno": 58,
+          "context": "none",
+          "resolved_location": "bool"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "spin"
+          ],
+          "code_str": "parent.spin",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "spin"
+          ],
+          "code_str": "child1.spin",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "spin"
+          ],
+          "code_str": "child2.spin",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.spin"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "generate_ls_couplings"
+          ],
+          "code_str": "generate_ls_couplings",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.spin.generate_ls_couplings"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "parity"
+          ],
+          "code_str": "parent.parity",
+          "lineno": 63,
+          "end_lineno": 63,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.parity"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "parity"
+          ],
+          "code_str": "child1.parity",
+          "lineno": 63,
+          "end_lineno": 63,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.parity"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "parity"
+          ],
+          "code_str": "child2.parity",
+          "lineno": 63,
+          "end_lineno": 63,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.parity"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "spin",
+            "filter_parity_violating_ls"
+          ],
+          "code_str": "filter_parity_violating_ls",
+          "lineno": 62,
+          "end_lineno": 62,
+          "context": "none",
+          "resolved_location": "ampform_dpd.spin.filter_parity_violating_ls"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 73,
+          "end_lineno": 73,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 73,
+          "end_lineno": 73,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "decay-definition",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b",
+          "Decay definition"
+        ]
+      },
+      "doc_lineno": 60002
+    },
+    {
+      "source": "s, m0, \u03930, m1, m2 = sp.symbols(\"s m0 Gamma0 m1 m2\", nonnegative=True)\nm_top, m_spec = sp.symbols(R\"m_\\mathrm{top} m_\\mathrm{spectator}\")\nR_dec, R_prod = sp.symbols(R\"R_\\mathrm{res} R_{\\Lambda_c}\")\nl_\u039bc, l_R = sp.symbols(R\"l_{\\Lambda_c} l_R\", integer=True, positive=True)\nbw = BreitWignerMinL(s, m_top, m_spec, m0, \u03930, m1, m2, l_R, l_\u039bc, R_dec, R_prod)\nLatex(aslatex({bw: bw.doit(deep=False)}))",
+      "names": [
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL"
+          ],
+          "code_str": "BreitWignerMinL",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL",
+            "()"
+          ],
+          "code_str": "bw",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL",
+            "()"
+          ],
+          "code_str": "bw",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL",
+            "()",
+            "doit"
+          ],
+          "code_str": "bw.doit",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "sympy.core.basic.Basic.doit"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "lineshapes-for-dynamics",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b",
+          "Lineshapes for dynamics"
+        ]
+      },
+      "doc_lineno": 80002
+    },
+    {
+      "source": "def formulate_breit_wigner(\n    decay_chain: ThreeBodyDecayChain,\n) -> tuple[BreitWignerMinL, dict[sp.Symbol, float]]:\n    s = _get_mandelstam_s(decay_chain)\n    child1_mass, child2_mass = map(_to_mass_symbol, decay_chain.decay_products)\n    l_dec = sp.Rational(decay_chain.outgoing_ls.L)\n    l_prod = sp.Rational(decay_chain.incoming_ls.L)\n    parent_mass = sp.Symbol(f\"m_{{{decay_chain.parent.latex}}}\")\n    spectator_mass = sp.Symbol(f\"m_{{{decay_chain.spectator.latex}}}\")\n    resonance_mass = sp.Symbol(f\"m_{{{decay_chain.resonance.latex}}}\")\n    resonance_width = sp.Symbol(Rf\"\\Gamma_{{{decay_chain.resonance.latex}}}\")\n    R_dec = sp.Symbol(R\"R_\\mathrm{res}\")\n    R_prod = sp.Symbol(R\"R_{\\Lambda_c}\")\n    parameter_defaults = {\n        parent_mass: decay_chain.parent.mass,\n        spectator_mass: decay_chain.spectator.mass,\n        resonance_mass: decay_chain.resonance.mass,\n        resonance_width: decay_chain.resonance.width,\n        child1_mass: decay_chain.decay_products[0].mass,\n        child2_mass: decay_chain.decay_products[1].mass,\n        # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376\n        R_dec: 1.5,\n        R_prod: 5,\n    }\n    dynamics = BreitWignerMinL(\n        s,\n        parent_mass,\n        spectator_mass,\n        resonance_mass,\n        resonance_width,\n        child1_mass,\n        child2_mass,\n        l_dec,\n        l_prod,\n        R_dec,\n        R_prod,\n    )\n    return dynamics, parameter_defaults\n\n\ndef _get_mandelstam_s(decay: ThreeBodyDecayChain) -> sp.Symbol:\n    s1, s2, s3 = sp.symbols(\"sigma1:4\", nonnegative=True)\n    m1, m2, m3 = map(_to_mass_symbol, [p, \u03c0, K])\n    decay_masses = {_to_mass_symbol(p) for p in decay.decay_products}\n    if decay_masses == {m2, m3}:\n        return s1\n    if decay_masses == {m1, m3}:\n        return s2\n    if decay_masses == {m1, m2}:\n        return s3\n    raise NotImplementedError(\n        f\"Cannot find Mandelstam variable for {''.join(decay_masses)}\"\n    )\n\n\ndef _to_mass_symbol(particle: Particle) -> sp.Symbol:\n    state_id = PARTICLE_TO_ID.get(particle)\n    if state_id is not None:\n        return sp.Symbol(f\"m{state_id}\", nonnegative=True)\n    return sp.Symbol(f\"m_{{{particle.latex}}}\", nonnegative=True)",
+      "names": [
+        {
+          "import_components": [
+            "tuple"
+          ],
+          "code_str": "tuple",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "tuple"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL"
+          ],
+          "code_str": "BreitWignerMinL",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "dict"
+          ],
+          "code_str": "dict",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "dict"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "float"
+          ],
+          "code_str": "float",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "float"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()"
+          ],
+          "code_str": "decay_chain",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()"
+          ],
+          "code_str": "decay_chain",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay_products"
+          ],
+          "code_str": "decay_chain.decay_products",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay_products"
+        },
+        {
+          "import_components": [
+            "map"
+          ],
+          "code_str": "map",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "map"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational"
+          ],
+          "code_str": "sp.Rational",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational",
+            "()"
+          ],
+          "code_str": "l_dec",
+          "lineno": 6,
+          "end_lineno": 6,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational"
+          ],
+          "code_str": "sp.Rational",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational",
+            "()"
+          ],
+          "code_str": "l_prod",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "parent_mass",
+          "lineno": 8,
+          "end_lineno": 8,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 9,
+          "end_lineno": 9,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "spectator_mass",
+          "lineno": 9,
+          "end_lineno": 9,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "resonance_mass",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 11,
+          "end_lineno": 11,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "resonance_width",
+          "lineno": 11,
+          "end_lineno": 11,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "R_dec",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 13,
+          "end_lineno": 13,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "R_prod",
+          "lineno": 13,
+          "end_lineno": 13,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "parent_mass",
+          "lineno": 15,
+          "end_lineno": 15,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "spectator_mass",
+          "lineno": 16,
+          "end_lineno": 16,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "resonance_mass",
+          "lineno": 17,
+          "end_lineno": 17,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "resonance_width",
+          "lineno": 18,
+          "end_lineno": 18,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "R_dec",
+          "lineno": 22,
+          "end_lineno": 22,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "R_prod",
+          "lineno": 23,
+          "end_lineno": 23,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay_products"
+          ],
+          "code_str": "decay_chain.decay_products",
+          "lineno": 19,
+          "end_lineno": 19,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay_products"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay_products"
+          ],
+          "code_str": "decay_chain.decay_products",
+          "lineno": 20,
+          "end_lineno": 20,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay_products"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "parent_mass",
+          "lineno": 27,
+          "end_lineno": 27,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "spectator_mass",
+          "lineno": 28,
+          "end_lineno": 28,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "resonance_mass",
+          "lineno": 29,
+          "end_lineno": 29,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "resonance_width",
+          "lineno": 30,
+          "end_lineno": 30,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational",
+            "()"
+          ],
+          "code_str": "l_dec",
+          "lineno": 33,
+          "end_lineno": 33,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Rational",
+            "()"
+          ],
+          "code_str": "l_prod",
+          "lineno": 34,
+          "end_lineno": 34,
+          "context": "none",
+          "resolved_location": "sympy.core.numbers.Rational"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "R_dec",
+          "lineno": 35,
+          "end_lineno": 35,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol",
+            "()"
+          ],
+          "code_str": "R_prod",
+          "lineno": 36,
+          "end_lineno": 36,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL"
+          ],
+          "code_str": "BreitWignerMinL",
+          "lineno": 25,
+          "end_lineno": 25,
+          "context": "none",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL",
+            "()"
+          ],
+          "code_str": "dynamics",
+          "lineno": 25,
+          "end_lineno": 25,
+          "context": "none",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "dynamics",
+            "BreitWignerMinL",
+            "()"
+          ],
+          "code_str": "dynamics",
+          "lineno": 38,
+          "end_lineno": 38,
+          "context": "none",
+          "resolved_location": "ampform_dpd.dynamics.BreitWignerMinL"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 41,
+          "end_lineno": 41,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain"
+          ],
+          "code_str": "ThreeBodyDecayChain",
+          "lineno": 41,
+          "end_lineno": 41,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()"
+          ],
+          "code_str": "decay",
+          "lineno": 41,
+          "end_lineno": 41,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "symbols"
+          ],
+          "code_str": "sp.symbols",
+          "lineno": 42,
+          "end_lineno": 42,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.symbols"
+        },
+        {
+          "import_components": [
+            "map"
+          ],
+          "code_str": "map",
+          "lineno": 43,
+          "end_lineno": 43,
+          "context": "none",
+          "resolved_location": "map"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "ThreeBodyDecayChain",
+            "()",
+            "decay_products"
+          ],
+          "code_str": "decay.decay_products",
+          "lineno": 44,
+          "end_lineno": 44,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.ThreeBodyDecayChain.decay_products"
+        },
+        {
+          "import_components": [
+            "NotImplementedError"
+          ],
+          "code_str": "NotImplementedError",
+          "lineno": 51,
+          "end_lineno": 51,
+          "context": "none",
+          "resolved_location": "NotImplementedError"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 56,
+          "end_lineno": 56,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle"
+          ],
+          "code_str": "Particle",
+          "lineno": 56,
+          "end_lineno": 56,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "particle",
+          "lineno": 56,
+          "end_lineno": 56,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()"
+          ],
+          "code_str": "particle",
+          "lineno": 57,
+          "end_lineno": 57,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 59,
+          "end_lineno": 59,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "decay",
+            "Particle",
+            "()",
+            "latex"
+          ],
+          "code_str": "particle.latex",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "ampform_dpd.decay.Particle.latex"
+        },
+        {
+          "import_components": [
+            "sympy",
+            "Symbol"
+          ],
+          "code_str": "sp.Symbol",
+          "lineno": 60,
+          "end_lineno": 60,
+          "context": "none",
+          "resolved_location": "sympy.core.symbol.Symbol"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "lineshapes-for-dynamics",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b",
+          "Lineshapes for dynamics"
+        ]
+      },
+      "doc_lineno": 90002
+    },
+    {
+      "source": "model_builder = DalitzPlotDecompositionBuilder(DECAY, min_ls=True)\nfor chain in model_builder.decay.chains:\n    model_builder.dynamics_choices.register_builder(chain, formulate_breit_wigner)\nmodel = model_builder.formulate(reference_subsystem=1)\nmodel.intensity",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder"
+          ],
+          "code_str": "DalitzPlotDecompositionBuilder",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()"
+          ],
+          "code_str": "model_builder",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate"
+          ],
+          "code_str": "model_builder.formulate",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "ampform_dpd.DalitzPlotDecompositionBuilder.formulate"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()"
+          ],
+          "code_str": "model",
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "intensity"
+          ],
+          "code_str": "model.intensity",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.intensity"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "model-formulation",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b",
+          "Model formulation"
+        ]
+      },
+      "doc_lineno": 110002
+    },
+    {
+      "source": "Latex(aslatex(model.amplitudes))",
+      "names": [
+        {
+          "import_components": [
+            "ampform_dpd",
+            "DalitzPlotDecompositionBuilder",
+            "()",
+            "formulate",
+            "()",
+            "amplitudes"
+          ],
+          "code_str": "model.amplitudes",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform_dpd.AmplitudeModel.amplitudes"
+        },
+        {
+          "import_components": [
+            "ampform_dpd",
+            "io",
+            "aslatex"
+          ],
+          "code_str": "aslatex",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "ampform.io.aslatex"
+        },
+        {
+          "import_components": [
+            "IPython",
+            "display",
+            "Latex"
+          ],
+          "code_str": "Latex",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "IPython.core.display.Latex"
+        }
+      ],
+      "example": {
+        "document": "lc2pkpi",
+        "ref_id": "model-formulation",
+        "headings": [
+          "\u039bc\u207a \u2192 p\u03c0\u207aK\u207b",
+          "Model formulation"
+        ]
+      },
+      "doc_lineno": 120002
+    }
+  ]
+}

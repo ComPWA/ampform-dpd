@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ampform_dpd.io &#8212; Symbolic Dalitz-Plot Decomposition</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-codeautolink.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Symbolic Dalitz-Plot Decomposition</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../lc2pkpi.html">
+   Λc⁺ → pπ⁺K⁻
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../jpsi2ksp.html">
+   J/ψ → K⁰Σ⁺p̅
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../api/ampform_dpd.html">
+   API
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/ampform_dpd.angles.html">
+     angles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/ampform_dpd.decay.html">
+     decay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/ampform_dpd.dynamics.html">
+     dynamics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/ampform_dpd.io.html">
+     io
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/ampform_dpd.spin.html">
+     spin
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            <p>Version 0.1.dev1+g441a6ea (15/12/2022 11:34:11)</p>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/ComPWA/ampform-dpd"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/ComPWA/ampform-dpd/issues/new?title=Issue%20on%20page%20%2F_modules/ampform_dpd/io.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for ampform_dpd.io</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Input-output functions for `ampform` and `sympy` objects.</span>
+
+<span class="sd">This module extends AmpForm&#39;s :func:`~ampform.io.aslatex` function. You can register</span>
+<span class="sd">more implementations as follows:</span>
+
+<span class="sd">&gt;&gt;&gt; from ampform_dpd.io import aslatex</span>
+<span class="sd">&gt;&gt;&gt; @aslatex.register(int)</span>
+<span class="sd">... def _(obj: int) -&gt; str:</span>
+<span class="sd">...     return &quot;my custom rendering&quot;</span>
+<span class="sd">&gt;&gt;&gt; aslatex(1)</span>
+<span class="sd">&#39;my custom rendering&#39;</span>
+<span class="sd">&gt;&gt;&gt; aslatex(3.4 - 2j)</span>
+<span class="sd">&#39;3.4-2i&#39;</span>
+
+<span class="sd">This code originates from `ComPWA/ampform#280</span>
+<span class="sd">&lt;https://github.com/ComPWA/ampform/pull/280&gt;`_.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">abc</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">expanduser</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">overload</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
+<span class="kn">import</span> <span class="nn">cloudpickle</span>
+<span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">ampform.io</span> <span class="kn">import</span> <span class="n">aslatex</span>
+<span class="kn">from</span> <span class="nn">tensorwaves.function</span> <span class="kn">import</span> <span class="n">ParametrizedBackendFunction</span><span class="p">,</span> <span class="n">PositionalArgumentFunction</span>
+<span class="kn">from</span> <span class="nn">tensorwaves.function.sympy</span> <span class="kn">import</span> <span class="n">create_function</span><span class="p">,</span> <span class="n">create_parametrized_function</span>
+<span class="kn">from</span> <span class="nn">tensorwaves.interface</span> <span class="kn">import</span> <span class="n">Function</span><span class="p">,</span> <span class="n">ParameterValue</span><span class="p">,</span> <span class="n">ParametrizedFunction</span>
+
+<span class="kn">from</span> <span class="nn">ampform_dpd.decay</span> <span class="kn">import</span> <span class="n">IsobarNode</span><span class="p">,</span> <span class="n">Particle</span><span class="p">,</span> <span class="n">ThreeBodyDecay</span><span class="p">,</span> <span class="n">ThreeBodyDecayChain</span>
+
+<span class="n">_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">complex</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">real</span> <span class="o">=</span> <span class="n">__downcast</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+    <span class="n">imag</span> <span class="o">=</span> <span class="n">__downcast</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
+    <span class="n">plus</span> <span class="o">=</span> <span class="s2">&quot;+&quot;</span> <span class="k">if</span> <span class="n">imag</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">real</span><span class="si">}{</span><span class="n">plus</span><span class="si">}{</span><span class="n">imag</span><span class="si">}</span><span class="s2">i&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">__downcast</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">Basic</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Basic</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">latex</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Need at least one dictionary item&quot;</span><span class="p">)</span>
+    <span class="n">latex</span> <span class="o">=</span> <span class="sa">R</span><span class="s2">&quot;\begin</span><span class="si">{array}{rcl}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">latex</span> <span class="o">+=</span> <span class="sa">Rf</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">aslatex</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="si">}</span><span class="s2"> &amp;=&amp; </span><span class="si">{</span><span class="n">aslatex</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">latex</span> <span class="o">+=</span> <span class="sa">R</span><span class="s2">&quot;\end</span><span class="si">{array}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">latex</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Need at least one item to render as LaTeX&quot;</span><span class="p">)</span>
+    <span class="n">latex</span> <span class="o">=</span> <span class="sa">R</span><span class="s2">&quot;\begin</span><span class="si">{array}{c}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+        <span class="n">item_latex</span> <span class="o">=</span> <span class="n">aslatex</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">latex</span> <span class="o">+=</span> <span class="sa">Rf</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">item_latex</span><span class="si">}</span><span class="s2"> </span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">latex</span> <span class="o">+=</span> <span class="sa">R</span><span class="s2">&quot;\end</span><span class="si">{array}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">latex</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">IsobarNode</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">IsobarNode</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">render_arrow</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">IsobarNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">interaction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">R</span><span class="s2">&quot;\to&quot;</span>
+        <span class="k">return</span> <span class="sa">Rf</span><span class="s2">&quot;\xrightarrow[S=</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">S</span><span class="si">}</span><span class="s2">]</span><span class="se">{{</span><span class="s2">L=</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">interaction</span><span class="o">.</span><span class="n">L</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">aslatex</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">to</span> <span class="o">=</span> <span class="n">render_arrow</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="n">child1</span> <span class="o">=</span> <span class="n">aslatex</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">child1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">child2</span> <span class="o">=</span> <span class="n">aslatex</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">child2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">Rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parent</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">to</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">child1</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">child2</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ThreeBodyDecay</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">ThreeBodyDecay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">aslatex</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">chains</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ThreeBodyDecayChain</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">ThreeBodyDecayChain</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">aslatex</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">decay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Particle</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Particle</span><span class="p">,</span> <span class="n">with_jp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">only_jp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">only_jp</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_render_jp</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_jp</span><span class="p">:</span>
+        <span class="n">jp</span> <span class="o">=</span> <span class="n">_render_jp</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">Rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">latex</span><span class="si">}</span><span class="s2">\left[</span><span class="si">{</span><span class="n">jp</span><span class="si">}</span><span class="s2">\right]&quot;</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">latex</span>
+
+
+<span class="k">def</span> <span class="nf">_render_jp</span><span class="p">(</span><span class="n">particle</span><span class="p">:</span> <span class="n">Particle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">parity</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="n">particle</span><span class="o">.</span><span class="n">parity</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;+&quot;</span>
+    <span class="k">if</span> <span class="n">particle</span><span class="o">.</span><span class="n">spin</span><span class="o">.</span><span class="n">denominator</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">spin</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">latex</span><span class="p">(</span><span class="n">particle</span><span class="o">.</span><span class="n">spin</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">spin</span> <span class="o">=</span> <span class="sa">Rf</span><span class="s2">&quot;\frac</span><span class="se">{{</span><span class="si">{</span><span class="n">particle</span><span class="o">.</span><span class="n">spin</span><span class="o">.</span><span class="n">numerator</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="n">particle</span><span class="o">.</span><span class="n">spin</span><span class="o">.</span><span class="n">denominator</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">spin</span><span class="si">}</span><span class="s2">^</span><span class="si">{</span><span class="n">parity</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<div class="viewcode-block" id="as_markdown_table"><a class="viewcode-back" href="../../api/ampform_dpd.io.html#ampform_dpd.io.as_markdown_table">[docs]</a><span class="k">def</span> <span class="nf">as_markdown_table</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Render objects a `str` suitable for generating a table.&quot;&quot;&quot;</span>
+    <span class="n">item_type</span> <span class="o">=</span> <span class="n">_determine_item_type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">item_type</span> <span class="ow">is</span> <span class="n">Particle</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_as_resonance_markdown_table</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">item_type</span> <span class="ow">is</span> <span class="n">ThreeBodyDecay</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_as_decay_markdown_table</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">chains</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">item_type</span> <span class="ow">is</span> <span class="n">ThreeBodyDecayChain</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_as_decay_markdown_table</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Cannot render a sequence with </span><span class="si">{</span><span class="n">item_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> items as a Markdown table&quot;</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_determine_item_type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Need at least one entry to render a table&quot;</span><span class="p">)</span>
+    <span class="n">item_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">item_type</span><span class="p">),</span> <span class="n">obj</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not all items are of type </span><span class="si">{</span><span class="n">item_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">item_type</span>
+
+
+<span class="k">def</span> <span class="nf">_as_resonance_markdown_table</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Particle</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LaTeX&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$J^P$&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mass (MeV)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;width (MeV)&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">src</span> <span class="o">=</span> <span class="n">_create_markdown_table_header</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">row_items</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">particle</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">particle</span><span class="o">.</span><span class="n">latex</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span>
+            <span class="sa">Rf</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">aslatex</span><span class="p">(</span><span class="n">particle</span><span class="p">,</span> <span class="n">only_jp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span> <span class="o">*</span> <span class="n">particle</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span> <span class="o">*</span> <span class="n">particle</span><span class="o">.</span><span class="n">width</span><span class="p">)</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">src</span> <span class="o">+=</span> <span class="n">_create_markdown_table_row</span><span class="p">(</span><span class="n">row_items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">src</span>
+
+
+<span class="k">def</span> <span class="nf">_as_decay_markdown_table</span><span class="p">(</span><span class="n">decay_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ThreeBodyDecayChain</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;resonance&quot;</span><span class="p">,</span>
+        <span class="sa">R</span><span class="s2">&quot;$J^P$&quot;</span><span class="p">,</span>
+        <span class="sa">R</span><span class="s2">&quot;mass (MeV)&quot;</span><span class="p">,</span>
+        <span class="sa">R</span><span class="s2">&quot;width (MeV)&quot;</span><span class="p">,</span>
+        <span class="sa">R</span><span class="s2">&quot;$L_\mathrm</span><span class="si">{dec}</span><span class="s2">^\mathrm</span><span class="si">{min}</span><span class="s2">$&quot;</span><span class="p">,</span>
+        <span class="sa">R</span><span class="s2">&quot;$L_\mathrm</span><span class="si">{prod}</span><span class="s2">^\mathrm</span><span class="si">{min}</span><span class="s2">$&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">src</span> <span class="o">=</span> <span class="n">_create_markdown_table_header</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">decay_chains</span><span class="p">:</span>
+        <span class="n">child1</span><span class="p">,</span> <span class="n">child2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">aslatex</span><span class="p">,</span> <span class="n">chain</span><span class="o">.</span><span class="n">decay_products</span><span class="p">)</span>
+        <span class="n">row_items</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">Rf</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="o">.</span><span class="n">latex</span><span class="si">}</span><span class="s2"> \to&quot;</span> <span class="sa">Rf</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">child1</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">child2</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span>
+            <span class="sa">Rf</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">aslatex</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="p">,</span> <span class="n">only_jp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span> <span class="o">*</span> <span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span> <span class="o">*</span> <span class="n">chain</span><span class="o">.</span><span class="n">resonance</span><span class="o">.</span><span class="n">width</span><span class="p">)</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">chain</span><span class="o">.</span><span class="n">outgoing_ls</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
+            <span class="n">chain</span><span class="o">.</span><span class="n">incoming_ls</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">src</span> <span class="o">+=</span> <span class="n">_create_markdown_table_row</span><span class="p">(</span><span class="n">row_items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">src</span>
+
+
+<span class="k">def</span> <span class="nf">_create_markdown_table_header</span><span class="p">(</span><span class="n">column_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+    <span class="n">src</span> <span class="o">=</span> <span class="n">_create_markdown_table_row</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
+    <span class="n">src</span> <span class="o">+=</span> <span class="n">_create_markdown_table_row</span><span class="p">([</span><span class="s2">&quot;---&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">src</span>
+
+
+<span class="k">def</span> <span class="nf">_create_markdown_table_row</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;| &quot;</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; |</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+
+<div class="viewcode-block" id="perform_cached_doit"><a class="viewcode-back" href="../../api/ampform_dpd.io.html#ampform_dpd.io.perform_cached_doit">[docs]</a><span class="k">def</span> <span class="nf">perform_cached_doit</span><span class="p">(</span>
+    <span class="n">unevaluated_expr</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Perform :code:`doit()` on an `~sympy.core.expr.Expr` and cache the result to disk.</span>
+
+<span class="sd">    The cached result is fetched from disk if the hash of the original expression is the</span>
+<span class="sd">    same as the hash embedded in the filename.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        unevaluated_expr: A `sympy.Expr &lt;sympy.core.expr.Expr&gt;` on which to call</span>
+<span class="sd">            :code:`doit()`.</span>
+<span class="sd">        directory: The directory in which to cache the result. If `None`, the cache</span>
+<span class="sd">            directory will be put under the home directory, or to the path specified by</span>
+<span class="sd">            the environment variable :code:`SYMPY_CACHE_DIR`.</span>
+
+<span class="sd">    .. tip:: For a faster cache, set `PYTHONHASHSEED</span>
+<span class="sd">        &lt;https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED&gt;`_ to a</span>
+<span class="sd">        fixed value.</span>
+
+<span class="sd">    .. seealso:: :func:`perform_cached_lambdify`</span>
+
+<span class="sd">    .. deprecated:: 0.2</span>
+<span class="sd">        Use :func:`ampform.sympy.perform_cached_doit` instead. See `ComPWA/ampform#24</span>
+<span class="sd">        &lt;https://github.com/ComPWA/ampform-dpd/issues/24&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. &quot;</span>
+        <span class="s2">&quot;See https://github.com/ComPWA/ampform-dpd/issues/24&quot;</span><span class="p">,</span>
+        <span class="n">category</span><span class="o">=</span><span class="ne">PendingDeprecationWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">main_cache_dir</span> <span class="o">=</span> <span class="n">_get_main_cache_dir</span><span class="p">()</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">abspath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">main_cache_dir</span><span class="si">}</span><span class="s2">/.sympy-cache&quot;</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">get_readable_hash</span><span class="p">(</span><span class="n">unevaluated_expr</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">.pkl&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Cached expression file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> not found, performing doit()...&quot;</span>
+    <span class="p">)</span>
+    <span class="n">unfolded_expr</span> <span class="o">=</span> <span class="n">unevaluated_expr</span><span class="o">.</span><span class="n">doit</span><span class="p">()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">unfolded_expr</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">unfolded_expr</span></div>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">perform_cached_lambdify</span><span class="p">(</span>
+    <span class="n">expr</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;jax&quot;</span><span class="p">,</span>
+    <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PositionalArgumentFunction</span><span class="p">:</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">perform_cached_lambdify</span><span class="p">(</span>
+    <span class="n">expr</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span> <span class="n">ParameterValue</span><span class="p">],</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;jax&quot;</span><span class="p">,</span>
+    <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParametrizedBackendFunction</span><span class="p">:</span>
+    <span class="o">...</span>
+
+
+<div class="viewcode-block" id="perform_cached_lambdify"><a class="viewcode-back" href="../../api/ampform_dpd.io.html#ampform_dpd.io.perform_cached_lambdify">[docs]</a><span class="k">def</span> <span class="nf">perform_cached_lambdify</span><span class="p">(</span>
+    <span class="n">expr</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">,</span> <span class="n">ParameterValue</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;jax&quot;</span><span class="p">,</span>
+    <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParametrizedFunction</span> <span class="o">|</span> <span class="n">Function</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.</span>
+
+<span class="sd">    The cached result is fetched from disk if the hash of the expression is the same as</span>
+<span class="sd">    the hash embedded in the filename.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        expr: A `sympy.Expr &lt;sympy.core.expr.Expr&gt;` on which to call</span>
+<span class="sd">            :func:`~tensorwaves.function.sympy.create_function` or</span>
+<span class="sd">            :func:`~tensorwaves.function.sympy.create_parametrized_function`.</span>
+<span class="sd">        parameters: Specify this argument in order to create a</span>
+<span class="sd">            `~tensorwaves.function.ParametrizedBackendFunction` instead of a</span>
+<span class="sd">            `~tensorwaves.function.PositionalArgumentFunction`.</span>
+<span class="sd">        backend: The choice of backend for the created numerical function. **WARNING**:</span>
+<span class="sd">            this function has only been tested for :code:`backend=&quot;jax&quot;`!</span>
+<span class="sd">        directory: The directory in which to cache the result. If `None`, the cache</span>
+<span class="sd">            directory will be put under the home directory, or to the path specified by</span>
+<span class="sd">            the environment variable :code:`SYMPY_CACHE_DIR`.</span>
+
+<span class="sd">    .. tip:: For a faster cache, set `PYTHONHASHSEED</span>
+<span class="sd">        &lt;https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED&gt;`_ to a</span>
+<span class="sd">        fixed value.</span>
+
+<span class="sd">    .. seealso:: :func:`ampform.sympy.perform_cached_doit`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">main_cache_dir</span> <span class="o">=</span> <span class="n">_get_main_cache_dir</span><span class="p">()</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">abspath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">main_cache_dir</span><span class="si">}</span><span class="s2">/.sympy-cache-</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">hash_obj</span> <span class="o">=</span> <span class="n">expr</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hash_obj</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">expr</span><span class="p">,</span>
+            <span class="nb">tuple</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">parameters</span><span class="p">[</span><span class="n">s</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="p">)),</span>
+        <span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">get_readable_hash</span><span class="p">(</span><span class="n">hash_obj</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">.pkl&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cached function file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> not found, lambdifying...&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">create_function</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">create_parametrized_function</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">func</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_main_cache_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SYMPY_CACHE_DIR&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cache_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>  <span class="c1"># home directory</span>
+    <span class="k">return</span> <span class="n">cache_dir</span>
+
+
+<div class="viewcode-block" id="get_readable_hash"><a class="viewcode-back" href="../../api/ampform_dpd.io.html#ampform_dpd.io.get_readable_hash">[docs]</a><span class="k">def</span> <span class="nf">get_readable_hash</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">python_hash_seed</span> <span class="o">=</span> <span class="n">_get_python_hash_seed</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">python_hash_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;pythonhashseed-</span><span class="si">{</span><span class="n">python_hash_seed</span><span class="si">}{</span><span class="nb">hash</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="si">:</span><span class="s2">+</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">_to_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">Expr</span><span class="p">):</span>
+        <span class="c1"># Using the str printer is slower and not necessarily unique,</span>
+        <span class="c1"># but pickle.dumps() does not always result in the same bytes stream.</span>
+        <span class="n">_warn_about_unsafe_hash</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_python_hash_seed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">python_hash_seed</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHONHASHSEED&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">python_hash_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">python_hash_seed</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">python_hash_seed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># warn once</span>
+<span class="k">def</span> <span class="nf">_warn_about_unsafe_hash</span><span class="p">():</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    PYTHONHASHSEED has not been set. For faster and safer hashing of SymPy expressions,</span>
+<span class="s2">    set the PYTHONHASHSEED environment variable to a fixed value and rerun the program.</span>
+<span class="s2">    See https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Mikhail Mikhasenko, Remco de Boer<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

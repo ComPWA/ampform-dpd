@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator"/>
+<title>io — Symbolic Dalitz-Plot Decomposition</title>
+<!-- Loaded before other Sphinx assets -->
+<link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet"/>
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet"/>
+<link href="../_static/vendor/fontawesome/5.13.0/css/all.min.css" rel="stylesheet"/>
+<link as="font" crossorigin="" href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+<link href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" rel="stylesheet" type="text/css">
+<link href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" rel="stylesheet" type="text/css">
+<link href="../_static/sphinx-codeautolink.css" rel="stylesheet" type="text/css">
+<link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+<link href="../_static/togglebutton.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf" rel="preload"/>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+<script src="../_static/jquery.js"></script>
+<script src="../_static/underscore.js"></script>
+<script src="../_static/doctools.js"></script>
+<script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+<script src="../_static/clipboard.min.js"></script>
+<script src="../_static/copybutton.js"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="../_static/togglebutton.js"></script>
+<script src="../_static/design-tabs.js"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<link href="../genindex.html" rel="index" title="Index">
+<link href="../search.html" rel="search" title="Search"/>
+<link href="ampform_dpd.spin.html" rel="next" title="spin"/>
+<link href="ampform_dpd.dynamics.html" rel="prev" title="dynamics"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="None" name="docsearch:language"/>
+<!-- Google Analytics -->
+</link></link></link></link></link></link></head>
+<body data-offset="60" data-spy="scroll" data-target="#bd-toc-nav">
+<!-- Checkboxes to toggle the left sidebar -->
+<input aria-label="Toggle navigation sidebar" class="sidebar-toggle" id="__navigation" name="__navigation" type="checkbox"/>
+<label class="overlay overlay-navbar" for="__navigation">
+<div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input aria-label="Toggle in-page Table of Contents" class="sidebar-toggle" id="__page-toc" name="__page-toc" type="checkbox"/>
+<label class="overlay overlay-pagetoc" for="__page-toc">
+<div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+<div class="container-fluid" id="banner"></div>
+<div class="container-xl">
+<div class="row">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+<div class="bd-sidebar__content">
+<div class="bd-sidebar__top"><div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+<h1 class="site-logo" id="site-title">Symbolic Dalitz-Plot Decomposition</h1>
+</a>
+</div><form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+<i class="icon fas fa-search"></i>
+<input aria-label="Search the docs ..." autocomplete="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." type="search"/>
+</form><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
+<div class="bd-toc-item active">
+<ul class="nav bd-sidenav">
+<li class="toctree-l1">
+<a class="reference internal" href="../lc2pkpi.html">
+   Λc⁺ → pπ⁺K⁻
+  </a>
+</li>
+<li class="toctree-l1">
+<a class="reference internal" href="../jpsi2ksp.html">
+   J/ψ → K⁰Σ⁺p̅
+  </a>
+</li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children">
+<a class="reference internal" href="ampform_dpd.html">
+   API
+  </a>
+<input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox">
+<label for="toctree-checkbox-1">
+<i class="fas fa-chevron-down">
+</i>
+</label>
+<ul class="current">
+<li class="toctree-l2">
+<a class="reference internal" href="ampform_dpd.angles.html">
+     angles
+    </a>
+</li>
+<li class="toctree-l2">
+<a class="reference internal" href="ampform_dpd.decay.html">
+     decay
+    </a>
+</li>
+<li class="toctree-l2">
+<a class="reference internal" href="ampform_dpd.dynamics.html">
+     dynamics
+    </a>
+</li>
+<li class="toctree-l2 current active">
+<a class="current reference internal" href="#">
+     io
+    </a>
+</li>
+<li class="toctree-l2">
+<a class="reference internal" href="ampform_dpd.spin.html">
+     spin
+    </a>
+</li>
+</ul>
+</input></li>
+</ul>
+</div>
+</nav></div>
+<div class="bd-sidebar__bottom">
+<!-- To handle the deprecated key -->
+<div class="navbar_extra_footer">
+<p>Version 0.1.dev1+g441a6ea (15/12/2022 11:34:11)</p>
+</div>
+</div>
+</div>
+<div id="rtd-footer-container"></div>
+</div>
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+<div class="header-article row sticky-top noprint">
+<div class="col py-1 d-flex header-article-main">
+<div class="header-article__left">
+<label class="headerbtn" data-placement="right" data-toggle="tooltip" for="__navigation" title="Toggle navigation">
+<span class="headerbtn__icon-container">
+<i class="fas fa-bars"></i>
+</span>
+</label>
+</div>
+<div class="header-article__right">
+<button class="headerbtn" data-placement="bottom" data-toggle="tooltip" onclick="toggleFullScreen()" title="Fullscreen mode">
+<span class="headerbtn__icon-container">
+<i class="fas fa-expand"></i>
+</span>
+</button>
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+<button aria-label="Source repositories" class="headerbtn menu-dropdown__trigger">
+<i class="fab fa-github"></i>
+</button>
+<div class="menu-dropdown__content">
+<ul>
+<li>
+<a class="headerbtn" data-placement="left" data-toggle="tooltip" href="https://github.com/ComPWA/ampform-dpd" title="Source repository">
+<span class="headerbtn__icon-container">
+<i class="fab fa-github"></i>
+</span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+</li>
+<li>
+<a class="headerbtn" data-placement="left" data-toggle="tooltip" href="https://github.com/ComPWA/ampform-dpd/issues/new?title=Issue%20on%20page%20%2Fapi/ampform_dpd.io.html&amp;body=Your%20issue%20content%20here." title="Open an issue">
+<span class="headerbtn__icon-container">
+<i class="fas fa-lightbulb"></i>
+</span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+</li>
+<li>
+<a class="headerbtn" data-placement="left" data-toggle="tooltip" href="https://github.com/ComPWA/ampform-dpd/edit/main/docs/api/ampform_dpd.io.rst" title="Edit this page">
+<span class="headerbtn__icon-container">
+<i class="fas fa-pencil-alt"></i>
+</span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="menu-dropdown menu-dropdown-download-buttons">
+<button aria-label="Download this page" class="headerbtn menu-dropdown__trigger">
+<i class="fas fa-download"></i>
+</button>
+<div class="menu-dropdown__content">
+<ul>
+<li>
+<a class="headerbtn" data-placement="left" data-toggle="tooltip" href="../_sources/api/ampform_dpd.io.rst" title="Download source file">
+<span class="headerbtn__icon-container">
+<i class="fas fa-file"></i>
+</span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+</li>
+<li>
+<button class="headerbtn" data-placement="left" data-toggle="tooltip" onclick="printPdf(this)" title="Print to PDF">
+<span class="headerbtn__icon-container">
+<i class="fas fa-file-pdf"></i>
+</span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+</div>
+<div class="article row">
+<div class="col pl-md-3 pl-lg-5 content-container">
+<!-- Table of contents that is only displayed when printing the page -->
+<div class="onlyprint" id="jb-print-docs-body">
+<h1>io</h1>
+<!-- Table of contents -->
+<div id="print-main-content">
+<div id="jb-print-toc">
+</div>
+</div>
+</div>
+<main id="main-content" role="main">
+<div>
+<section id="io">
+<h1>io<a class="headerlink" href="#io" title="Permalink to this headline">#</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="../api/ampform_dpd.io.html#module-ampform_dpd.io" title="ampform_dpd.io"><span class="nn">ampform_dpd.io</span></a>
+</pre></div>
+</div>
+<span class="target" id="module-ampform_dpd.io"></span><p>Input-output functions for <a class="reference external" href="https://ampform.readthedocs.io/en/stable/api/ampform.html#module-ampform" title="(in AmpForm v0.14.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ampform</span></code></a> and <a class="reference external" href="https://docs.sympy.org/latest/index.html#module-sympy" title="(in SymPy v1.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sympy</span></code></a> objects.</p>
+<p>This module extends AmpForm’s <a class="reference external" href="https://ampform.readthedocs.io/en/stable/api/ampform.io.html#ampform.io.aslatex" title="(in AmpForm v0.14.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">aslatex()</span></code></a> function. You can register
+more implementations as follows:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <a class="sphinx-codeautolink-a" href="../api/ampform_dpd.io.html#module-ampform_dpd.io" title="ampform_dpd.io"><span class="nn">ampform_dpd.io</span></a> <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://ampform.readthedocs.io/en/stable/api/ampform.io.html#ampform.io.aslatex" title="ampform.io.aslatex"><span class="n">aslatex</span></a>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@aslatex</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#int" title="int"><span class="nb">int</span></a><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#int" title="int"><span class="nb">int</span></a><span class="p">)</span> <span class="o">-&gt;</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/stdtypes.html#str" title="str"><span class="nb">str</span></a><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="s2">"my custom rendering"</span>
+<span class="gp">&gt;&gt;&gt; </span><a class="sphinx-codeautolink-a" href="https://ampform.readthedocs.io/en/stable/api/ampform.io.html#ampform.io.aslatex" title="ampform.io.aslatex"><span class="n">aslatex</span></a><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">'my custom rendering'</span>
+<span class="gp">&gt;&gt;&gt; </span><a class="sphinx-codeautolink-a" href="https://ampform.readthedocs.io/en/stable/api/ampform.io.html#ampform.io.aslatex" title="ampform.io.aslatex"><span class="n">aslatex</span></a><span class="p">(</span><span class="mf">3.4</span> <span class="o">-</span> <span class="mi">2</span><span class="n">j</span><span class="p">)</span>
+<span class="go">'3.4-2i'</span>
+</pre></div>
+</div>
+<p>This code originates from <a class="reference external" href="https://github.com/ComPWA/ampform/pull/280">ComPWA/ampform#280</a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ampform_dpd.io.as_markdown_table">
+<span class="sig-name descname"><span class="pre">as_markdown_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/ampform_dpd/io.html#as_markdown_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampform_dpd.io.as_markdown_table" title="Permalink to this definition">#</a></dt>
+<dd><p>Render objects a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> suitable for generating a table.</p>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="ampform_dpd.io.perform_cached_doit">
+<span class="sig-name descname"><span class="pre">perform_cached_doit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unevaluated_expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><span class="pre">Expr</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><span class="pre">Expr</span></a></span></span><a class="reference internal" href="../_modules/ampform_dpd/io.html#perform_cached_doit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampform_dpd.io.perform_cached_doit" title="Permalink to this definition">#</a></dt>
+<dd><p>Perform <code class="code docutils literal notranslate"><span class="pre">doit()</span></code> on an <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Expr</span></code></a> and cache the result to disk.</p>
+<p>The cached result is fetched from disk if the hash of the original expression is the
+same as the hash embedded in the filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unevaluated_expr</strong> – A <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sympy.Expr</span></code></a> on which to call
+<code class="code docutils literal notranslate"><span class="pre">doit()</span></code>.</p></li>
+<li><p><strong>directory</strong> – The directory in which to cache the result. If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, the cache
+directory will be put under the home directory, or to the path specified by
+the environment variable <code class="code docutils literal notranslate"><span class="pre">SYMPY_CACHE_DIR</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For a faster cache, set <a class="reference external" href="https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED">PYTHONHASHSEED</a> to a
+fixed value.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#ampform_dpd.io.perform_cached_lambdify" title="ampform_dpd.io.perform_cached_lambdify"><code class="xref py py-func docutils literal notranslate"><span class="pre">perform_cached_lambdify()</span></code></a></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.2: </span>Use <a class="reference external" href="https://ampform.readthedocs.io/en/stable/api/ampform.sympy.html#ampform.sympy.perform_cached_doit" title="(in AmpForm v0.14.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ampform.sympy.perform_cached_doit()</span></code></a> instead. See <a class="reference external" href="https://github.com/ComPWA/ampform-dpd/issues/24">ComPWA/ampform#24</a></p>
+</div>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="ampform_dpd.io.perform_cached_lambdify">
+<span class="sig-name descname"><span class="pre">perform_cached_lambdify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><span class="pre">Expr</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'jax'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference external" href="https://tensorwaves.readthedocs.io/en/stable/api/tensorwaves.function.html#tensorwaves.function.PositionalArgumentFunction" title="(in TensorWaves v0.4.9)"><span class="pre">PositionalArgumentFunction</span></a></span></span><a class="reference internal" href="../_modules/ampform_dpd/io.html#perform_cached_lambdify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampform_dpd.io.perform_cached_lambdify" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">perform_cached_lambdify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><span class="pre">Expr</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.11)"><span class="pre">Mapping</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.symbol.Symbol" title="(in SymPy v1.11)"><span class="pre">Symbol</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.11)"><span class="pre">complex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'jax'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference external" href="https://tensorwaves.readthedocs.io/en/stable/api/tensorwaves.function.html#tensorwaves.function.ParametrizedBackendFunction" title="(in TensorWaves v0.4.9)"><span class="pre">ParametrizedBackendFunction</span></a></span></span></dt>
+<dd><p>Lambdify a SymPy <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Expr</span></code></a> and cache the result to disk.</p>
+<p>The cached result is fetched from disk if the hash of the expression is the same as
+the hash embedded in the filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr</strong> – A <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.expr.Expr" title="(in SymPy v1.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sympy.Expr</span></code></a> on which to call
+<a class="reference external" href="https://tensorwaves.readthedocs.io/en/stable/api/tensorwaves.function.sympy.html#tensorwaves.function.sympy.create_function" title="(in TensorWaves v0.4.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_function()</span></code></a> or
+<a class="reference external" href="https://tensorwaves.readthedocs.io/en/stable/api/tensorwaves.function.sympy.html#tensorwaves.function.sympy.create_parametrized_function" title="(in TensorWaves v0.4.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_parametrized_function()</span></code></a>.</p></li>
+<li><p><strong>parameters</strong> – Specify this argument in order to create a
+<a class="reference external" href="https://tensorwaves.readthedocs.io/en/stable/api/tensorwaves.function.html#tensorwaves.function.ParametrizedBackendFunction" title="(in TensorWaves v0.4.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametrizedBackendFunction</span></code></a> instead of a
+<a class="reference external" href="https://tensorwaves.readthedocs.io/en/stable/api/tensorwaves.function.html#tensorwaves.function.PositionalArgumentFunction" title="(in TensorWaves v0.4.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PositionalArgumentFunction</span></code></a>.</p></li>
+<li><p><strong>backend</strong> – The choice of backend for the created numerical function. <strong>WARNING</strong>:
+this function has only been tested for <code class="code docutils literal notranslate"><span class="pre">backend="jax"</span></code>!</p></li>
+<li><p><strong>directory</strong> – The directory in which to cache the result. If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, the cache
+directory will be put under the home directory, or to the path specified by
+the environment variable <code class="code docutils literal notranslate"><span class="pre">SYMPY_CACHE_DIR</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For a faster cache, set <a class="reference external" href="https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED">PYTHONHASHSEED</a> to a
+fixed value.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://ampform.readthedocs.io/en/stable/api/ampform.sympy.html#ampform.sympy.perform_cached_doit" title="(in AmpForm v0.14.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ampform.sympy.perform_cached_doit()</span></code></a></p>
+</div>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="ampform_dpd.io.get_readable_hash">
+<span class="sig-name descname"><span class="pre">get_readable_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/ampform_dpd/io.html#get_readable_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampform_dpd.io.get_readable_hash" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+</section>
+</div>
+</main>
+<footer class="footer-article noprint">
+<!-- Previous / next buttons -->
+<div class="prev-next-area">
+<a class="left-prev" href="ampform_dpd.dynamics.html" id="prev-link" title="previous page">
+<i class="fas fa-angle-left"></i>
+<div class="prev-next-info">
+<p class="prev-next-subtitle">previous</p>
+<p class="prev-next-title">dynamics</p>
+</div>
+</a>
+<a class="right-next" href="ampform_dpd.spin.html" id="next-link" title="next page">
+<div class="prev-next-info">
+<p class="prev-next-subtitle">next</p>
+<p class="prev-next-title">spin</p>
+</div>
+<i class="fas fa-angle-right"></i>
+</a>
+</div>
+</footer>
+</div>
+</div>
+<div class="footer-content row">
+<footer class="col footer"><p>
+  
+    By Mikhail Mikhasenko, Remco de Boer<br/>
+  
+      © Copyright 2022.<br/>
+</p>
+</footer>
+</div>
+</div>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+</body>
+</html>
