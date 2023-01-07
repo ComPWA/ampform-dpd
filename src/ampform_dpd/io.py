@@ -233,8 +233,10 @@ def perform_cached_doit(
         <https://github.com/ComPWA/ampform-dpd/issues/24>`_
     """
     warn(
-        "Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. "
-        "See https://github.com/ComPWA/ampform-dpd/issues/24",
+        (
+            "Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. "
+            "See https://github.com/ComPWA/ampform-dpd/issues/24"
+        ),
         category=PendingDeprecationWarning,
     )
     if directory is None:
