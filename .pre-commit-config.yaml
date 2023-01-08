@@ -35,6 +35,8 @@ repos:
           - --no-docs
           - --no-prettierrc
           - --pin-requirements=bimonthly
+          - --repo-name=ampform-dpd
+          - --repo-title=AmpForm-DPD
       - id: format-setup-cfg
 
   - repo: https://github.com/psf/black
