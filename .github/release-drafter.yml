@@ -32,6 +32,6 @@ replacers:
 sort-direction: ascending
 
 template: |
-  _See all documentation for the latest version [here](https://compwa.github.io/ampform-dpd)._
-
   $CHANGES
+
+  _The full changelog as commits can be found [here](https://github.com/ComPWA/ampform-dpd/compare/$PREVIOUS_TAG...$NEXT_PATCH_VERSION)._
