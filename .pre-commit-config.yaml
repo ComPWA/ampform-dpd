@@ -28,42 +28,19 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.159
+    rev: 0.0.164
     hooks:
       - id: check-dev-files
         args:
           - --no-docs
           - --no-prettierrc
           - --pin-requirements=bimonthly
+          - --repo-name=ampform-dpd
+          - --repo-title=AmpForm-DPD
       - id: format-setup-cfg
 
-  - repo: https://github.com/psf/black
-    rev: 22.10.0
-    hooks:
-      - id: black
-
-  - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.14.1
-    hooks:
-      - id: cspell
-
-  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: 2.6.1
-    hooks:
-      - id: editorconfig-checker
-        name: editorconfig
-        exclude: >
-          (?x)^(
-            .*\.py
-          )$
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
-
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.5.3
+    rev: 1.6.1
     hooks:
       - id: nbqa-black
         additional_dependencies:
@@ -73,6 +50,40 @@ repos:
       - id: nbqa-pyupgrade
         args:
           - --py37-plus
+
+  - repo: https://github.com/psf/black
+    rev: 22.12.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v6.17.1
+    hooks:
+      - id: cspell
+
+  - repo: https://github.com/myint/docformatter
+    rev: v1.5.1
+    hooks:
+      - id: docformatter
+        args:
+          - --in-place
+          - --wrap-descriptions=88
+          - --wrap-summaries=88
+
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 2.6.2
+    hooks:
+      - id: editorconfig-checker
+        name: editorconfig
+        exclude: >
+          (?x)^(
+            .*\.py
+          )$
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.11.4
+    hooks:
+      - id: isort
 
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
@@ -102,12 +113,12 @@ repos:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.281
+    rev: v1.1.287
     hooks:
       - id: pyright
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.2
+    rev: v3.3.1
     hooks:
       - id: pyupgrade
         args:
