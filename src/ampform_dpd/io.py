@@ -210,7 +210,7 @@ def _create_markdown_table_row(items: Iterable):
 def perform_cached_doit(
     unevaluated_expr: sp.Expr, directory: str | None = None
 ) -> sp.Expr:
-    """Perform :code:`doit()` on an `~sympy.core.expr.Expr` and cache the result to disk.
+    """Perform :code:`doit()` on an `~sympy.core.expr.Expr` and cache result to disk.
 
     The cached result is fetched from disk if the hash of the original expression is the
     same as the hash embedded in the filename.
@@ -232,13 +232,11 @@ def perform_cached_doit(
         Use :func:`ampform.sympy.perform_cached_doit` instead. See `ComPWA/ampform#24
         <https://github.com/ComPWA/ampform-dpd/issues/24>`_
     """
-    warn(
-        (
-            "Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. "
-            "See https://github.com/ComPWA/ampform-dpd/issues/24"
-        ),
-        category=PendingDeprecationWarning,
-    )
+    msg = """
+    Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. See
+    https://github.com/ComPWA/ampform-dpd/issues/24
+    """
+    warn(dedent(msg), category=PendingDeprecationWarning)
     if directory is None:
         main_cache_dir = _get_main_cache_dir()
         directory = abspath(f"{main_cache_dir}/.sympy-cache")

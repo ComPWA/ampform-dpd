@@ -11,6 +11,7 @@ def formulate_scattering_angle(
 
     Compute the :math:`\theta_{ij}` scattering angle as formulated in `Eq (A1) in the
     DPD paper <https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=9>`_.
+
     The angle is that between particle :math:`i` and spectator particle :math:`k` in the
     rest frame of the isobar resonance :math:`(ij)`.
     """

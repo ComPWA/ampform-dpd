@@ -53,7 +53,9 @@ def test_formulate_theta_hat_angle():
 
 
 def test_formulate_zeta_angle_equation_A6():
-    """Test Eq. (A6), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=10.
+    """Test Eq.
+
+    (A6), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=10.
     """
     for i in [1, 2, 3]:
         for k in [1, 2, 3]:
@@ -85,7 +87,9 @@ def test_formulate_zeta_angle_equation_A6():
     ],
 )
 def test_formulate_zeta_angle_sum_rule(ζ1: sp.Expr, ζ2: sp.Expr, ζ3: sp.Expr):
-    """Test Eq. (A9), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=11.
+    """Test Eq.
+
+    (A9), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=11.
     """
     σ3_expr = compute_third_mandelstam(σ1, σ2, m0, m1, m2, m3)
     masses = {m0: 2.3, m1: 0.94, m2: 0.14, m3: 0.49, σ1: 1.2, σ2: 3.0, σ3: σ3_expr}
