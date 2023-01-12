@@ -71,6 +71,100 @@ where you should replace the `3.x` with the version of Python you want to use.
 
 <!-- cspell:ignore pkpi -->
 
+## Physics
+
+Dalitz-plot decomposition allows us to separate variables that affect the <font color=RoyalBlue>angular distribution</font> from variables that describe the <font color=Orange>dynamics</font>. It allows rewriting a **transition amplitude**&nbsp;$T$ as
+
+$$
+T^{\Lambda}_{\{\lambda\}}(\alpha,\beta,\gamma; \{\sigma\}) = \sum_{\nu}
+{\color{RoyalBlue} D_{\Lambda,\nu}^{J}(\alpha,\beta,\gamma)}
+\,
+{\color{Orange} O^\nu_{\{\lambda\}}(\{\sigma\})}.
+$$
+
+Here, $\Lambda$ and $\nu$ indicate the allowed spin projections of the initial state, $\{\lambda\}$ are the allowed spin projections of the final state (e.g. $\{\lambda\}=\lambda_1,\lambda_3,\lambda_3$ for a three-body decay), The Euler angles $\alpha,\beta,\gamma$ are obtained by choosing a specific aligned center-of-momentum frame ("aligned CM"), see Fig.&nbsp;2 in Ref&nbsp;{cite}`JPAC:2019ufm`, which gives us an "aligned" transition amplitude $O^\nu_{\{\lambda\}}$ that only depends on dynamic variables $\{\sigma\}$ (in the case of a three-body decay, the three Mandelstam variables $\sigma_1,\sigma_2,\sigma_3$).
+
+These aligned transition amplitudes are then combined into an observable **differential cross section** (intensity distribution) using a spin density matrix $\rho_{_{\Lambda,\Lambda'}}$ for the spin projections $\Lambda$ of the initial state,
+
+:::{container} full-width
+
+$$
+\mathrm{d}\sigma/\mathrm{d}\Phi_3 = N
+\sum_{\Lambda,\Lambda'} \rho_{_{\Lambda,\Lambda'}}
+\sum_{\nu,\nu'} {\color{RoyalBlue}
+      D^{J^*}_{\Lambda,\nu}\left(\alpha,\beta,\gamma\right)
+      D^{J}_{\Lambda',\nu'}\left(\alpha,\beta,\gamma\right)
+   }
+   \sum_{\{\lambda\}} {\color{Orange}
+      O^\nu_{\{\lambda\}}\left(\{\sigma\}\right)
+      O^{\nu'*}_{\{\lambda\}}\left(\{\sigma\}\right)
+   }.
+$$
+
+:::
+
+Given the right alignment, the aligned transition amplitude can be written as
+
+<!-- prettier-ignore-start -->
+
+````{math}
+---
+label: aligned-amplitude
+---
+\begin{eqnarray*}
+{\color{Orange}O^\nu_{\{\lambda\}}\left(\{\sigma\}\right)} &=&
+   \sum_{(ij)k}
+   \sum^{(ij)\to i,j}_s
+   \sum_\tau
+   \sum_{\{\lambda'\}}
+   \; {\color{Orange}X_s\!\left(\sigma_k\right)}
+\\ {\color{LightGray}\text{production:}} && \quad \times\;```
+   \eta_J\,
+   d^J_{\nu,\tau-\lambda'_k}\!\left(\hat\theta_{k(1)}\right)\,
+   H^{0\to(ij),k}_{\tau,\lambda_k'}
+\\ {\color{LightGray}\text{decay:}} && \quad \times\;
+   \eta_s\,
+   d^s_{\tau,\lambda'_i-\lambda_j'}\!\left(\theta_{ij}\right)\,
+   H^{(ij)\to i,j}_{\lambda'_i,\lambda'_j}
+\\ {\color{LightGray}\text{rotations:}} && \quad \times\;
+   d^{j_1}_{\lambda'_1,\lambda_1}\!\left(\zeta^1_{k(0)}\right)\,
+   d^{j_2}_{\lambda'_2,\lambda_2}\!\left(\zeta^2_{k(0)}\right)\,
+   d^{j_3}_{\lambda'_3,\lambda_3}\!\left(\zeta^3_{k(0)}\right)
+\end{eqnarray*}
+````
+
+Notice the general structure:
+
+- **Summations**: The outer sum is taken over the three decay chain combinations $(ij)k \in \left\{(23)1, (31)2, (12)3\right\}$. Next, we sum over the spin magnitudes&nbsp;$s$ of all resonances[^1], the corresponding allowed helicities&nbsp;$\tau$, and allowed spin projections&nbsp;$\{\lambda'\}$ of the final state.
+- **Dynamics**: The function $X_s$ only depends on a single Mandelstam variable and carries all the dynamical information about the decay chain. Typically, these are your $K$-matrix or Breit-Wigner lineshape functions.
+- **Isobars**: There is a Wigner&nbsp;$d$-function and a helicity coupling $H$ for each isobar in the three-body decay chain: the $0\to(ij),k$ production node and the $(ij)\to i,j$ decay node. The argument of these Wigner&nbsp;$d$-functions are the polar angles. The factors $\eta_J=\sqrt{2S+1}$ and $\eta_s=\sqrt{2s+1}$ are normalization factors.
+- **Wigner rotations**: The last three Wigner&nbsp;$d$-functions represent Wigner rotations that appear when rotating the boosted frames of the production and decay isobar amplitudes back to the space-fixed CM frame.
+
+If $k=1$, we have $\hat\theta_{k(1)}=0$, so the Wigner&nbsp;$d$ function for the production isobar reduces to a Kronecker delta, $d^J_{\nu,\tau-\lambda'_k}\!\left(\hat\theta_{k(1)}\right) = \delta_{\nu,\tau-\lambda'_k}$.
+
+[^1]: Alternatively, one can sum over all resonances themselves, so that one has a dynamic function&nbsp;$X_\mathcal{R}(\sigma_k)$ for each resonance&nbsp;$\mathcal{R}$ in subsystem&nbsp;$k$.
+
+Equation&nbsp;{eq}`aligned-amplitude` is written in terms of _helicity_ couplings, but can be rewritten in terms of _$LS$ couplings_, using
+
+```{math}
+\begin{eqnarray*}
+H^{0\to(ij),k}_{\tau,\lambda'_k} & = &
+   \sum_{LS}
+   H^{0\to(ij),k}_{LS}
+   \sqrt{\frac{2L+1}{2J+1}}
+   C^{S,\tau-\lambda'_k}_{s,\tau,j_k,-\lambda'_k}
+   C^{J,\tau-\lambda'_k}_{L,0,S,\tau-\lambda'_k} \\
+H^{(ij)\to i,j}_{\lambda'_i,\lambda'_j} & = &
+   \sum_{l's'}
+   H^{0\to(ij),k}_{l's'}
+   \sqrt{\frac{2l'+1}{2s+1}}
+   C^{s',\lambda'_i-\lambda'_j}_{j_i,\lambda'_i,j_j,-\lambda'_j}
+   C^{s,\lambda'_i-\lambda'_j}_{l',0,s',\lambda'_i-\lambda'_j}\,.
+\end{eqnarray*}
+```
+
+The dynamics function is dependent on the $LS$&nbsp;values and we write $X_s^{LS;l's'}$ instead of $X_s$.
+
 ## Examples
 
 ```{toctree}
@@ -86,4 +180,13 @@ jpsi2ksp
 hidden:
 ---
 API <api/ampform_dpd>
+```
+
+## Bibliography
+
+```{bibliography} /references.bib
+---
+style: unsrt
+cited:
+---
 ```
