@@ -160,23 +160,24 @@ class DalitzPlotDecompositionBuilder:
             resonance_spin = sp.Rational(chain.resonance.spin)
             resonance_helicities = create_spin_range(resonance_spin)
             for λR_val in resonance_helicities:
-                if λ[0] == λR_val - λ[k]:  # Kronecker delta
-                    h_prod = _create_coupling_symbol(
-                        self.use_production_helicity_couplings,
-                        resonance=R,
-                        helicities=(λR_val, λ[k]),
-                        interaction=chain.incoming_ls,
-                        typ="production",
-                    )
-                    h_dec = _create_coupling_symbol(
-                        self.use_decay_helicity_couplings,
-                        resonance=R,
-                        helicities=(λ[i], λ[j]),
-                        interaction=chain.outgoing_ls,
-                        typ="decay",
-                    )
-                    parameter_defaults[h_prod] = 1 + 0j
-                    parameter_defaults[h_dec] = 1
+                if λ[0] != λR_val - λ[k]:  # Kronecker delta
+                    continue
+                h_prod = _create_coupling_symbol(
+                    self.use_production_helicity_couplings,
+                    resonance=R,
+                    helicities=(λR_val, λ[k]),
+                    interaction=chain.incoming_ls,
+                    typ="production",
+                )
+                h_dec = _create_coupling_symbol(
+                    self.use_decay_helicity_couplings,
+                    resonance=R,
+                    helicities=(λ[i], λ[j]),
+                    interaction=chain.outgoing_ls,
+                    typ="decay",
+                )
+                parameter_defaults[h_prod] = 1 + 0j
+                parameter_defaults[h_dec] = 1
             sub_amp_expr = (
                 sp.KroneckerDelta(λ[0], λR - λ[k])
                 * (-1) ** (spin[k] - λ[k])
