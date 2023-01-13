@@ -203,15 +203,19 @@ class DalitzPlotDecompositionBuilder:
                 resonance_isobar = chain.decay.child1
                 sub_amp_expr *= _formulate_clebsch_gordan_factors(
                     resonance_isobar,
-                    child1_helicity=λ[i],
-                    child2_helicity=λ[j],
+                    helicities={
+                        self.decay.final_state[i]: λ[i],
+                        self.decay.final_state[j]: λ[j],
+                    },
                 )
             if not self.use_production_helicity_couplings:
                 production_isobar = chain.decay
                 sub_amp_expr *= _formulate_clebsch_gordan_factors(
                     production_isobar,
-                    child1_helicity=λR,
-                    child2_helicity=λ[k],
+                    helicities={
+                        chain.resonance: λR,
+                        self.decay.final_state[k]: λ[k],
+                    },
                 )
             sub_amp = PoolSum(
                 sub_amp_expr,
@@ -344,8 +348,7 @@ def simplify_latex_rendering() -> None:
 
 def _formulate_clebsch_gordan_factors(
     isobar: IsobarNode,
-    child1_helicity: sp.Rational | sp.Symbol,
-    child2_helicity: sp.Rational | sp.Symbol,
+    helicities: dict[Particle, sp.Rational | sp.Symbol],
 ) -> sp.Expr:
     if isobar.interaction is None:
         raise ValueError(
@@ -353,10 +356,14 @@ def _formulate_clebsch_gordan_factors(
         )
     # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
     # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
+    child1 = _get_particle(isobar.child1)
+    child2 = _get_particle(isobar.child2)
+    child1_helicity = helicities[child1]
+    child2_helicity = helicities[child2]
     cg_ss = CG(
-        j1=_get_particle(isobar.child1).spin,
+        j1=child1.spin,
         m1=child1_helicity,
-        j2=_get_particle(isobar.child2).spin,
+        j2=child2.spin,
         m2=-child2_helicity,
         j3=isobar.interaction.S,
         m3=child1_helicity - child2_helicity,
