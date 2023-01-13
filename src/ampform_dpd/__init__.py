@@ -143,12 +143,12 @@ class DalitzPlotDecompositionBuilder:
         i, j = get_decay_product_ids(subsystem_id)
         θij, θij_expr = formulate_scattering_angle(i, j)
         λ = λ0, λ1, λ2, λ3
-        spin = [
+        spin = (
             self.decay.initial_state.spin,
             self.decay.final_state[1].spin,
             self.decay.final_state[2].spin,
             self.decay.final_state[3].spin,
-        ]
+        )
         λR = sp.Symbol(R"\lambda_R", rational=True)
         terms = []
         parameter_defaults = {}
