@@ -121,11 +121,11 @@ label: aligned-amplitude
 \\ {\color{LightGray}\text{production:}} && \quad \times\;```
    \eta_J\,
    d^J_{\nu,\tau-\lambda'_k}\!\left(\hat\theta_{k(1)}\right)\,
-   H^{0\to(ij),k}_{\tau,\lambda_k'}
+   H^{0\to(ij),k}_{\tau,\lambda_k'}\,(-1)^{j_k-\lambda_k'}
 \\ {\color{LightGray}\text{decay:}} && \quad \times\;
    \eta_s\,
    d^s_{\tau,\lambda'_i-\lambda_j'}\!\left(\theta_{ij}\right)\,
-   H^{(ij)\to i,j}_{\lambda'_i,\lambda'_j}
+   H^{(ij)\to i,j}_{\lambda'_i,\lambda'_j}\,(-1)^{j_j-\lambda_j'}
 \\ {\color{LightGray}\text{rotations:}} && \quad \times\;
    d^{j_1}_{\lambda'_1,\lambda_1}\!\left(\zeta^1_{k(0)}\right)\,
    d^{j_2}_{\lambda'_2,\lambda_2}\!\left(\zeta^2_{k(0)}\right)\,
@@ -139,6 +139,7 @@ Notice the general structure:
 - **Dynamics**: The function $X_s$ only depends on a single Mandelstam variable and carries all the dynamical information about the decay chain. Typically, these are your $K$-matrix or Breit-Wigner lineshape functions.
 - **Isobars**: There is a Wigner&nbsp;$d$-function and a helicity coupling $H$ for each isobar in the three-body decay chain: the $0\to(ij),k$ production node and the $(ij)\to i,j$ decay node. The argument of these Wigner&nbsp;$d$-functions are the polar angles. The factors $\eta_J=\sqrt{2S+1}$ and $\eta_s=\sqrt{2s+1}$ are normalization factors.
 - **Wigner rotations**: The last three Wigner&nbsp;$d$-functions represent Wigner rotations that appear when rotating the boosted frames of the production and decay isobar amplitudes back to the space-fixed CM frame.
+- **Particle-2** phases, $(-1)^{j-\lambda}$, are added to both helicity couplings to convert to the particle-2 convention. The convention treats the first and the second particle unequally, however, it enables the simple relation of the helicity couplings to the LS couplings used below.
 
 If $k=1$, we have $\hat\theta_{k(1)}=0$, so the Wigner&nbsp;$d$ function for the production isobar reduces to a Kronecker delta, $d^J_{\nu,\tau-\lambda'_k}\!\left(\hat\theta_{k(1)}\right) = \delta_{\nu,\tau-\lambda'_k}$.
 
