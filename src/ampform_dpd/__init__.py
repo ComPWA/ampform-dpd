@@ -49,13 +49,13 @@ class DalitzPlotDecompositionBuilder:
     def __init__(
         self,
         decay: ThreeBodyDecay,
-        use_helicity_couplings: tuple[bool, bool] | bool = True,
+        min_ls: tuple[bool, bool] | bool = True,
     ) -> None:
         """Amplitude builder for the helicity formalism with Dalitz-plot decomposition.
 
         Args:
             decay: The `.ThreeBodyDecay` over which to formulate the amplitude model.
-            use_helicity_couplings: Use helicity couplings instead of
+            min_ls: Use helicity couplings instead of
                 :math:`LS`-couplings. If setting this boolean with a `tuple`, the first
                 element of the `tuple` defines whether to use helicity couplings on the
                 **production** `.IsobarNode` and the second configures the **decay**
@@ -63,22 +63,18 @@ class DalitzPlotDecompositionBuilder:
         """
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
-        if isinstance(use_helicity_couplings, bool):
-            self.use_production_helicity_couplings = use_helicity_couplings
-            self.use_decay_helicity_couplings = use_helicity_couplings
-        elif (
-            isinstance(use_helicity_couplings, tuple)
-            and len(use_helicity_couplings) == 2
-        ):
+        if isinstance(min_ls, bool):
+            self.use_production_helicity_couplings = min_ls
+            self.use_decay_helicity_couplings = min_ls
+        elif isinstance(min_ls, tuple) and len(min_ls) == 2:
             (
                 self.use_production_helicity_couplings,
                 self.use_decay_helicity_couplings,
-            ) = use_helicity_couplings
+            ) = min_ls
         else:
             raise NotImplementedError(
-                "Cannot configure helicity couplings with a"
-                f" {type(use_helicity_couplings).__name__}",
-                use_helicity_couplings,
+                f"Cannot configure helicity couplings with a {type(min_ls).__name__}",
+                min_ls,
             )
 
     def formulate(
