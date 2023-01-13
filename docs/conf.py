@@ -81,6 +81,9 @@ autodoc_type_aliases = {}
 autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 2
+bibtex_bibfiles = [
+    "references.bib",
+]
 codeautolink_concat_default = True
 copyright = "2022"
 default_role = "py:obj"
@@ -102,6 +105,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_togglebutton",
+    "sphinxcontrib.bibtex",
 ]
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
