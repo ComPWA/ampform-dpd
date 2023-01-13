@@ -201,7 +201,6 @@ class DalitzPlotDecompositionBuilder:
             )
             if not self.use_decay_helicity_couplings:
                 resonance_isobar = chain.decay.child1
-                assert resonance_isobar.interaction is not None
                 sub_amp_expr *= _formulate_clebsch_gordan_factor(
                     resonance_isobar,
                     child1_helicity=λ[i],
@@ -209,7 +208,6 @@ class DalitzPlotDecompositionBuilder:
                 )
             if not self.use_production_helicity_couplings:
                 production_isobar = chain.decay
-                assert production_isobar.interaction is not None
                 sub_amp_expr *= _formulate_clebsch_gordan_factor(
                     production_isobar,
                     child1_helicity=λR,
