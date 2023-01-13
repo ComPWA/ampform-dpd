@@ -201,14 +201,14 @@ class DalitzPlotDecompositionBuilder:
             )
             if not self.use_decay_helicity_couplings:
                 resonance_isobar = chain.decay.child1
-                sub_amp_expr *= _formulate_clebsch_gordan_factor(
+                sub_amp_expr *= _formulate_clebsch_gordan_factors(
                     resonance_isobar,
                     child1_helicity=λ[i],
                     child2_helicity=λ[j],
                 )
             if not self.use_production_helicity_couplings:
                 production_isobar = chain.decay
-                sub_amp_expr *= _formulate_clebsch_gordan_factor(
+                sub_amp_expr *= _formulate_clebsch_gordan_factors(
                     production_isobar,
                     child1_helicity=λR,
                     child2_helicity=λ[k],
@@ -342,7 +342,7 @@ def simplify_latex_rendering() -> None:
     sp.Indexed._latex = _print_Indexed_latex
 
 
-def _formulate_clebsch_gordan_factor(
+def _formulate_clebsch_gordan_factors(
     isobar: IsobarNode,
     child1_helicity: sp.Rational | sp.Symbol,
     child2_helicity: sp.Rational | sp.Symbol,
