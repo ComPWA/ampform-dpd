@@ -103,7 +103,7 @@ Given the right alignment, the aligned transition amplitude can be written as
 
 <!-- prettier-ignore-start -->
 
-````{math}
+```{math}
 ---
 label: aligned-amplitude
 ---
@@ -114,7 +114,7 @@ label: aligned-amplitude
    \sum_\tau
    \sum_{\{\lambda'\}}
    \; {\color{Orange}X_s\!\left(\sigma_k\right)}
-\\ {\color{LightGray}\text{production:}} && \quad \times\;```
+\\ {\color{LightGray}\text{production:}} && \quad \times\;
    \eta_J\,
    d^J_{\nu,\tau-\lambda'_k}\!\left(\hat\theta_{k(1)}\right)\,
    H^{0\to(ij),k}_{\tau,\lambda_k'}\,(-1)^{j_k-\lambda_k'}
@@ -127,7 +127,7 @@ label: aligned-amplitude
    d^{j_2}_{\lambda'_2,\lambda_2}\!\left(\zeta^2_{k(0)}\right)\,
    d^{j_3}_{\lambda'_3,\lambda_3}\!\left(\zeta^3_{k(0)}\right)
 \end{eqnarray*}
-````
+```
 
 Notice the general structure:
 
