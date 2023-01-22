@@ -24,7 +24,7 @@ jobs:
 
   gh-pages:
     name: Upload to GitHub Pages
-    needs: documentation
+    needs: docnb
     if: >
       github.repository == 'ComPWA/ampform-dpd' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-20.04
