@@ -16,40 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  linkcheck:
-    name: Check external links
-    uses: ComPWA/actions/.github/workflows/linkcheck.yml@linkcheck
-
-  docnb:
-    name: Execute and build documentation
-    uses: ComPWA/actions/.github/workflows/docnb.yml@linkcheck
-
-  gh-pages:
-    name: Upload to GitHub Pages
-    needs: docnb
-    if: >
-      github.repository == 'ComPWA/ampform-dpd' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.PAT }}
-      - name: Remove all existing files
-        run: find . ! -regex '^./.git\(/.*\)?' -delete | true
-      - uses: actions/download-artifact@v3
-        with:
-          name: html
-          path: .
-      - name: Commit to gh-pages orphan branch
-        run: |
-          git checkout --orphan gh-pages
-          git add -A
-          git config --global user.name "GitHub"
-          git config --global user.email "noreply@github.com"
-          git status -s
-          git commit -m "Upload documentation build files"
-      - name: Force-push changes
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
-          git push origin gh-pages --force
+  documentation:
+    uses: ComPWA/actions/.github/workflows/ci-docs.yml@linkcheck
+    with:
+      gh-pages: true
