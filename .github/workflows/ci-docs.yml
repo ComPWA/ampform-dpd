@@ -17,9 +17,11 @@ on:
 
 jobs:
   linkcheck:
+    name: Check external links
     uses: ComPWA/actions/.github/workflows/linkcheck.yml@linkcheck
 
   docnb:
+    name: Execute and build documentation
     uses: ComPWA/actions/.github/workflows/docnb.yml@linkcheck
 
   gh-pages:
