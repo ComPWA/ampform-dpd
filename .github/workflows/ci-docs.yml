@@ -16,6 +16,9 @@ on:
   workflow_dispatch:
 
 jobs:
+  linkcheck:
+    uses: ComPWA/actions/.github/workflows/linkcheck.yml@linkcheck
+
   documentation:
     name: Build documentation and run notebooks
     runs-on: ubuntu-20.04
