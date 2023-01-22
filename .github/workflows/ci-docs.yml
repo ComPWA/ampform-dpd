@@ -1,4 +1,4 @@
-name: CI-docs
+name: Documentation
 env:
   PYTHONHASHSEED: "0"
 
