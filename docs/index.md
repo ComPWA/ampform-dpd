@@ -183,7 +183,7 @@ API <api/ampform_dpd>
 
 ```{bibliography} /references.bib
 ---
-style: unsrt
+style: unsrt_et_al
 cited:
 ---
 ```
