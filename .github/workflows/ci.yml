@@ -19,7 +19,14 @@ jobs:
     with:
       gh-pages: true
 
-  pytest:
+  style:
+    uses: ComPWA/actions/.github/workflows/pre-commit.yml@linkcheck
+    with:
+      hooks: >-
+        editorconfig-checker
+        pyright
+
+  test:
     strategy:
       fail-fast: false
       matrix:
@@ -41,10 +48,3 @@ jobs:
     with:
       python-version: ${{ matrix.python-version }}
       runs-on: ${{ matrix.os }}
-
-  style:
-    uses: ComPWA/actions/.github/workflows/pre-commit.yml@linkcheck
-    with:
-      hooks: >-
-        editorconfig-checker
-        pyright
