@@ -133,12 +133,13 @@ Notice the general structure:
 
 - **Summations**: The outer sum is taken over the three decay chain combinations $(ij)k \in \left\{(23)1, (31)2, (12)3\right\}$. Next, we sum over the spin magnitudes&nbsp;$s$ of all resonances[^1], the corresponding allowed helicities&nbsp;$\tau$, and allowed spin projections&nbsp;$\{\lambda'\}$ of the final state.
 - **Dynamics**: The function $X_s$ only depends on a single Mandelstam variable and carries all the dynamical information about the decay chain. Typically, these are your $K$-matrix or Breit-Wigner lineshape functions.
-- **Isobars**: There is a Wigner&nbsp;$d$-function and a helicity coupling $H$ for each isobar in the three-body decay chain: the $0\to(ij),k$ production node and the $(ij)\to i,j$ decay node. The argument of these Wigner&nbsp;$d$-functions are the polar angles. The factors $\eta_J=\sqrt{2S+1}$ and $\eta_s=\sqrt{2s+1}$ are normalization factors. The phase $(-1)^{j-\lambda}$ is added to both helicity couplings to convert to the particle-2 convention. The convention treats the first and the second particle unequally, however, it enables the simple relation of the helicity couplings to the $LS$&nbsp;couplings explained below.
+- **Isobars**: There is a Wigner&nbsp;$d$-function and a helicity coupling $H$ for each isobar in the three-body decay chain: the $0\to(ij),k$ production node and the $(ij)\to i,j$ decay node. The argument of these Wigner&nbsp;$d$-functions are the polar angles. The factors $\eta_J=\sqrt{2S+1}$ and $\eta_s=\sqrt{2s+1}$ are normalization factors. The phase $(-1)^{j-\lambda}$ is added to both helicity couplings to convert to the Jacob-Wick particle-2 convention.[^2] The convention treats the first and the second particle unequally, however, it enables the simple relation of the helicity couplings to the $LS$&nbsp;couplings explained below.
 - **Wigner rotations**: The last three Wigner&nbsp;$d$-functions represent Wigner rotations that appear when rotating the boosted frames of the production and decay isobar amplitudes back to the space-fixed CM frame.
 
 If $k=1$, we have $\hat\theta_{k(1)}=0$, so the Wigner&nbsp;$d$ function for the production isobar reduces to a Kronecker delta, $d^J_{\nu,\tau-\lambda'_k}\!\left(\hat\theta_{k(1)}\right) = \delta_{\nu,\tau-\lambda'_k}$.
 
 [^1]: Alternatively, one can sum over all resonances themselves, so that one has a dynamic function&nbsp;$X_\mathcal{R}(\sigma_k)$ for each resonance&nbsp;$\mathcal{R}$ in subsystem&nbsp;$k$.
+[^2]: See also {cite}`JPAC:2021rxu`, Section&nbsp;2.1.
 
 Equation&nbsp;{eq}`aligned-amplitude` is written in terms of _helicity_ couplings, but can be rewritten in terms of _$LS$&nbsp;couplings_, using
 
