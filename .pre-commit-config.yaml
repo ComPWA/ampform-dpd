@@ -28,14 +28,28 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.159
+    rev: 0.0.164
     hooks:
       - id: check-dev-files
         args:
           - --no-docs
           - --no-prettierrc
           - --pin-requirements=bimonthly
+          - --repo-name=ampform-dpd
+          - --repo-title=AmpForm-DPD
       - id: format-setup-cfg
+
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.5.3
+    hooks:
+      - id: nbqa-black
+        additional_dependencies:
+          - black>=22.1.0
+      - id: nbqa-flake8
+      - id: nbqa-isort
+      - id: nbqa-pyupgrade
+        args:
+          - --py37-plus
 
   - repo: https://github.com/psf/black
     rev: 22.10.0
@@ -61,18 +75,6 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
-
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.5.3
-    hooks:
-      - id: nbqa-black
-        additional_dependencies:
-          - black>=22.1.0
-      - id: nbqa-flake8
-      - id: nbqa-isort
-      - id: nbqa-pyupgrade
-        args:
-          - --py37-plus
 
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
