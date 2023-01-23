@@ -20,7 +20,7 @@ jobs:
       gh-pages: true
 
   style:
-    uses: ComPWA/actions/.github/workflows/ci-style.yml@linkcheck
+    uses: ComPWA/actions/.github/workflows/pre-commit.yml@linkcheck
     with:
       hooks: >-
         editorconfig-checker
