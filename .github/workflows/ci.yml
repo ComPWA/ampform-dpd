@@ -44,5 +44,6 @@ jobs:
             python-version: "3.7"
     uses: ComPWA/actions/.github/workflows/pytest.yml@dev
     with:
+      coverage-target: ${{ matrix.coverage-target }}
       python-version: ${{ matrix.python-version }}
       runs-on: ubuntu-22.04
