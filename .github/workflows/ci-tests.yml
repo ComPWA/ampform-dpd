@@ -23,6 +23,7 @@ jobs:
     with:
       python-version: ${{ matrix.python-version }}
       runs-on: ${{ matrix.os }}
+      package-name: ampform_dpd
 
   pytest:
     strategy:
