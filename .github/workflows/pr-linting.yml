@@ -1,6 +1,9 @@
-# cspell:ignore agilepathway commitlint kode
-
 name: PR linting
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     types:
@@ -16,6 +19,7 @@ jobs:
     name: Check labels
     runs-on: ubuntu-22.04
     steps:
+      # cspell:ignore agilepathway
       - uses: docker://agilepathway/pull-request-label-checker:latest
         with:
           any_of:
@@ -30,4 +34,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm install @commitlint/config-conventional
+        # cspell:ignore commitlint kode
       - uses: JulienKode/pull-request-name-linter-action@v0.5.0
