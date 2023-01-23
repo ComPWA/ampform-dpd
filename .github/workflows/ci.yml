@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  docs:
+  doc:
     uses: ComPWA/actions/.github/workflows/ci-docs.yml@linkcheck
     with:
       gh-pages: true
