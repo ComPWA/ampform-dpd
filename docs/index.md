@@ -86,8 +86,6 @@ Here, $\Lambda$ and $\nu$ indicate the allowed spin projections of the initial s
 
 These aligned transition amplitudes are then combined into an observable **differential cross section** (intensity distribution) using a spin density matrix $\rho_{_{\Lambda,\Lambda'}}$ for the spin projections $\Lambda$ of the initial state,
 
-:::{container} full-width
-
 $$
 \mathrm{d}\sigma/\mathrm{d}\Phi_3 = N
 \sum_{\Lambda,\Lambda'} \rho_{_{\Lambda,\Lambda'}}
@@ -100,8 +98,6 @@ $$
       O^{\nu'*}_{\{\lambda\}}\left(\{\sigma\}\right)
    }.
 $$
-
-:::
 
 Given the right alignment, the aligned transition amplitude can be written as
 
