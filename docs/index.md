@@ -82,9 +82,9 @@ T^{\Lambda}_{\{\lambda\}}(\alpha,\beta,\gamma; \{\sigma\}) = \sum_{\nu}
 {\color{Orange} O^\nu_{\{\lambda\}}(\{\sigma\})}.
 $$
 
-Here, $\Lambda$ and $\nu$ indicate the allowed spin projections of the initial state, $\{\lambda\}$ are the allowed spin projections of the final state (e.g. $\{\lambda\}=\lambda_1,\lambda_3,\lambda_3$ for a three-body decay), The Euler angles $\alpha,\beta,\gamma$ are obtained by choosing a specific aligned center-of-momentum frame ("aligned CM"), see Fig.&nbsp;2 in Ref&nbsp;{cite}`JPAC:2019ufm`, which gives us an "aligned" transition amplitude $O^\nu_{\{\lambda\}}$ that only depends on dynamic variables $\{\sigma\}$ (in the case of a three-body decay, the three Mandelstam variables $\sigma_1,\sigma_2,\sigma_3$).
+Here, $\Lambda$ and $\nu$ indicate the allowed spin projections of the initial state, $\{\lambda\}$ are the allowed spin projections of the final state (e.g. $\{\lambda\}=\lambda_1,\lambda_3,\lambda_3$ for a three-body decay). The Euler angles $\alpha,\beta,\gamma$ are obtained by choosing a specific aligned center-of-momentum frame ("aligned CM"), see Fig.&nbsp;2 in Ref&nbsp;{cite}`JPAC:2019ufm`, which gives us an "aligned" transition amplitude $O^\nu_{\{\lambda\}}$ that only depends on dynamic variables $\{\sigma\}$ (in the case of a three-body decay, the three Mandelstam variables $\sigma_1,\sigma_2,\sigma_3$).
 
-These aligned transition amplitudes are then combined into an observable **differential cross section** (intensity distribution) using a spin density matrix $\rho_{_{\Lambda,\Lambda'}}$ for the spin projections $\Lambda$ of the initial state,
+These aligned transition amplitudes are then combined into an observable **differential cross section** (intensity distribution), using a spin density matrix $\rho_{_{\Lambda,\Lambda'}}$ for the spin projections $\Lambda$ of the initial state,
 
 $$
 \mathrm{d}\sigma/\mathrm{d}\Phi_3 = N
@@ -125,7 +125,7 @@ label: aligned-amplitude
 \\ {\color{LightGray}\text{rotations:}} && \quad \times\;
    d^{j_1}_{\lambda'_1,\lambda_1}\!\left(\zeta^1_{k(0)}\right)\,
    d^{j_2}_{\lambda'_2,\lambda_2}\!\left(\zeta^2_{k(0)}\right)\,
-   d^{j_3}_{\lambda'_3,\lambda_3}\!\left(\zeta^3_{k(0)}\right)
+   d^{j_3}_{\lambda'_3,\lambda_3}\!\left(\zeta^3_{k(0)}\right).
 \end{eqnarray*}
 ```
 
