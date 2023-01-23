@@ -1,39 +1,25 @@
-name: Requirements (PR)
+name: Requirements
 
 on:
   pull_request:
     branches:
       - main
       - epic/*
-      - "[0-9]+.[0-9]+.x"
+    paths:
+      - .constraints/py3.*.txt
+      - .pre-commit-config.yaml
+      - setup.cfg
+  schedule:
+    - cron: "0 3 7 */2 *"
+  workflow_dispatch:
 
 jobs:
-  diff:
-    name: Check dependency changes
-    if: github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Determine dependency changes
-        run: |
-          echo 'diff<<EOF' >> $GITHUB_OUTPUT
-          git diff origin/main --color -- .constraints .pre-commit-config.yaml setup.cfg >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
-        id: diff
-    outputs:
-      diff: ${{ steps.diff.outputs.diff }}
-
   pip-constraints:
     name: Update pip constraints
-    needs: diff
-    if: >
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      needs.diff.outputs.diff != ''
-    # Only run if PR does not come from a fork
-    # https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow
-    runs-on: ubuntu-20.04
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -50,31 +36,27 @@ jobs:
 
   pre-commit:
     name: pre-commit autoupdate
-    needs: diff
-    if: >
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      needs.diff.outputs.diff != ''
-    runs-on: ubuntu-20.04
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: ComPWA/update-pre-commit@main
 
   push:
     name: Push changes
-    if: >
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      needs.diff.outputs.diff != ''
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
-      - diff
       - pip-constraints
       - pre-commit
     steps:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
-        # GITHUB_TOKEN will not rerun checks after pushing to a PR branch
+          # GITHUB_TOKEN will not rerun checks after pushing to a PR branch
       - uses: actions/download-artifact@v3
+      - run: ls -A
       - name: Move artifacts to correct location
         run: |
           if [[ -d artifact ]]; then
@@ -85,6 +67,7 @@ jobs:
           fi
       - run: git status -s
       - name: Commit and push changes
+        if: github.event_name != 'schedule'
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
           git config --global user.name "GitHub"
@@ -97,3 +80,16 @@ jobs:
             git pull origin ${GITHUB_HEAD_REF}
             git push origin HEAD:${GITHUB_HEAD_REF}
           fi
+      - name: Create Pull Request
+        if: github.event_name == 'schedule'
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "MAINT: update pip constraints and pre-commit"
+          committer: GitHub <noreply@github.com>
+          author: GitHub <noreply@github.com>
+          title: "MAINT: update pip constraints and pre-commit"
+          labels: |
+            🔨 Maintenance
+          branch-suffix: timestamp
+          delete-branch: true
+          token: ${{ secrets.PAT }}
