@@ -19,12 +19,6 @@ jobs:
     with:
       gh-pages: true
 
-  codecov:
-    uses: ComPWA/actions/.github/workflows/pytest.yml@linkcheck
-    with:
-      python-version: "3.7"
-      runs-on: ubuntu-20.04
-
   pytest:
     strategy:
       fail-fast: false
@@ -37,7 +31,11 @@ jobs:
           - "3.9"
           - "3.10"
         exclude:
-          - os: ubuntu-20.04 # coverage job
+          - os: ubuntu-20.04
+            python-version: "3.7"
+        include:
+          - coverage-target: ampform_dpd
+            os: ubuntu-20.04
             python-version: "3.7"
     uses: ComPWA/actions/.github/workflows/pytest.yml@linkcheck
     with:
