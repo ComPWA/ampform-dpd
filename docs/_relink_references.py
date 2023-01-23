@@ -8,7 +8,6 @@ See also https://github.com/sphinx-doc/sphinx/issues/5868.
 """
 from __future__ import annotations
 
-# pyright: reportMissingImports=false
 import sphinx.domains.python
 from docutils import nodes
 from sphinx.addnodes import pending_xref, pending_xref_condition
