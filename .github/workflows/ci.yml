@@ -22,7 +22,7 @@ jobs:
   style:
     uses: ComPWA/actions/.github/workflows/ci-style.yml@linkcheck
     with:
-      hooks: |
+      hooks: >-
         editorconfig-checker
         pyright
 
