@@ -26,7 +26,7 @@ jobs:
         editorconfig-checker
         pyright
 
-  test:
+  pytest:
     strategy:
       fail-fast: false
       matrix:
