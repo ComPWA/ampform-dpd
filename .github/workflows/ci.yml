@@ -20,12 +20,12 @@ on:
 
 jobs:
   doc:
-    uses: ComPWA/actions/.github/workflows/ci-docs.yml@linkcheck
+    uses: ComPWA/actions/.github/workflows/ci-docs.yml@dev
     with:
       gh-pages: true
 
   style:
-    uses: ComPWA/actions/.github/workflows/pre-commit.yml@linkcheck
+    uses: ComPWA/actions/.github/workflows/pre-commit.yml@dev
     with:
       hooks: >-
         editorconfig-checker
@@ -42,7 +42,7 @@ jobs:
         include:
           - coverage-target: ampform_dpd
             python-version: "3.7"
-    uses: ComPWA/actions/.github/workflows/pytest.yml@linkcheck
+    uses: ComPWA/actions/.github/workflows/pytest.yml@dev
     with:
       python-version: ${{ matrix.python-version }}
       runs-on: ubuntu-22.04
