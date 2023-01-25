@@ -32,18 +32,7 @@ jobs:
         pyright
 
   pytest:
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version:
-          - "3.8"
-          - "3.9"
-          - "3.10"
-        include:
-          - coverage-target: ampform_dpd
-            python-version: "3.7"
     uses: ComPWA/actions/.github/workflows/pytest.yml@dev
     with:
-      coverage-target: ${{ matrix.coverage-target }}
-      python-version: ${{ matrix.python-version }}
-      runs-on: ubuntu-22.04
+      coverage-target: ampform_dpd
+      macos-python-version: "3.7"
