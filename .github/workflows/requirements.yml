@@ -20,5 +20,5 @@ on:
 jobs:
   requirements:
     uses: ComPWA/actions/.github/workflows/requirements.yml@dev
-    with:
-      secrets: ${{ secrets.PAT }}
+    secrets:
+      token: ${{ secrets.PAT }}
