@@ -26,10 +26,6 @@ jobs:
 
   style:
     uses: ComPWA/actions/.github/workflows/pre-commit.yml@dev
-    with:
-      hooks: >-
-        editorconfig-checker
-        pyright
 
   pytest:
     uses: ComPWA/actions/.github/workflows/pytest.yml@dev
