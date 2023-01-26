@@ -27,7 +27,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: cfd9bea
+    rev: f877ab1
     hooks:
       - id: check-dev-files
         args:
