@@ -3,7 +3,6 @@ ci:
   autoupdate_schedule: quarterly # already done by requirements-cron.yml
   skip:
     # hooks that don't work on pre-commit.ci
-    - editorconfig-checker
     - pyright
 
 repos:
@@ -28,11 +27,10 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: c4e3454
+    rev: cfd9bea
     hooks:
       - id: check-dev-files
         args:
-          - --no-docs
           - --no-prettierrc
           - --pin-requirements=bimonthly
           - --repo-name=ampform-dpd

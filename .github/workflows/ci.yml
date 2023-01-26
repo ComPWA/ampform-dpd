@@ -24,11 +24,11 @@ jobs:
     with:
       gh-pages: true
 
-  style:
-    uses: ComPWA/actions/.github/workflows/pre-commit.yml@dev
-
   pytest:
     uses: ComPWA/actions/.github/workflows/pytest.yml@dev
     with:
       coverage-target: ampform_dpd
       macos-python-version: "3.7"
+
+  style:
+    uses: ComPWA/actions/.github/workflows/pre-commit.yml@dev
