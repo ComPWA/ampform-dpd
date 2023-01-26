@@ -303,7 +303,7 @@ class DynamicsConfigurator:
 
     def get_builder(self, identifier) -> DynamicsBuilder:
         chain = self.__get_chain(identifier)
-        return self.__dynamics_builders[chain]
+        return self.__dynamics_builders.get(chain, formulate_non_resonant)
 
     def __get_chain(self, identifier) -> ThreeBodyDecayChain:
         if isinstance(identifier, ThreeBodyDecayChain):
@@ -329,6 +329,12 @@ class DynamicsBuilder(Protocol):
         self, decay_chain: ThreeBodyDecayChain
     ) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
         ...
+
+
+def formulate_non_resonant(
+    decay_chain: ThreeBodyDecayChain,
+) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
+    return sp.Rational(1), {}
 
 
 def simplify_latex_rendering() -> None:
