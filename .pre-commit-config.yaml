@@ -3,7 +3,6 @@ ci:
   autoupdate_schedule: quarterly # already done by requirements-cron.yml
   skip:
     # hooks that don't work on pre-commit.ci
-    - editorconfig-checker
     - pyright
 
 repos:
@@ -28,11 +27,10 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.164
+    rev: 0.0.166
     hooks:
       - id: check-dev-files
         args:
-          - --no-docs
           - --no-prettierrc
           - --pin-requirements=bimonthly
           - --repo-name=ampform-dpd
@@ -60,15 +58,6 @@ repos:
     rev: v6.17.1
     hooks:
       - id: cspell
-
-  - repo: https://github.com/myint/docformatter
-    rev: v1.5.1
-    hooks:
-      - id: docformatter
-        args:
-          - --in-place
-          - --wrap-descriptions=88
-          - --wrap-summaries=88
 
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
     rev: 2.6.2

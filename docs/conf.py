@@ -4,6 +4,8 @@ import subprocess
 import sys
 from datetime import datetime
 
+from pybtex.plugin import register_plugin
+
 if sys.version_info < (3, 8):
     from importlib_metadata import PackageNotFoundError
     from importlib_metadata import version as get_package_version
@@ -13,6 +15,7 @@ else:
 
 sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
+from _unsrt_et_al import MyStyle
 
 
 def get_execution_mode() -> str:
@@ -58,6 +61,7 @@ def generate_api() -> None:
 
 generate_api()
 relink_references()
+register_plugin("pybtex.style.formatting", "unsrt_et_al", MyStyle)
 
 
 add_module_names = False
@@ -81,6 +85,9 @@ autodoc_type_aliases = {}
 autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 2
+bibtex_bibfiles = [
+    "references.bib",
+]
 codeautolink_concat_default = True
 copyright = "2022"
 default_role = "py:obj"
@@ -102,6 +109,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_togglebutton",
+    "sphinxcontrib.bibtex",
 ]
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
