@@ -170,6 +170,7 @@ maxdepth: 1
 ---
 lc2pkpi
 jpsi2ksp
+collect-wigners
 ```
 
 ```{toctree}
