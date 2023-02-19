@@ -356,7 +356,7 @@ def _to_bytes(obj) -> bytes:
 
 def _get_python_hash_seed() -> int | None:
     python_hash_seed = os.environ.get("PYTHONHASHSEED", "")
-    if python_hash_seed is not None and python_hash_seed.isdigit():
+    if python_hash_seed.isdigit():
         return int(python_hash_seed)
     return None
 
