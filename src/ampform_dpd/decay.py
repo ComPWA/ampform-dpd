@@ -113,9 +113,9 @@ class ThreeBodyDecayChain:
             raise TypeError(f"Child 1 of child 1 has of type {Particle.__name__}")
         if not isinstance(self.decay.child2, Particle):
             raise TypeError(f"Child 2 has of type {Particle.__name__} (spectator)")
-        if self.incoming_ls is None:
+        if self.incoming_ls is None:  # pyright: ignore[reportUnnecessaryComparison]
             raise ValueError(f"LS-coupling for production node required")
-        if self.outgoing_ls is None:
+        if self.outgoing_ls is None:  # pyright: ignore[reportUnnecessaryComparison]
             raise ValueError(f"LS-coupling for decay node required")
 
     @property
