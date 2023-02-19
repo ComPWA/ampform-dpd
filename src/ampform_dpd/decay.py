@@ -109,8 +109,8 @@ class ThreeBodyDecayChain:
             raise TypeError(f"Child 1 has of type {IsobarNode.__name__} (the decay)")
         if not isinstance(self.decay.child1.child1, Particle):
             raise TypeError(f"Child 1 of child 1 has of type {Particle.__name__}")
-        if not isinstance(self.decay.child1.child1, Particle):
-            raise TypeError(f"Child 1 of child 1 has of type {Particle.__name__}")
+        if not isinstance(self.decay.child1.child2, Particle):
+            raise TypeError(f"Child 2 of child 1 has of type {Particle.__name__}")
         if not isinstance(self.decay.child2, Particle):
             raise TypeError(f"Child 2 has of type {Particle.__name__} (spectator)")
         if self.incoming_ls is None:  # pyright: ignore[reportUnnecessaryComparison]
