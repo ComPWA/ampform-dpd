@@ -2,6 +2,7 @@ name: ampform-dpd
 channels:
   - defaults
 dependencies:
+  - graphviz
   - python==3.8.*
   - pip
   - pip:

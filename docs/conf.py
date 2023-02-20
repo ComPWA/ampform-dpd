@@ -133,6 +133,7 @@ intersphinx_mapping = {
     "ampform": ("https://ampform.readthedocs.io/en/stable", None),
     "attrs": ("https://www.attrs.org/en/stable", None),
     "compwa-org": ("https://compwa-org.readthedocs.io", None),
+    "ipywidgets": ("https://ipywidgets.readthedocs.io/en/stable", None),
     "jax": ("https://jax.readthedocs.io/en/latest", None),
     "matplotlib": ("https://matplotlib.org/stable", None),
     "python": ("https://docs.python.org/3", None),
@@ -150,6 +151,7 @@ myst_enable_extensions = [
     "html_image",
     "substitution",
 ]
+myst_heading_anchors = 3
 myst_render_markdown_format = "myst"
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
