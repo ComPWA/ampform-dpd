@@ -111,6 +111,7 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
 ]
+html_last_updated_fmt = "%-d %B %Y"
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
 html_theme_options = {
