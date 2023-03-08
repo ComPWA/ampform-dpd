@@ -171,7 +171,10 @@ maxdepth: 1
 lc2pkpi
 jpsi2ksp
 d2kkk
+jpsi2pipipi
 ```
+
+<!-- cspell:ignore pipipi -->
 
 ```{toctree}
 ---
