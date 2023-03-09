@@ -106,6 +106,7 @@
     "ncols",
     "ndarray",
     "noreply",
+    "nrows",
     "pandoc",
     "pbar",
     "pcolormesh",
@@ -134,7 +135,8 @@
     "xrightarrow",
     "ydata",
     "ylabel",
-    "ylim"
+    "ylim",
+    "yticks"
   ],
   "language": "en-US",
   "version": "0.2",
