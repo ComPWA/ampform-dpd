@@ -127,6 +127,7 @@
     "textwrap",
     "toctree",
     "tqdm",
+    "trigsimp",
     "unsrt",
     "venv",
     "wspace",
