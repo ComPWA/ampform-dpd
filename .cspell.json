@@ -106,6 +106,7 @@
     "ncols",
     "ndarray",
     "noreply",
+    "nrows",
     "pandoc",
     "pbar",
     "pcolormesh",
@@ -126,6 +127,7 @@
     "textwrap",
     "toctree",
     "tqdm",
+    "trigsimp",
     "unsrt",
     "venv",
     "wspace",
@@ -134,7 +136,8 @@
     "xrightarrow",
     "ydata",
     "ylabel",
-    "ylim"
+    "ylim",
+    "yticks"
   ],
   "language": "en-US",
   "version": "0.2",
