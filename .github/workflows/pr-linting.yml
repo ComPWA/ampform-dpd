@@ -22,9 +22,9 @@ jobs:
       # cspell:ignore agilepathway
       - uses: docker://agilepathway/pull-request-label-checker:latest
         with:
-          any_of:
-            🐛 Bug,✨ Feature,⚙️ Enhancement,⚠️ Interface,❗ Behavior,📝 Docs,🔨
-            Maintenance,🖱️ DX
+          any_of: >
+            🐛 Bug,✨ Feature,⚙️ Enhancement,⚠️ Interface,❗ Behavior,📝 Docs,
+            🔨 Maintenance,🖱️ DX
           none_of: Epic,💫 Good first issue
           repo_token: ${{ secrets.GITHUB_TOKEN }}
 
