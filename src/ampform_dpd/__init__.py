@@ -4,6 +4,7 @@ from __future__ import annotations
 import sys
 from functools import lru_cache
 from itertools import product
+from typing import Iterable
 
 import sympy as sp
 from ampform.sympy import PoolSum
@@ -346,6 +347,19 @@ def simplify_latex_rendering() -> None:
         return f"{base}_{{{indices}}}"
 
     sp.Indexed._latex = _print_Indexed_latex
+
+
+def set_initial_state_polarization(
+    intensity: PoolSum, spin_projections: Iterable[sp.Rational | float | int]
+) -> PoolSum:
+    """Set the spin projections of the initial state."""
+    helicity_symbol, _ = intensity.indices[0]
+    helicity_values = tuple(sp.Rational(i) for i in spin_projections)
+    new_indices = (
+        (helicity_symbol, helicity_values),
+        *intensity.indices[1:],
+    )
+    return PoolSum(intensity.expression, *new_indices)
 
 
 def _formulate_clebsch_gordan_factors(
