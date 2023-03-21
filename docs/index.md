@@ -172,9 +172,8 @@ lc2pkpi
 jpsi2ksp
 d2kkk
 jpsi2pipipi
+jpsi2phipipi
 ```
-
-<!-- cspell:ignore pipipi -->
 
 ```{toctree}
 ---
