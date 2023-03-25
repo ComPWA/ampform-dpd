@@ -171,6 +171,8 @@ maxdepth: 1
 lc2pkpi
 jpsi2ksp
 d2kkk
+jpsi2pipipi
+jpsi2phipipi
 ```
 
 ```{toctree}

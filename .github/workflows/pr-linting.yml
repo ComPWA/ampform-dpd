@@ -1,9 +1,5 @@
 name: PR linting
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   pull_request:
     types:
@@ -22,7 +18,7 @@ jobs:
       # cspell:ignore agilepathway
       - uses: docker://agilepathway/pull-request-label-checker:latest
         with:
-          any_of: >-
+          any_of: >
             🐛 Bug,✨ Feature,⚙️ Enhancement,⚠️ Interface,❗ Behavior,📝 Docs,
             🔨 Maintenance,🖱️ DX
           none_of: Epic,💫 Good first issue
