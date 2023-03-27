@@ -2,8 +2,8 @@ ci:
   autoupdate_commit_msg: "MAINT: update pip constraints and pre-commit"
   autoupdate_schedule: quarterly # already done by requirements-cron.yml
   skip:
-    # hooks that don't work on pre-commit.ci
     - pyright
+    - taplo
 
 repos:
   - repo: meta
@@ -27,7 +27,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.168
+    rev: 0.0.171
     hooks:
       - id: check-dev-files
         args:
@@ -38,7 +38,7 @@ repos:
       - id: format-setup-cfg
 
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.6.3
+    rev: 1.6.4
     hooks:
       - id: nbqa-black
         additional_dependencies:
@@ -55,7 +55,7 @@ repos:
       - id: black
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.26.0
+    rev: v6.31.0
     hooks:
       - id: cspell
 
@@ -97,12 +97,12 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.4
+    rev: v3.0.0-alpha.6
     hooks:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.294
+    rev: v1.1.300
     hooks:
       - id: pyright
 
@@ -112,3 +112,8 @@ repos:
       - id: pyupgrade
         args:
           - --py37-plus
+
+  - repo: https://github.com/ComPWA/mirrors-taplo
+    rev: v0.8.0
+    hooks:
+      - id: taplo

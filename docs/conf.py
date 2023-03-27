@@ -2,7 +2,6 @@ import os
 import shutil
 import subprocess
 import sys
-from datetime import datetime
 
 from pybtex.plugin import register_plugin
 
@@ -26,11 +25,6 @@ def get_execution_mode() -> str:
         print("\033[93;1mWill run Jupyter notebooks with cache\033[0m")
         return "cache"
     return "off"
-
-
-def get_timestamp() -> str:
-    now = datetime.now()
-    return now.strftime("%d/%m/%Y %H:%M:%S")
 
 
 def get_version() -> str:
@@ -111,10 +105,10 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
 ]
+html_last_updated_fmt = "%-d %B %Y"
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "extra_navbar": f"<p>Version {get_version()} ({get_timestamp()})</p>",
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
     },
