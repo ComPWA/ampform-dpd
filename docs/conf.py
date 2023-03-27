@@ -113,13 +113,14 @@ html_theme_options = {
         "binderhub_url": "https://mybinder.org",
     },
     "path_to_docs": "docs",
-    "repository_url": "https://github.com/ComPWA/ampform-dpd",
     "repository_branch": "main",
+    "repository_url": "https://github.com/ComPWA/ampform-dpd",
     "show_navbar_depth": 2,
     "show_toc_level": 2,
-    "use_repository_button": True,
     "use_edit_page_button": True,
     "use_issues_button": True,
+    "use_repository_button": True,
+    "use_sidenotes": False,
 }
 html_title = "Symbolic Dalitz-Plot Decomposition"
 intersphinx_mapping = {
