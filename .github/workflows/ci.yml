@@ -27,6 +27,7 @@ jobs:
   doc:
     uses: ComPWA/actions/.github/workflows/ci-docs.yml@v1
     with:
+      apt-packages: graphviz
       gh-pages: true
       specific-pip-packages: ${{ inputs.specific-pip-packages }}
   pytest:
