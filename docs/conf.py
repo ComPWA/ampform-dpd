@@ -120,7 +120,6 @@ html_theme_options = {
     "use_edit_page_button": True,
     "use_issues_button": True,
     "use_repository_button": True,
-    "use_sidenotes": False,
 }
 html_title = "Symbolic Dalitz-Plot Decomposition"
 intersphinx_mapping = {
