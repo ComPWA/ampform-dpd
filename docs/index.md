@@ -179,14 +179,6 @@ jpsi2phipipi
 ---
 hidden:
 ---
+references
 API <api/ampform_dpd>
-```
-
-## Bibliography
-
-```{bibliography} /references.bib
----
-style: unsrt_et_al
-cited:
----
 ```
