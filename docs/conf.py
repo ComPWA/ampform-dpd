@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import os
 import shutil
 import subprocess
 import sys
 
+import requests
 from pybtex.plugin import register_plugin
 
 if sys.version_info < (3, 8):
@@ -27,11 +30,33 @@ def get_execution_mode() -> str:
     return "off"
 
 
+def get_logo_path() -> str | None:
+    path = "_static/logo.svg"
+    try:
+        _fetch_logo(
+            url="https://raw.githubusercontent.com/ComPWA/ComPWA/04e5199/doc/images/logo.svg",
+            output_path=path,
+        )
+    except requests.exceptions.ConnectionError:
+        pass
+    if os.path.exists(path):
+        return path
+    return None
+
+
 def get_version() -> str:
     try:
         return get_package_version("ampform_dpd")
     except PackageNotFoundError:
         return ""
+
+
+def _fetch_logo(url: str, output_path: str) -> None:
+    if os.path.exists(output_path):
+        return
+    online_content = requests.get(url, allow_redirects=True)
+    with open(output_path, "wb") as stream:
+        stream.write(online_content.content)
 
 
 def generate_api() -> None:
@@ -105,13 +130,16 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
 ]
+html_favicon = "_static/favicon.ico"
 html_last_updated_fmt = "%-d %B %Y"
+html_logo = get_logo_path()
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
     },
+    "logo": {"text": "Symbolic Dalitz&#8209;Plot&nbsp;Decomposition"},
     "path_to_docs": "docs",
     "repository_branch": "main",
     "repository_url": "https://github.com/ComPWA/ampform-dpd",
@@ -121,7 +149,7 @@ html_theme_options = {
     "use_issues_button": True,
     "use_repository_button": True,
 }
-html_title = "Symbolic Dalitz-Plot Decomposition"
+html_title = html_theme_options["logo"]["text"]
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
     "ampform": ("https://ampform.readthedocs.io/en/stable", None),
