@@ -19,6 +19,10 @@ sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
 from _unsrt_et_al import MyStyle
 
+PACKAGE = "ampform-dpd"
+REPO_NAME = "ampform-dpd"
+BRANCH = "main"
+
 
 def get_execution_mode() -> str:
     if "FORCE_EXECUTE_NB" in os.environ:
@@ -136,10 +140,42 @@ html_logo = get_logo_path()
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
 html_theme_options = {
+    "icon_links": [
+        {
+            "name": "Common Partial Wave Analysis",
+            "url": "https://compwa-org.rtfd.io",
+            "icon": "_static/favicon.ico",
+            "type": "local",
+        },
+        {
+            "name": "GitHub",
+            "url": f"https://github.com/ComPWA/{REPO_NAME}",
+            "icon": "fa-brands fa-github",
+        },
+        {
+            "name": "PyPI",
+            "url": f"https://pypi.org/project/{PACKAGE}",
+            "icon": "fa-brands fa-python",
+        },
+        {
+            "name": "Launch on Binder",
+            "url": (
+                f"https://mybinder.org/v2/gh/ComPWA/{REPO_NAME}/{BRANCH}?filepath=docs"
+            ),
+            "icon": "https://mybinder.readthedocs.io/en/latest/_static/favicon.png",
+            "type": "url",
+        },
+        {
+            "name": "Launch on Colaboratory",
+            "url": f"https://colab.research.google.com/github/ComPWA/{REPO_NAME}/blob/{BRANCH}",
+            "icon": "https://avatars.githubusercontent.com/u/33467679?s=100",
+            "type": "url",
+        },
+    ],
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
     },
-    "logo": {"text": "Dalitz&#8209;Plot&nbsp;Decomposition"},
+    "logo": {"text": "Dalitz-Plot Decomposition"},
     "path_to_docs": "docs",
     "repository_branch": "main",
     "repository_url": "https://github.com/ComPWA/ampform-dpd",
