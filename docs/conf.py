@@ -175,7 +175,7 @@ html_theme_options = {
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
     },
-    "logo": {"text": "Dalitz&#8209;Plot&nbsp;Decomposition"},
+    "logo": {"text": "Dalitz-Plot Decomposition"},
     "path_to_docs": "docs",
     "repository_branch": "main",
     "repository_url": "https://github.com/ComPWA/ampform-dpd",
