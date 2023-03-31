@@ -126,6 +126,7 @@
     "setuptools",
     "sharey",
     "startswith",
+    "suptitle",
     "textwrap",
     "toctree",
     "tqdm",
