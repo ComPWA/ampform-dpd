@@ -170,9 +170,13 @@ maxdepth: 1
 ---
 lc2pkpi
 jpsi2ksp
-d2kkk
-jpsi2pipipi
-jpsi2phipipi
+```
+
+```{toctree}
+---
+maxdepth: 2
+---
+comparison
 ```
 
 ```{toctree}
@@ -181,4 +185,25 @@ hidden:
 ---
 references
 API <api/ampform_dpd>
+```
+
+```{toctree}
+---
+caption: Related projects
+hidden:
+---
+QRules <https://qrules.readthedocs.io>
+AmpForm <https://ampform.readthedocs.io>
+TensorWaves <https://tensorwaves.readthedocs.io>
+PWA Pages <https://pwa.readthedocs.io>
+```
+
+```{toctree}
+---
+caption: ComPWA Organization
+hidden:
+---
+Website <https://compwa-org.readthedocs.io>
+GitHub Repositories <https://github.com/ComPWA>
+About <https://compwa-org.readthedocs.io/en/stable/about.html>
 ```
