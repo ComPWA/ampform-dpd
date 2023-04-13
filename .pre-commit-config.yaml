@@ -27,7 +27,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.171
+    rev: 0.0.179
     hooks:
       - id: check-dev-files
         args:
@@ -39,7 +39,7 @@ repos:
       - id: format-setup-cfg
 
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.6.4
+    rev: 1.7.0
     hooks:
       - id: nbqa-black
         additional_dependencies:
@@ -51,7 +51,7 @@ repos:
           - --py37-plus
 
   - repo: https://github.com/psf/black
-    rev: 23.1.0
+    rev: 23.3.0
     hooks:
       - id: black
 
@@ -61,11 +61,12 @@ repos:
       - id: cspell
 
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: 2.7.1
+    rev: "2.7.1"
     hooks:
       - id: editorconfig-checker
         name: editorconfig
-        exclude: >
+        alias: ec
+        exclude: >-
           (?x)^(
             .*\.py
           )$
@@ -84,6 +85,7 @@ repos:
           - |
             cell.metadata.code_folding
             cell.metadata.id
+            cell.metadata.user_expressions
             metadata.celltoolbar
             metadata.colab.name
             metadata.colab.provenance
@@ -103,7 +105,7 @@ repos:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.300
+    rev: v1.1.303
     hooks:
       - id: pyright
 
