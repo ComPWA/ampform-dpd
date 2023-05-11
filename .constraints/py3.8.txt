@@ -48,11 +48,11 @@ execnet==1.9.0
 executing==1.2.0
 fastjsonschema==2.16.3
 filelock==3.12.0
-flatbuffers==23.3.3
-fonttools==4.39.3
+flatbuffers==23.5.8
+fonttools==4.39.4
 fqdn==1.5.1
 gast==0.4.0
-google-auth==2.17.3
+google-auth==2.18.0
 google-auth-oauthlib==1.0.0
 google-pasta==0.2.0
 graphviz==0.20.1
@@ -74,8 +74,8 @@ ipython-genutils==0.2.0
 ipywidgets==8.0.6
 isoduration==20.11.0
 isort==5.12.0
-jax==0.4.8
-jaxlib==0.4.7
+jax==0.4.9
+jaxlib==0.4.9
 jedi==0.18.2
 jinja2==3.1.2
 json5==0.9.11
@@ -191,7 +191,7 @@ sphinxcontrib-htmlhelp==2.0.1
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
-sqlalchemy==2.0.12
+sqlalchemy==2.0.13
 stack-data==0.6.2
 sympy==1.11.1
 tabulate==0.9.0
@@ -212,7 +212,7 @@ tqdm==4.65.0
 traitlets==5.9.0
 typing-extensions==4.5.0
 uri-template==1.2.0
-urllib3==2.0.2
+urllib3==1.26.15
 virtualenv==20.23.0
 wcwidth==0.2.6
 webcolors==1.13
