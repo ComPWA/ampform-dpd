@@ -16,7 +16,7 @@ def formulate_scattering_angle(
     """
     if not {state_id, sibling_id} <= {1, 2, 3}:
         raise ValueError(f"Child IDs need to be one of 1, 2, 3")
-    # pyright: reportUnnecessaryContains=false
+    # pyright: ignore[reportUnnecessaryContains]
     if {state_id, sibling_id} in {(2, 1), (3, 2), (1, 3)}:
         raise NotImplementedError(
             f"Cannot compute scattering angle θ{state_id}{sibling_id}"
