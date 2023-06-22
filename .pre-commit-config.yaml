@@ -27,7 +27,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.179
+    rev: 0.0.182
     hooks:
       - id: check-dev-files
         args:
@@ -61,7 +61,7 @@ repos:
       - id: cspell
 
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: "2.7.1"
+    rev: "2.7.2"
     hooks:
       - id: editorconfig-checker
         name: editorconfig
@@ -83,6 +83,7 @@ repos:
         args:
           - --extra-keys
           - |
+            cell.attachments
             cell.metadata.code_folding
             cell.metadata.id
             cell.metadata.user_expressions
@@ -105,12 +106,12 @@ repos:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.308
+    rev: v1.1.315
     hooks:
       - id: pyright
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.4.0
+    rev: v3.7.0
     hooks:
       - id: pyupgrade
         args:
