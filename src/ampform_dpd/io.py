@@ -25,21 +25,22 @@ from collections import abc
 from functools import lru_cache
 from os.path import abspath, dirname, expanduser
 from textwrap import dedent
-from typing import Iterable, Mapping, Sequence, overload
+from typing import TYPE_CHECKING, Iterable, Mapping, Sequence, overload
 from warnings import warn
 
 import cloudpickle
 import sympy as sp
 from ampform.io import aslatex
-from tensorwaves.function import (ParametrizedBackendFunction,
-                                  PositionalArgumentFunction)
-from tensorwaves.function.sympy import (create_function,
-                                        create_parametrized_function)
-from tensorwaves.interface import (Function, ParameterValue,
-                                   ParametrizedFunction)
+from tensorwaves.function.sympy import create_function, create_parametrized_function
 
-from ampform_dpd.decay import (IsobarNode, Particle, ThreeBodyDecay,
-                               ThreeBodyDecayChain)
+from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+
+if TYPE_CHECKING:
+    from tensorwaves.function import (
+        ParametrizedBackendFunction,
+        PositionalArgumentFunction,
+    )
+    from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -66,7 +67,8 @@ def _(obj: sp.Basic, **kwargs) -> str:
 @aslatex.register(abc.Mapping)
 def _(obj: Mapping, **kwargs) -> str:
     if len(obj) == 0:
-        raise ValueError("Need at least one dictionary item")
+        msg = "Need at least one dictionary item"
+        raise ValueError(msg)
     latex = R"\begin{array}{rcl}" + "\n"
     for lhs, rhs in obj.items():
         latex += Rf"  {aslatex(lhs, **kwargs)} &=& {aslatex(rhs, **kwargs)} \\" + "\n"
@@ -78,7 +80,8 @@ def _(obj: Mapping, **kwargs) -> str:
 def _(obj: Iterable, **kwargs) -> str:
     obj = list(obj)
     if len(obj) == 0:
-        raise ValueError("Need at least one item to render as LaTeX")
+        msg = "Need at least one item to render as LaTeX"
+        raise ValueError(msg)
     latex = R"\begin{array}{c}" + "\n"
     for item in obj:
         item_latex = aslatex(item, **kwargs)
@@ -139,8 +142,9 @@ def as_markdown_table(obj: Sequence) -> str:
         return _as_decay_markdown_table(obj.chains)
     if item_type is ThreeBodyDecayChain:
         return _as_decay_markdown_table(obj)
+    msg = f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
     raise NotImplementedError(
-        f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
+        msg
     )
 
 
@@ -148,10 +152,12 @@ def _determine_item_type(obj) -> type:
     if not isinstance(obj, abc.Sequence):
         return type(obj)
     if len(obj) < 1:
-        raise ValueError(f"Need at least one entry to render a table")
+        msg = "Need at least one entry to render a table"
+        raise ValueError(msg)
     item_type = type(obj[0])
-    if not all(map(lambda i: isinstance(i, item_type), obj)):
-        raise ValueError(f"Not all items are of type {item_type.__name__}")
+    if not all(isinstance(i, item_type) for i in obj):
+        msg = f"Not all items are of type {item_type.__name__}"
+        raise ValueError(msg)
     return item_type
 
 
@@ -189,7 +195,7 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
     for chain in decay_chains:
         child1, child2 = map(aslatex, chain.decay_products)
         row_items = [
-            Rf"${chain.resonance.latex} \to" Rf" {child1} {child2}$",
+            Rf"${chain.resonance.latex} \to {child1} {child2}$",
             Rf"${aslatex(chain.resonance, only_jp=True)}$",
             f"{int(1e3 * chain.resonance.mass):,.0f}",
             f"{int(1e3 * chain.resonance.width):,.0f}",
@@ -207,7 +213,7 @@ def _create_markdown_table_header(column_names: list[str]):
 
 
 def _create_markdown_table_row(items: Iterable):
-    items = map(lambda i: f"{i}", items)
+    items = (f"{i}" for i in items)
     return "| " + " | ".join(items) + " |\n"
 
 

@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 THIS_DIR = dirname(abspath(__file__))
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
-dummy_args = dict(mass=0, width=0)
+dummy_args = {"mass": 0, "width": 0}
 Λc = Particle("Λc", latex=R"\Lambda_c^+", spin=0.5, parity=+1, **dummy_args)
 p = Particle("p", latex="p", spin=0.5, parity=+1, **dummy_args)
 π = Particle("π+", latex=R"\pi^+", spin=0, parity=-1, **dummy_args)
@@ -53,9 +53,9 @@ def test_aslatex_isobar_node():
 @pytest.mark.parametrize(
     ("assumptions", "expected_hash"),
     [
-        (dict(), "pythonhashseed-0+7459658071388516764"),
-        (dict(real=True), "pythonhashseed-0+3665410414623666716"),
-        (dict(rational=True), "pythonhashseed-0-7926839224244779605"),
+        ({}, "pythonhashseed-0+7459658071388516764"),
+        ({"real": True}, "pythonhashseed-0+3665410414623666716"),
+        ({"rational": True}, "pythonhashseed-0-7926839224244779605"),
     ],
 )
 def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture):

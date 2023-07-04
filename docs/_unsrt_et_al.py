@@ -1,10 +1,17 @@
 from pybtex.database import Entry
 from pybtex.richtext import Tag, Text
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
-from pybtex.style.template import \
-    _format_list  # pyright: ignore[reportPrivateUsage]
-from pybtex.style.template import (FieldIsMissing, Node, field, href, join,
-                                   node, sentence, words)
+from pybtex.style.template import (
+    FieldIsMissing,
+    Node,
+    _format_list,  # pyright: ignore[reportPrivateUsage]
+    field,
+    href,
+    join,
+    node,
+    sentence,
+    words,
+)
 
 
 class MyStyle(UnsrtStyle):  # type: ignore[reportUntypedBaseClass]

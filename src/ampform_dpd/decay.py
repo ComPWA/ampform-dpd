@@ -2,13 +2,15 @@
 from __future__ import annotations
 
 import sys
-from typing import Dict
+from typing import TYPE_CHECKING, Dict
 
-import sympy as sp
 from attrs import field, frozen
 from attrs.validators import instance_of
 
 from ampform_dpd._attrs import assert_spin_value, to_ls, to_rational
+
+if TYPE_CHECKING:
+    import sympy as sp
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal
@@ -48,16 +50,17 @@ class ThreeBodyDecay:
         expected_final_state = set(self.final_state.values())
         for i, chain in enumerate(self.chains):
             if chain.parent != expected_initial_state:
+                msg = f"Chain {i} has initial state {chain.parent.name}, but should have {expected_initial_state.name}"
                 raise ValueError(
-                    f"Chain {i} has initial state {chain.parent.name}, but should have"
-                    f" {expected_initial_state.name}"
+                    msg
                 )
             final_state = {chain.spectator, *chain.decay_products}
             if final_state != expected_final_state:
-                to_str = lambda s: ", ".join(p.name for p in s)
+                def to_str(s):
+                    return ", ".join(p.name for p in s)
+                msg = f"Chain {i} has final state {to_str(final_state)}, but should have {to_str(expected_final_state)}"
                 raise ValueError(
-                    f"Chain {i} has final state {to_str(final_state)}, but should have"
-                    f" {to_str(expected_final_state)}"
+                    msg
                 )
 
     @property
@@ -72,7 +75,8 @@ class ThreeBodyDecay:
         for chain in self.chains:
             if chain.resonance.name == resonance_name:
                 return chain
-        raise KeyError(f"No decay chain found for resonance {resonance_name}")
+        msg = f"No decay chain found for resonance {resonance_name}"
+        raise KeyError(msg)
 
     def get_subsystem(self, subsystem_id: Literal[1, 2, 3]) -> ThreeBodyDecay:
         child1_id, child2_id = get_decay_product_ids(subsystem_id)
@@ -93,7 +97,8 @@ def get_decay_product_ids(spectator_id: Literal[1, 2, 3]) -> tuple[int, int]:
         return 3, 1
     if spectator_id == 3:
         return 1, 2
-    raise ValueError(f"Spectator ID has to be one of 1, 2, 3, not {spectator_id}")
+    msg = f"Spectator ID has to be one of 1, 2, 3, not {spectator_id}"
+    raise ValueError(msg)
 
 
 OuterStates = Dict[Literal[0, 1, 2, 3], Particle]
@@ -106,17 +111,23 @@ class ThreeBodyDecayChain:
 
     def __attrs_post_init__(self) -> None:
         if not isinstance(self.decay.child1, IsobarNode):
-            raise TypeError(f"Child 1 has of type {IsobarNode.__name__} (the decay)")
+            msg = f"Child 1 has of type {IsobarNode.__name__} (the decay)"
+            raise TypeError(msg)
         if not isinstance(self.decay.child1.child1, Particle):
-            raise TypeError(f"Child 1 of child 1 has of type {Particle.__name__}")
+            msg = f"Child 1 of child 1 has of type {Particle.__name__}"
+            raise TypeError(msg)
         if not isinstance(self.decay.child1.child2, Particle):
-            raise TypeError(f"Child 2 of child 1 has of type {Particle.__name__}")
+            msg = f"Child 2 of child 1 has of type {Particle.__name__}"
+            raise TypeError(msg)
         if not isinstance(self.decay.child2, Particle):
-            raise TypeError(f"Child 2 has of type {Particle.__name__} (spectator)")
+            msg = f"Child 2 has of type {Particle.__name__} (spectator)"
+            raise TypeError(msg)
         if self.incoming_ls is None:  # pyright: ignore[reportUnnecessaryComparison]
-            raise ValueError(f"LS-coupling for production node required")
+            msg = "LS-coupling for production node required"
+            raise ValueError(msg)
         if self.outgoing_ls is None:  # pyright: ignore[reportUnnecessaryComparison]
-            raise ValueError(f"LS-coupling for decay node required")
+            msg = "LS-coupling for decay node required"
+            raise ValueError(msg)
 
     @property
     def parent(self) -> Particle:

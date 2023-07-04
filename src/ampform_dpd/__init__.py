@@ -10,13 +10,17 @@ from ampform.sympy import PoolSum
 from attrs import field, frozen
 from sympy.core.symbol import Str
 from sympy.physics.matrices import msigma
-from sympy.physics.quantum.spin import CG
+from sympy.physics.quantum.spin import CG, WignerD
 from sympy.physics.quantum.spin import Rotation as Wigner
-from sympy.physics.quantum.spin import WignerD
 
-from ampform_dpd.decay import (IsobarNode, LSCoupling, Particle,
-                               ThreeBodyDecay, ThreeBodyDecayChain,
-                               get_decay_product_ids)
+from ampform_dpd.decay import (
+    IsobarNode,
+    LSCoupling,
+    Particle,
+    ThreeBodyDecay,
+    ThreeBodyDecayChain,
+    get_decay_product_ids,
+)
 from ampform_dpd.spin import create_spin_range
 
 from .angles import formulate_scattering_angle, formulate_zeta_angle
@@ -67,8 +71,9 @@ class DalitzPlotDecompositionBuilder:
                 self.use_decay_helicity_couplings,
             ) = min_ls
         else:
+            msg = f"Cannot configure helicity couplings with a {type(min_ls).__name__}"
             raise NotImplementedError(
-                f"Cannot configure helicity couplings with a {type(min_ls).__name__}",
+                msg,
                 min_ls,
             )
 
@@ -304,14 +309,16 @@ class DynamicsConfigurator:
         if isinstance(identifier, ThreeBodyDecayChain):
             chain = identifier
             if chain not in set(self.__decay.chains):
+                msg = f"Decay does not have chain with resonance {chain.resonance.name}"
                 raise ValueError(
-                    f"Decay does not have chain with resonance {chain.resonance.name}"
+                    msg
                 )
             return chain
         if isinstance(identifier, str):
             return self.__decay.find_chain(identifier)
+        msg = f"Cannot get decay chain for identifier type {type(identifier)}"
         raise NotImplementedError(
-            f"Cannot get decay chain for identifier type {type(identifier)}"
+            msg
         )
 
     @property
@@ -348,8 +355,9 @@ def _formulate_clebsch_gordan_factors(
     helicities: dict[Particle, sp.Rational | sp.Symbol],
 ) -> sp.Expr:
     if isobar.interaction is None:
+        msg = "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
         raise ValueError(
-            "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
+            msg
         )
     # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
     # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
@@ -391,9 +399,9 @@ def formulate_polarimetry(
 ) -> tuple[PoolSum, PoolSum, PoolSum]:
     half = sp.Rational(1, 2)
     if builder.decay.initial_state.spin != half:
+        msg = f"Can only formulate polarimetry for an initial state with spin 1/2, but got {builder.decay.initial_state.spin}"
         raise ValueError(
-            "Can only formulate polarimetry for an initial state with spin 1/2, but"
-            f" got {builder.decay.initial_state.spin}"
+            msg
         )
     model = builder.formulate(reference_subsystem)
     λ0, λ0_prime = sp.symbols(R"lambda \lambda^{\prime}", rational=True)
