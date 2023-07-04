@@ -31,11 +31,15 @@ from warnings import warn
 import cloudpickle
 import sympy as sp
 from ampform.io import aslatex
-from tensorwaves.function import ParametrizedBackendFunction, PositionalArgumentFunction
-from tensorwaves.function.sympy import create_function, create_parametrized_function
-from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
+from tensorwaves.function import (ParametrizedBackendFunction,
+                                  PositionalArgumentFunction)
+from tensorwaves.function.sympy import (create_function,
+                                        create_parametrized_function)
+from tensorwaves.interface import (Function, ParameterValue,
+                                   ParametrizedFunction)
 
-from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+from ampform_dpd.decay import (IsobarNode, Particle, ThreeBodyDecay,
+                               ThreeBodyDecayChain)
 
 _LOGGER = logging.getLogger(__name__)
 

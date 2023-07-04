@@ -1,5 +1,6 @@
 # Symbolic Dalitz-Plot Decomposition
 
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![GPLv3+ license](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 
 [![PyPI package](https://badge.fury.io/py/ampform-dpd.svg)](https://pypi.org/project/ampform-dpd)

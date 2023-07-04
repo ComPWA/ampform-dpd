@@ -3,11 +3,9 @@ import pytest
 import sympy as sp
 from ampform.kinematics.phasespace import Kallen, compute_third_mandelstam
 
-from ampform_dpd.angles import (
-    formulate_scattering_angle,
-    formulate_theta_hat_angle,
-    formulate_zeta_angle,
-)
+from ampform_dpd.angles import (formulate_scattering_angle,
+                                formulate_theta_hat_angle,
+                                formulate_zeta_angle)
 
 m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
 σ1, σ2, σ3 = sp.symbols("sigma1:4", nonnegative=True)

@@ -14,14 +14,9 @@ from sympy.physics.quantum.spin import CG
 from sympy.physics.quantum.spin import Rotation as Wigner
 from sympy.physics.quantum.spin import WignerD
 
-from ampform_dpd.decay import (
-    IsobarNode,
-    LSCoupling,
-    Particle,
-    ThreeBodyDecay,
-    ThreeBodyDecayChain,
-    get_decay_product_ids,
-)
+from ampform_dpd.decay import (IsobarNode, LSCoupling, Particle,
+                               ThreeBodyDecay, ThreeBodyDecayChain,
+                               get_decay_product_ids)
 from ampform_dpd.spin import create_spin_range
 
 from .angles import formulate_scattering_angle, formulate_zeta_angle
