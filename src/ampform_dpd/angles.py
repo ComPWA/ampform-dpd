@@ -20,9 +20,7 @@ def formulate_scattering_angle(
     # pyright: ignore[reportUnnecessaryContains]
     if {state_id, sibling_id} in {(2, 1), (3, 2), (1, 3)}:
         msg = f"Cannot compute scattering angle θ{state_id}{sibling_id}"
-        raise NotImplementedError(
-            msg
-        )
+        raise NotImplementedError(msg)
     if state_id == sibling_id:
         msg = f"IDs of the decay products cannot be equal: {state_id}"
         raise ValueError(msg)
@@ -54,9 +52,7 @@ def formulate_theta_hat_angle(
     allowed_ids = {1, 2, 3}
     if not {isobar_id, aligned_subsystem} <= allowed_ids:
         msg = f"Child IDs need to be one of {', '.join(map(str, allowed_ids))}"
-        raise ValueError(
-            msg
-        )
+        raise ValueError(msg)
     symbol = sp.Symbol(Rf"\hat\theta_{isobar_id}({aligned_subsystem})", real=True)
     if isobar_id == aligned_subsystem:
         return symbol, sp.S.Zero
@@ -162,8 +158,10 @@ def formulate_zeta_angle(
         (2, 3, 1),
         (3, 1, 2),
     }:
+
         def create_symbols(i):
             return sp.symbols(f"m{i} sigma{i}", nonnegative=True)
+
         mi, σi = create_symbols(rotated_state)
         mj, σj = create_symbols(aligned_subsystem)
         mk, σk = create_symbols(reference_subsystem)
@@ -190,7 +188,8 @@ def formulate_zeta_angle(
             rotated_state, reference_subsystem, aligned_subsystem
         )
         return zeta_symbol, -zeta
-    msg = f"No expression for ζ^{rotated_state}_{aligned_subsystem}({reference_subsystem})"
-    raise NotImplementedError(
-        msg
+    msg = (
+        "No expression for"
+        f" ζ^{rotated_state}_{aligned_subsystem}({reference_subsystem})"
     )
+    raise NotImplementedError(msg)

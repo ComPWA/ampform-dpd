@@ -50,18 +50,22 @@ class ThreeBodyDecay:
         expected_final_state = set(self.final_state.values())
         for i, chain in enumerate(self.chains):
             if chain.parent != expected_initial_state:
-                msg = f"Chain {i} has initial state {chain.parent.name}, but should have {expected_initial_state.name}"
-                raise ValueError(
-                    msg
+                msg = (
+                    f"Chain {i} has initial state {chain.parent.name}, but should have"
+                    f" {expected_initial_state.name}"
                 )
+                raise ValueError(msg)
             final_state = {chain.spectator, *chain.decay_products}
             if final_state != expected_final_state:
+
                 def to_str(s):
                     return ", ".join(p.name for p in s)
-                msg = f"Chain {i} has final state {to_str(final_state)}, but should have {to_str(expected_final_state)}"
-                raise ValueError(
-                    msg
+
+                msg = (
+                    f"Chain {i} has final state {to_str(final_state)}, but should have"
+                    f" {to_str(expected_final_state)}"
                 )
+                raise ValueError(msg)
 
     @property
     def initial_state(self) -> Particle:

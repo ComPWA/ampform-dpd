@@ -14,9 +14,7 @@ if TYPE_CHECKING:
 def assert_spin_value(instance, attribute: Attribute, value: sp.Rational) -> None:
     if value.denominator not in {1, 2}:
         msg = f"{attribute.name} value should be integer or half-integer, not {value}"
-        raise ValueError(
-            msg
-        )
+        raise ValueError(msg)
 
 
 def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling:

@@ -142,10 +142,10 @@ def as_markdown_table(obj: Sequence) -> str:
         return _as_decay_markdown_table(obj.chains)
     if item_type is ThreeBodyDecayChain:
         return _as_decay_markdown_table(obj)
-    msg = f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
-    raise NotImplementedError(
-        msg
+    msg = (
+        f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
     )
+    raise NotImplementedError(msg)
 
 
 def _determine_item_type(obj) -> type:

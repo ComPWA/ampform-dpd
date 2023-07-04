@@ -310,16 +310,12 @@ class DynamicsConfigurator:
             chain = identifier
             if chain not in set(self.__decay.chains):
                 msg = f"Decay does not have chain with resonance {chain.resonance.name}"
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
             return chain
         if isinstance(identifier, str):
             return self.__decay.find_chain(identifier)
         msg = f"Cannot get decay chain for identifier type {type(identifier)}"
-        raise NotImplementedError(
-            msg
-        )
+        raise NotImplementedError(msg)
 
     @property
     def decay(self) -> ThreeBodyDecay:
@@ -356,9 +352,7 @@ def _formulate_clebsch_gordan_factors(
 ) -> sp.Expr:
     if isobar.interaction is None:
         msg = "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
-        raise ValueError(
-            msg
-        )
+        raise ValueError(msg)
     # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
     # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
     child1 = _get_particle(isobar.child1)
@@ -399,10 +393,11 @@ def formulate_polarimetry(
 ) -> tuple[PoolSum, PoolSum, PoolSum]:
     half = sp.Rational(1, 2)
     if builder.decay.initial_state.spin != half:
-        msg = f"Can only formulate polarimetry for an initial state with spin 1/2, but got {builder.decay.initial_state.spin}"
-        raise ValueError(
-            msg
+        msg = (
+            "Can only formulate polarimetry for an initial state with spin 1/2, but"
+            f" got {builder.decay.initial_state.spin}"
         )
+        raise ValueError(msg)
     model = builder.formulate(reference_subsystem)
     λ0, λ0_prime = sp.symbols(R"lambda \lambda^{\prime}", rational=True)
     λ = {
