@@ -7,7 +7,6 @@
     "garaioag.garaio-vscode-unwanted-recommendations",
     "github.vscode-github-actions",
     "github.vscode-pull-request-github",
-    "ms-python.mypy-type-checker",
     "ms-python.python",
     "ms-python.vscode-pylance",
     "ms-toolsai.vscode-jupyter-cell-tags",
@@ -25,6 +24,7 @@
     "bungcip.better-toml",
     "ms-python.flake8",
     "ms-python.isort",
+    "ms-python.mypy-type-checker",
     "ms-python.pylint",
     "travisillig.vscode-json-stable-stringify"
   ]
