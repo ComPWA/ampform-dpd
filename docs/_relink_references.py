@@ -19,10 +19,14 @@ if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
 
 __TARGET_SUBSTITUTIONS = {
+    "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
     "OuterStates": "ampform_dpd.decay.OuterStates",
+    "ParameterValue": "tensorwaves.interface.ParameterValue",
+    "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PoolSum": "ampform.sympy.PoolSum",
+    "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Rational": "sympy.core.numbers.Rational",
@@ -32,6 +36,7 @@ __TARGET_SUBSTITUTIONS = {
 }
 __REF_TYPE_SUBSTITUTIONS = {
     "ampform_dpd.decay.OuterStates": "obj",
+    "tensorwaves.interface.ParameterValue": "obj",
 }
 
 
