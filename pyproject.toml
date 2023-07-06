@@ -130,6 +130,7 @@ extend-select = [
 ]
 ignore = [
     "B028",    # missing explicit stacklevel keyword
+    "C408",
     "D101",
     "D102",
     "D103",

@@ -213,8 +213,7 @@ def _create_markdown_table_header(column_names: list[str]):
 
 
 def _create_markdown_table_row(items: Iterable):
-    items = (f"{i}" for i in items)
-    return "| " + " | ".join(items) + " |\n"
+    return "| " + " | ".join(f"{i}" for i in items) + " |\n"
 
 
 def perform_cached_doit(

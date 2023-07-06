@@ -53,9 +53,9 @@ def test_aslatex_isobar_node():
 @pytest.mark.parametrize(
     ("assumptions", "expected_hash"),
     [
-        ({}, "pythonhashseed-0+7459658071388516764"),
-        ({"real": True}, "pythonhashseed-0+3665410414623666716"),
-        ({"rational": True}, "pythonhashseed-0-7926839224244779605"),
+        (dict(), "pythonhashseed-0+7459658071388516764"),
+        (dict(real=True), "pythonhashseed-0+3665410414623666716"),
+        (dict(rational=True), "pythonhashseed-0-7926839224244779605"),
     ],
 )
 def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture):

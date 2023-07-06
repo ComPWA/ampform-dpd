@@ -43,7 +43,6 @@ def get_logo_path() -> str | None:
             url="https://raw.githubusercontent.com/ComPWA/ComPWA/04e5199/doc/images/logo.svg",
             output_path=path,
         )
-
     if os.path.exists(path):
         return path
     return None
