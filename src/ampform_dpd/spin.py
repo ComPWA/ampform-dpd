@@ -12,8 +12,9 @@ def generate_ls_couplings(
     child2_spin: SupportsFloat,
     max_L: int = 3,  # noqa: N803
 ) -> list[tuple[int, sp.Rational]]:
-    r""">>> generate_ls_couplings(1.5, 0.5, 0)
-    [(1, 1/2), (2, 1/2)].
+    r"""
+    >>> generate_ls_couplings(1.5, 0.5, 0)
+    [(1, 1/2), (2, 1/2)]
     """
     s1 = float(child1_spin)
     s2 = float(child2_spin)
@@ -34,11 +35,12 @@ def filter_parity_violating_ls(
     child1_parity: SupportsInt,
     child2_parity: SupportsInt,
 ) -> list[tuple[int, sp.Rational]]:
-    r""">>> LS = generate_ls_couplings(0.5, 1.5, 0)  # Λc → Λ(1520)π
+    r"""
+    >>> LS = generate_ls_couplings(0.5, 1.5, 0)  # Λc → Λ(1520)π
     >>> LS
     [(1, 3/2), (2, 3/2)]
     >>> filter_parity_violating_ls(LS, +1, -1, -1)
-    [(2, 3/2)].
+    [(2, 3/2)]
     """
     η0, η1, η2 = (
         int(parent_parity),
@@ -49,8 +51,9 @@ def filter_parity_violating_ls(
 
 
 def create_spin_range(spin: SupportsFloat) -> list[sp.Rational]:
-    """>>> create_spin_range(1.5)
-    [-3/2, -1/2, 1/2, 3/2].
+    """
+    >>> create_spin_range(1.5)
+    [-3/2, -1/2, 1/2, 3/2]
     """
     return create_rational_range(-spin, spin)
 
@@ -58,8 +61,9 @@ def create_spin_range(spin: SupportsFloat) -> list[sp.Rational]:
 def create_rational_range(
     __from: SupportsFloat, __to: SupportsFloat
 ) -> list[sp.Rational]:
-    """>>> create_rational_range(-0.5, +1.5)
-    [-1/2, 1/2, 3/2].
+    """
+    >>> create_rational_range(-0.5, +1.5)
+    [-1/2, 1/2, 3/2]
     """
     spin_range = arange(float(__from), +float(__to) + 0.5)
     return list(map(sp.Rational, spin_range))
