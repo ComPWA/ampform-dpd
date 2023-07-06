@@ -33,9 +33,7 @@ target-version = [
 ]
 
 [tool.nbqa.addopts]
-black = [
-    "--line-length=85",
-]
+black = ["--line-length=85"]
 ruff = [
     "--extend-ignore=B018",
     "--extend-ignore=C90",
@@ -46,8 +44,30 @@ ruff = [
     "--extend-ignore=PLR2004",
     "--extend-ignore=PLW0602",
     "--extend-ignore=PLW0603",
+    "--extend-ignore=PLW2901",
     "--line-length=85",
 ]
+
+[tool.pyright]
+reportGeneralTypeIssues = false
+reportImportCycles = false
+reportIncompatibleMethodOverride = false
+reportMissingParameterType = false
+reportMissingTypeArgument = false
+reportMissingTypeStubs = false
+reportPrivateImportUsage = false
+reportUnknownArgumentType = false
+reportUnknownLambdaType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+reportUnnecessaryContains = false
+reportUnnecessaryIsInstance = false
+reportUnusedClass = true
+reportUnusedFunction = true
+reportUnusedImport = true
+reportUnusedVariable = true
+typeCheckingMode = "strict"
 
 [tool.nbqa.exclude]
 flake8 = "^docs/appendix/benchmark.ipynb"
@@ -77,36 +97,6 @@ testpaths = [
     "src",
     "tests",
 ]
-
-[tool.pyright]
-exclude = [
-    "**/.git",
-    "**/.ipynb_checkpoints",
-    "**/.mypy_cache",
-    "**/.pytest_cache",
-    "**/.tox",
-    "**/__pycache__",
-    "**/_build",
-]
-reportGeneralTypeIssues = false
-reportImportCycles = false
-reportIncompatibleMethodOverride = false
-reportMissingParameterType = false
-reportMissingTypeArgument = false
-reportMissingTypeStubs = false
-reportPrivateImportUsage = false
-reportUnknownArgumentType = false
-reportUnknownLambdaType = false
-reportUnknownMemberType = false
-reportUnknownParameterType = false
-reportUnknownVariableType = false
-reportUnnecessaryContains = false
-reportUnnecessaryIsInstance = false
-reportUnusedClass = true
-reportUnusedFunction = true
-reportUnusedImport = true
-reportUnusedVariable = true
-typeCheckingMode = "strict"
 
 [tool.ruff]
 extend-select = [
@@ -142,6 +132,7 @@ extend-select = [
     "YTT",
 ]
 ignore = [
+    "B028",    # missing explicit stacklevel keyword
     "D101",
     "D102",
     "D103",
@@ -152,6 +143,9 @@ ignore = [
     "D407",
     "D416",
     "E501",
+    "ISC003",
+    "PLR0913", # sympy class
+    "S301",
     "SIM108",
 ]
 show-fixes = true
@@ -163,9 +157,11 @@ target-version = "py37"
 task-tags = ["cspell"]
 
 [tool.ruff.per-file-ignores]
+"*" = ["D"]
 "docs/*" = [
     "E402",
     "INP001",
+    "PLR2004",
     "S101",
     "S113",
     "T201",
@@ -178,6 +174,19 @@ task-tags = ["cspell"]
     "PLR0913",
     "PLR2004",
     "S101",
+]
+
+[tool.ruff.pep8-naming]
+ignore-names = [
+    "A",
+    "H",
+    "L",
+    "R",
+    "R_dec",
+    "R_prod",
+    "S",
+    "Γ*",
+    "λ*",
 ]
 
 [tool.ruff.pydocstyle]

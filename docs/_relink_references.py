@@ -37,7 +37,7 @@ __REF_TYPE_SUBSTITUTIONS = {
 
 def _new_type_to_xref(
     target: str,
-    env: BuildEnvironment = None,
+    env: BuildEnvironment | None = None,
     suppress_prefix: bool = False,
 ) -> pending_xref:
     reftype, target, title, refspecific = parse_reftarget(target, suppress_prefix)

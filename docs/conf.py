@@ -79,7 +79,7 @@ def generate_api() -> None:
                 "--templatedir _templates",
             ]
         ),
-        shell=True,
+        shell=True,  # noqa: S602
     )
 
 
@@ -113,7 +113,7 @@ bibtex_bibfiles = [
     "references.bib",
 ]
 codeautolink_concat_default = True
-copyright = "2022"
+copyright = "2022"  # noqa: A001
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",

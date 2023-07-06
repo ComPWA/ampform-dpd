@@ -65,17 +65,14 @@ class DalitzPlotDecompositionBuilder:
         if isinstance(min_ls, bool):
             self.use_production_helicity_couplings = min_ls
             self.use_decay_helicity_couplings = min_ls
-        elif isinstance(min_ls, tuple) and len(min_ls) == 2:
+        elif isinstance(min_ls, tuple) and len(min_ls) == 2:  # noqa: PLR2004
             (
                 self.use_production_helicity_couplings,
                 self.use_decay_helicity_couplings,
             ) = min_ls
         else:
             msg = f"Cannot configure helicity couplings with a {type(min_ls).__name__}"
-            raise NotImplementedError(
-                msg,
-                min_ls,
-            )
+            raise NotImplementedError(msg, min_ls)
 
     def formulate(
         self,
@@ -338,7 +335,7 @@ def formulate_non_resonant(
 def simplify_latex_rendering() -> None:
     """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
 
-    def _print_Indexed_latex(self, printer, *args):
+    def _print_Indexed_latex(self, printer, *args):  # noqa: N802
         base = printer._print(self.base)
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"

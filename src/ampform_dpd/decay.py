@@ -97,9 +97,9 @@ class ThreeBodyDecay:
 def get_decay_product_ids(spectator_id: Literal[1, 2, 3]) -> tuple[int, int]:
     if spectator_id == 1:
         return 2, 3
-    if spectator_id == 2:
+    if spectator_id == 2:  # noqa: PLR2004
         return 3, 1
-    if spectator_id == 3:
+    if spectator_id == 3:  # noqa: PLR2004
         return 1, 2
     msg = f"Spectator ID has to be one of 1, 2, 3, not {spectator_id}"
     raise ValueError(msg)

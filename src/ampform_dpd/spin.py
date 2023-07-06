@@ -10,7 +10,7 @@ def generate_ls_couplings(
     parent_spin: SupportsFloat,
     child1_spin: SupportsFloat,
     child2_spin: SupportsFloat,
-    max_L: int = 3,
+    max_L: int = 3,  # noqa: N803
 ) -> list[tuple[int, sp.Rational]]:
     r""">>> generate_ls_couplings(1.5, 0.5, 0)
     [(1, 1/2), (2, 1/2)].
