@@ -8,17 +8,25 @@ See also https://github.com/sphinx-doc/sphinx/issues/5868.
 """
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import sphinx.domains.python
 from docutils import nodes
 from sphinx.addnodes import pending_xref, pending_xref_condition
 from sphinx.domains.python import parse_reftarget
-from sphinx.environment import BuildEnvironment
+
+if TYPE_CHECKING:
+    from sphinx.environment import BuildEnvironment
 
 __TARGET_SUBSTITUTIONS = {
+    "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
     "OuterStates": "ampform_dpd.decay.OuterStates",
+    "ParameterValue": "tensorwaves.interface.ParameterValue",
+    "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PoolSum": "ampform.sympy.PoolSum",
+    "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Rational": "sympy.core.numbers.Rational",
@@ -28,12 +36,13 @@ __TARGET_SUBSTITUTIONS = {
 }
 __REF_TYPE_SUBSTITUTIONS = {
     "ampform_dpd.decay.OuterStates": "obj",
+    "tensorwaves.interface.ParameterValue": "obj",
 }
 
 
 def _new_type_to_xref(
     target: str,
-    env: BuildEnvironment = None,
+    env: BuildEnvironment | None = None,
     suppress_prefix: bool = False,
 ) -> pending_xref:
     reftype, target, title, refspecific = parse_reftarget(target, suppress_prefix)

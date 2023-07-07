@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 THIS_DIR = dirname(abspath(__file__))
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
-dummy_args = dict(mass=0, width=0)
+dummy_args = {"mass": 0, "width": 0}
 Λc = Particle("Λc", latex=R"\Lambda_c^+", spin=0.5, parity=+1, **dummy_args)
 p = Particle("p", latex="p", spin=0.5, parity=+1, **dummy_args)
 π = Particle("π+", latex=R"\pi^+", spin=0, parity=-1, **dummy_args)

@@ -52,7 +52,7 @@ def test_formulate_theta_hat_angle():
         assert formulate_theta_hat_angle(i, i)[1] == 0
 
 
-def test_formulate_zeta_angle_equation_A6():
+def test_formulate_zeta_angle_equation_A6():  # noqa: N802
     """Test Eq. (A6), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=10."""
     for i in [1, 2, 3]:
         for k in [1, 2, 3]:

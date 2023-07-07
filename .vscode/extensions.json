@@ -1,8 +1,10 @@
 {
   "recommendations": [
+    "charliermarsh.ruff",
     "eamodio.gitlens",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
+    "garaioag.garaio-vscode-unwanted-recommendations",
     "github.vscode-github-actions",
     "github.vscode-pull-request-github",
     "ms-python.python",
@@ -17,5 +19,13 @@
     "tamasfe.even-better-toml",
     "tyriar.sort-lines",
     "yzhang.markdown-all-in-one"
+  ],
+  "unwantedRecommendations": [
+    "bungcip.better-toml",
+    "ms-python.flake8",
+    "ms-python.isort",
+    "ms-python.mypy-type-checker",
+    "ms-python.pylint",
+    "travisillig.vscode-json-stable-stringify"
   ]
 }

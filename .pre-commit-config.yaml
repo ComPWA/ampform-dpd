@@ -27,7 +27,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.182
+    rev: 0.0.189
     hooks:
       - id: check-dev-files
         args:
@@ -44,11 +44,12 @@ repos:
       - id: nbqa-black
         additional_dependencies:
           - black>=22.1.0
-      - id: nbqa-flake8
-      - id: nbqa-isort
       - id: nbqa-pyupgrade
         args:
           - --py37-plus
+      - id: nbqa-ruff
+        args:
+          - --fix
 
   - repo: https://github.com/psf/black
     rev: 23.3.0
@@ -70,11 +71,6 @@ repos:
           (?x)^(
             .*\.py
           )$
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
-    hooks:
-      - id: isort
 
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
@@ -101,21 +97,28 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.9-for-vscode
+    rev: v3.0.0
     hooks:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.315
+    rev: v1.1.316
     hooks:
       - id: pyright
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.7.0
+    rev: v3.8.0
     hooks:
       - id: pyupgrade
         args:
           - --py37-plus
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.277
+    hooks:
+      - id: ruff
+        args:
+          - --fix
 
   - repo: https://github.com/ComPWA/mirrors-taplo
     rev: v0.8.0

@@ -16,6 +16,8 @@ else:
     from importlib.metadata import version as get_package_version
 
 sys.path.insert(0, os.path.abspath("."))
+import contextlib
+
 from _relink_references import relink_references
 from _unsrt_et_al import MyStyle
 
@@ -36,13 +38,11 @@ def get_execution_mode() -> str:
 
 def get_logo_path() -> str | None:
     path = "_static/logo.svg"
-    try:
+    with contextlib.suppress(requests.exceptions.ConnectionError):
         _fetch_logo(
             url="https://raw.githubusercontent.com/ComPWA/ComPWA/04e5199/doc/images/logo.svg",
             output_path=path,
         )
-    except requests.exceptions.ConnectionError:
-        pass
     if os.path.exists(path):
         return path
     return None
@@ -69,8 +69,8 @@ def generate_api() -> None:
         " ".join(
             [
                 "sphinx-apidoc",
-                f"../src/ampform_dpd/",
-                f"../src/ampform_dpd/version.py",
+                "../src/ampform_dpd/",
+                "../src/ampform_dpd/version.py",
                 "-o api/",
                 "--force",
                 "--no-toc",
@@ -78,7 +78,7 @@ def generate_api() -> None:
                 "--templatedir _templates",
             ]
         ),
-        shell=True,
+        shell=True,  # noqa: S602
     )
 
 
@@ -112,7 +112,7 @@ bibtex_bibfiles = [
     "references.bib",
 ]
 codeautolink_concat_default = True
-copyright = "2022"
+copyright = "2022"  # noqa: A001
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",

@@ -15,17 +15,18 @@ def formulate_scattering_angle(
     rest frame of the isobar resonance :math:`(ij)`.
     """
     if not {state_id, sibling_id} <= {1, 2, 3}:
-        raise ValueError(f"Child IDs need to be one of 1, 2, 3")
+        msg = "Child IDs need to be one of 1, 2, 3"
+        raise ValueError(msg)
     # pyright: ignore[reportUnnecessaryContains]
     if {state_id, sibling_id} in {(2, 1), (3, 2), (1, 3)}:
-        raise NotImplementedError(
-            f"Cannot compute scattering angle θ{state_id}{sibling_id}"
-        )
+        msg = f"Cannot compute scattering angle θ{state_id}{sibling_id}"
+        raise NotImplementedError(msg)
     if state_id == sibling_id:
-        raise ValueError(f"IDs of the decay products cannot be equal: {state_id}")
+        msg = f"IDs of the decay products cannot be equal: {state_id}"
+        raise ValueError(msg)
     symbol = sp.Symbol(Rf"theta_{state_id}{sibling_id}", real=True)
     spectator_id = next(iter({1, 2, 3} - {state_id, sibling_id}))
-    m0 = sp.Symbol(f"m0", nonnegative=True)
+    m0 = sp.Symbol("m0", nonnegative=True)
     mi = sp.Symbol(f"m{state_id}", nonnegative=True)
     mj = sp.Symbol(f"m{sibling_id}", nonnegative=True)
     mk = sp.Symbol(f"m{spectator_id}", nonnegative=True)
@@ -50,15 +51,14 @@ def formulate_theta_hat_angle(
     r"""Formulate an expression for :math:`\hat\theta_{i(j)}`."""
     allowed_ids = {1, 2, 3}
     if not {isobar_id, aligned_subsystem} <= allowed_ids:
-        raise ValueError(
-            f"Child IDs need to be one of {', '.join(map(str, allowed_ids))}"
-        )
+        msg = f"Child IDs need to be one of {', '.join(map(str, allowed_ids))}"
+        raise ValueError(msg)
     symbol = sp.Symbol(Rf"\hat\theta_{isobar_id}({aligned_subsystem})", real=True)
     if isobar_id == aligned_subsystem:
         return symbol, sp.S.Zero
     if (isobar_id, aligned_subsystem) in {(3, 1), (1, 2), (2, 3)}:
         remaining_id = next(iter(allowed_ids - {isobar_id, aligned_subsystem}))
-        m0 = sp.Symbol(f"m0", nonnegative=True)
+        m0 = sp.Symbol("m0", nonnegative=True)
         mi = sp.Symbol(f"m{isobar_id}", nonnegative=True)
         mj = sp.Symbol(f"m{aligned_subsystem}", nonnegative=True)
         σi = sp.Symbol(f"sigma{isobar_id}", nonnegative=True)
@@ -79,7 +79,7 @@ def formulate_theta_hat_angle(
     return symbol, -theta
 
 
-def formulate_zeta_angle(
+def formulate_zeta_angle(  # noqa: C901, PLR0911
     rotated_state: int,
     aligned_subsystem: int,
     reference_subsystem: int,
@@ -158,7 +158,10 @@ def formulate_zeta_angle(
         (2, 3, 1),
         (3, 1, 2),
     }:
-        create_symbols = lambda i: sp.symbols(f"m{i} sigma{i}", nonnegative=True)
+
+        def create_symbols(i):
+            return sp.symbols(f"m{i} sigma{i}", nonnegative=True)
+
         mi, σi = create_symbols(rotated_state)
         mj, σj = create_symbols(aligned_subsystem)
         mk, σk = create_symbols(reference_subsystem)
@@ -174,11 +177,9 @@ def formulate_zeta_angle(
         (1, 3, 1),
         (2, 1, 2),
         (3, 2, 3),
-        # Eq (A8)
         (1, 1, 2),
         (2, 2, 3),
         (3, 3, 1),
-        # Eq (A11)
         (1, 3, 2),
         (2, 1, 3),
         (3, 2, 1),
@@ -187,7 +188,8 @@ def formulate_zeta_angle(
             rotated_state, reference_subsystem, aligned_subsystem
         )
         return zeta_symbol, -zeta
-    raise NotImplementedError(
+    msg = (
         "No expression for"
         f" ζ^{rotated_state}_{aligned_subsystem}({reference_subsystem})"
     )
+    raise NotImplementedError(msg)
