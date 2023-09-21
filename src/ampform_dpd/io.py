@@ -269,8 +269,7 @@ def perform_cached_lambdify(
     expr: sp.Expr,
     backend: str = "jax",
     directory: str | None = None,
-) -> PositionalArgumentFunction:
-    ...
+) -> PositionalArgumentFunction: ...
 
 
 @overload
@@ -279,8 +278,7 @@ def perform_cached_lambdify(
     parameters: Mapping[sp.Symbol, ParameterValue],
     backend: str = "jax",
     directory: str | None = None,
-) -> ParametrizedBackendFunction:
-    ...
+) -> ParametrizedBackendFunction: ...
 
 
 def perform_cached_lambdify(
