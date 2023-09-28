@@ -54,10 +54,8 @@ repos:
     hooks:
       - id: black
       - id: black-jupyter
-        args:
-          - --line-length=85
-        types_or:
-          - jupyter
+        args: [--line-length=85]
+        types_or: [jupyter]
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v7.3.0
