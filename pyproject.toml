@@ -1,9 +1,134 @@
 [build-system]
+build-backend = "setuptools.build_meta"
 requires = [
     "setuptools>=61.2",
     "setuptools_scm",
 ]
-build-backend = "setuptools.build_meta"
+
+[project]
+authors = [{name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de"}]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed",
+]
+dependencies = [
+    "ampform ~=0.14.4", # Kibble and Kallen functions, perform_cached_doit
+    "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
+    "cloudpickle",
+    "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
+    "tensorwaves[jax]",
+    'typing-extensions; python_version <"3.8.0"',
+]
+description = "Symbolic expressions for Dalitz-Plot Decomposition"
+dynamic = ["version"]
+license = {text = "GPLv3 or later"}
+name = "ampform-dpd"
+requires-python = ">=3.7"
+
+[project.optional-dependencies]
+dev = [
+    "ampform-dpd[doc]",
+    "ampform-dpd[jupyter]",
+    "ampform-dpd[sty]",
+    "ampform-dpd[test]",
+    "sphinx-autobuild",
+    "tox >=1.9", # for skip_install, use_develop
+]
+doc = [
+    "graphviz",
+    "ipympl",
+    "ipywidgets",
+    'importlib-metadata; python_version <"3.8.0"',
+    "matplotlib",
+    "myst-nb >=0.14", # nb_render_markdown_format for Markdown tables
+    "sphinx-book-theme",
+    "sphinx-codeautolink[ipython]",
+    "sphinx-copybutton",
+    "sphinx-design",
+    "sphinx-togglebutton",
+    "sphinxcontrib-bibtex",
+    "tensorwaves[phsp]",
+    "tqdm",
+]
+format = [
+    "black",
+]
+jax = [
+    "tensorwaves[jax]",
+]
+jupyter = [
+    "ampform-dpd[doc]",
+    "jupyterlab >=3.0",
+    "jupyterlab-code-formatter",
+    "jupyterlab-lsp",
+    "jupyterlab-myst",
+    "python-lsp-server[rope]",
+    'ypy-websocket <0.8.3; python_version <"3.8.0"',
+]
+lint = [
+    "ruff",
+]
+numba = [
+    "tensorwaves[numba]",
+]
+sty = [
+    "ampform-dpd[format]",
+    "ampform-dpd[lint]",
+    "ampform-dpd[test]", # for pytest type hints
+    "docutils",
+    "pre-commit >=1.4.0",
+    "pybtex",
+    "sphinx",
+]
+tensorflow = [
+    "ampform-dpd[tf]",
+]
+test = [
+    "nbmake",
+    'nbmake <1.3; python_version <"3.8.0"',
+    "numpy",
+    "pytest >=6.0", # pyproject.toml
+    "pytest-cov",
+    "pytest-xdist",
+]
+tf = [
+    "tensorwaves[tf]",
+]
+
+[project.readme]
+content-type = "text/markdown"
+file = "README.md"
+
+[project.urls]
+Changelog = "https://github.com/ComPWA/ampform-dpd/releases"
+Documentation = "https://compwa.github.io/ampform-dpd"
+Source = "https://github.com/ComPWA/ampform-dpd"
+Tracker = "https://github.com/ComPWA/ampform-dpd/issues"
+
+[tool.setuptools]
+include-package-data = false
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+ampform_dpd = ["py.typed"]
+
+[tool.setuptools.packages.find]
+namespaces = false
+where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/ampform_dpd/version.py"
@@ -128,7 +253,7 @@ extend-select = [
     "YTT",
 ]
 ignore = [
-    "B028",    # missing explicit stacklevel keyword
+    "B028", # missing explicit stacklevel keyword
     "C408",
     "D101",
     "D102",
@@ -153,6 +278,19 @@ src = [
 target-version = "py37"
 task-tags = ["cspell"]
 
+[tool.ruff.pep8-naming]
+ignore-names = [
+    "A",
+    "H",
+    "L",
+    "R",
+    "R_dec",
+    "R_prod",
+    "S",
+    "Γ*",
+    "λ*",
+]
+
 [tool.ruff.per-file-ignores]
 "*" = ["D"]
 "docs/*" = [
@@ -173,19 +311,6 @@ task-tags = ["cspell"]
     "S101",
 ]
 
-[tool.ruff.pep8-naming]
-ignore-names = [
-    "A",
-    "H",
-    "L",
-    "R",
-    "R_dec",
-    "R_prod",
-    "S",
-    "Γ*",
-    "λ*",
-]
-
 [tool.ruff.pydocstyle]
 convention = "google"
 
@@ -202,128 +327,3 @@ sort_first = [
 sort_table_keys = true
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
-
-[tool.setuptools]
-package-dir = {"" = "src"}
-include-package-data = false
-
-[tool.setuptools.packages.find]
-where = ["src"]
-namespaces = false
-
-[tool.setuptools.package-data]
-ampform_dpd = ["py.typed"]
-
-[project]
-name = "ampform-dpd"
-description = "Symbolic expressions for Dalitz-Plot Decomposition"
-authors = [{name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de"}]
-license = {text = "GPLv3 or later"}
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Education",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Topic :: Scientific/Engineering",
-    "Topic :: Scientific/Engineering :: Physics",
-    "Typing :: Typed",
-]
-requires-python = ">=3.7"
-dependencies = [
-    "ampform ~=0.14.4", # Kibble and Kallen functions, perform_cached_doit
-    "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
-    "cloudpickle",
-    "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
-    "tensorwaves[jax]",
-    'typing-extensions; python_version <"3.8.0"',
-]
-dynamic = ["version"]
-
-[project.readme]
-file = "README.md"
-content-type = "text/markdown"
-
-[project.urls]
-Tracker = "https://github.com/ComPWA/ampform-dpd/issues"
-Changelog = "https://github.com/ComPWA/ampform-dpd/releases"
-Documentation = "https://compwa.github.io/ampform-dpd"
-Source = "https://github.com/ComPWA/ampform-dpd"
-
-[project.optional-dependencies]
-jax = [
-    "tensorwaves[jax]",
-]
-numba = [
-    "tensorwaves[numba]",
-]
-tf = [
-    "tensorwaves[tf]",
-]
-tensorflow = [
-    "ampform-dpd[tf]",
-]
-doc = [
-    "graphviz",
-    "ipympl",
-    "ipywidgets",
-    'importlib-metadata; python_version <"3.8.0"',
-    "matplotlib",
-    "myst-nb >=0.14", # nb_render_markdown_format for Markdown tables
-    "sphinx-book-theme",
-    "sphinx-codeautolink[ipython]",
-    "sphinx-copybutton",
-    "sphinx-design",
-    "sphinx-togglebutton",
-    "sphinxcontrib-bibtex",
-    "tensorwaves[phsp]",
-    "tqdm",
-]
-jupyter = [
-    "ampform-dpd[doc]",
-    "jupyterlab >=3.0",
-    "jupyterlab-code-formatter",
-    "jupyterlab-lsp",
-    "jupyterlab-myst",
-    "python-lsp-server[rope]",
-    'ypy-websocket <0.8.3; python_version <"3.8.0"',
-]
-test = [
-    "nbmake",
-    'nbmake <1.3; python_version <"3.8.0"',
-    "numpy",
-    "pytest >=6.0", # pyproject.toml
-    "pytest-cov",
-    "pytest-xdist",
-]
-format = [
-    "black",
-]
-lint = [
-    "ruff",
-]
-sty = [
-    "ampform-dpd[format]",
-    "ampform-dpd[lint]",
-    "ampform-dpd[test]", # for pytest type hints
-    "docutils",
-    "pre-commit >=1.4.0",
-    "pybtex",
-    "sphinx",
-]
-dev = [
-    "ampform-dpd[doc]",
-    "ampform-dpd[jupyter]",
-    "ampform-dpd[sty]",
-    "ampform-dpd[test]",
-    "sphinx-autobuild",
-    "tox >=1.9", # for skip_install, use_develop
-]
