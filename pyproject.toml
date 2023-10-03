@@ -15,14 +15,14 @@ classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python",
     "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering",
     "Typing :: Typed",
 ]
 dependencies = [
@@ -52,7 +52,6 @@ doc = [
     "graphviz",
     "ipympl",
     "ipywidgets",
-    'importlib-metadata; python_version <"3.8.0"',
     "matplotlib",
     "myst-nb >=0.14", # nb_render_markdown_format for Markdown tables
     "sphinx-book-theme",
@@ -63,6 +62,7 @@ doc = [
     "sphinxcontrib-bibtex",
     "tensorwaves[phsp]",
     "tqdm",
+    'importlib-metadata; python_version <"3.8.0"',
 ]
 format = [
     "black",
@@ -99,11 +99,11 @@ tensorflow = [
 ]
 test = [
     "nbmake",
-    'nbmake <1.3; python_version <"3.8.0"',
     "numpy",
     "pytest >=6.0", # pyproject.toml
     "pytest-cov",
     "pytest-xdist",
+    'nbmake <1.3; python_version <"3.8.0"',
 ]
 tf = [
     "tensorwaves[tf]",
