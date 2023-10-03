@@ -33,7 +33,6 @@ target-version = [
 ]
 
 [tool.nbqa.addopts]
-black = ["--line-length=85"]
 ruff = [
     "--extend-ignore=B018",
     "--extend-ignore=C90",

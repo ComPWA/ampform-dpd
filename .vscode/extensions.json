@@ -23,6 +23,7 @@
   ],
   "unwantedRecommendations": [
     "bungcip.better-toml",
+    "davidanson.vscode-markdownlint",
     "ms-python.flake8",
     "ms-python.isort",
     "ms-python.mypy-type-checker",
