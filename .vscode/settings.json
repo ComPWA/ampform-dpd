@@ -3,6 +3,7 @@
     "editor.formatOnSave": false
   },
   "[git-commit]": {
+    "editor.rulers": [72],
     "rewrap.wrappingColumn": 72
   },
   "[json]": {
@@ -14,7 +15,6 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.rulers": [],
-    "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 80,
     "editor.wrappingIndent": "same",
     "editor.wrappingStrategy": "advanced"
@@ -23,7 +23,8 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     },
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.rulers": [88]
   },
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -31,7 +32,6 @@
   "black-formatter.importStrategy": "fromEnvironment",
   "cSpell.enabled": true,
   "editor.formatOnSave": true,
-  "editor.rulers": [88],
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "livePreview.defaultPreviewPath": "docs/_build/html",
