@@ -66,18 +66,16 @@ def _fetch_logo(url: str, output_path: str) -> None:
 def generate_api() -> None:
     shutil.rmtree("api", ignore_errors=True)
     subprocess.call(
-        " ".join(
-            [
-                "sphinx-apidoc",
-                "../src/ampform_dpd/",
-                "../src/ampform_dpd/version.py",
-                "-o api/",
-                "--force",
-                "--no-toc",
-                "--separate",
-                "--templatedir _templates",
-            ]
-        ),
+        " ".join([
+            "sphinx-apidoc",
+            "../src/ampform_dpd/",
+            "../src/ampform_dpd/version.py",
+            "-o api/",
+            "--force",
+            "--no-toc",
+            "--separate",
+            "--templatedir _templates",
+        ]),
         shell=True,  # noqa: S602
     )
 
@@ -90,15 +88,13 @@ register_plugin("pybtex.style.formatting", "unsrt_et_al", MyStyle)
 add_module_names = False
 author = "Mikhail Mikhasenko, Remco de Boer"
 autodoc_default_options = {
-    "exclude-members": ", ".join(
-        [
-            "default_assumptions",
-            "doit",
-            "evaluate",
-            "is_commutative",
-            "is_extended_real",
-        ]
-    ),
+    "exclude-members": ", ".join([
+        "default_assumptions",
+        "doit",
+        "evaluate",
+        "is_commutative",
+        "is_extended_real",
+    ]),
     "members": True,
     "undoc-members": True,
     "show-inheritance": True,
