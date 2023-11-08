@@ -1,9 +1,9 @@
 # cspell:ignore msigma
 from __future__ import annotations
 
-import sys
 from functools import lru_cache
 from itertools import product
+from typing import Literal, Protocol
 
 import sympy as sp
 from ampform.sympy import PoolSum
@@ -13,6 +13,7 @@ from sympy.physics.matrices import msigma
 from sympy.physics.quantum.spin import CG, WignerD
 from sympy.physics.quantum.spin import Rotation as Wigner
 
+from ampform_dpd.angles import formulate_scattering_angle, formulate_zeta_angle
 from ampform_dpd.decay import (
     IsobarNode,
     LSCoupling,
@@ -22,13 +23,6 @@ from ampform_dpd.decay import (
     get_decay_product_ids,
 )
 from ampform_dpd.spin import create_spin_range
-
-from .angles import formulate_scattering_angle, formulate_zeta_angle
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal, Protocol
-else:
-    from typing import Literal, Protocol
 
 
 @frozen

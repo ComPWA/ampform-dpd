@@ -1,8 +1,7 @@
 """Data structures that describe a three-body decay."""
 from __future__ import annotations
 
-import sys
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Literal
 
 from attrs import field, frozen
 from attrs.validators import instance_of
@@ -11,11 +10,6 @@ from ampform_dpd._attrs import assert_spin_value, to_ls, to_rational
 
 if TYPE_CHECKING:
     import sympy as sp
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal
-else:
-    from typing import Literal
 
 
 @frozen

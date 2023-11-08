@@ -1,22 +1,17 @@
 from __future__ import annotations
 
+import contextlib
 import os
 import shutil
 import subprocess
 import sys
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as get_package_version
 
 import requests
 from pybtex.plugin import register_plugin
 
-if sys.version_info < (3, 8):
-    from importlib_metadata import PackageNotFoundError
-    from importlib_metadata import version as get_package_version
-else:
-    from importlib.metadata import PackageNotFoundError
-    from importlib.metadata import version as get_package_version
-
 sys.path.insert(0, os.path.abspath("."))
-import contextlib
 
 from _relink_references import relink_references
 from _unsrt_et_al import MyStyle
