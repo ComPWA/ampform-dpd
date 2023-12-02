@@ -31,6 +31,7 @@
   },
   "black-formatter.importStrategy": "fromEnvironment",
   "cSpell.enabled": true,
+  "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
