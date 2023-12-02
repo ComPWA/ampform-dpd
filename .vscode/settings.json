@@ -3,9 +3,7 @@
     "editor.formatOnSave": false
   },
   "[git-commit]": {
-    "editor.rulers": [
-      72
-    ],
+    "editor.rulers": [72],
     "rewrap.wrappingColumn": 72
   },
   "[json]": {
@@ -26,9 +24,7 @@
       "source.organizeImports": true
     },
     "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.rulers": [
-      88
-    ]
+    "editor.rulers": [88]
   },
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -38,17 +34,13 @@
   "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
   "files.eol": "\n",
-  "github-actions.workflows.pinned.workflows": [
-    ".github/workflows/ci.yml"
-  ],
+  "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "notebook.gotoSymbols.showAllSymbols": true,
   "python.analysis.autoImportCompletions": false,
   "python.analysis.inlayHints.pytestParameters": true,
   "python.analysis.typeCheckingMode": "strict",
-  "python.testing.pytestArgs": [
-    "--color=no"
-  ],
+  "python.testing.pytestArgs": ["--color=no"],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "rewrap.wrappingColumn": 88,
