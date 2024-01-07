@@ -180,9 +180,9 @@ class BlattWeisskopf(UnevaluatedExpression):
             1: 1 / (1 + z**2),
             2: 1 / (9 + 3 * z**2 + z**4),
         }
-        return sp.Piecewise(*[
-            (sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()
-        ])
+        return sp.Piecewise(
+            *[(sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()]
+        )
 
     def _latex(self, printer, *args):
         z, L = map(printer._print, self.args)
