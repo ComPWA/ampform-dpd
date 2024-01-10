@@ -19,7 +19,6 @@ vscode:
     - editorconfig.editorconfig
     - esbenp.prettier-vscode
     - executablebookproject.myst-highlight
-    - garaioag.garaio-vscode-unwanted-recommendations
     - github.vscode-github-actions
     - github.vscode-pull-request-github
     - ms-python.black-formatter
@@ -30,6 +29,7 @@ vscode:
     - ms-vsliveshare.vsliveshare
     - oijaz.unicode-latex
     - redhat.vscode-yaml
+    - Soulcode.vscode-unwanted-extensions
     - stkb.rewrap
     - streetsidesoftware.code-spell-checker
     - tamasfe.even-better-toml
