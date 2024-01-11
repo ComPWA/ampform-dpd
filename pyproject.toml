@@ -302,6 +302,7 @@ ignore-names = [
     "S113",
     "T201",
 ]
+"docs/conf.py" = ["D100"]
 "setup.py" = ["D100"]
 "tests/*" = [
     "D",
