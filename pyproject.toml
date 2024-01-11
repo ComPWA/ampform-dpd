@@ -52,12 +52,13 @@ doc = [
     "ipywidgets",
     "matplotlib",
     "myst-nb >=0.14", # nb_render_markdown_format for Markdown tables
+    "sphinx-api-relink >=0.0.4",
     "sphinx-book-theme",
     "sphinx-codeautolink[ipython]",
     "sphinx-copybutton",
     "sphinx-design",
+    "sphinx-pybtex-etal-style",
     "sphinx-togglebutton",
-    "sphinxcontrib-bibtex",
     "tensorwaves[phsp]",
     "tqdm",
 ]
