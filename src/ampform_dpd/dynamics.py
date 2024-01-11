@@ -1,79 +1,52 @@
 """Functions for dynamics lineshapes and kinematics."""
 
-# pyright: reportPrivateUsage=false
 from __future__ import annotations
+
+from typing import Any
 
 import sympy as sp
 from ampform.kinematics.phasespace import Kallen
-from ampform.sympy import (
-    UnevaluatedExpression,
-    create_expression,
-    implement_doit_method,
-    make_commutative,
-)
+from ampform.sympy import unevaluated
 
 
-@make_commutative
-@implement_doit_method
-class P(UnevaluatedExpression):
-    def __new__(cls, s, mi, mj, **hints):
-        return create_expression(cls, s, mi, mj, **hints)
+@unevaluated
+class P(sp.Expr):
+    s: Any
+    mi: Any
+    mj: Any
+    _latex_repr_ = R"p_{{{mi},{mj}}}\left({s}\right)"
 
     def evaluate(self):
         s, mi, mj = self.args
         return sp.sqrt(Kallen(s, mi**2, mj**2)) / (2 * sp.sqrt(s))
 
-    def _latex(self, printer, *args):
-        s, mi, mj = map(printer._print, self.args)
-        return Rf"p_{{{mi},{mj}}}\left({s}\right)"
 
-
-@make_commutative
-@implement_doit_method
-class Q(UnevaluatedExpression):
-    def __new__(cls, s, m0, mk, **hints):
-        return create_expression(cls, s, m0, mk, **hints)
+@unevaluated
+class Q(sp.Expr):
+    s: Any
+    m0: Any
+    mk: Any
+    _latex_repr_ = R"q_{{{m0},{mk}}}\left({s}\right)"
 
     def evaluate(self):
         s, m0, mk = self.args
         return sp.sqrt(Kallen(s, m0**2, mk**2)) / (2 * m0)  # <-- not s!
 
-    def _latex(self, printer, *args):
-        s, m0, mk = map(printer._print, self.args)
-        return Rf"q_{{{m0},{mk}}}\left({s}\right)"
 
-
-@make_commutative
-@implement_doit_method
-class BreitWignerMinL(UnevaluatedExpression):
-    def __new__(
-        cls,
-        s,
-        decaying_mass,
-        spectator_mass,
-        resonance_mass,
-        resonance_width,
-        child2_mass,
-        child1_mass,
-        l_dec,
-        l_prod,
-        R_dec,
-        R_prod,
-    ):
-        return create_expression(
-            cls,
-            s,
-            decaying_mass,
-            spectator_mass,
-            resonance_mass,
-            resonance_width,
-            child2_mass,
-            child1_mass,
-            l_dec,
-            l_prod,
-            R_dec,
-            R_prod,
-        )
+@unevaluated
+class BreitWignerMinL(sp.Expr):
+    s: Any
+    decaying_mass: Any
+    spectator_mass: Any
+    resonance_mass: Any
+    resonance_width: Any
+    child2_mass: Any
+    child1_mass: Any
+    l_dec: Any
+    l_prod: Any
+    R_dec: Any
+    R_prod: Any
+    _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
     def evaluate(self):
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
@@ -91,18 +64,16 @@ class BreitWignerMinL(UnevaluatedExpression):
             evaluate=False,
         )
 
-    def _latex(self, printer, *args) -> str:
-        s = printer._print(self.args[0])
-        l_dec = printer._print(self.args[7])
-        l_prod = printer._print(self.args[8])
-        return Rf"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
-
-@make_commutative
-@implement_doit_method
-class BuggBreitWigner(UnevaluatedExpression):
-    def __new__(cls, s, m0, Γ0, m1, m2, γ):
-        return create_expression(cls, s, m0, Γ0, m1, m2, γ)
+@unevaluated
+class BuggBreitWigner(sp.Expr):
+    s: Any
+    m0: Any
+    Γ0: Any
+    m1: Any
+    m2: Any
+    γ: Any
+    _latex_repr_ = R"\mathcal{{R}}^\mathrm{{Bugg}}\left({s}\right)"
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, γ = self.args
@@ -114,17 +85,16 @@ class BuggBreitWigner(UnevaluatedExpression):
         )
         return 1 / (m0**2 - s - sp.I * g_squared)
 
-    def _latex(self, printer, *args) -> str:
-        s = printer._print(self.args[0], *args)
-        return Rf"\mathcal{{R}}^\mathrm{{Bugg}}\left({s}\right)"
 
-
-@make_commutative
-@implement_doit_method
-class FlattéSWave(UnevaluatedExpression):
+@unevaluated
+class FlattéSWave(sp.Expr):
     # https://github.com/ComPWA/polarimetry/blob/34f5330/julia/notebooks/model0.jl#L151-L161
-    def __new__(cls, s, m0, widths, masses1, masses2):
-        return create_expression(cls, s, m0, widths, masses1, masses2)
+    s: Any
+    m0: Any
+    widths: tuple[Any, Any]
+    masses1: tuple[Any, Any]
+    masses2: tuple[Any, Any]
+    _latex_repr_ = R"\mathcal{{R}}^\mathrm{{Flatté}}\left({s}\right)"
 
     def evaluate(self):
         s, m0, (Γ1, Γ2), (ma1, mb1), (ma2, mb2) = self.args
@@ -137,16 +107,17 @@ class FlattéSWave(UnevaluatedExpression):
         Γ = Γ1 + Γ2
         return 1 / (m0**2 - s - sp.I * m0 * Γ)
 
-    def _latex(self, printer, *args) -> str:
-        s = printer._print(self.args[0])
-        return Rf"\mathcal{{R}}^\mathrm{{Flatté}}\left({s}\right)"
 
-
-@make_commutative
-@implement_doit_method
-class EnergyDependentWidth(UnevaluatedExpression):
-    def __new__(cls, s, m0, Γ0, m1, m2, L, R):
-        return create_expression(cls, s, m0, Γ0, m1, m2, L, R)
+@unevaluated
+class EnergyDependentWidth(sp.Expr):
+    s: Any
+    m0: Any
+    Γ0: Any
+    m1: Any
+    m2: Any
+    L: Any
+    R: Any
+    _latex_repr_ = R"\Gamma\left({s}\right)"
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, L, R = self.args
@@ -162,16 +133,12 @@ class EnergyDependentWidth(UnevaluatedExpression):
             evaluate=False,
         )
 
-    def _latex(self, printer, *args) -> str:
-        s = printer._print(self.args[0])
-        return Rf"\Gamma\left({s}\right)"
 
-
-@make_commutative
-@implement_doit_method
-class BlattWeisskopf(UnevaluatedExpression):
-    def __new__(cls, z, L, **hints):
-        return create_expression(cls, z, L, **hints)
+@unevaluated
+class BlattWeisskopf(sp.Expr):
+    z: Any
+    L: Any
+    _latex_repr_ = R"F_{{{L}}}\left({z}\right)"
 
     def evaluate(self) -> sp.Piecewise:
         z, L = self.args
@@ -183,7 +150,3 @@ class BlattWeisskopf(UnevaluatedExpression):
         return sp.Piecewise(
             *[(sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()]
         )
-
-    def _latex(self, printer, *args):
-        z, L = map(printer._print, self.args)
-        return Rf"F_{{{L}}}\left({z}\right)"

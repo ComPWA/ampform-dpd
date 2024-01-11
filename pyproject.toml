@@ -25,7 +25,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "ampform ~=0.14.4", # Kibble and Kallen functions, perform_cached_doit
+    "ampform >=0.14.8", # Kibble and Kallen functions, perform_cached_doit, @unevaluated
     "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
     "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg

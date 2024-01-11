@@ -96,6 +96,7 @@
     "pycache",
     "pygments",
     "redeboer",
+    "repr",
     "savefig",
     "sdist",
     "seealso",
