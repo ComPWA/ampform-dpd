@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 import os
+import sys
 from os.path import abspath, dirname
 from typing import TYPE_CHECKING
 
@@ -53,12 +54,14 @@ def test_aslatex_isobar_node():
 @pytest.mark.parametrize(
     ("assumptions", "expected_hash"),
     [
-        (dict(), "pythonhashseed-0+7459658071388516764"),
-        (dict(real=True), "pythonhashseed-0+3665410414623666716"),
-        (dict(rational=True), "pythonhashseed-0-7926839224244779605"),
+        (dict(), (+7459658071388516764, +8778804591879682108)),
+        (dict(real=True), (+3665410414623666716, -7967572625470457155)),
+        (dict(rational=True), (-7926839224244779605, -8321323707982755013)),
     ],
 )
-def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture):
+def test_get_readable_hash(
+    assumptions, expected_hash: tuple[int, int], caplog: LogCaptureFixture
+):
     caplog.set_level(logging.WARNING)
     x, y = sp.symbols("x y", **assumptions)
     expr = x**2 + y
@@ -70,7 +73,12 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
             assert "PYTHONHASHSEED has not been set." in caplog.text
             caplog.clear()
     elif python_hash_seed == "0":
-        assert h == expected_hash
+        if sys.version_info < (3, 11):
+            expected_hash = expected_hash[0]
+        else:
+            expected_hash = expected_hash[1]
+        expected = f"pythonhashseed-0{expected_hash:+d}"
+        assert h == expected
     else:
         pytest.skip("PYTHONHASHSEED has been set, but is not 0")
     assert caplog.text == ""

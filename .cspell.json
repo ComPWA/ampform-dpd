@@ -24,7 +24,6 @@
     ".vscode/*",
     ".vscode/.gitignore",
     "codecov.yml",
-    "docs/_templates/*",
     "docs/conf.py",
     "pyproject.toml",
     "tox.ini"
@@ -97,6 +96,7 @@
     "pycache",
     "pygments",
     "redeboer",
+    "repr",
     "savefig",
     "sdist",
     "seealso",

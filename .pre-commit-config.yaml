@@ -12,6 +12,18 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
 
+  - repo: https://github.com/ComPWA/policy
+    rev: 0.2.0
+    hooks:
+      - id: check-dev-files
+        args:
+          - --doc-apt-packages=graphviz
+          - --no-prettierrc
+          - --pin-requirements=bimonthly
+          - --repo-name=ampform-dpd
+          - --repo-title=AmpForm-DPD
+      - id: colab-toc-visible
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
@@ -27,20 +39,8 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
 
-  - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.1.6
-    hooks:
-      - id: check-dev-files
-        args:
-          - --doc-apt-packages=graphviz
-          - --no-prettierrc
-          - --pin-requirements=bimonthly
-          - --repo-name=ampform-dpd
-          - --repo-title=AmpForm-DPD
-      - id: colab-toc-visible
-
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 23.11.0
+    rev: 23.12.1
     hooks:
       - id: black
       - id: black-jupyter
@@ -48,7 +48,7 @@ repos:
         types_or: [jupyter]
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.0.0
+    rev: v8.3.0
     hooks:
       - id: cspell
 
@@ -89,17 +89,17 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.3
+    rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.338
+    rev: v1.1.345
     hooks:
       - id: pyright
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.6
+    rev: v0.1.13
     hooks:
       - id: ruff
         args: [--fix]
