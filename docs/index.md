@@ -31,7 +31,7 @@ You can substitute `stable` in the above command with `main` or any of the [tags
 ampform-dpd @ git+https://github.com/ComPWA/ampform-dpd@main
 ```
 
-However, we highly recommend using the more dynamic, {ref}`'editable installation' <compwa-org:develop:Editable installation>` instead. This goes as follows:
+However, we highly recommend using the more dynamic, {ref}`'editable installation' <compwa:develop:Editable installation>` instead. This goes as follows:
 
 1. Get the source code (see [the Pro Git Book](https://git-scm.com/book/en/v2)):
 
@@ -40,15 +40,15 @@ However, we highly recommend using the more dynamic, {ref}`'editable installatio
    cd ampform-dpd
    ```
 
-2. **\[Recommended\]** Create a virtual environment (see {ref}`here <compwa-org:develop:Virtual environment>` or the tip below).
+2. **\[Recommended\]** Create a virtual environment (see {ref}`here <compwa:develop:Virtual environment>` or the tip below).
 
-3. Install the project in {ref}`'editable installation' <compwa-org:develop:Editable installation>` with {ref}`additional dependencies <compwa-org:develop:Optional dependencies>` for the developer:
+3. Install the project in {ref}`'editable installation' <compwa:develop:Editable installation>` with {ref}`additional dependencies <compwa:develop:Optional dependencies>` for the developer:
 
    ```shell
    python3 -m pip install -e .[dev]
    ```
 
-That's all! Have a look at the {doc}`/index` page to try out the package, and see {doc}`compwa-org:develop` for tips on how to work with this 'editable' developer setup!
+That's all! Have a look at the {doc}`/index` page to try out the package, and see {doc}`compwa:develop` for tips on how to work with this 'editable' developer setup!
 
 :::{tip}
 
@@ -59,7 +59,7 @@ conda env create
 conda activate ampform-dpd
 ```
 
-This way of installing is also safer, because it {ref}`pins all dependencies <compwa-org:develop:Pinning dependency versions>`. Note you can also pin dependencies with `pip`, by running:
+This way of installing is also safer, because it {ref}`pins all dependencies <compwa:develop:Pinning dependency versions>`. Note you can also pin dependencies with `pip`, by running:
 
 ```shell
 python3 -m pip install -e .[dev] -c .constraints/py3.x.txt
@@ -196,5 +196,5 @@ QRules <https://qrules.readthedocs.io>
 AmpForm <https://ampform.readthedocs.io>
 TensorWaves <https://tensorwaves.readthedocs.io>
 PWA Pages <https://pwa.readthedocs.io>
-ComPWA project <https://compwa-org.readthedocs.io>
+ComPWA project <https://compwa.github.io>
 ```
