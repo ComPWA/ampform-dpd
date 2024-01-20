@@ -112,7 +112,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "Common Partial Wave Analysis",
-            "url": "https://compwa-org.rtfd.io",
+            "url": "https://compwa.github.io",
             "icon": "_static/favicon.ico",
             "type": "local",
         },
@@ -162,7 +162,7 @@ intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
     "ampform": (f"https://ampform.readthedocs.io/en/{pin('ampform')}", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
-    "compwa-org": ("https://compwa-org.readthedocs.io", None),
+    "compwa": ("https://compwa.github.io", None),
     "graphviz": ("https://graphviz.readthedocs.io/en/stable", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
     "jax": ("https://jax.readthedocs.io/en/latest", None),
