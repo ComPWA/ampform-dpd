@@ -63,17 +63,15 @@ doc = [
     "tensorwaves[phsp]",
     "tqdm",
 ]
-format = [
-    "black",
-]
 jax = [
     "tensorwaves[jax]",
 ]
 jupyter = [
     "ampform-dpd[doc]",
+    "black",
     "isort",
-    "jupyterlab >=3.0",
     "jupyterlab",
+    "jupyterlab >=3.0",
     "jupyterlab-code-formatter",
     "jupyterlab-git",
     "jupyterlab-lsp",
@@ -90,10 +88,11 @@ numba = [
 sty = [
     "ampform-dpd[format]",
     "ampform-dpd[lint]",
-    "ampform-dpd[test]", # for pytest type hints
+    "ampform-dpd[test]",
     "docutils",
     "pre-commit >=1.4.0",
     "pybtex",
+    "ruff",
     "sphinx",
     "sphinx-api-relink >=0.0.4",
 ]
@@ -134,29 +133,6 @@ where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/ampform_dpd/version.py"
-
-[tool.black]
-exclude = '''
-/(
-    .*\.egg-info
-    | .*build
-    | \.eggs
-    | \.git
-    | \.pytest_cache
-    | \.tox
-    | \.venv
-    | \.vscode
-    | dist
-)/
-'''
-include = '\.pyi?$'
-preview = true
-target-version = [
-    "py310",
-    "py311",
-    "py38",
-    "py39",
-]
 
 [tool.pyright]
 reportGeneralTypeIssues = false
@@ -207,6 +183,19 @@ testpaths = [
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
+preview = true
+show-fixes = true
+src = [
+    "src",
+    "tests",
+]
+target-version = "py38"
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
 extend-select = [
     "A",
     "B",
@@ -252,33 +241,19 @@ ignore = [
     "D407",
     "D416",
     "E501",
+    "ISC001",
     "ISC003",
     "PLR0913",
+    "PLW1514",
     "S301",
     "SIM108",
 ]
-show-fixes = true
-src = [
-    "src",
-    "tests",
-]
-target-version = "py38"
 task-tags = ["cspell"]
 
-[tool.ruff.pep8-naming]
-ignore-names = [
-    "A",
-    "H",
-    "L",
-    "R",
-    "R_dec",
-    "R_prod",
-    "S",
-    "Γ*",
-    "λ*",
-]
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "*" = ["D"]
 "*.ipynb" = [
     "B018",
@@ -311,14 +286,29 @@ ignore-names = [
     "D",
     "INP001",
     "PGH001",
+    "PLC2701",
     "PLR0913",
     "PLR2004",
+    "PLR6301",
     "S101",
     "T20",
 ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.pep8-naming]
+ignore-names = [
+    "A",
+    "H",
+    "L",
+    "R",
+    "R_dec",
+    "R_prod",
+    "S",
+    "Γ*",
+    "λ*",
+]
 
 [tool.tomlsort]
 all = false

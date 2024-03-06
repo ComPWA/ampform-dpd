@@ -21,7 +21,6 @@ vscode:
     - executablebookproject.myst-highlight
     - github.vscode-github-actions
     - github.vscode-pull-request-github
-    - ms-python.black-formatter
     - ms-python.python
     - ms-python.vscode-pylance
     - ms-toolsai.vscode-jupyter-cell-tags
@@ -29,9 +28,8 @@ vscode:
     - ms-vsliveshare.vsliveshare
     - oijaz.unicode-latex
     - redhat.vscode-yaml
-    - Soulcode.vscode-unwanted-extensions
+    - soulcode.vscode-unwanted-extensions
     - stkb.rewrap
     - streetsidesoftware.code-spell-checker
     - tamasfe.even-better-toml
-    - tyriar.sort-lines
     - yzhang.markdown-all-in-one
