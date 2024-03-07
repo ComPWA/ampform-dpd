@@ -26,7 +26,8 @@
     "codecov.yml",
     "docs/conf.py",
     "pyproject.toml",
-    "tox.ini"
+    "tox.ini",
+    "typings"
   ],
   "ignoreWords": [
     "Jpsi",
