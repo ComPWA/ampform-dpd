@@ -282,7 +282,7 @@ def perform_cached_lambdify(
 ) -> ParametrizedBackendFunction: ...
 
 
-def perform_cached_lambdify(
+def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
     backend: str = "jax",

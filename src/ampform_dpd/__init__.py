@@ -118,7 +118,7 @@ class DalitzPlotDecompositionBuilder:
             parameter_defaults=parameter_defaults,
         )
 
-    def formulate_subsystem_amplitude(
+    def formulate_subsystem_amplitude(  # noqa: PLR0914
         self,
         λ0: sp.Rational,
         λ1: sp.Rational,

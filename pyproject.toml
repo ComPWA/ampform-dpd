@@ -133,13 +133,19 @@ where = ["src"]
 write_to = "src/ampform_dpd/version.py"
 
 [tool.pyright]
+reportArgumentType = false
+reportAssignmentType = false
+reportAttributeAccessIssue = false
+reportCallIssue = false
 reportGeneralTypeIssues = false
 reportImportCycles = false
 reportIncompatibleMethodOverride = false
 reportMissingParameterType = false
 reportMissingTypeArgument = false
 reportMissingTypeStubs = false
+reportOperatorIssue = false
 reportPrivateImportUsage = false
+reportReturnType = false
 reportUnknownArgumentType = false
 reportUnknownLambdaType = false
 reportUnknownMemberType = false
@@ -180,6 +186,7 @@ testpaths = [
 ]
 
 [tool.ruff]
+extend-exclude = ["typings"]
 extend-include = ["*.ipynb"]
 preview = true
 show-fixes = true
@@ -241,6 +248,7 @@ ignore = [
     "E501",
     "ISC001",
     "ISC003",
+    "PLC2401",
     "PLR0913",
     "PLW1514",
     "S301",
@@ -279,7 +287,9 @@ split-on-trailing-comma = false
     "T201",
 ]
 "docs/conf.py" = ["D100"]
+"jpsi2ksp.ipynb" = ["PLC2701"]
 "setup.py" = ["D100"]
+"src/ampform_dpd/io.py" = ["S403"]
 "tests/*" = [
     "D",
     "INP001",
