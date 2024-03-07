@@ -79,22 +79,14 @@ jupyter = [
     "python-lsp-ruff",
     "python-lsp-server[rope]",
 ]
-lint = [
-    "ruff",
-]
 numba = [
     "tensorwaves[numba]",
 ]
 sty = [
-    "ampform-dpd[format]",
-    "ampform-dpd[lint]",
     "ampform-dpd[test]",
-    "docutils",
+    "ampform-dpd[types]",
     "pre-commit >=1.4.0",
-    "pybtex",
     "ruff",
-    "sphinx",
-    "sphinx-api-relink >=0.0.4",
 ]
 tensorflow = [
     "ampform-dpd[tf]",
@@ -108,6 +100,12 @@ test = [
 ]
 tf = [
     "tensorwaves[tf]",
+]
+types = [
+    "docutils",
+    "pybtex",
+    "sphinx",
+    "sphinx-api-relink >=0.0.4",
 ]
 
 [project.readme]
