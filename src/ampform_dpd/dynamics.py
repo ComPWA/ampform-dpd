@@ -48,7 +48,7 @@ class BreitWignerMinL(sp.Expr):
     R_prod: Any
     _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
-    def evaluate(self):
+    def evaluate(self):  # noqa: PLR0914
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
         q = Q(s, m_top, m_spec)
         q0 = Q(m0**2, m_top, m_spec)
@@ -147,6 +147,6 @@ class BlattWeisskopf(sp.Expr):
             1: 1 / (1 + z**2),
             2: 1 / (9 + 3 * z**2 + z**4),
         }
-        return sp.Piecewise(
-            *[(sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()]
-        )
+        return sp.Piecewise(*[
+            (sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()
+        ])
