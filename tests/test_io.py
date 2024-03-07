@@ -81,4 +81,4 @@ def test_get_readable_hash(
         assert h == expected
     else:
         pytest.skip("PYTHONHASHSEED has been set, but is not 0")
-    assert caplog.text == ""
+    assert not caplog.text

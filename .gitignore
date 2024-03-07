@@ -15,18 +15,19 @@ dist/
 version.py
 
 # Temporary files
-*.pyc
-*condaenv.*
+__pycache__/
 .coverage
 .coverage.*
 .ipynb_checkpoints/
 .mypy*/
 .pytest_cache/
 .virtual_documents/
-__pycache__/
+*.pyc
+*condaenv.*
 coverage.*
 htmlcov/
 prof/
+typings/
 
 # Virtual environments
 *venv/
