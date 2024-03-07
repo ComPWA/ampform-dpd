@@ -9,21 +9,19 @@ from sphinx_api_relink.helpers import (
     set_intersphinx_version_remapping,
 )
 
-set_intersphinx_version_remapping(
-    {
-        "ipython": {
-            "8.12.2": "8.12.1",
-            "8.12.3": "8.12.1",
-        },
-        "ipywidgets": {
-            "8.0.3": "8.0.5",
-            "8.0.4": "8.0.5",
-            "8.0.6": "8.0.5",
-            "8.1.1": "8.1.2",
-        },
-        "mpl-interactions": {"0.24.1": "0.24.0"},
-    }
-)
+set_intersphinx_version_remapping({
+    "ipython": {
+        "8.12.2": "8.12.1",
+        "8.12.3": "8.12.1",
+    },
+    "ipywidgets": {
+        "8.0.3": "8.0.5",
+        "8.0.4": "8.0.5",
+        "8.0.6": "8.0.5",
+        "8.1.1": "8.1.2",
+    },
+    "mpl-interactions": {"0.24.1": "0.24.0"},
+})
 
 BRANCH = get_branch_name()
 ORGANIZATION = "ComPWA"
@@ -54,15 +52,13 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
 api_target_types: dict[str, str] = {}
 author = "Common Partial Wave Analysis"
 autodoc_default_options = {
-    "exclude-members": ", ".join(
-        [
-            "default_assumptions",
-            "doit",
-            "evaluate",
-            "is_commutative",
-            "is_extended_real",
-        ]
-    ),
+    "exclude-members": ", ".join([
+        "default_assumptions",
+        "doit",
+        "evaluate",
+        "is_commutative",
+        "is_extended_real",
+    ]),
     "members": True,
     "undoc-members": True,
     "show-inheritance": True,
