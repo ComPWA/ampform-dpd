@@ -3,7 +3,7 @@
 absl-py==2.1.0
 accessible-pygments==0.0.4
 alabaster==0.7.13
-ampform==0.14.11
+ampform==0.15.0
 anyio==4.3.0
 argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
@@ -216,7 +216,7 @@ tensorflow==2.11.1
 tensorflow-estimator==2.11.0
 tensorflow-io-gcs-filesystem==0.34.0
 tensorflow-probability==0.20.1
-tensorwaves==0.4.11
+tensorwaves==0.4.12
 termcolor==2.4.0
 terminado==0.18.0
 tinycss2==1.2.1
