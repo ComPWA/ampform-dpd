@@ -83,7 +83,6 @@ numba = [
     "tensorwaves[numba]",
 ]
 sty = [
-    "ampform-dpd[test]",
     "ampform-dpd[types]",
     "pre-commit >=1.4.0",
     "ruff",
@@ -104,6 +103,7 @@ tf = [
 types = [
     "docutils",
     "pybtex",
+    "pytest",
     "sphinx",
     "sphinx-api-relink >=0.0.4",
 ]
