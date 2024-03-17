@@ -259,6 +259,19 @@ task-tags = ["cspell"]
 [tool.ruff.lint.isort]
 split-on-trailing-comma = false
 
+[tool.ruff.lint.pep8-naming]
+ignore-names = [
+    "A",
+    "H",
+    "L",
+    "R",
+    "R_dec",
+    "R_prod",
+    "S",
+    "Γ*",
+    "λ*",
+]
+
 [tool.ruff.lint.per-file-ignores]
 "*" = ["D"]
 "*.ipynb" = [
@@ -304,19 +317,6 @@ split-on-trailing-comma = false
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
-
-[tool.ruff.pep8-naming]
-ignore-names = [
-    "A",
-    "H",
-    "L",
-    "R",
-    "R_dec",
-    "R_prod",
-    "S",
-    "Γ*",
-    "λ*",
-]
 
 [tool.tomlsort]
 all = false
