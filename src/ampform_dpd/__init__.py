@@ -1,4 +1,5 @@
-# cspell:ignore msigma
+"""Module for formulating the amplitude model for a three-body decay using DPD."""
+
 from __future__ import annotations
 
 from functools import lru_cache
@@ -6,10 +7,11 @@ from itertools import product
 from typing import Literal, Protocol
 
 import sympy as sp
+from ampform.kinematics.phasespace import compute_third_mandelstam
 from ampform.sympy import PoolSum
 from attrs import field, frozen
 from sympy.core.symbol import Str
-from sympy.physics.matrices import msigma
+from sympy.physics.matrices import msigma  # cspell:ignore msigma
 from sympy.physics.quantum.spin import CG, WignerD
 from sympy.physics.quantum.spin import Rotation as Wigner
 
@@ -32,6 +34,8 @@ class AmplitudeModel:
     amplitudes: dict[sp.Indexed, sp.Expr] = field(factory=dict)
     variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
     parameter_defaults: dict[sp.Symbol, float] = field(factory=dict)
+    masses: dict[sp.Symbol, float] = field(factory=dict)
+    invariants: dict[sp.Symbol, float] = field(factory=dict)
 
     @property
     def full_expression(self) -> sp.Expr:
@@ -91,13 +95,7 @@ class DalitzPlotDecompositionBuilder:
             *helicity_symbols, reference_subsystem
         )
         angle_definitions.update(zeta_defs)
-        m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
-        masses = {
-            m0: self.decay.states[0].mass,
-            m1: self.decay.states[1].mass,
-            m2: self.decay.states[2].mass,
-            m3: self.decay.states[3].mass,
-        }
+        masses = create_mass_symbol_mapping(self.decay)
         parameter_defaults.update(masses)
         if cleanup_summations:
             aligned_amp = aligned_amp.cleanup()
@@ -116,6 +114,8 @@ class DalitzPlotDecompositionBuilder:
             amplitudes=amplitude_definitions,
             variables=angle_definitions,
             parameter_defaults=parameter_defaults,
+            masses=masses,
+            invariants=formulate_invariants(self.decay),
         )
 
     def formulate_subsystem_amplitude(  # noqa: PLR0914
@@ -365,10 +365,7 @@ def _formulate_clebsch_gordan_factors(
         j3=isobar.parent.spin,
         m3=child1_helicity - child2_helicity,
     )
-    sqrt_factor = sp.sqrt(
-        (2 * isobar.interaction.L + 1) / (2 * isobar.parent.spin + 1),
-        evaluate=False,
-    )
+    sqrt_factor = sp.sqrt((2 * isobar.interaction.L + 1) / (2 * isobar.parent.spin + 1))
     return sqrt_factor * cg_ll * cg_ss
 
 
@@ -376,6 +373,33 @@ def _get_particle(isobar: IsobarNode | Particle) -> Particle:
     if isinstance(isobar, IsobarNode):
         return isobar.parent
     return isobar
+
+
+def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
+    return {
+        sp.Symbol(f"m{i}"): decay.states[i].mass
+        for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
+    }
+
+
+def formulate_invariants(decay: ThreeBodyDecay) -> dict[sp.Symbol, sp.Expr]:
+    s1, s2, s3 = sp.symbols("sigma1:4", nonnegative=True)
+    return {
+        s1: formulate_third_mandelstam(decay, 2, 3),
+        s2: formulate_third_mandelstam(decay, 3, 1),
+        s3: formulate_third_mandelstam(decay, 1, 2),
+    }
+
+
+def formulate_third_mandelstam(
+    decay: ThreeBodyDecay,
+    x_mandelstam: Literal[1, 2, 3] = 1,
+    y_mandelstam: Literal[1, 2, 3] = 2,
+) -> sp.Add:
+    m0, m1, m2, m3 = create_mass_symbol_mapping(decay)
+    sigma_x = sp.Symbol(f"sigma{x_mandelstam}", nonnegative=True)
+    sigma_y = sp.Symbol(f"sigma{y_mandelstam}", nonnegative=True)
+    return compute_third_mandelstam(sigma_x, sigma_y, m0, m1, m2, m3)
 
 
 def formulate_polarimetry(
