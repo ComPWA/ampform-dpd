@@ -255,6 +255,68 @@ class DalitzPlotDecompositionBuilder:
         return amp_expr, wigner_generator.angle_definitions
 
 
+def _create_coupling_symbol(
+    helicity_coupling: bool,
+    resonance: Str,
+    helicities: tuple[sp.Basic, sp.Basic],
+    interaction: LSCoupling,
+    typ: Literal["production", "decay"],
+) -> sp.Indexed:
+    H = _get_coupling_base(helicity_coupling, typ)
+    if helicity_coupling:
+        λi, λj = helicities
+        return H[resonance, λi, λj]
+    return H[resonance, interaction.L, interaction.S]
+
+
+@lru_cache(maxsize=None)
+def _get_coupling_base(
+    helicity_coupling: bool, typ: Literal["production", "decay"]
+) -> sp.IndexedBase:
+    if helicity_coupling:
+        return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{{typ}}}")
+    return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{LS,{typ}}}")
+
+
+def _formulate_clebsch_gordan_factors(
+    isobar: IsobarNode,
+    helicities: dict[Particle, sp.Rational | sp.Symbol],
+) -> sp.Expr:
+    if isobar.interaction is None:
+        msg = "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
+        raise ValueError(msg)
+    # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
+    # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
+    child1 = _get_particle(isobar.child1)
+    child2 = _get_particle(isobar.child2)
+    child1_helicity = helicities[child1]
+    child2_helicity = helicities[child2]
+    cg_ss = CG(
+        j1=child1.spin,
+        m1=child1_helicity,
+        j2=child2.spin,
+        m2=-child2_helicity,
+        j3=isobar.interaction.S,
+        m3=child1_helicity - child2_helicity,
+    )
+    cg_ll = CG(
+        j1=isobar.interaction.L,
+        m1=0,
+        j2=isobar.interaction.S,
+        m2=child1_helicity - child2_helicity,
+        j3=isobar.parent.spin,
+        m3=child1_helicity - child2_helicity,
+    )
+    sqrt_factor = sp.sqrt((2 * isobar.interaction.L + 1) / (2 * isobar.parent.spin + 1))
+    return sqrt_factor * cg_ll * cg_ss
+
+
+def _get_particle(isobar: IsobarNode | Particle) -> Particle:
+    if isinstance(isobar, IsobarNode):
+        return isobar.parent
+    return isobar
+
+
 @lru_cache(maxsize=None)
 def _generate_amplitude_index_bases() -> dict[Literal[1, 2, 3], sp.IndexedBase]:
     return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))
@@ -335,45 +397,6 @@ def simplify_latex_rendering() -> None:
     sp.Indexed._latex = _print_Indexed_latex
 
 
-def _formulate_clebsch_gordan_factors(
-    isobar: IsobarNode,
-    helicities: dict[Particle, sp.Rational | sp.Symbol],
-) -> sp.Expr:
-    if isobar.interaction is None:
-        msg = "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
-        raise ValueError(msg)
-    # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
-    # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
-    child1 = _get_particle(isobar.child1)
-    child2 = _get_particle(isobar.child2)
-    child1_helicity = helicities[child1]
-    child2_helicity = helicities[child2]
-    cg_ss = CG(
-        j1=child1.spin,
-        m1=child1_helicity,
-        j2=child2.spin,
-        m2=-child2_helicity,
-        j3=isobar.interaction.S,
-        m3=child1_helicity - child2_helicity,
-    )
-    cg_ll = CG(
-        j1=isobar.interaction.L,
-        m1=0,
-        j2=isobar.interaction.S,
-        m2=child1_helicity - child2_helicity,
-        j3=isobar.parent.spin,
-        m3=child1_helicity - child2_helicity,
-    )
-    sqrt_factor = sp.sqrt((2 * isobar.interaction.L + 1) / (2 * isobar.parent.spin + 1))
-    return sqrt_factor * cg_ll * cg_ss
-
-
-def _get_particle(isobar: IsobarNode | Particle) -> Particle:
-    if isinstance(isobar, IsobarNode):
-        return isobar.parent
-    return isobar
-
-
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
     return {
         sp.Symbol(f"m{i}"): decay.states[i].mass
@@ -399,26 +422,3 @@ def formulate_third_mandelstam(
     sigma_x = sp.Symbol(f"sigma{x_mandelstam}", nonnegative=True)
     sigma_y = sp.Symbol(f"sigma{y_mandelstam}", nonnegative=True)
     return compute_third_mandelstam(sigma_x, sigma_y, m0, m1, m2, m3)
-
-
-def _create_coupling_symbol(
-    helicity_coupling: bool,
-    resonance: Str,
-    helicities: tuple[sp.Basic, sp.Basic],
-    interaction: LSCoupling,
-    typ: Literal["production", "decay"],
-) -> sp.Indexed:
-    H = _get_coupling_base(helicity_coupling, typ)
-    if helicity_coupling:
-        λi, λj = helicities
-        return H[resonance, λi, λj]
-    return H[resonance, interaction.L, interaction.S]
-
-
-@lru_cache(maxsize=None)
-def _get_coupling_base(
-    helicity_coupling: bool, typ: Literal["production", "decay"]
-) -> sp.IndexedBase:
-    if helicity_coupling:
-        return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{{typ}}}")
-    return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{LS,{typ}}}")
