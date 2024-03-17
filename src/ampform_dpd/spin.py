@@ -1,3 +1,5 @@
+"""Functions for generating spin projections and LS couplings."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -12,7 +14,8 @@ def generate_ls_couplings(
     child2_spin: SupportsFloat,
     max_L: int = 3,  # noqa: N803
 ) -> list[tuple[int, sp.Rational]]:
-    r"""
+    """Generate a list of allowed LS couplings.
+
     >>> generate_ls_couplings(1.5, 0.5, 0)
     [(1, 1/2), (2, 1/2)]
     """
@@ -35,7 +38,8 @@ def filter_parity_violating_ls(
     child1_parity: SupportsInt,
     child2_parity: SupportsInt,
 ) -> list[tuple[int, sp.Rational]]:
-    r"""
+    """Filter parity-violating LS combinations from a list of LS couplings.
+
     >>> LS = generate_ls_couplings(0.5, 1.5, 0)  # Λc → Λ(1520)π
     >>> LS
     [(1, 3/2), (2, 3/2)]
@@ -51,7 +55,8 @@ def filter_parity_violating_ls(
 
 
 def create_spin_range(spin: SupportsFloat) -> list[sp.Rational]:
-    """
+    """Create a range of allowed spin projections.
+
     >>> create_spin_range(1.5)
     [-3/2, -1/2, 1/2, 3/2]
     """
@@ -61,7 +66,8 @@ def create_spin_range(spin: SupportsFloat) -> list[sp.Rational]:
 def create_rational_range(
     __from: SupportsFloat, __to: SupportsFloat
 ) -> list[sp.Rational]:
-    """
+    """Create a range of rational numbers, especially useful for spin projections.
+
     >>> create_rational_range(-0.5, +1.5)
     [-1/2, 1/2, 3/2]
     """

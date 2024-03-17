@@ -1,3 +1,5 @@
+"""Formulate expressions for scattering and alignment angles."""
+
 from __future__ import annotations
 
 import sympy as sp
@@ -17,8 +19,11 @@ def formulate_scattering_angle(
     if not {state_id, sibling_id} <= {1, 2, 3}:
         msg = "Child IDs need to be one of 1, 2, 3"
         raise ValueError(msg)
-    # pyright: ignore[reportUnnecessaryContains]
-    if {state_id, sibling_id} in {(2, 1), (3, 2), (1, 3)}:
+    if {state_id, sibling_id} in {  # pyright: ignore[reportUnnecessaryContains]
+        (2, 1),
+        (3, 2),
+        (1, 3),
+    }:
         msg = f"Cannot compute scattering angle θ{state_id}{sibling_id}"
         raise NotImplementedError(msg)
     if state_id == sibling_id:
