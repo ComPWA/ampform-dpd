@@ -11,7 +11,6 @@ from ampform.kinematics.phasespace import compute_third_mandelstam
 from ampform.sympy import PoolSum
 from attrs import field, frozen
 from sympy.core.symbol import Str
-from sympy.physics.matrices import msigma  # cspell:ignore msigma
 from sympy.physics.quantum.spin import CG, WignerD
 from sympy.physics.quantum.spin import Rotation as Wigner
 
@@ -400,45 +399,6 @@ def formulate_third_mandelstam(
     sigma_x = sp.Symbol(f"sigma{x_mandelstam}", nonnegative=True)
     sigma_y = sp.Symbol(f"sigma{y_mandelstam}", nonnegative=True)
     return compute_third_mandelstam(sigma_x, sigma_y, m0, m1, m2, m3)
-
-
-def formulate_polarimetry(
-    builder: DalitzPlotDecompositionBuilder, reference_subsystem: Literal[1, 2, 3] = 1
-) -> tuple[PoolSum, PoolSum, PoolSum]:
-    half = sp.Rational(1, 2)
-    if builder.decay.initial_state.spin != half:
-        msg = (
-            "Can only formulate polarimetry for an initial state with spin 1/2, but"
-            f" got {builder.decay.initial_state.spin}"
-        )
-        raise ValueError(msg)
-    model = builder.formulate(reference_subsystem)
-    λ0, λ0_prime = sp.symbols(R"lambda \lambda^{\prime}", rational=True)
-    λ = {
-        sp.Symbol(f"lambda{i}", rational=True): create_spin_range(state.spin)
-        for i, state in builder.decay.final_state.items()
-    }
-    ref = reference_subsystem
-    return tuple(
-        PoolSum(
-            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()
-            * pauli_matrix[_to_index(λ0), _to_index(λ0_prime)]
-            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],
-            (λ0, [-half, +half]),
-            (λ0_prime, [-half, +half]),
-            *λ.items(),
-        ).cleanup()
-        / model.intensity
-        for pauli_matrix in map(msigma, [1, 2, 3])
-    )
-
-
-def _to_index(helicity):
-    """Symbolic conversion of half-value helicities to Pauli matrix indices."""
-    return sp.Piecewise(
-        (1, sp.LessThan(helicity, 0)),
-        (0, True),
-    )
 
 
 def _create_coupling_symbol(
