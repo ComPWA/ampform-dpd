@@ -27,11 +27,13 @@ from functools import lru_cache
 from os.path import abspath, dirname, expanduser
 from textwrap import dedent
 from typing import TYPE_CHECKING, Iterable, Mapping, Sequence, overload
-from warnings import warn
 
 import cloudpickle
 import sympy as sp
 from ampform.io import aslatex
+from ampform.sympy import (
+    perform_cached_doit,  # noqa: F401  # pyright:ignore[reportUnusedImport]
+)
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
 from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
@@ -215,54 +217,6 @@ def _create_markdown_table_header(column_names: list[str]):
 
 def _create_markdown_table_row(items: Iterable):
     return "| " + " | ".join(f"{i}" for i in items) + " |\n"
-
-
-def perform_cached_doit(
-    unevaluated_expr: sp.Expr, directory: str | None = None
-) -> sp.Expr:
-    """Perform :code:`doit()` on an `~sympy.core.expr.Expr` and cache result to disk.
-
-    The cached result is fetched from disk if the hash of the original expression is the
-    same as the hash embedded in the filename.
-
-    Args:
-        unevaluated_expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
-            :code:`doit()`.
-        directory: The directory in which to cache the result. If `None`, the cache
-            directory will be put under the home directory, or to the path specified by
-            the environment variable :code:`SYMPY_CACHE_DIR`.
-
-    .. tip:: For a faster cache, set `PYTHONHASHSEED
-        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
-        fixed value.
-
-    .. seealso:: :func:`perform_cached_lambdify`
-
-    .. deprecated:: 0.2
-        Use :func:`ampform.sympy.perform_cached_doit` instead. See `ComPWA/ampform#24
-        <https://github.com/ComPWA/ampform-dpd/issues/24>`_
-    """
-    msg = """
-    Use ampform.sympy.perform_cached_doit from AmpForm-DPD v0.2 onwards. See
-    https://github.com/ComPWA/ampform-dpd/issues/24
-    """
-    warn(dedent(msg), category=PendingDeprecationWarning)
-    if directory is None:
-        main_cache_dir = _get_main_cache_dir()
-        directory = abspath(f"{main_cache_dir}/.sympy-cache")
-    h = get_readable_hash(unevaluated_expr)
-    filename = f"{directory}/{h}.pkl"
-    if os.path.exists(filename):
-        with open(filename, "rb") as f:
-            return pickle.load(f)
-    _LOGGER.warning(
-        f"Cached expression file {filename} not found, performing doit()..."
-    )
-    unfolded_expr = unevaluated_expr.doit()
-    os.makedirs(dirname(filename), exist_ok=True)
-    with open(filename, "wb") as f:
-        pickle.dump(unfolded_expr, f)
-    return unfolded_expr
 
 
 @overload
