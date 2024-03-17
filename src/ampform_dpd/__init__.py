@@ -23,6 +23,9 @@ from ampform_dpd.decay import (
     ThreeBodyDecayChain,
     get_decay_product_ids,
 )
+from ampform_dpd.io import (
+    simplify_latex_rendering,  # noqa: F401  # pyright:ignore[reportUnusedImport]
+)
 from ampform_dpd.spin import create_spin_range
 
 
@@ -384,17 +387,6 @@ def formulate_non_resonant(
     decay_chain: ThreeBodyDecayChain,
 ) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
     return sp.Rational(1), {}
-
-
-def simplify_latex_rendering() -> None:
-    """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
-
-    def _print_Indexed_latex(self, printer, *args):  # noqa: N802
-        base = printer._print(self.base)
-        indices = ", ".join(map(printer._print, self.indices))
-        return f"{base}_{{{indices}}}"
-
-    sp.Indexed._latex = _print_Indexed_latex
 
 
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
