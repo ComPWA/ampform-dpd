@@ -18,14 +18,11 @@ This code originates from `ComPWA/ampform#280
 
 from __future__ import annotations
 
-import hashlib
 import logging
-import os
 import pickle
 from collections import abc
-from functools import lru_cache
-from os.path import abspath, dirname, expanduser
-from textwrap import dedent
+from importlib.metadata import version
+from pathlib import Path
 from typing import TYPE_CHECKING, Iterable, Mapping, Sequence, overload
 
 import cloudpickle
@@ -36,6 +33,7 @@ from ampform.sympy import (
 )
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
+from ampform_dpd._cache import get_readable_hash, get_system_cache_directory
 from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
 if TYPE_CHECKING:
@@ -240,7 +238,7 @@ def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
     backend: str = "jax",
-    directory: str | None = None,
+    cache_directory: Path | str | None = None,
 ) -> ParametrizedFunction | Function:
     """Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.
 
@@ -266,9 +264,15 @@ def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
 
     .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
-    if directory is None:
-        main_cache_dir = _get_main_cache_dir()
-        directory = abspath(f"{main_cache_dir}/.sympy-cache-{backend}")
+    if cache_directory is None:
+        system_cache_dir = get_system_cache_directory()
+        backend_version = version(backend)
+        cache_directory = (
+            Path(system_cache_dir) / "ampform_dpd" / f"{backend}-v{backend_version}"
+        )
+    if not isinstance(cache_directory, Path):
+        cache_directory = Path(cache_directory)
+    cache_directory.mkdir(exist_ok=True, parents=True)
     if parameters is None:
         hash_obj = expr
     else:
@@ -277,8 +281,8 @@ def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
             tuple((s, parameters[s]) for s in sorted(parameters, key=str)),
         )
     h = get_readable_hash(hash_obj)
-    filename = f"{directory}/{h}.pkl"
-    if os.path.exists(filename):
+    filename = cache_directory / f"{h}.pkl"
+    if filename.exists():
         with open(filename, "rb") as f:
             return pickle.load(f)
     _LOGGER.warning(f"Cached function file {filename} not found, lambdifying...")
@@ -286,52 +290,9 @@ def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
         func = create_function(expr, backend)
     else:
         func = create_parametrized_function(expr, parameters, backend)
-    os.makedirs(dirname(filename), exist_ok=True)
     with open(filename, "wb") as f:
         cloudpickle.dump(func, f)
     return func
-
-
-def _get_main_cache_dir() -> str:
-    cache_dir = os.environ.get("SYMPY_CACHE_DIR")
-    if cache_dir is None:
-        cache_dir = expanduser("~")  # home directory
-    return cache_dir
-
-
-def get_readable_hash(obj) -> str:
-    python_hash_seed = _get_python_hash_seed()
-    if python_hash_seed is not None:
-        return f"pythonhashseed-{python_hash_seed}{hash(obj):+}"
-    b = _to_bytes(obj)
-    return hashlib.sha256(b).hexdigest()
-
-
-def _to_bytes(obj) -> bytes:
-    if isinstance(obj, sp.Expr):
-        # Using the str printer is slower and not necessarily unique,
-        # but pickle.dumps() does not always result in the same bytes stream.
-        _warn_about_unsafe_hash()
-        return str(obj).encode()
-    return pickle.dumps(obj)
-
-
-def _get_python_hash_seed() -> int | None:
-    python_hash_seed = os.environ.get("PYTHONHASHSEED", "")
-    if python_hash_seed.isdigit():
-        return int(python_hash_seed)
-    return None
-
-
-@lru_cache(maxsize=None)  # warn once
-def _warn_about_unsafe_hash():
-    message = """
-    PYTHONHASHSEED has not been set. For faster and safer hashing of SymPy expressions,
-    set the PYTHONHASHSEED environment variable to a fixed value and rerun the program.
-    See https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED
-    """
-    message = dedent(message).replace("\n", " ").strip()
-    _LOGGER.warning(message)
 
 
 def simplify_latex_rendering() -> None:
