@@ -10,8 +10,9 @@ from typing import TYPE_CHECKING
 import pytest
 import sympy as sp
 
+from ampform_dpd._cache import _warn_about_unsafe_hash
 from ampform_dpd.decay import IsobarNode, Particle
-from ampform_dpd.io import _warn_about_unsafe_hash, aslatex, get_readable_hash
+from ampform_dpd.io import aslatex, get_readable_hash
 
 if TYPE_CHECKING:
     from _pytest.logging import LogCaptureFixture
