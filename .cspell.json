@@ -145,6 +145,7 @@
     "lineshapes",
     "matplotlib",
     "NumPy",
+    "PyPA",
     "pyplot",
     "pyright",
     "pytest",
