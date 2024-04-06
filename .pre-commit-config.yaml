@@ -38,7 +38,7 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/ComPWA/policy
-    rev: 0.3.3
+    rev: 0.3.4
     hooks:
       - id: check-dev-files
         args:
@@ -50,7 +50,7 @@ repos:
       - id: colab-toc-visible
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.3.3
+    rev: v0.3.5
     hooks:
       - id: ruff
         args: [--fix]
@@ -91,7 +91,7 @@ repos:
           - --in-place
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.6.0
+    rev: v8.6.1
     hooks:
       - id: cspell
 
@@ -107,6 +107,6 @@ repos:
           )$
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.354
+    rev: v1.1.357
     hooks:
       - id: pyright
