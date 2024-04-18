@@ -88,7 +88,6 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
-    "sphinx.ext.viewcode",
     "sphinx_api_relink",
     "sphinx_book_theme",
     "sphinx_codeautolink",
