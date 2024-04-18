@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     import sympy as sp
 
 
-@frozen
+@frozen(order=True)
 class Particle:
     name: str
     latex: str
@@ -23,7 +23,7 @@ class Particle:
     width: float
 
 
-@frozen
+@frozen(order=True)
 class IsobarNode:
     parent: Particle
     child1: Particle | IsobarNode
@@ -104,7 +104,7 @@ OuterStates = Dict[Literal[0, 1, 2, 3], Particle]
 """Mapping of the initial and final state IDs to their `.Particle` definition."""
 
 
-@frozen
+@frozen(order=True)
 class ThreeBodyDecayChain:
     decay: IsobarNode = field(validator=instance_of(IsobarNode))
 
@@ -156,7 +156,7 @@ class ThreeBodyDecayChain:
         return self.decay.child1.interaction
 
 
-@frozen
+@frozen(order=True)
 class LSCoupling:
     L: int
     S: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
