@@ -173,7 +173,7 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
     src = _create_markdown_table_header(column_names)
     for particle in items:
         row_items = [
-            particle.name,
+            f"`{particle.name}`",
             f"${particle.latex}$",
             Rf"${aslatex(particle, only_jp=True)}$",
             f"{int(1e3 * particle.mass):,.0f}",
