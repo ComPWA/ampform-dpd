@@ -26,9 +26,10 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "ampform >=0.14.8", # Kibble and Kallen functions, perform_cached_doit, @unevaluated
+    "ampform >=0.15.0", # relabel_edge_ids
     "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
+    "qrules >=0.10.0",
     "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
 ]
