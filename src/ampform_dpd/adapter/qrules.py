@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Iterable
 
+import qrules
 from qrules.quantum_numbers import InteractionProperties
 from qrules.topology import EdgeType, FrozenTransition, NodeType
 from qrules.transition import State
@@ -17,15 +19,23 @@ from ampform_dpd.decay import (
 
 
 def to_three_body_decay(
-    transitions: Iterable[FrozenTransition[Particle, LSCoupling]],
+    transitions: Iterable[FrozenTransition],
+    min_ls: bool = False,
 ) -> ThreeBodyDecay:
-    transitions = tuple(transitions)
+    transitions = convert_edges_and_nodes(transitions)
+    if min_ls:
+        transitions = filter_min_ls(transitions)
     if not transitions:
         msg = "Need at least one transition object"
         raise ValueError(msg)
     some_transition = transitions[0]
+    initial_state, *_ = some_transition.initial_states.values()
+    final_states = {
+        i: some_transition.final_states[idx]
+        for i, idx in enumerate(sorted(some_transition.final_states), 1)
+    }
     return ThreeBodyDecay(
-        states={**some_transition.initial_states, **some_transition.final_states},
+        states={0: initial_state, **final_states},
         chains=tuple(sorted(to_decay_chain(t) for t in transitions)),
     )
 
@@ -130,3 +140,11 @@ def filter_min_ls(
         )
         min_transitions.append(min_transition)
     return tuple(min_transitions)
+
+
+def load_particles() -> qrules.particle.ParticleCollection:
+    src_dir = Path(__file__).parent.parent
+    particle_database = qrules.load_default_particles()
+    additional_definitions = qrules.io.load(src_dir / "particle-definitions.yml")
+    particle_database.update(additional_definitions)
+    return particle_database
