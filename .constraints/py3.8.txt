@@ -37,7 +37,7 @@ defusedxml==0.7.1
 distlib==0.3.8
 dm-tree==0.1.8
 docstring-to-markdown==0.15
-docutils==0.19
+docutils==0.17.1
 exceptiongroup==1.2.1
 execnet==2.1.1
 executing==2.0.1
@@ -60,7 +60,7 @@ h5py==3.11.0
 hepunits==2.3.3
 httpcore==1.0.5
 httpx==0.27.0
-identify==2.5.35
+identify==2.5.36
 idna==3.7
 imagesize==1.4.1
 iminuit==2.25.2
@@ -96,7 +96,7 @@ jupyterlab-git==0.50.0
 jupyterlab-lsp==5.1.0
 jupyterlab-myst==2.3.2
 jupyterlab-pygments==0.3.0
-jupyterlab-server==2.26.0
+jupyterlab-server==2.27.1
 jupyterlab-widgets==3.0.10
 keras==2.11.0
 kiwisolver==1.4.5
@@ -142,7 +142,7 @@ pickleshare==0.7.5
 pillow==10.3.0
 pkgutil-resolve-name==1.3.10
 platformdirs==4.2.0
-pluggy==1.4.0
+pluggy==1.5.0
 pre-commit==3.5.0
 prometheus-client==0.20.0
 prompt-toolkit==3.0.43
@@ -171,7 +171,7 @@ python-lsp-server==1.11.0
 pytoolconfig==1.3.1
 pytz==2024.1
 pyyaml==6.0.1
-pyzmq==26.0.0
+pyzmq==26.0.2
 qrules==0.10.1
 referencing==0.34.0
 requests==2.31.0
@@ -181,7 +181,7 @@ rfc3986-validator==0.1.1
 rope==1.13.0
 rpds-py==0.18.0
 rsa==4.9
-ruff==0.4.0
+ruff==0.4.1
 scipy==1.10.1
 send2trash==1.8.3
 six==1.16.0
@@ -199,7 +199,7 @@ sphinx-design==0.5.0
 sphinx-pybtex-etal-style==0.0.2
 sphinx-togglebutton==0.3.2
 sphinxcontrib-applehelp==1.0.4
-sphinxcontrib-bibtex==2.5.0
+sphinxcontrib-bibtex==2.6.2
 sphinxcontrib-devhelp==1.0.2
 sphinxcontrib-htmlhelp==2.0.1
 sphinxcontrib-jsmath==1.0.1
@@ -224,7 +224,7 @@ tomli==2.0.1
 tornado==6.4
 tox==4.14.2
 tqdm==4.66.2
-traitlets==5.14.2
+traitlets==5.14.3
 types-python-dateutil==2.9.0.20240316
 typing-extensions==4.11.0
 ujson==5.9.0
