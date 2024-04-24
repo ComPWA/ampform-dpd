@@ -200,9 +200,11 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
             Rf"${aslatex(chain.resonance, only_jp=True)}$",
             f"{int(1e3 * chain.resonance.mass):,.0f}",
             f"{int(1e3 * chain.resonance.width):,.0f}",
-            chain.outgoing_ls.L,
-            chain.incoming_ls.L,
         ]
+        if chain.outgoing_ls is not None:
+            row_items.append(chain.outgoing_ls.L)
+        if chain.incoming_ls is not None:
+            row_items.append(chain.incoming_ls.L)
         src += _create_markdown_table_row(row_items)
     return src
 

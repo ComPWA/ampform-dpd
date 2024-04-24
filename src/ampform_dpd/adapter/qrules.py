@@ -41,7 +41,7 @@ def to_three_body_decay(
 
 
 def to_decay_chain(
-    transition: FrozenTransition[Particle, LSCoupling],
+    transition: FrozenTransition[Particle, LSCoupling | None],
 ) -> ThreeBodyDecayChain:
     if len(transition.initial_states) != 1:
         msg = f"Can only handle one initial state, but got {len(transition.initial_states)}"
@@ -74,7 +74,7 @@ def to_decay_chain(
 
 def convert_edges_and_nodes(
     transitions: Iterable[FrozenTransition],
-) -> tuple[FrozenTransition[Particle, LSCoupling], ...]:
+) -> tuple[FrozenTransition[Particle, LSCoupling | None], ...]:
     unique_transitions = {
         transition.convert(
             state_converter=_convert_edge,
@@ -105,15 +105,16 @@ def _convert_edge(state: Any) -> Particle:
     )
 
 
-def _convert_node(node: Any) -> Particle:
+def _convert_node(node: Any) -> LSCoupling | None:
+    if node is None:
+        return None
     if isinstance(node, LSCoupling):
         return node
     if not isinstance(node, InteractionProperties):
         msg = f"Cannot convert node of type {type(node)}"
         raise NotImplementedError(msg)
     if node.l_magnitude is None or node.s_magnitude is None:
-        msg = "Cannot convert node with undefined L or S"
-        raise NotImplementedError(msg)
+        return None
     return LSCoupling(
         L=node.l_magnitude,
         S=node.s_magnitude,
