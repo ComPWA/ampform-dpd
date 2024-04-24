@@ -36,18 +36,21 @@ EXECUTE_NB = get_execution_mode() != "off"
 add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions: dict[str, str | tuple[str, str]] = {
-    "Literal[(-1, 1)]": "typing.Literal",
+    "FrozenTransition": "qrules.topology.FrozenTransition",
     "Literal[-1, 1]": "typing.Literal",
+    "Literal[(-1, 1)]": "typing.Literal",
     "OuterStates": ("obj", "ampform_dpd.decay.OuterStates"),
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PoolSum": "ampform.sympy.PoolSum",
     "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
+    "qrules.topology.EdgeType": "typing.TypeVar",
+    "qrules.topology.NodeType": "typing.TypeVar",
+    "sp.acos": "sympy.functions.elementary.trigonometric.acos",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
-    "sp.acos": "sympy.functions.elementary.trigonometric.acos",
 }
 api_target_types: dict[str, str] = {}
 author = "Common Partial Wave Analysis"

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     import sympy as sp
 
 
-@frozen
+@frozen(order=True)
 class Particle:
     name: str
     latex: str
@@ -23,7 +23,7 @@ class Particle:
     width: float
 
 
-@frozen
+@frozen(order=True)
 class IsobarNode:
     parent: Particle
     child1: Particle | IsobarNode
@@ -104,7 +104,7 @@ OuterStates = Dict[Literal[0, 1, 2, 3], Particle]
 """Mapping of the initial and final state IDs to their `.Particle` definition."""
 
 
-@frozen
+@frozen(order=True)
 class ThreeBodyDecayChain:
     decay: IsobarNode = field(validator=instance_of(IsobarNode))
 
@@ -121,12 +121,6 @@ class ThreeBodyDecayChain:
         if not isinstance(self.decay.child2, Particle):
             msg = f"Child 2 has of type {Particle.__name__} (spectator)"
             raise TypeError(msg)
-        if self.incoming_ls is None:  # pyright: ignore[reportUnnecessaryComparison]
-            msg = "LS-coupling for production node required"
-            raise ValueError(msg)
-        if self.outgoing_ls is None:  # pyright: ignore[reportUnnecessaryComparison]
-            msg = "LS-coupling for decay node required"
-            raise ValueError(msg)
 
     @property
     def parent(self) -> Particle:
@@ -148,15 +142,15 @@ class ThreeBodyDecayChain:
         return self.decay.child2
 
     @property
-    def incoming_ls(self) -> LSCoupling:
+    def incoming_ls(self) -> LSCoupling | None:
         return self.decay.interaction
 
     @property
-    def outgoing_ls(self) -> LSCoupling:
+    def outgoing_ls(self) -> LSCoupling | None:
         return self.decay.child1.interaction
 
 
-@frozen
+@frozen(order=True)
 class LSCoupling:
     L: int
     S: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
