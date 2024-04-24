@@ -391,7 +391,7 @@ def formulate_non_resonant(
 
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
     return {
-        sp.Symbol(f"m{i}"): decay.states[i].mass
+        sp.Symbol(f"m{i}", nonnegative=True): decay.states[i].mass
         for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
     }
 
