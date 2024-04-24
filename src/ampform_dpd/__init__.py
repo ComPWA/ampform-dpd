@@ -290,8 +290,8 @@ def _formulate_clebsch_gordan_factors(
         raise ValueError(msg)
     # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
     # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
-    child1 = _get_particle(isobar.child1)
-    child2 = _get_particle(isobar.child2)
+    child1 = get_particle(isobar.child1)
+    child2 = get_particle(isobar.child2)
     child1_helicity = helicities[child1]
     child2_helicity = helicities[child2]
     cg_ss = CG(
@@ -314,7 +314,7 @@ def _formulate_clebsch_gordan_factors(
     return sqrt_factor * cg_ll * cg_ss
 
 
-def _get_particle(isobar: IsobarNode | Particle) -> Particle:
+def get_particle(isobar: IsobarNode | Particle) -> Particle:
     if isinstance(isobar, IsobarNode):
         return isobar.parent
     return isobar
