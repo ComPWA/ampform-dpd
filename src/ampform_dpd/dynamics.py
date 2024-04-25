@@ -144,8 +144,8 @@ class BlattWeisskopf(sp.Expr):
         z, L = self.args
         cases = {
             0: 1,
-            1: 1 / (1 + z**2),
-            2: 1 / (9 + 3 * z**2 + z**4),
+            1: 1 / (1 + z**2),  # type:ignore[operator]
+            2: 1 / (9 + 3 * z**2 + z**4),  # type:ignore[operator]
         }
         return sp.Piecewise(*[
             (sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()

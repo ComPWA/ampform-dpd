@@ -35,7 +35,7 @@ def to_three_body_decay(
         for i, idx in enumerate(sorted(some_transition.final_states), 1)
     }
     return ThreeBodyDecay(
-        states={0: initial_state, **final_states},
+        states={0: initial_state, **final_states},  # type:ignore[dict-item]
         chains=tuple(sorted(to_decay_chain(t) for t in transitions)),
     )
 
@@ -97,9 +97,9 @@ def _convert_edge(state: Any) -> Particle:
         raise NotImplementedError(msg)
     return Particle(
         name=particle.name,
-        latex=particle.latex,
+        latex=particle.name if particle.latex is None else particle.latex,
         spin=particle.spin,
-        parity=particle.parity,
+        parity=int(particle.parity),  # type:ignore[arg-type]
         mass=particle.mass,
         width=particle.width,
     )
@@ -131,11 +131,11 @@ def filter_min_ls(
     min_transitions = []
     for group in grouped_transitions.values():
         transition, *_ = group
-        min_transition = FrozenTransition(
+        min_transition: FrozenTransition[EdgeType, NodeType] = FrozenTransition(
             topology=transition.topology,
             states=transition.states,
             interactions={
-                i: min(t.interactions[i] for t in group)
+                i: min(t.interactions[i] for t in group)  # type:ignore[type-var]
                 for i in transition.interactions
             },
         )
@@ -146,6 +146,6 @@ def filter_min_ls(
 def load_particles() -> qrules.particle.ParticleCollection:
     src_dir = Path(__file__).parent.parent
     particle_database = qrules.load_default_particles()
-    additional_definitions = qrules.io.load(src_dir / "particle-definitions.yml")
-    particle_database.update(additional_definitions)
+    additional_definitions = qrules.io.load(src_dir / "particle-definitions.yml")  # type:ignore[arg-type]
+    particle_database.update(additional_definitions)  # type:ignore[arg-type]
     return particle_database

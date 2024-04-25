@@ -23,7 +23,7 @@ import pickle
 from collections import abc
 from importlib.metadata import version
 from pathlib import Path
-from typing import TYPE_CHECKING, Iterable, Mapping, Sequence, overload
+from typing import TYPE_CHECKING, Any, Iterable, Mapping, Sequence, overload
 
 import cloudpickle
 import sympy as sp
@@ -136,11 +136,11 @@ def _render_jp(particle: Particle) -> str:
 
 def as_markdown_table(obj: Sequence) -> str:
     """Render objects a `str` suitable for generating a table."""
+    if isinstance(obj, ThreeBodyDecay):
+        return _as_decay_markdown_table(obj.chains)
     item_type = _determine_item_type(obj)
     if item_type is Particle:
         return _as_resonance_markdown_table(obj)
-    if item_type is ThreeBodyDecay:
-        return _as_decay_markdown_table(obj.chains)
     if item_type is ThreeBodyDecayChain:
         return _as_decay_markdown_table(obj)
     msg = (
@@ -175,7 +175,7 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
         row_items = [
             f"`{particle.name}`",
             f"${particle.latex}$",
-            Rf"${aslatex(particle, only_jp=True)}$",
+            Rf"${aslatex(particle, only_jp=True)}$",  # type:ignore[call-arg]
             f"{int(1e3 * particle.mass):,.0f}",
             f"{int(1e3 * particle.width):,.0f}",
         ]
@@ -195,9 +195,9 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
     src = _create_markdown_table_header(column_names)
     for chain in decay_chains:
         child1, child2 = map(aslatex, chain.decay_products)
-        row_items = [
+        row_items: list = [
             Rf"${chain.resonance.latex} \to {child1} {child2}$",
-            Rf"${aslatex(chain.resonance, only_jp=True)}$",
+            Rf"${aslatex(chain.resonance, only_jp=True)}$",  # type:ignore[call-arg]
             f"{int(1e3 * chain.resonance.mass):,.0f}",
             f"{int(1e3 * chain.resonance.width):,.0f}",
         ]
@@ -236,7 +236,7 @@ def perform_cached_lambdify(
 ) -> ParametrizedBackendFunction: ...
 
 
-def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
+def perform_cached_lambdify(  # type:ignore[misc]  # pyright:ignore[reportInconsistentOverload]
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
     backend: str = "jax",
@@ -276,7 +276,7 @@ def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
         cache_directory = Path(cache_directory)
     cache_directory.mkdir(exist_ok=True, parents=True)
     if parameters is None:
-        hash_obj = expr
+        hash_obj: Any = expr
     else:
         hash_obj = (
             expr,
@@ -288,6 +288,7 @@ def perform_cached_lambdify(  # pyright: ignore[reportInconsistentOverload]
         with open(filename, "rb") as f:
             return pickle.load(f)
     _LOGGER.warning(f"Cached function file {filename} not found, lambdifying...")
+    func: ParametrizedFunction | Function
     if parameters is None:
         func = create_function(expr, backend)
     else:
@@ -305,4 +306,4 @@ def simplify_latex_rendering() -> None:
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"
 
-    sp.Indexed._latex = _print_Indexed_latex
+    sp.Indexed._latex = _print_Indexed_latex  # type:ignore[attr-defined]

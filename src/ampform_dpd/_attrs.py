@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, SupportsFloat
+from typing import TYPE_CHECKING, Iterable, SupportsFloat
 
 import sympy as sp
 
 if TYPE_CHECKING:
     from attrs import Attribute
 
-    from ampform_dpd.decay import LSCoupling
+    from ampform_dpd.decay import LSCoupling, ThreeBodyDecayChain
 
 
 def assert_spin_value(instance, attribute: Attribute, value: sp.Rational) -> None:
@@ -18,7 +18,7 @@ def assert_spin_value(instance, attribute: Attribute, value: sp.Rational) -> Non
         raise ValueError(msg)
 
 
-def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling:
+def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling | None:
     from ampform_dpd.decay import LSCoupling  # noqa: PLC0415
 
     if obj is None:
@@ -30,6 +30,10 @@ def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling:
         return LSCoupling(L, S)
     msg = f"Cannot convert {type(obj).__name__} to {LSCoupling.__name__}"
     raise TypeError(msg)
+
+
+def to_chains(obj: Iterable[ThreeBodyDecayChain]) -> tuple[ThreeBodyDecayChain, ...]:
+    return tuple(obj)
 
 
 def to_rational(obj: SupportsFloat) -> sp.Rational:

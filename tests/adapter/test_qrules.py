@@ -73,7 +73,7 @@ def test_to_three_body_decay(reaction: ReactionInfo, min_ls: bool):
 
 
 def _get_couplings(transition: StateTransition) -> tuple[dict, dict]:
-    return tuple(
+    return tuple(  # type:ignore[return-value]
         {"L": node.l_magnitude, "S": node.s_magnitude}
         for node in transition.interactions.values()
     )

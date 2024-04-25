@@ -86,6 +86,7 @@ numba = [
 ]
 sty = [
     "ampform-dpd[types]",
+    "mypy",
     "pre-commit >=1.4.0",
     "ruff",
 ]
@@ -133,6 +134,21 @@ where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/ampform_dpd/version.py"
+
+[tool.mypy]
+exclude = "_build"
+show_error_codes = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["cloudpickle.*"]
+
+[[tool.mypy.overrides]]
+check_untyped_defs = true
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+module = ["tests.*"]
 
 [tool.pyright]
 reportArgumentType = false
