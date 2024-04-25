@@ -116,20 +116,6 @@ OuterStates = Dict[Literal[0, 1, 2, 3], Particle]
 class ThreeBodyDecayChain:
     decay: IsobarNode = field(validator=instance_of(IsobarNode))
 
-    def __attrs_post_init__(self) -> None:
-        if not isinstance(self.decay.child1, IsobarNode):
-            msg = f"Child 1 has of type {IsobarNode.__name__} (the decay)"
-            raise TypeError(msg)
-        if not isinstance(self.decay.child1.child1, Particle):
-            msg = f"Child 1 of child 1 has of type {Particle.__name__}"
-            raise TypeError(msg)
-        if not isinstance(self.decay.child1.child2, Particle):
-            msg = f"Child 2 of child 1 has of type {Particle.__name__}"
-            raise TypeError(msg)
-        if not isinstance(self.decay.child2, Particle):
-            msg = f"Child 2 has of type {Particle.__name__} (spectator)"
-            raise TypeError(msg)
-
     @property
     def parent(self) -> Particle:
         return self.decay.parent
