@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import TYPE_CHECKING, Literal, TypeVar
+from typing import TYPE_CHECKING, Dict, Literal, TypeVar
 
 from attrs import field, frozen
 from attrs.validators import instance_of
@@ -108,7 +108,7 @@ def get_decay_product_ids(
     raise ValueError(msg)
 
 
-OuterStates = dict[Literal[0, 1, 2, 3], Particle]
+OuterStates = Dict[Literal[0, 1, 2, 3], Particle]
 """Mapping of the initial and final state IDs to their `.Particle` definition."""
 
 
