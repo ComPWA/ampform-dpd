@@ -60,7 +60,7 @@ def create_spin_range(spin: SupportsFloat) -> list[sp.Rational]:
     >>> create_spin_range(1.5)
     [-3/2, -1/2, 1/2, 3/2]
     """
-    return create_rational_range(-spin, spin)
+    return create_rational_range(-float(spin), +float(spin))
 
 
 def create_rational_range(

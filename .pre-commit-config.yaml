@@ -2,6 +2,7 @@ ci:
   autoupdate_commit_msg: "MAINT: update pip constraints and pre-commit"
   autoupdate_schedule: quarterly # already done by requirements-cron.yml
   skip:
+    - mypy
     - prettier
     - pyright
     - taplo
@@ -107,6 +108,16 @@ repos:
           (?x)^(
             .*\.py
           )$
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        require_serial: true
+        types:
+          - python
 
   - repo: https://github.com/ComPWA/mirrors-pyright
     rev: v1.1.359

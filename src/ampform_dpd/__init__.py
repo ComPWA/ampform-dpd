@@ -22,6 +22,7 @@ from ampform_dpd.decay import (
     ThreeBodyDecay,
     ThreeBodyDecayChain,
     get_decay_product_ids,
+    get_particle,
 )
 from ampform_dpd.io import (
     simplify_latex_rendering,  # noqa: F401  # pyright:ignore[reportUnusedImport]
@@ -35,9 +36,9 @@ class AmplitudeModel:
     intensity: sp.Expr = sp.S.One
     amplitudes: dict[sp.Indexed, sp.Expr] = field(factory=dict)
     variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
-    parameter_defaults: dict[sp.Symbol, float] = field(factory=dict)
-    masses: dict[sp.Symbol, float] = field(factory=dict)
-    invariants: dict[sp.Symbol, float] = field(factory=dict)
+    parameter_defaults: dict[sp.Symbol, float | complex] = field(factory=dict)
+    masses: dict[sp.Symbol, float | complex] = field(factory=dict)
+    invariants: dict[sp.Symbol, sp.Expr] = field(factory=dict)
 
     @property
     def full_expression(self) -> sp.Expr:
@@ -79,17 +80,20 @@ class DalitzPlotDecompositionBuilder:
         reference_subsystem: Literal[1, 2, 3] = 1,
         cleanup_summations: bool = False,
     ) -> AmplitudeModel:
-        helicity_symbols = sp.symbols("lambda:4", rational=True)
+        helicity_symbols: tuple[sp.Symbol, sp.Symbol, sp.Symbol, sp.Symbol] = (
+            sp.symbols("lambda:4", rational=True)
+        )
         allowed_helicities = {
-            symbol: create_spin_range(self.decay.states[i].spin)
+            symbol: create_spin_range(self.decay.states[i].spin)  # type:ignore[index]
             for i, symbol in enumerate(helicity_symbols)
         }
         amplitude_definitions = {}
         angle_definitions = {}
         parameter_defaults = {}
-        for args in product(*allowed_helicities.values()):
-            for sub_system in [1, 2, 3]:
-                chain_model = self.formulate_subsystem_amplitude(*args, sub_system)
+        args: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
+        for args in product(*allowed_helicities.values()):  # type:ignore[assignment]
+            for sub_system in (1, 2, 3):
+                chain_model = self.formulate_subsystem_amplitude(*args, sub_system)  # type:ignore[arg-type]
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)
                 parameter_defaults.update(chain_model.parameter_defaults)
@@ -100,13 +104,13 @@ class DalitzPlotDecompositionBuilder:
         masses = create_mass_symbol_mapping(self.decay)
         parameter_defaults.update(masses)
         if cleanup_summations:
-            aligned_amp = aligned_amp.cleanup()
+            aligned_amp = aligned_amp.cleanup()  # type:ignore[assignment]
         intensity = PoolSum(
             sp.Abs(aligned_amp) ** 2,
             *allowed_helicities.items(),
         )
         if cleanup_summations:
-            intensity = intensity.cleanup()
+            intensity = intensity.cleanup()  # type:ignore[assignment]
         return AmplitudeModel(
             decay=self.decay,
             intensity=PoolSum(
@@ -165,8 +169,8 @@ class DalitzPlotDecompositionBuilder:
                     interaction=chain.outgoing_ls,
                     typ="decay",
                 )
-                parameter_defaults[h_prod] = 1 + 0j
-                parameter_defaults[h_dec] = 1
+                parameter_defaults[h_prod] = 1 + 0j  # type:ignore[index]
+                parameter_defaults[h_dec] = 1  # type:ignore[index]
             sub_amp_expr = (
                 sp.KroneckerDelta(λ[0], λR - λ[k])
                 * (-1) ** (spin[k] - λ[k])
@@ -189,9 +193,8 @@ class DalitzPlotDecompositionBuilder:
                 * (-1) ** (spin[j] - λ[j])
             )
             if not self.use_decay_helicity_couplings:
-                resonance_isobar = chain.decay.child1
                 sub_amp_expr *= _formulate_clebsch_gordan_factors(
-                    resonance_isobar,
+                    chain.decay_node,
                     helicities={
                         self.decay.final_state[i]: λ[i],
                         self.decay.final_state[j]: λ[j],
@@ -255,20 +258,23 @@ class DalitzPlotDecompositionBuilder:
             (_λ2, create_spin_range(j2)),
             (_λ3, create_spin_range(j3)),
         )
-        return amp_expr, wigner_generator.angle_definitions
+        return amp_expr, wigner_generator.angle_definitions  # type:ignore[return-value]
 
 
 def _create_coupling_symbol(
     helicity_coupling: bool,
     resonance: Str,
     helicities: tuple[sp.Basic, sp.Basic],
-    interaction: LSCoupling,
+    interaction: LSCoupling | None,
     typ: Literal["production", "decay"],
 ) -> sp.Indexed:
     H = _get_coupling_base(helicity_coupling, typ)
     if helicity_coupling:
         λi, λj = helicities
         return H[resonance, λi, λj]
+    if interaction is None:
+        msg = "Cannot formulate LS-coupling without LS combinations"
+        raise ValueError(msg)
     return H[resonance, interaction.L, interaction.S]
 
 
@@ -314,15 +320,9 @@ def _formulate_clebsch_gordan_factors(
     return sqrt_factor * cg_ll * cg_ss
 
 
-def get_particle(isobar: IsobarNode | Particle) -> Particle:
-    if isinstance(isobar, IsobarNode):
-        return isobar.parent
-    return isobar
-
-
 @lru_cache(maxsize=None)
 def _generate_amplitude_index_bases() -> dict[Literal[1, 2, 3], sp.IndexedBase]:
-    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))
+    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # type:ignore[arg-type]
 
 
 class _AlignmentWignerGenerator:
@@ -333,8 +333,8 @@ class _AlignmentWignerGenerator:
     def __call__(
         self,
         j: sp.Rational,
-        m: sp.Rational,
-        m_prime: sp.Rational,
+        m: sp.Rational | sp.Symbol,
+        m_prime: sp.Rational | sp.Symbol,
         rotated_state: int,
         aligned_subsystem: int,
     ) -> sp.Rational | WignerD:
@@ -380,16 +380,18 @@ class DynamicsConfigurator:
 class DynamicsBuilder(Protocol):
     def __call__(
         self, decay_chain: ThreeBodyDecayChain
-    ) -> tuple[sp.Expr, dict[sp.Symbol, float]]: ...
+    ) -> tuple[sp.Expr, dict[sp.Symbol, float | complex]]: ...
 
 
 def formulate_non_resonant(
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
+) -> tuple[sp.Expr, dict[sp.Symbol, float | complex]]:
     return sp.Rational(1), {}
 
 
-def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
+def create_mass_symbol_mapping(
+    decay: ThreeBodyDecay,
+) -> dict[sp.Symbol, float | complex]:
     return {
         sp.Symbol(f"m{i}", nonnegative=True): decay.states[i].mass
         for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID

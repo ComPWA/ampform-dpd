@@ -67,7 +67,6 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 autodoc_member_order = "bysource"
-autodoc_type_aliases = {}
 autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 2

@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Literal
+from functools import lru_cache
+from typing import TYPE_CHECKING, Dict, Literal, TypeVar
 
 from attrs import field, frozen
 from attrs.validators import instance_of
 
-from ampform_dpd._attrs import assert_spin_value, to_ls, to_rational
+from ampform_dpd._attrs import assert_spin_value, to_chains, to_ls, to_rational
 
 if TYPE_CHECKING:
     import sympy as sp
@@ -31,14 +32,19 @@ class IsobarNode:
     interaction: LSCoupling | None = field(default=None, converter=to_ls)
 
     @property
-    def children(self) -> tuple[Particle, Particle]:
+    def children(
+        self,
+    ) -> tuple[
+        Particle | IsobarNode,
+        Particle | IsobarNode,
+    ]:
         return self.child1, self.child2
 
 
 @frozen
 class ThreeBodyDecay:
     states: OuterStates
-    chains: tuple[ThreeBodyDecayChain, ...]
+    chains: tuple[ThreeBodyDecayChain, ...] = field(converter=to_chains)
 
     def __attrs_post_init__(self) -> None:
         expected_initial_state = self.initial_state
@@ -89,7 +95,9 @@ class ThreeBodyDecay:
         return ThreeBodyDecay(self.states, filtered_chains)
 
 
-def get_decay_product_ids(spectator_id: Literal[1, 2, 3]) -> tuple[int, int]:
+def get_decay_product_ids(
+    spectator_id: Literal[1, 2, 3],
+) -> tuple[Literal[1, 2, 3], Literal[1, 2, 3]]:
     if spectator_id == 1:
         return 2, 3
     if spectator_id == 2:  # noqa: PLR2004
@@ -128,18 +136,31 @@ class ThreeBodyDecayChain:
 
     @property
     def resonance(self) -> Particle:
-        return self.decay.child1.parent
+        decay_node: IsobarNode = self._get_child_of_type(IsobarNode)
+        return get_particle(decay_node)
+
+    @property
+    def decay_node(self) -> IsobarNode:
+        return self._get_child_of_type(IsobarNode)
 
     @property
     def decay_products(self) -> tuple[Particle, Particle]:
         return (
-            self.decay.child1.child1,
-            self.decay.child1.child2,
+            get_particle(self.decay_node.child1),
+            get_particle(self.decay_node.child2),
         )
 
     @property
     def spectator(self) -> Particle:
-        return self.decay.child2
+        return self._get_child_of_type(Particle)
+
+    @lru_cache(maxsize=None)  # noqa: B019
+    def _get_child_of_type(self, typ: type[T]) -> T:
+        for child in self.decay.children:
+            if isinstance(child, typ):
+                return child
+        msg = f"The production node does not have any children that are of type {typ.__name__}"
+        raise ValueError(msg)
 
     @property
     def incoming_ls(self) -> LSCoupling | None:
@@ -147,10 +168,20 @@ class ThreeBodyDecayChain:
 
     @property
     def outgoing_ls(self) -> LSCoupling | None:
-        return self.decay.child1.interaction
+        decay_node: IsobarNode = self._get_child_of_type(IsobarNode)
+        return decay_node.interaction
+
+
+T = TypeVar("T", Particle, IsobarNode)
 
 
 @frozen(order=True)
 class LSCoupling:
     L: int
     S: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
+
+
+def get_particle(isobar: IsobarNode | Particle) -> Particle:
+    if isinstance(isobar, IsobarNode):
+        return isobar.parent
+    return isobar

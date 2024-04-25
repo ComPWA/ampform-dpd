@@ -75,7 +75,7 @@ def test_get_readable_hash(
             caplog.clear()
     elif python_hash_seed == "0":
         if sys.version_info < (3, 11):
-            expected_hash = expected_hash[0]
+            expected_hash = expected_hash[0]  # type:ignore[assignment]
         else:
             expected_hash = expected_hash[1]
         expected = f"pythonhashseed-0{expected_hash:+d}"
