@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import abc, defaultdict
+from functools import singledispatch
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, TypeVar, overload
 
+import attrs
 import qrules
 from qrules.quantum_numbers import InteractionProperties
 from qrules.topology import EdgeType, FrozenTransition, NodeType
-from qrules.transition import State
+from qrules.transition import ReactionInfo, State, StateTransition, Topology
 
 from ampform_dpd.decay import (
     IsobarNode,
@@ -149,3 +151,52 @@ def load_particles() -> qrules.particle.ParticleCollection:
     additional_definitions = qrules.io.load(src_dir / "particle-definitions.yml")  # type:ignore[arg-type]
     particle_database.update(additional_definitions)  # type:ignore[arg-type]
     return particle_database
+
+
+@overload
+def normalize_state_ids(obj: T) -> T: ...
+@overload
+def normalize_state_ids(obj: Iterable[T]) -> list[T]: ...
+def normalize_state_ids(obj):  # pyright:ignore[reportInconsistentOverload]
+    """Relabel the state IDs so that they lie in the range :math:`[0, N)`."""
+    return _impl_normalize_state_ids(obj)
+
+
+@singledispatch
+def _impl_normalize_state_ids(obj):
+    """Relabel the state IDs so that they lie in the range :math:`[0, N)`."""
+    msg = f"Cannot relabel edge IDs of a {type(obj).__name__}"
+    raise NotImplementedError(msg)
+
+
+@_impl_normalize_state_ids.register(ReactionInfo)  # type:ignore[attr-defined]
+def _(obj: ReactionInfo) -> ReactionInfo:
+    return ReactionInfo(
+        # no attrs.evolve() in order to call __attrs_post_init__()
+        transitions=[_impl_normalize_state_ids(g) for g in obj.transitions],
+        formalism=obj.formalism,
+    )
+
+
+@_impl_normalize_state_ids.register(FrozenTransition)  # type:ignore[attr-defined]
+def _(obj: StateTransition) -> StateTransition:
+    return attrs.evolve(
+        obj,
+        topology=_impl_normalize_state_ids(obj.topology),
+        states={new: obj.states[old] for new, old in enumerate(sorted(obj.states))},
+    )
+
+
+@_impl_normalize_state_ids.register(Topology)  # type:ignore[attr-defined]
+def _(obj: Topology) -> Topology:
+    mapping = {old: new for new, old in enumerate(sorted(obj.edges))}
+    return obj.relabel_edges(mapping)
+
+
+@_impl_normalize_state_ids.register(abc.Iterable)  # type:ignore[attr-defined]
+def _(obj: abc.Iterable[T]) -> list[T]:
+    return [_impl_normalize_state_ids(x) for x in obj]
+
+
+T = TypeVar("T", ReactionInfo, StateTransition, Topology)
+"""Type variable for the input and output of :func:`normalize_state_ids`."""

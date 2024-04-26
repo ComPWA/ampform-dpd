@@ -5,7 +5,11 @@ from typing import TYPE_CHECKING
 import pytest
 import qrules
 
-from ampform_dpd.adapter.qrules import filter_min_ls, to_three_body_decay
+from ampform_dpd.adapter.qrules import (
+    filter_min_ls,
+    normalize_state_ids,
+    to_three_body_decay,
+)
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
@@ -48,6 +52,27 @@ def test_filter_min_ls(reaction: ReactionInfo):
             {"L": 1, "S": 0.5},
         ),
     ]
+
+
+def test_normalize_state_ids_reaction(reaction: ReactionInfo):
+    reaction012 = reaction
+    reaction123 = normalize_state_ids(reaction012)
+    assert set(reaction123.initial_state) == {0}
+    assert set(reaction123.final_state) == {1, 2, 3}
+
+    transitions123 = normalize_state_ids(reaction012.transitions)
+    for transition012, transition123 in zip(reaction012.transitions, transitions123):
+        assert set(transition123.initial_states) == {0}
+        assert set(transition123.final_states) == {1, 2, 3}
+        assert set(transition123.intermediate_states) == {4}
+
+        topology123 = normalize_state_ids(transition123.topology)
+        assert topology123.incoming_edge_ids == {0}
+        assert topology123.outgoing_edge_ids == {1, 2, 3}
+        assert topology123.intermediate_edge_ids == {4}
+
+        for i in transition012.states:
+            assert transition012.states[i] == transition123.states[i + 1]
 
 
 @pytest.mark.parametrize("min_ls", [False, True])
