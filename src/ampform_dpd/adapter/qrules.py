@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections import abc, defaultdict
 from functools import singledispatch
 from pathlib import Path
@@ -19,17 +20,25 @@ from ampform_dpd.decay import (
     ThreeBodyDecayChain,
 )
 
+_LOGGER = logging.getLogger(__name__)
+
 
 def to_three_body_decay(
     transitions: Iterable[FrozenTransition],
     min_ls: bool = False,
 ) -> ThreeBodyDecay:
-    transitions = convert_edges_and_nodes(transitions)
-    if min_ls:
-        transitions = filter_min_ls(transitions)
+    transitions = tuple(transitions)
     if not transitions:
         msg = "Need at least one transition object"
         raise ValueError(msg)
+    if set(transitions[0].initial_states) != {0} or set(
+        transitions[0].final_states
+    ) != {1, 2, 3}:
+        transitions = normalize_state_ids(transitions)
+        _LOGGER.warning("Relabeled initial state to 0 and final states to 1, 2, 3")
+    transitions = convert_edges_and_nodes(transitions)
+    if min_ls:
+        transitions = filter_min_ls(transitions)
     some_transition = transitions[0]
     initial_state, *_ = some_transition.initial_states.values()
     final_states = {
