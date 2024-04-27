@@ -38,9 +38,8 @@ def xib2pkk_reaction() -> ReactionInfo:
         allowed_intermediate_particles=["Lambda(1520)"],
         formalism="helicity",
     )
-    reaction = normalize_state_ids(reaction)
     swapped_transitions = tuple(
-        attrs.evolve(t, topology=t.topology.swap_edges(2, 3))
+        attrs.evolve(t, topology=t.topology.swap_edges(1, 2))
         for t in reaction.transitions
     )
     return qrules.transition.ReactionInfo(
@@ -50,7 +49,7 @@ def xib2pkk_reaction() -> ReactionInfo:
 
 
 def test_convert_transitions(xib2pkk_reaction: ReactionInfo):
-    reaction = xib2pkk_reaction
+    reaction = normalize_state_ids(xib2pkk_reaction)
     assert reaction.get_intermediate_particles().names == ["Lambda(1520)"]
     assert len(reaction.transitions) == 16
     transitions = convert_transitions(reaction.transitions)
