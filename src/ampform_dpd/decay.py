@@ -123,7 +123,7 @@ class ThreeBodyDecayChain:
     @property
     def resonance(self) -> Particle:
         decay_node: IsobarNode = self._get_child_of_type(IsobarNode)
-        return get_particle(decay_node)
+        return to_particle(decay_node)
 
     @property
     def decay_node(self) -> IsobarNode:
@@ -132,8 +132,8 @@ class ThreeBodyDecayChain:
     @property
     def decay_products(self) -> tuple[Particle, Particle]:
         return (
-            get_particle(self.decay_node.child1),
-            get_particle(self.decay_node.child2),
+            to_particle(self.decay_node.child1),
+            to_particle(self.decay_node.child2),
         )
 
     @property
@@ -167,7 +167,7 @@ class LSCoupling:
     S: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
 
 
-def get_particle(isobar: IsobarNode | Particle) -> Particle:
+def to_particle(isobar: IsobarNode | Particle) -> Particle:
     if isinstance(isobar, IsobarNode):
         return isobar.parent
     return isobar

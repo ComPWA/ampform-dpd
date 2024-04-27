@@ -22,7 +22,7 @@ from ampform_dpd.decay import (
     ThreeBodyDecay,
     ThreeBodyDecayChain,
     get_decay_product_ids,
-    get_particle,
+    to_particle,
 )
 from ampform_dpd.io import (
     simplify_latex_rendering,  # noqa: F401  # pyright:ignore[reportUnusedImport]
@@ -296,8 +296,8 @@ def _formulate_clebsch_gordan_factors(
         raise ValueError(msg)
     # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
     # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
-    child1 = get_particle(isobar.child1)
-    child2 = get_particle(isobar.child2)
+    child1 = to_particle(isobar.child1)
+    child2 = to_particle(isobar.child2)
     child1_helicity = helicities[child1]
     child2_helicity = helicities[child2]
     cg_ss = CG(
