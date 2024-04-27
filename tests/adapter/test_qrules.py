@@ -1,22 +1,37 @@
+# pyright: reportPrivateUsage=false
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 import attrs
 import pytest
 import qrules
 
 from ampform_dpd.adapter.qrules import (
+    _convert_transition,
+    _get_equal_final_state_ids,
     convert_transitions,
     filter_min_ls,
     normalize_state_ids,
+    permute_equal_final_states,
     to_three_body_decay,
 )
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
     from _pytest.fixtures import SubRequest
+    from qrules.topology import FrozenTransition
     from qrules.transition import ReactionInfo, StateTransition
+
+
+@pytest.fixture(scope="session")
+def a2pipipi_reaction() -> ReactionInfo:
+    return qrules.generate_transitions(
+        initial_state="a(1)(1260)0",
+        final_state=["pi0", "pi0", "pi0"],
+        allowed_intermediate_particles=["a(0)(980)0"],
+        formalism="helicity",
+    )
 
 
 @pytest.fixture(scope="session", params=["canonical-helicity", "helicity"])
@@ -95,6 +110,25 @@ def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
         ]
 
 
+@pytest.mark.parametrize("converter", [lambda x: x, _convert_transition])
+def test_get_equal_final_state_ids(
+    a2pipipi_reaction: ReactionInfo,
+    jpsi2pksigma_reaction: ReactionInfo,
+    xib2pkk_reaction: ReactionInfo,
+    converter: Callable[[FrozenTransition], FrozenTransition],
+):
+    test_cases = [
+        (a2pipipi_reaction, (1, 2, 3)),
+        (jpsi2pksigma_reaction, tuple()),
+        (xib2pkk_reaction, (2, 3)),
+    ]
+    for reaction012, expected in test_cases:
+        reaction = normalize_state_ids(reaction012)
+        transition = converter(reaction.transitions[0])
+        equal_ids = _get_equal_final_state_ids(transition)
+        assert equal_ids == expected
+
+
 def test_normalize_state_ids_reaction(jpsi2pksigma_reaction: ReactionInfo):
     reaction012 = jpsi2pksigma_reaction
     reaction123 = normalize_state_ids(reaction012)
@@ -114,6 +148,27 @@ def test_normalize_state_ids_reaction(jpsi2pksigma_reaction: ReactionInfo):
 
         for i in transition012.states:
             assert transition012.states[i] == transition123.states[i + 1]
+
+
+def test_permute_equal_final_states(
+    a2pipipi_reaction: ReactionInfo,
+    jpsi2pksigma_reaction: ReactionInfo,
+    xib2pkk_reaction: ReactionInfo,
+):
+    test_cases = [
+        (1, jpsi2pksigma_reaction),
+        (2, xib2pkk_reaction),
+        (3, a2pipipi_reaction),
+    ]
+    for n_permutations, reaction012 in test_cases:
+        reaction = normalize_state_ids(reaction012)
+        transition = reaction.transitions[0]
+        permutations = permute_equal_final_states(transition)
+        assert len(permutations) == n_permutations
+
+        permuted_reaction = permute_equal_final_states(reaction)
+        n_transitions = len(permuted_reaction.transitions)
+        assert n_transitions == n_permutations * len(reaction.transitions)
 
 
 @pytest.mark.parametrize("min_ls", [False, True])

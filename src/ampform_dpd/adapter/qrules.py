@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import itertools
 import logging
 from collections import abc, defaultdict
 from functools import singledispatch
@@ -13,6 +14,7 @@ from qrules.topology import EdgeType, FrozenTransition, NodeType
 from qrules.transition import ReactionInfo, StateTransition, Topology
 
 from ampform_dpd.decay import (
+    FinalStateID,
     IsobarNode,
     LSCoupling,
     Particle,
@@ -257,3 +259,82 @@ def _(obj: abc.Iterable[T]) -> list[T]:
 
 T = TypeVar("T", ReactionInfo, StateTransition, Topology)
 """Type variable for the input and output of :func:`normalize_state_ids`."""
+
+
+@overload
+def permute_equal_final_states(obj: ReactionInfo) -> ReactionInfo: ...
+@overload
+def permute_equal_final_states(
+    obj: Iterable[FrozenTransition[EdgeType, NodeType]],
+) -> list[FrozenTransition[EdgeType, NodeType]]: ...
+@overload
+def permute_equal_final_states(
+    obj: FrozenTransition[EdgeType, NodeType],
+) -> list[FrozenTransition[EdgeType, NodeType]]: ...
+def permute_equal_final_states(obj: T) -> T:  # type:ignore[misc]  # pyright:ignore[reportInconsistentOverload]
+    return _impl_permute_equal_final_states(obj)
+
+
+@singledispatch
+def _impl_permute_equal_final_states(obj):
+    msg = f"Cannot permute equal final states of a {type(obj)}"
+    raise NotImplementedError(msg)
+
+
+@_impl_permute_equal_final_states.register(ReactionInfo)
+def _(obj: ReactionInfo) -> ReactionInfo:
+    return ReactionInfo(
+        transitions=permute_equal_final_states(obj.transitions),
+        formalism=obj.formalism,
+    )
+
+
+@_impl_permute_equal_final_states.register(abc.Iterable)
+def _(
+    obj: Iterable[FrozenTransition[EdgeType, NodeType]],
+) -> list[FrozenTransition[EdgeType, NodeType]]:
+    permuted_transitions = []
+    for transition in obj:
+        permuted_transitions.extend(permute_equal_final_states(transition))
+    return permuted_transitions
+
+
+@_impl_permute_equal_final_states.register(FrozenTransition)
+def _(
+    obj: FrozenTransition[EdgeType, NodeType],
+) -> list[FrozenTransition[EdgeType, NodeType]]:
+    transition = obj
+    equal_state_ids = _get_equal_final_state_ids(transition)
+    if not equal_state_ids:
+        return [transition]
+    unique_permutations = {transition} | {
+        attrs.evolve(transition, topology=transition.topology.swap_edges(i, j))
+        for i, j in itertools.combinations(equal_state_ids, 2)
+    }
+    return sorted(unique_permutations)
+
+
+def _get_equal_final_state_ids(
+    transition: FrozenTransition,
+) -> (
+    tuple[()]
+    | tuple[FinalStateID, FinalStateID]
+    | tuple[FinalStateID, FinalStateID, FinalStateID]
+):
+    particle_to_id = defaultdict(list)
+    for idx, state in transition.final_states.items():
+        key = _uniqueness_repr(state)
+        particle_to_id[key].append(idx)
+    all_equal_state_ids = [set(ids) for ids in particle_to_id.values() if len(ids) > 1]
+    if not all_equal_state_ids:
+        return tuple()  # type:ignore[return-value]
+    return tuple(sorted(all_equal_state_ids[0]))  # type:ignore[return-value]
+
+
+def _uniqueness_repr(obj: Any) -> str:
+    if isinstance(obj, qrules.transition.State):
+        return _uniqueness_repr(obj.particle)
+    if isinstance(obj, (Particle, State, qrules.particle.Particle)):
+        return obj.name
+    msg = f"Cannot create a uniqueness key for {type(obj)}"
+    raise NotImplementedError(msg)
