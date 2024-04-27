@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import attrs
 import pytest
 import qrules
 
 from ampform_dpd.adapter.qrules import (
+    convert_transitions,
     filter_min_ls,
     normalize_state_ids,
     to_three_body_decay,
@@ -18,7 +20,7 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(scope="session", params=["canonical-helicity", "helicity"])
-def reaction(request: SubRequest) -> ReactionInfo:
+def jpsi2pksigma_reaction(request: SubRequest) -> ReactionInfo:  # cspell:ignore pksigma
     return qrules.generate_transitions(
         initial_state=[("J/psi(1S)", [+1])],
         final_state=["K0", ("Sigma+", [+0.5]), ("p~", [+0.5])],
@@ -28,7 +30,37 @@ def reaction(request: SubRequest) -> ReactionInfo:
     )
 
 
-def test_filter_min_ls(reaction: ReactionInfo):
+@pytest.fixture(scope="session")
+def xib2pkk_reaction() -> ReactionInfo:
+    reaction = qrules.generate_transitions(
+        initial_state="Xi(b)-",
+        final_state=["p", "K-", "K-"],
+        allowed_intermediate_particles=["Lambda(1520)"],
+        formalism="helicity",
+    )
+    reaction = normalize_state_ids(reaction)
+    swapped_transitions = tuple(
+        attrs.evolve(t, topology=t.topology.swap_edges(2, 3))
+        for t in reaction.transitions
+    )
+    return qrules.transition.ReactionInfo(
+        transitions=reaction.transitions + swapped_transitions,
+        formalism=reaction.formalism,
+    )
+
+
+def test_convert_transitions(xib2pkk_reaction: ReactionInfo):
+    reaction = xib2pkk_reaction
+    assert reaction.get_intermediate_particles().names == ["Lambda(1520)"]
+    assert len(reaction.transitions) == 16
+    transitions = convert_transitions(reaction.transitions)
+    assert len(transitions) == 2
+    decay = to_three_body_decay(transitions, min_ls=True)
+    assert len(decay.chains) == 2
+
+
+def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
+    reaction = jpsi2pksigma_reaction
     transitions = tuple(
         t for t in reaction.transitions if t.states[3].spin_projection == +0.5
     )
@@ -64,8 +96,8 @@ def test_filter_min_ls(reaction: ReactionInfo):
         ]
 
 
-def test_normalize_state_ids_reaction(reaction: ReactionInfo):
-    reaction012 = reaction
+def test_normalize_state_ids_reaction(jpsi2pksigma_reaction: ReactionInfo):
+    reaction012 = jpsi2pksigma_reaction
     reaction123 = normalize_state_ids(reaction012)
     assert set(reaction123.initial_state) == {0}
     assert set(reaction123.final_state) == {1, 2, 3}
@@ -86,7 +118,8 @@ def test_normalize_state_ids_reaction(reaction: ReactionInfo):
 
 
 @pytest.mark.parametrize("min_ls", [False, True])
-def test_to_three_body_decay(reaction: ReactionInfo, min_ls: bool):
+def test_to_three_body_decay(jpsi2pksigma_reaction: ReactionInfo, min_ls: bool):
+    reaction = normalize_state_ids(jpsi2pksigma_reaction)
     decay = to_three_body_decay(reaction.transitions, min_ls)
     assert decay.initial_state.name == "J/psi(1S)"
     assert {i: p.name for i, p in decay.final_state.items()} == {

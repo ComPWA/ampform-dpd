@@ -36,10 +36,14 @@ EXECUTE_NB = get_execution_mode() != "off"
 add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions: dict[str, str | tuple[str, str]] = {
+    "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
+    "DecayNode": ("obj", "ampform_dpd.decay.DecayNode"),
+    "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
+    "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FrozenTransition": "qrules.topology.FrozenTransition",
+    "InitialStateID": ("obj", "ampform_dpd.decay.InitialStateID"),
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
-    "OuterStates": ("obj", "ampform_dpd.decay.OuterStates"),
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PoolSum": "ampform.sympy.PoolSum",
@@ -51,6 +55,8 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
+    "StateID": ("obj", "ampform_dpd.decay.StateID"),
+    "StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
 }
 api_target_types: dict[str, str] = {}
 author = "Common Partial Wave Analysis"

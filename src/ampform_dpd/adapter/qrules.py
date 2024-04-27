@@ -10,12 +10,14 @@ import attrs
 import qrules
 from qrules.quantum_numbers import InteractionProperties
 from qrules.topology import EdgeType, FrozenTransition, NodeType
-from qrules.transition import ReactionInfo, State, StateTransition, Topology
+from qrules.transition import ReactionInfo, StateTransition, Topology
 
 from ampform_dpd.decay import (
     IsobarNode,
     LSCoupling,
     Particle,
+    State,
+    StateIDTemplate,
     ThreeBodyDecay,
     ThreeBodyDecayChain,
 )
@@ -36,23 +38,26 @@ def to_three_body_decay(
     ) != {1, 2, 3}:
         transitions = normalize_state_ids(transitions)
         _LOGGER.warning("Relabeled initial state to 0 and final states to 1, 2, 3")
-    transitions = convert_edges_and_nodes(transitions)
+    transitions = convert_transitions(transitions)
     if min_ls:
         transitions = filter_min_ls(transitions)
     some_transition = transitions[0]
-    initial_state, *_ = some_transition.initial_states.values()
-    final_states = {
-        i: some_transition.final_states[idx]
-        for i, idx in enumerate(sorted(some_transition.final_states), 1)
-    }
+    (initial_state_id, initial_state), *_ = some_transition.initial_states.items()
+    outer_states = (
+        _to_state(initial_state, index=initial_state_id),  # type:ignore[type-var]
+        *[
+            _to_state(particle, index=idx)  # type:ignore[type-var]
+            for idx, particle in some_transition.final_states.items()
+        ],
+    )
     return ThreeBodyDecay(
-        states={0: initial_state, **final_states},  # type:ignore[dict-item]
-        chains=tuple(sorted(to_decay_chain(t) for t in transitions)),
+        states={state.index: state for state in outer_states},  # type:ignore[misc]
+        chains=tuple(sorted(_to_decay_chain(t) for t in transitions)),
     )
 
 
-def to_decay_chain(
-    transition: FrozenTransition[Particle, LSCoupling | None],
+def _to_decay_chain(
+    transition: FrozenTransition[Particle | State, LSCoupling | None],
 ) -> ThreeBodyDecayChain:
     if len(transition.initial_states) != 1:
         msg = f"Can only handle one initial state, but got {len(transition.initial_states)}"
@@ -64,48 +69,56 @@ def to_decay_chain(
         msg = f"There are {len(transition.interactions)} interaction nodes, so this can't be a three-body decay"
         raise ValueError(msg)
     topology = transition.topology
-    spectator_id, resonance_id = sorted(topology.get_edge_ids_outgoing_from_node(0))
-    resonance_id, *_ = sorted(topology.get_edge_ids_ingoing_to_node(1))
-    child1_id, child2_id = sorted(topology.get_edge_ids_outgoing_from_node(1))
     parent, *_ = transition.initial_states.values()
+    spectator_id, resonance_id = sorted(topology.get_edge_ids_outgoing_from_node(0))
+    child1_id, child2_id = sorted(topology.get_edge_ids_outgoing_from_node(1))
+    resonance_id, *_ = sorted(topology.get_edge_ids_ingoing_to_node(1))
     production_node, decay_node = transition.interactions.values()
-    isobar = IsobarNode(
-        parent=parent,
-        child1=IsobarNode(
-            parent=transition.states[resonance_id],
-            child1=transition.states[child1_id],
-            child2=transition.states[child2_id],
-            interaction=decay_node,
-        ),
-        child2=transition.states[spectator_id],
-        interaction=production_node,
-    )
-    return ThreeBodyDecayChain(decay=isobar)
-
-
-def convert_edges_and_nodes(
-    transitions: Iterable[FrozenTransition],
-) -> tuple[FrozenTransition[Particle, LSCoupling | None], ...]:
-    unique_transitions = {
-        transition.convert(
-            state_converter=_convert_edge,
-            interaction_converter=_convert_node,
+    return ThreeBodyDecayChain(
+        decay=IsobarNode(
+            parent=parent,
+            child1=IsobarNode(
+                parent=transition.states[resonance_id],
+                child1=transition.states[child1_id],  # type:ignore[arg-type]
+                child2=transition.states[child2_id],  # type:ignore[arg-type]
+                interaction=decay_node,
+            ),
+            child2=transition.states[spectator_id],  # type:ignore[arg-type]
+            interaction=production_node,
         )
-        for transition in transitions
-    }
+    )
+
+
+def convert_transitions(
+    transitions: Iterable[FrozenTransition],
+) -> tuple[FrozenTransition[Particle | State, LSCoupling | None], ...]:
+    unique_transitions = {_convert_transition(t) for t in transitions}
     return tuple(sorted(unique_transitions))
 
 
-def _convert_edge(state: Any) -> Particle:
-    if isinstance(state, Particle):
-        return state
-    if not isinstance(state, State):
-        msg = f"Cannot convert state of type {type(state)}"
-        raise NotImplementedError(msg)
-    particle = state.particle
-    if particle.parity is None:
-        msg = f"Cannot convert particle {particle.name} with undefined parity"
-        raise NotImplementedError(msg)
+def _convert_transition(
+    transition: FrozenTransition,
+) -> FrozenTransition[Particle | State, LSCoupling | None]:
+    return FrozenTransition(
+        transition.topology,
+        states={
+            index: _to_particle(state)
+            if index in transition.intermediate_states
+            else _to_state(state, index=index)  # type:ignore[type-var]
+            for index, state in transition.states.items()
+        },
+        interactions={
+            i: _to_ls_coupling(interaction)
+            for i, interaction in transition.interactions.items()
+        },
+    )
+
+
+def _to_particle(
+    particle: qrules.particle.Particle | qrules.transition.State,
+) -> Particle:
+    if isinstance(particle, qrules.transition.State):
+        particle = particle.particle
     return Particle(
         name=particle.name,
         latex=particle.name if particle.latex is None else particle.latex,
@@ -116,7 +129,29 @@ def _convert_edge(state: Any) -> Particle:
     )
 
 
-def _convert_node(node: Any) -> LSCoupling | None:
+def _to_state(obj: Any, index: StateIDTemplate | None = None):
+    if isinstance(obj, qrules.transition.State):
+        obj = obj.particle
+    if isinstance(obj, State):
+        index = obj.index
+    if index is None:
+        msg = f"Cannot create a {State} from a {type(obj)} without an index"
+        raise ValueError(msg)
+    if not isinstance(obj, Particle) and not isinstance(obj, qrules.particle.Particle):
+        msg = f"Cannot convert object of type {type(obj)} to a {State}"
+        raise NotImplementedError(msg)
+    return State(
+        name=obj.name,
+        latex=obj.name if obj.latex is None else obj.latex,  # pyright:ignore[reportUnnecessaryComparison]
+        spin=obj.spin,
+        parity=int(obj.parity),  # type:ignore[arg-type]
+        mass=obj.mass,
+        width=obj.width,
+        index=index,
+    )
+
+
+def _to_ls_coupling(node: Any) -> LSCoupling | None:
     if node is None:
         return None
     if isinstance(node, LSCoupling):
@@ -137,8 +172,11 @@ def filter_min_ls(
 ) -> tuple[FrozenTransition[EdgeType, NodeType], ...]:
     grouped_transitions = defaultdict(list)
     for transition in transitions:
-        resonances = tuple(transition.intermediate_states.values())
-        grouped_transitions[resonances].append(transition)
+        key = tuple(
+            (state, _get_decay_product_ids(transition.topology, resonance_id))
+            for resonance_id, state in transition.intermediate_states.items()
+        )
+        grouped_transitions[key].append(transition)
     min_transitions = []
     for group in grouped_transitions.values():
         transition, *_ = group
@@ -154,6 +192,14 @@ def filter_min_ls(
         )
         min_transitions.append(min_transition)
     return tuple(min_transitions)
+
+
+def _get_decay_product_ids(topology: Topology, resonance_id: int) -> tuple[int, ...]:
+    node_id = topology.edges[resonance_id].ending_node_id
+    if node_id is None:
+        msg = f"Resonance graph edge {resonance_id} has no ending node"
+        raise ValueError(msg)
+    return tuple(sorted(topology.get_originating_final_state_edge_ids(node_id)))
 
 
 def load_particles() -> qrules.particle.ParticleCollection:

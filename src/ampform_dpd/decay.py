@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import TYPE_CHECKING, Dict, Literal, TypeVar
+from textwrap import dedent
+from typing import TYPE_CHECKING, Generic, Literal, TypeVar, overload
 
 from attrs import field, frozen
 from attrs.validators import instance_of
@@ -12,6 +13,16 @@ from ampform_dpd._attrs import assert_spin_value, to_chains, to_ls, to_rational
 
 if TYPE_CHECKING:
     import sympy as sp
+
+
+InitialStateID = Literal[0]
+"""ID for the initial state particle in a three-body decay."""
+FinalStateID = Literal[1, 2, 3]
+"""ID for a particle in the final state of a three-body decay."""
+StateID = Literal[0, 1, 2, 3]
+"""ID for any of the initial state or final state particles in a three-body decay."""
+StateIDTemplate = TypeVar("StateIDTemplate", InitialStateID, FinalStateID, StateID)
+"""Generic template for the ID of a particle in a three-body decay."""
 
 
 @frozen(order=True)
@@ -25,25 +36,41 @@ class Particle:
 
 
 @frozen(order=True)
-class IsobarNode:
-    parent: Particle
-    child1: Particle | IsobarNode
-    child2: Particle | IsobarNode
+class State(Particle, Generic[StateIDTemplate]):
+    """Initial or final state `.Particle` in a `ThreeBodyDecay`, carrying an index."""
+
+    index: StateIDTemplate
+
+
+InitialState = State[InitialStateID]
+"""The initial state particle."""
+FinalState = State[FinalStateID]
+"""One of the final state particles."""
+ParentType = TypeVar("ParentType", Particle, InitialState)
+"""Type of the parent of an `IsobarNode`."""
+
+
+@frozen(order=True)
+class IsobarNode(Generic[ParentType]):
+    parent: ParentType
+    child1: IsobarNode[Particle] | FinalState
+    child2: IsobarNode[Particle] | FinalState
     interaction: LSCoupling | None = field(default=None, converter=to_ls)
 
     @property
-    def children(
-        self,
-    ) -> tuple[
-        Particle | IsobarNode,
-        Particle | IsobarNode,
-    ]:
+    def children(self) -> tuple[DecayNode | FinalState, DecayNode | FinalState]:
         return self.child1, self.child2
+
+
+ProductionNode = IsobarNode[InitialState]
+"""The first `IsobarNode` in a `ThreeBodyDecayChain`."""
+DecayNode = IsobarNode[Particle]
+"""The second `IsobarNode` in a `ThreeBodyDecayChain`."""
 
 
 @frozen
 class ThreeBodyDecay:
-    states: OuterStates
+    states: dict[StateID, State[StateID]]
     chains: tuple[ThreeBodyDecayChain, ...] = field(converter=to_chains)
 
     def __attrs_post_init__(self) -> None:
@@ -51,30 +78,36 @@ class ThreeBodyDecay:
         expected_final_state = set(self.final_state.values())
         for i, chain in enumerate(self.chains):
             if chain.parent != expected_initial_state:
-                msg = (
-                    f"Chain {i} has initial state {chain.parent.name}, but should have"
-                    f" {expected_initial_state.name}"
-                )
+                msg = dedent(f"""
+                    Chain {i} has initial state
+                      {chain.parent.index}: {chain.parent.name}
+                    but should have
+                      {expected_initial_state.index}: {expected_initial_state.name}
+                """).strip()
                 raise ValueError(msg)
             final_state = {chain.spectator, *chain.decay_products}
             if final_state != expected_final_state:
 
-                def to_str(s):
-                    return ", ".join(p.name for p in s)
+                def to_str(s: set[FinalState]) -> str:
+                    return ", ".join(
+                        f"{p.index}: {p.name}" for p in sorted(s, key=lambda x: x.index)
+                    )
 
-                msg = (
-                    f"Chain {i} has final state {to_str(final_state)}, but should have"
-                    f" {to_str(expected_final_state)}"
-                )
+                msg = dedent(f"""
+                    Chain {i} has final state
+                       {to_str(final_state)}
+                    but should have
+                       {to_str(expected_final_state)}
+                """).strip()
                 raise ValueError(msg)
 
     @property
-    def initial_state(self) -> Particle:
-        return self.states[0]
+    def initial_state(self) -> InitialState:
+        return self.states[0]  # type:ignore[return-value]
 
     @property
-    def final_state(self) -> dict[Literal[1, 2, 3], Particle]:
-        return {k: v for k, v in self.states.items() if k != 0}
+    def final_state(self) -> dict[FinalStateID, FinalState]:
+        return {s.index: s for s in self.states.values() if s.index != 0}  # type:ignore[misc]
 
     def find_chain(self, resonance_name: str) -> ThreeBodyDecayChain:
         for chain in self.chains:
@@ -83,7 +116,7 @@ class ThreeBodyDecay:
         msg = f"No decay chain found for resonance {resonance_name}"
         raise KeyError(msg)
 
-    def get_subsystem(self, subsystem_id: Literal[1, 2, 3]) -> ThreeBodyDecay:
+    def get_subsystem(self, subsystem_id: FinalStateID) -> ThreeBodyDecay:
         child1_id, child2_id = get_decay_product_ids(subsystem_id)
         child1 = self.final_state[child1_id]
         child2 = self.final_state[child2_id]
@@ -96,8 +129,8 @@ class ThreeBodyDecay:
 
 
 def get_decay_product_ids(
-    spectator_id: Literal[1, 2, 3],
-) -> tuple[Literal[1, 2, 3], Literal[1, 2, 3]]:
+    spectator_id: FinalStateID,
+) -> tuple[FinalStateID, FinalStateID]:
     if spectator_id == 1:
         return 2, 3
     if spectator_id == 2:  # noqa: PLR2004
@@ -108,37 +141,54 @@ def get_decay_product_ids(
     raise ValueError(msg)
 
 
-OuterStates = Dict[Literal[0, 1, 2, 3], Particle]
-"""Mapping of the initial and final state IDs to their `.Particle` definition."""
-
-
 @frozen(order=True)
 class ThreeBodyDecayChain:
-    decay: IsobarNode = field(validator=instance_of(IsobarNode))
+    decay: ProductionNode = field(validator=instance_of(IsobarNode))
+
+    def __attrs_post_init__(self) -> None:
+        outer_states: list[State[StateID]] = [self.initial_state, *self.final_state]  # type:ignore[list-item]
+        for state in outer_states:
+            if not isinstance(state, State):
+                msg = f"Not all particles in the initial or final state are not type {State.__name__}"
+                raise TypeError(msg)
+        if len({state.index for state in outer_states}) != 4:  # noqa: PLR2004
+            msg = "The initial and/or final state contains particles with the same ID:"
+            for state in outer_states:
+                msg += f"\n  {state.index}: {state.name}"
+            raise ValueError(msg)
 
     @property
-    def parent(self) -> Particle:
-        return self.decay.parent
+    def initial_state(self) -> InitialState:
+        return self.parent
+
+    @property
+    @lru_cache(maxsize=None)  # noqa: B019
+    def final_state(self) -> tuple[FinalState, FinalState, FinalState]:
+        final_state = (*self.decay_products, self.spectator)
+        return tuple(sorted(final_state, key=lambda x: x.index))  # type:ignore[return-value]
+
+    @property
+    def parent(self) -> InitialState:
+        return self.decay.parent  # type:ignore[return-value]
 
     @property
     def resonance(self) -> Particle:
-        decay_node: IsobarNode = self._get_child_of_type(IsobarNode)
-        return to_particle(decay_node)
+        return to_particle(self.decay_node)
 
     @property
-    def decay_node(self) -> IsobarNode:
+    def decay_node(self) -> DecayNode:
         return self._get_child_of_type(IsobarNode)
 
     @property
-    def decay_products(self) -> tuple[Particle, Particle]:
-        return (
+    def decay_products(self) -> tuple[FinalState, FinalState]:
+        return (  # type:ignore[return-value]
             to_particle(self.decay_node.child1),
             to_particle(self.decay_node.child2),
         )
 
     @property
-    def spectator(self) -> Particle:
-        return self._get_child_of_type(Particle)
+    def spectator(self) -> FinalState:
+        return self._get_child_of_type(State)
 
     @lru_cache(maxsize=None)  # noqa: B019
     def _get_child_of_type(self, typ: type[T]) -> T:
@@ -154,11 +204,10 @@ class ThreeBodyDecayChain:
 
     @property
     def outgoing_ls(self) -> LSCoupling | None:
-        decay_node: IsobarNode = self._get_child_of_type(IsobarNode)
-        return decay_node.interaction
+        return self.decay_node.interaction
 
 
-T = TypeVar("T", Particle, IsobarNode)
+T = TypeVar("T", IsobarNode, Particle, InitialState, FinalState)
 
 
 @frozen(order=True)
@@ -167,7 +216,13 @@ class LSCoupling:
     S: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
 
 
-def to_particle(isobar: IsobarNode | Particle) -> Particle:
+@overload
+def to_particle(isobar: IsobarNode[ParentType]) -> ParentType: ...
+@overload
+def to_particle(isobar: State[StateIDTemplate]) -> State[StateIDTemplate]: ...
+@overload
+def to_particle(isobar: Particle) -> Particle: ...
+def to_particle(isobar):
     if isinstance(isobar, IsobarNode):
         return isobar.parent
     return isobar
