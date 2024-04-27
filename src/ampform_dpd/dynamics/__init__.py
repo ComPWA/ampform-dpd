@@ -5,8 +5,39 @@ from __future__ import annotations
 from typing import Any
 
 import sympy as sp
+from ampform.dynamics import formulate_form_factor
 from ampform.kinematics.phasespace import Kallen
 from ampform.sympy import unevaluated
+
+
+@unevaluated
+class RelativisticBreitWigner(sp.Expr):
+    s: Any
+    mass0: Any
+    gamma0: Any
+    m1: Any
+    m2: Any
+    angular_momentum: Any
+    meson_radius: Any
+    _latex_repr_ = (
+        R"\mathcal{{R}}_{{{angular_momentum}}}\left({s}, {mass0}, {gamma0}\right)"
+    )
+
+    def evaluate(self):
+        from ampform.dynamics import EnergyDependentWidth  # noqa: PLC0415
+
+        s, m0, w0, m1, m2, angular_momentum, meson_radius = self.args
+        width = EnergyDependentWidth(
+            s=s,
+            mass0=m0,
+            gamma0=w0,
+            m_a=m1,
+            m_b=m2,
+            angular_momentum=angular_momentum,
+            meson_radius=meson_radius,
+            name=Rf"\Gamma_{{{sp.latex(angular_momentum)}}}",
+        )
+        return (m0 * w0) / (m0**2 - s - width * m0 * sp.I)
 
 
 @unevaluated
@@ -150,3 +181,24 @@ class BlattWeisskopf(sp.Expr):
         return sp.Piecewise(*[
             (sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()
         ])
+
+
+@unevaluated
+class FormFactor(sp.Expr):
+    s: Any
+    m1: Any
+    m2: Any
+    angular_momentum: Any
+    meson_radius: Any
+
+    _latex_repr_ = R"\mathcal{{F}}_{{{angular_momentum}}}\left({s}, {m1}, {m2}\right)"
+
+    def evaluate(self):
+        s, m1, m2, angular_momentum, meson_radius = self.args
+        return formulate_form_factor(
+            s=s,
+            m_a=m1,
+            m_b=m2,
+            angular_momentum=angular_momentum,
+            meson_radius=meson_radius,
+        )
