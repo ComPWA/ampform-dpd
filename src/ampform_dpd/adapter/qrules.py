@@ -146,7 +146,9 @@ def filter_min_ls(
             topology=transition.topology,
             states=transition.states,
             interactions={
-                i: min(t.interactions[i] for t in group)  # type:ignore[type-var]
+                i: None
+                if any(t.interactions[i] is None for t in group)
+                else min(t.interactions[i] for t in group)  # type:ignore[type-var]
                 for i in transition.interactions
             },
         )

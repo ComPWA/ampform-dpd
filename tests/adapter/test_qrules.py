@@ -13,17 +13,18 @@ from ampform_dpd.adapter.qrules import (
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
+    from _pytest.fixtures import SubRequest
     from qrules.transition import ReactionInfo, StateTransition
 
 
-@pytest.fixture(scope="session")
-def reaction() -> ReactionInfo:
+@pytest.fixture(scope="session", params=["canonical-helicity", "helicity"])
+def reaction(request: SubRequest) -> ReactionInfo:
     return qrules.generate_transitions(
         initial_state=[("J/psi(1S)", [+1])],
         final_state=["K0", ("Sigma+", [+0.5]), ("p~", [+0.5])],
         allowed_interaction_types="strong",
         allowed_intermediate_particles=["Sigma(1660)"],
-        formalism="canonical-helicity",
+        formalism=request.param,
     )
 
 
@@ -33,25 +34,34 @@ def test_filter_min_ls(reaction: ReactionInfo):
     )
 
     ls_couplings = [_get_couplings(t) for t in transitions]
-    assert ls_couplings == [
-        (
-            {"L": 0, "S": 1.0},
-            {"L": 1, "S": 0.5},
-        ),
-        (
-            {"L": 2, "S": 1.0},
-            {"L": 1, "S": 0.5},
-        ),
-    ]
+    if reaction.formalism == "canonical-helicity":
+        assert len(ls_couplings) == 2
+        assert ls_couplings == [
+            (
+                {"L": 0, "S": 1.0},
+                {"L": 1, "S": 0.5},
+            ),
+            (
+                {"L": 2, "S": 1.0},
+                {"L": 1, "S": 0.5},
+            ),
+        ]
+    else:
+        assert len(ls_couplings) == 1
+        for ls_coupling in ls_couplings:
+            for ls in ls_coupling:
+                assert ls == {"L": None, "S": None}
 
     min_ls_transitions = filter_min_ls(transitions)
     ls_couplings = [_get_couplings(t) for t in min_ls_transitions]
-    assert ls_couplings == [
-        (
-            {"L": 0, "S": 1.0},
-            {"L": 1, "S": 0.5},
-        ),
-    ]
+    assert len(ls_couplings) == 1
+    if reaction.formalism == "canonical-helicity":
+        assert ls_couplings == [
+            (
+                {"L": 0, "S": 1.0},
+                {"L": 1, "S": 0.5},
+            ),
+        ]
 
 
 def test_normalize_state_ids_reaction(reaction: ReactionInfo):
@@ -84,14 +94,19 @@ def test_to_three_body_decay(reaction: ReactionInfo, min_ls: bool):
         2: "Sigma+",
         3: "p~",
     }
-    if min_ls:
+    if reaction.formalism == "canonical-helicity":
+        if min_ls:
+            assert len(decay.chains) == 1
+            assert decay.chains[0].incoming_ls == LSCoupling(L=0, S=1)
+            assert decay.chains[0].outgoing_ls == LSCoupling(L=1, S=0.5)
+        else:
+            assert len(decay.chains) == 2
+            assert decay.chains[1].incoming_ls == LSCoupling(L=2, S=1)
+            assert decay.chains[1].outgoing_ls == LSCoupling(L=1, S=0.5)
+    elif reaction.formalism == "helicity":
         assert len(decay.chains) == 1
-        assert decay.chains[0].incoming_ls == LSCoupling(L=0, S=1)
-        assert decay.chains[0].outgoing_ls == LSCoupling(L=1, S=0.5)
-    else:
-        assert len(decay.chains) == 2
-        assert decay.chains[1].incoming_ls == LSCoupling(L=2, S=1)
-        assert decay.chains[1].outgoing_ls == LSCoupling(L=1, S=0.5)
+        assert decay.chains[0].incoming_ls is None
+        assert decay.chains[0].outgoing_ls is None
     for chain in decay.chains:
         assert isinstance(chain.resonance, Particle)
         assert chain.resonance.name == "Sigma(1660)~-"
