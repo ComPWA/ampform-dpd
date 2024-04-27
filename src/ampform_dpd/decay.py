@@ -176,6 +176,10 @@ class ThreeBodyDecayChain:
         return to_particle(self.decay_node)
 
     @property
+    def production_node(self) -> ProductionNode:
+        return self.decay
+
+    @property
     def decay_node(self) -> DecayNode:
         return self._get_child_of_type(IsobarNode)
 
