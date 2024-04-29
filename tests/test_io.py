@@ -40,16 +40,16 @@ def test_aslatex_particle():
 def test_aslatex_isobar_node():
     node = IsobarNode(Λ1520, p, K)
     latex = aslatex(node)
-    assert latex == R"\Lambda(1520) \to p K^-"
+    assert latex == R"\left(\Lambda(1520) \to p K^-\right)"
     latex = aslatex(node, with_jp=True)
-    assert (
-        latex == R"\Lambda(1520)\left[\frac{3}{2}^-\right] \to"
-        R" p\left[\frac{1}{2}^+\right] K^-\left[0^-\right]"
-    )
+    expected = R"""
+    \left(\Lambda(1520)\left[\frac{3}{2}^-\right] \to p\left[\frac{1}{2}^+\right] K^-\left[0^-\right]\right)
+    """.strip()
+    assert latex == expected
 
     node = IsobarNode(Λ1520, p, K, interaction=(2, 1))
     latex = aslatex(node)
-    assert latex == R"\Lambda(1520) \xrightarrow[S=1]{L=2} p K^-"
+    assert latex == R"\left(\Lambda(1520) \xrightarrow[S=1]{L=2} p K^-\right)"
 
 
 @pytest.mark.parametrize(

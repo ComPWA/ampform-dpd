@@ -108,7 +108,10 @@ def _(obj: IsobarNode, **kwargs) -> str:
     to = render_arrow(obj)
     child1 = aslatex(obj.child1, **kwargs)
     child2 = aslatex(obj.child2, **kwargs)
-    return Rf"{parent} {to} {child1} {child2}"
+    latex = Rf"{parent} {to} {child1} {child2}"
+    if isinstance(obj.parent, State):
+        return latex
+    return Rf"\left({latex}\right)"
 
 
 @aslatex.register(ThreeBodyDecay)
