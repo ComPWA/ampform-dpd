@@ -34,7 +34,13 @@ from ampform.sympy import (
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
 from ampform_dpd._cache import get_readable_hash, get_system_cache_directory
-from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+from ampform_dpd.decay import (
+    IsobarNode,
+    Particle,
+    State,
+    ThreeBodyDecay,
+    ThreeBodyDecayChain,
+)
 
 if TYPE_CHECKING:
     from tensorwaves.function import (
@@ -139,7 +145,7 @@ def as_markdown_table(obj: Sequence) -> str:
     if isinstance(obj, ThreeBodyDecay):
         return _as_decay_markdown_table(obj.chains)
     item_type = _determine_item_type(obj)
-    if item_type is Particle:
+    if item_type in {Particle, State}:
         return _as_resonance_markdown_table(obj)
     if item_type is ThreeBodyDecayChain:
         return _as_decay_markdown_table(obj)
@@ -162,7 +168,7 @@ def _determine_item_type(obj) -> type:
     return item_type
 
 
-def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
+def _as_resonance_markdown_table(items: Sequence[Particle | State]) -> str:
     column_names = [
         "name",
         "LaTeX",
@@ -170,6 +176,9 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
         "mass (MeV)",
         "width (MeV)",
     ]
+    render_index = any(isinstance(i, State) for i in items)
+    if render_index:
+        column_names.insert(0, "index")
     src = _create_markdown_table_header(column_names)
     for particle in items:
         row_items = [
@@ -179,6 +188,8 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
             f"{int(1e3 * particle.mass):,.0f}",
             f"{int(1e3 * particle.width):,.0f}",
         ]
+        if render_index and isinstance(particle, State):
+            row_items.insert(0, particle.index)
         src += _create_markdown_table_row(row_items)
     return src
 

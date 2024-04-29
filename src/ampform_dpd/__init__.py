@@ -16,13 +16,14 @@ from sympy.physics.quantum.spin import Rotation as Wigner
 
 from ampform_dpd.angles import formulate_scattering_angle, formulate_zeta_angle
 from ampform_dpd.decay import (
+    FinalStateID,
     IsobarNode,
     LSCoupling,
     Particle,
     ThreeBodyDecay,
     ThreeBodyDecayChain,
     get_decay_product_ids,
-    get_particle,
+    to_particle,
 )
 from ampform_dpd.io import (
     simplify_latex_rendering,  # noqa: F401  # pyright:ignore[reportUnusedImport]
@@ -77,7 +78,7 @@ class DalitzPlotDecompositionBuilder:
 
     def formulate(
         self,
-        reference_subsystem: Literal[1, 2, 3] = 1,
+        reference_subsystem: FinalStateID = 1,
         cleanup_summations: bool = False,
     ) -> AmplitudeModel:
         helicity_symbols: tuple[sp.Symbol, sp.Symbol, sp.Symbol, sp.Symbol] = (
@@ -130,7 +131,7 @@ class DalitzPlotDecompositionBuilder:
         λ1: sp.Rational,
         λ2: sp.Rational,
         λ3: sp.Rational,
-        subsystem_id: Literal[1, 2, 3],
+        subsystem_id: FinalStateID,
     ) -> AmplitudeModel:
         k = subsystem_id
         i, j = get_decay_product_ids(subsystem_id)
@@ -231,7 +232,7 @@ class DalitzPlotDecompositionBuilder:
         λ1: sp.Rational | sp.Symbol,
         λ2: sp.Rational | sp.Symbol,
         λ3: sp.Rational | sp.Symbol,
-        reference_subsystem: Literal[1, 2, 3] = 1,
+        reference_subsystem: FinalStateID = 1,
     ) -> tuple[PoolSum, dict[sp.Symbol, sp.Expr]]:
         wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
         _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
@@ -296,8 +297,8 @@ def _formulate_clebsch_gordan_factors(
         raise ValueError(msg)
     # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
     # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
-    child1 = get_particle(isobar.child1)
-    child2 = get_particle(isobar.child2)
+    child1 = to_particle(isobar.child1)
+    child2 = to_particle(isobar.child2)
     child1_helicity = helicities[child1]
     child2_helicity = helicities[child2]
     cg_ss = CG(
@@ -321,12 +322,12 @@ def _formulate_clebsch_gordan_factors(
 
 
 @lru_cache(maxsize=None)
-def _generate_amplitude_index_bases() -> dict[Literal[1, 2, 3], sp.IndexedBase]:
+def _generate_amplitude_index_bases() -> dict[FinalStateID, sp.IndexedBase]:
     return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # type:ignore[arg-type]
 
 
 class _AlignmentWignerGenerator:
-    def __init__(self, reference_subsystem: Literal[1, 2, 3] = 1) -> None:
+    def __init__(self, reference_subsystem: FinalStateID = 1) -> None:
         self.angle_definitions: dict[sp.Symbol, sp.acos] = {}
         self.reference_subsystem = reference_subsystem
 
@@ -409,8 +410,8 @@ def formulate_invariants(decay: ThreeBodyDecay) -> dict[sp.Symbol, sp.Expr]:
 
 def formulate_third_mandelstam(
     decay: ThreeBodyDecay,
-    x_mandelstam: Literal[1, 2, 3] = 1,
-    y_mandelstam: Literal[1, 2, 3] = 2,
+    x_mandelstam: FinalStateID = 1,
+    y_mandelstam: FinalStateID = 2,
 ) -> sp.Add:
     m0, m1, m2, m3 = create_mass_symbol_mapping(decay)
     sigma_x = sp.Symbol(f"sigma{x_mandelstam}", nonnegative=True)
