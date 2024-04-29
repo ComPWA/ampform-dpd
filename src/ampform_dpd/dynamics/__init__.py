@@ -45,7 +45,7 @@ class P(sp.Expr):
     s: Any
     mi: Any
     mj: Any
-    _latex_repr_ = R"p_{{{mi},{mj}}}\left({s}\right)"
+    _latex_repr_ = R"p_{{_{{{mi},{mj}}}}}\left({s}\right)"
 
     def evaluate(self):
         s, mi, mj = self.args
@@ -57,7 +57,7 @@ class Q(sp.Expr):
     s: Any
     m0: Any
     mk: Any
-    _latex_repr_ = R"q_{{{m0},{mk}}}\left({s}\right)"
+    _latex_repr_ = R"q_{{_{{{m0},{mk}}}}}\left({s}\right)"
 
     def evaluate(self):
         s, m0, mk = self.args
