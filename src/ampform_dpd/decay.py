@@ -117,14 +117,7 @@ class ThreeBodyDecay:
         raise KeyError(msg)
 
     def get_subsystem(self, subsystem_id: FinalStateID) -> ThreeBodyDecay:
-        child1_id, child2_id = get_decay_product_ids(subsystem_id)
-        child1 = self.final_state[child1_id]
-        child2 = self.final_state[child2_id]
-        filtered_chains = [
-            chain
-            for chain in self.chains
-            if chain.decay_products in {(child1, child2), (child2, child1)}
-        ]
+        filtered_chains = [c for c in self.chains if c.spectator.index == subsystem_id]
         return ThreeBodyDecay(self.states, filtered_chains)
 
 
