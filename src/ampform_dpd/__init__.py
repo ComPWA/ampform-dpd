@@ -93,7 +93,7 @@ class DalitzPlotDecompositionBuilder:
         parameter_defaults = {}
         args: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
         for args in product(*allowed_helicities.values()):  # type:ignore[assignment]
-            for sub_system in (1, 2, 3):
+            for sub_system in _get_subsystem_ids(self.decay):
                 chain_model = self.formulate_subsystem_amplitude(*args, sub_system)  # type:ignore[arg-type]
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)
@@ -239,27 +239,24 @@ class DalitzPlotDecompositionBuilder:
         j0, j1, j2, j3 = (self.decay.states[i].spin for i in sorted(self.decay.states))
         A = _generate_amplitude_index_bases()
         amp_expr = PoolSum(
-            A[1][_λ0, _λ1, _λ2, _λ3]
-            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=1)
-            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=1)
-            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=1)
-            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=1)
-            + A[2][_λ0, _λ1, _λ2, _λ3]
-            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=2)
-            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=2)
-            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=2)
-            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=2)
-            + A[3][_λ0, _λ1, _λ2, _λ3]
-            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=3)
-            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=3)
-            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=3)
-            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=3),
+            sum(
+                A[k][_λ0, _λ1, _λ2, _λ3]
+                * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=k)
+                * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=k)
+                * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=k)
+                * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=k)
+                for k in _get_subsystem_ids(self.decay)
+            ),
             (_λ0, create_spin_range(j0)),
             (_λ1, create_spin_range(j1)),
             (_λ2, create_spin_range(j2)),
             (_λ3, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions  # type:ignore[return-value]
+
+
+def _get_subsystem_ids(decay: ThreeBodyDecay) -> list[FinalStateID]:
+    return sorted({chain.spectator.index for chain in decay.chains})
 
 
 def _create_coupling_symbol(
