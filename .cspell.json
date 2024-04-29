@@ -23,6 +23,7 @@
     ".gitpod.*",
     ".pre-commit-config.yaml",
     ".prettierignore",
+    ".readthedocs.yml",
     ".vscode/*",
     ".vscode/.gitignore",
     "codecov.yml",
