@@ -5,6 +5,7 @@ from __future__ import annotations
 from functools import lru_cache
 from textwrap import dedent
 from typing import TYPE_CHECKING, Generic, Literal, TypeVar, overload
+from warnings import warn
 
 from attrs import field, frozen
 from attrs.validators import instance_of
@@ -13,7 +14,6 @@ from ampform_dpd._attrs import assert_spin_value, to_chains, to_ls, to_rational
 
 if TYPE_CHECKING:
     import sympy as sp
-
 
 InitialStateID = Literal[0]
 """ID for the initial state particle in a three-body decay."""
@@ -118,6 +118,19 @@ class ThreeBodyDecay:
 
     def get_subsystem(self, subsystem_id: FinalStateID) -> ThreeBodyDecay:
         filtered_chains = [c for c in self.chains if c.spectator.index == subsystem_id]
+        if not filtered_chains:
+            initial_state = self.initial_state.name
+            final_state = ", ".join(
+                f"{i}: {s.name}" for i, s in self.final_state.items()
+            )
+            subsystems = ", ".join(
+                sorted({str(c.spectator.index) for c in self.chains})
+            )
+            msg = (
+                f"Three-body decay {initial_state} → {final_state} only has subsystems"
+                f"{subsystems}, not {subsystem_id}"
+            )
+            warn(msg, category=UserWarning)
         return ThreeBodyDecay(self.states, filtered_chains)
 
 
