@@ -119,19 +119,21 @@ class ThreeBodyDecay:
     def get_subsystem(self, subsystem_id: FinalStateID) -> ThreeBodyDecay:
         filtered_chains = [c for c in self.chains if c.spectator.index == subsystem_id]
         if not filtered_chains:
-            initial_state = self.initial_state.name
-            final_state = ", ".join(
-                f"{i}: {s.name}" for i, s in self.final_state.items()
-            )
-            subsystems = ", ".join(
-                sorted({str(c.spectator.index) for c in self.chains})
-            )
-            msg = (
-                f"Three-body decay {initial_state} → {final_state} only has subsystems"
-                f"{subsystems}, not {subsystem_id}"
-            )
+            decay_description = _get_decay_description(self)
+            subsystems = ", ".join(sorted(str(i) for i in _get_subsystem_ids(self)))
+            msg = f"Decay {decay_description} only has subsystems {subsystems}, not {subsystem_id}"
             warn(msg, category=UserWarning)
         return ThreeBodyDecay(self.states, filtered_chains)
+
+
+def _get_decay_description(decay: ThreeBodyDecay) -> str:
+    initial_state = decay.initial_state.name
+    final_state = ", ".join(f"{i}: {s.name}" for i, s in decay.final_state.items())
+    return f"{initial_state} → {final_state}"
+
+
+def _get_subsystem_ids(decay: ThreeBodyDecay) -> set[FinalStateID]:
+    return {c.spectator.index for c in decay.chains}
 
 
 def get_decay_product_ids(
