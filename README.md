@@ -14,6 +14,6 @@
 [![Spelling checked](https://img.shields.io/badge/cspell-checked-brightgreen.svg)](https://github.com/streetsidesoftware/cspell/tree/master/packages/cspell)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-This repository is a (temporary) extension of [AmpForm](https://ampform.rtfd.io) and provides a symbolic implementation of Dalitz-plot decomposition ([10.1103/PhysRevD.101.034033](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033)) with [SymPy](https://www.sympy.org/en/index.html). It has been extracted from the [ComPWA/polarimetry](https://github.com/ComPWA/polarimetry) repository, which is not yet public.
+This repository is a (temporary) extension of [AmpForm](https://ampform.rtfd.io) and provides a symbolic implementation of Dalitz-plot decomposition ([10.1103/PhysRevD.101.034033](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033)) with [SymPy](https://www.sympy.org/en/index.html). It has been extracted from the [ComPWA/polarimetry](https://github.com/ComPWA/polarimetry) repository ([10.1007/JHEP07(2023)228](<https://doi.org/10.1007/JHEP07(2023)228>)).
 
 Installation instructions can be found [here](https://compwa.github.io/ampform-dpd/#installation).
