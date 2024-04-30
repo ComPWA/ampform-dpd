@@ -49,51 +49,6 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 
-@aslatex.register(complex)
-def _(obj: complex, **kwargs) -> str:
-    real = __downcast(obj.real)
-    imag = __downcast(obj.imag)
-    plus = "+" if imag >= 0 else ""
-    return f"{real}{plus}{imag}i"
-
-
-def __downcast(obj: float) -> float | int:
-    if obj.is_integer():
-        return int(obj)
-    return obj
-
-
-@aslatex.register(sp.Basic)
-def _(obj: sp.Basic, **kwargs) -> str:
-    return sp.latex(obj)
-
-
-@aslatex.register(abc.Mapping)
-def _(obj: Mapping, **kwargs) -> str:
-    if len(obj) == 0:
-        msg = "Need at least one dictionary item"
-        raise ValueError(msg)
-    latex = R"\begin{array}{rcl}" + "\n"
-    for lhs, rhs in obj.items():
-        latex += Rf"  {aslatex(lhs, **kwargs)} &=& {aslatex(rhs, **kwargs)} \\" + "\n"
-    latex += R"\end{array}"
-    return latex
-
-
-@aslatex.register(abc.Iterable)
-def _(obj: Iterable, **kwargs) -> str:
-    obj = list(obj)
-    if len(obj) == 0:
-        msg = "Need at least one item to render as LaTeX"
-        raise ValueError(msg)
-    latex = R"\begin{array}{c}" + "\n"
-    for item in obj:
-        item_latex = aslatex(item, **kwargs)
-        latex += Rf"  {item_latex} \\" + "\n"
-    latex += R"\end{array}"
-    return latex
-
-
 @aslatex.register(IsobarNode)
 def _(obj: IsobarNode, **kwargs) -> str:
     def render_arrow(node: IsobarNode) -> str:
