@@ -5,6 +5,7 @@ from __future__ import annotations
 from functools import lru_cache
 from itertools import product
 from typing import Literal, Protocol
+from warnings import warn
 
 import sympy as sp
 from ampform.kinematics.phasespace import compute_third_mandelstam
@@ -22,6 +23,8 @@ from ampform_dpd.decay import (
     Particle,
     ThreeBodyDecay,
     ThreeBodyDecayChain,
+    _get_decay_description,  # pyright:ignore[reportPrivateUsage]
+    _get_subsystem_ids,  # pyright:ignore[reportPrivateUsage]
     get_decay_product_ids,
     to_particle,
 )
@@ -81,6 +84,7 @@ class DalitzPlotDecompositionBuilder:
         reference_subsystem: FinalStateID = 1,
         cleanup_summations: bool = False,
     ) -> AmplitudeModel:
+        _check_reference_subsystems(self.decay, reference_subsystem)
         helicity_symbols: tuple[sp.Symbol, sp.Symbol, sp.Symbol, sp.Symbol] = (
             sp.symbols("lambda:4", rational=True)
         )
@@ -93,7 +97,7 @@ class DalitzPlotDecompositionBuilder:
         parameter_defaults = {}
         args: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
         for args in product(*allowed_helicities.values()):  # type:ignore[assignment]
-            for sub_system in (1, 2, 3):
+            for sub_system in _get_subsystem_ids(self.decay):
                 chain_model = self.formulate_subsystem_amplitude(*args, sub_system)  # type:ignore[arg-type]
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)
@@ -234,32 +238,40 @@ class DalitzPlotDecompositionBuilder:
         λ3: sp.Rational | sp.Symbol,
         reference_subsystem: FinalStateID = 1,
     ) -> tuple[PoolSum, dict[sp.Symbol, sp.Expr]]:
+        _check_reference_subsystems(self.decay, reference_subsystem)
         wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
         _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
         j0, j1, j2, j3 = (self.decay.states[i].spin for i in sorted(self.decay.states))
         A = _generate_amplitude_index_bases()
         amp_expr = PoolSum(
-            A[1][_λ0, _λ1, _λ2, _λ3]
-            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=1)
-            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=1)
-            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=1)
-            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=1)
-            + A[2][_λ0, _λ1, _λ2, _λ3]
-            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=2)
-            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=2)
-            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=2)
-            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=2)
-            + A[3][_λ0, _λ1, _λ2, _λ3]
-            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=3)
-            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=3)
-            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=3)
-            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=3),
+            sum(
+                A[k][_λ0, _λ1, _λ2, _λ3]
+                * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=k)
+                * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=k)
+                * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=k)
+                * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=k)
+                for k in _get_subsystem_ids(self.decay)
+            ),
             (_λ0, create_spin_range(j0)),
             (_λ1, create_spin_range(j1)),
             (_λ2, create_spin_range(j2)),
             (_λ3, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions  # type:ignore[return-value]
+
+
+def _check_reference_subsystems(
+    decay: ThreeBodyDecay, reference_subsystem: FinalStateID
+) -> None:
+    subsystem_ids = _get_subsystem_ids(decay)
+    if reference_subsystem not in subsystem_ids:
+        decay_description = _get_decay_description(decay)
+        subsystems = ", ".join(sorted(str(i) for i in _get_subsystem_ids(decay)))
+        msg = (
+            f"Decay {decay_description} only has subsystems {subsystems}. Are you"
+            f" sure you want to use subsystem {reference_subsystem} as reference?"
+        )
+        warn(msg, category=UserWarning)
 
 
 def _create_coupling_symbol(
