@@ -28,9 +28,6 @@ from typing import TYPE_CHECKING, Any, Iterable, Mapping, Sequence, overload
 import cloudpickle
 import sympy as sp
 from ampform.io import aslatex
-from ampform.sympy import (
-    perform_cached_doit,  # noqa: F401  # pyright:ignore[reportUnusedImport]
-)
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
 from ampform_dpd._cache import get_readable_hash, get_system_cache_directory
