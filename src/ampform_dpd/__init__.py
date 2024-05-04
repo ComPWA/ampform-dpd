@@ -41,7 +41,7 @@ class AmplitudeModel:
     amplitudes: dict[sp.Indexed, sp.Expr] = field(factory=dict)
     variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
     parameter_defaults: dict[sp.Symbol, float | complex] = field(factory=dict)
-    masses: dict[sp.Symbol, float | complex] = field(factory=dict)
+    masses: dict[sp.Symbol, float] = field(factory=dict)
     invariants: dict[sp.Symbol, sp.Expr] = field(factory=dict)
 
     @property
@@ -402,9 +402,7 @@ def formulate_non_resonant(
     return sp.Rational(1), {}
 
 
-def create_mass_symbol_mapping(
-    decay: ThreeBodyDecay,
-) -> dict[sp.Symbol, float | complex]:
+def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
     return {
         sp.Symbol(f"m{i}", nonnegative=True): decay.states[i].mass
         for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
