@@ -111,13 +111,34 @@ def as_markdown_table(obj: Sequence) -> str:
 
 
 def _determine_item_type(obj) -> type:
+    """Determine the type of the items in a sequence.
+
+    >>> _determine_item_type([1, 2, 3])
+    <class 'int'>
+    >>> _determine_item_type([True, False])
+    <class 'bool'>
+    >>> _determine_item_type([True, False, 1])
+    <class 'int'>
+    >>> _determine_item_type([3.14, 1 + 1j])
+    Traceback (most recent call last):
+        ...
+    ValueError: Not all items are of type float'
+    """
     if not isinstance(obj, abc.Sequence):
         return type(obj)
     if len(obj) < 1:
         msg = "Need at least one entry to render a table"
         raise ValueError(msg)
-    item_type = type(obj[0])
-    if not all(isinstance(i, item_type) for i in obj):
+    existing_types = {type(i) for i in obj}
+    existing_types = {
+        typ
+        for typ in existing_types
+        if not any(
+            typ is not other and issubclass(typ, other) for other in existing_types
+        )
+    }
+    item_type = next(iter(existing_types))
+    if len(existing_types) != 1:
         msg = f"Not all items are of type {item_type.__name__}"
         raise ValueError(msg)
     return item_type
