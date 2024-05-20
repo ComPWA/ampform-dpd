@@ -87,11 +87,13 @@ def _(obj: Particle, with_jp: bool = False, only_jp: bool = False, **kwargs) -> 
 
 
 def _render_jp(particle: Particle) -> str:
-    parity = "-" if particle.parity < 0 else "+"
     if particle.spin.denominator == 1:
         spin = sp.latex(particle.spin)
     else:
         spin = Rf"\frac{{{particle.spin.numerator}}}{{{particle.spin.denominator}}}"
+    if particle.parity is None:
+        return f"J={spin}"
+    parity = "-" if particle.parity < 0 else "+"
     return f"{spin}^{parity}"
 
 
