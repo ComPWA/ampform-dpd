@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
+from collections import abc
 from functools import lru_cache
 from itertools import product
-from typing import Literal, Protocol
+from typing import Any, Literal, Protocol
 from warnings import warn
 
 import sympy as sp
 from ampform.kinematics.phasespace import compute_third_mandelstam
 from ampform.sympy import PoolSum
-from attrs import field, frozen
+from attrs import define, field, frozen
 from sympy.core.symbol import Str
 from sympy.physics.quantum.spin import CG, WignerD
 from sympy.physics.quantum.spin import Rotation as Wigner
@@ -394,6 +395,29 @@ class DynamicsBuilder(Protocol):
     def __call__(
         self, decay_chain: ThreeBodyDecayChain
     ) -> tuple[sp.Expr, dict[sp.Symbol, float | complex]]: ...
+
+
+@define
+class DefinedExpression:
+    expression: sp.Expr = sp.S.One
+    definitions: dict[sp.Symbol, complex | float] = field(factory=dict)
+
+    def __mul__(self, other: Any) -> DefinedExpression:
+        if isinstance(other, DefinedExpression):
+            return DefinedExpression(
+                expression=self.expression * other.expression,
+                definitions={**self.definitions, **other.definitions},
+            )
+        if isinstance(other, abc.Sequence) and len(other) == 2:  # noqa: PLR2004
+            expression, definitions = other
+            return DefinedExpression(
+                expression=self.expression * expression,
+                definitions={**self.definitions, **definitions},
+            )
+        return DefinedExpression(
+            expression=self.expression * other,
+            definitions=self.definitions,
+        )
 
 
 def formulate_non_resonant(
