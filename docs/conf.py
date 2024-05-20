@@ -37,6 +37,7 @@ add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
+    "ampform_dpd.io.serialization.dynamics.T": "typing.TypeVar",
     "DecayNode": ("obj", "ampform_dpd.decay.DecayNode"),
     "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
