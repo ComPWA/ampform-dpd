@@ -58,6 +58,7 @@
     "eqref",
     "figsize",
     "fontsize",
+    "formfactor",
     "gcov",
     "graphviz",
     "ipykernel",
