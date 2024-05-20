@@ -32,6 +32,7 @@ dependencies = [
     "qrules >=0.10.0",
     "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
+    'typing-extensions; python_version <"3.11.0"',
 ]
 description = "Symbolic expressions for Dalitz-Plot Decomposition"
 dynamic = ["version"]
@@ -331,6 +332,7 @@ ignore-names = [
 ]
 "setup.py" = ["D100"]
 "src/ampform_dpd/io/__init__.py" = ["S403"]
+"src/ampform_dpd/io/serialization/format.py" = ["E741"]
 "tests/*" = [
     "D",
     "INP001",
