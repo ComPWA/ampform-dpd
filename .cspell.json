@@ -85,6 +85,7 @@
     "nbformat",
     "ncols",
     "ndarray",
+    "noqa",
     "noreply",
     "nrows",
     "pandoc",
