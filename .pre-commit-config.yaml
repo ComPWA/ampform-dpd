@@ -21,6 +21,7 @@ repos:
           - --extra-keys
           - |
             cell.attachments
+            cell.id
             cell.metadata.code_folding
             cell.metadata.editable
             cell.metadata.id
