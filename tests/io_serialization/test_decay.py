@@ -5,11 +5,14 @@ from typing import TYPE_CHECKING
 import sympy as sp
 
 from ampform_dpd.io.serialization.decay import (
-    _get_decay_chains,  # pyright:ignore[reportPrivateUsage]
+    get_decay_chains,  # pyright:ignore[reportPrivateUsage]
     get_final_state,
     get_initial_state,
+    get_states,
+    to_decay,
     to_decay_chain,
 )
+from ampform_dpd.io.serialization.format import ModelDefinition
 
 if TYPE_CHECKING:
     from ampform_dpd.io.serialization.format import ModelDefinition
@@ -32,8 +35,35 @@ def test_get_initial_state(model_definition: ModelDefinition):
     assert initial_state.parity is None
 
 
+def test_get_states(model_definition: ModelDefinition):
+    states = get_states(model_definition)
+    assert len(states) == 4
+    assert {i: s.name for i, s in states.items()} == {0: "Lc", 1: "p", 2: "pi", 3: "K"}
+
+
+def test_to_decay(model_definition: ModelDefinition):
+    decay = to_decay(model_definition)
+    assert decay.initial_state.name == "Lc"
+    assert {p.name for p in decay.final_state.values()} == {"p", "pi", "K"}
+    assert len(decay.chains) == 12
+    assert [c.resonance.name for c in decay.chains] == [
+        "D1232",
+        "D1600",
+        "D1700",
+        "K1430",
+        "K700",
+        "K892",
+        "L1405",
+        "L1520",
+        "L1600",
+        "L1670",
+        "L1690",
+        "L2000",
+    ]
+
+
 def test_to_decay_chain(model_definition: ModelDefinition):
-    chain_definitions = _get_decay_chains(model_definition)
+    chain_definitions = get_decay_chains(model_definition)
     chain = to_decay_chain(
         chain_definitions[0],
         initial_state=get_initial_state(model_definition),

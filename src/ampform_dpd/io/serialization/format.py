@@ -3,6 +3,7 @@ from __future__ import annotations
 import difflib
 import sys
 from typing import TYPE_CHECKING, Literal, TypedDict, Union
+from warnings import warn
 
 from ampform_dpd.decay import FinalStateID
 
@@ -123,6 +124,23 @@ class ChannelParameters(TypedDict):
     mb: float
     l: float
     d: float
+
+
+def get_decay_chains(model: ModelDefinition) -> list[DecayChain]:
+    distribution_def = get_distribution_def(model)
+    return distribution_def["decay_description"]["chains"]
+
+
+def get_distribution_def(model: ModelDefinition) -> Distribution:
+    distribution_defs = model["distributions"]
+    n_distributions = len(distribution_defs)
+    if n_distributions == 0:
+        msg = "The serialized model does not have any distributions"
+        raise ValueError(msg)
+    if n_distributions > 1:
+        msg = f"There are {n_distributions} distributions, but expecting one only"
+        warn(msg, category=UserWarning)
+    return distribution_defs[0]
 
 
 def get_function_definition(

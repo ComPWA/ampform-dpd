@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Callable, Iterable
-from warnings import warn
 
 import sympy as sp
 
@@ -14,11 +13,11 @@ from ampform_dpd.decay import (
     ThreeBodyDecay,
     ThreeBodyDecayChain,
 )
+from ampform_dpd.io.serialization.format import get_decay_chains, get_distribution_def
 
 if TYPE_CHECKING:
     from ampform_dpd.io.serialization.format import (
         DecayChain,
-        Distribution,
         ModelDefinition,
         StateDefinition,
         Vertex,
@@ -31,10 +30,10 @@ def to_decay(
     initial_state = get_initial_state(model, to_latex)
     final_state = get_final_state(model, to_latex)
     return ThreeBodyDecay(
-        states=_get_states(model, to_latex),
+        states=get_states(model, to_latex),
         chains=sorted({
             to_decay_chain(chain, initial_state, final_state, to_latex)
-            for chain in _get_decay_chains(model)
+            for chain in get_decay_chains(model)
         }),
     )
 
@@ -93,24 +92,7 @@ def __find_decay_product_ids(
     raise ValueError(msg)
 
 
-def _get_decay_chains(model: ModelDefinition) -> list[DecayChain]:
-    distribution_def = _get_distribution_def(model)
-    return distribution_def["decay_description"]["chains"]
-
-
-def _get_distribution_def(model: ModelDefinition) -> Distribution:
-    distribution_defs = model["distributions"]
-    n_distributions = len(distribution_defs)
-    if n_distributions == 0:
-        msg = "The serialized model does not have any distributions"
-        raise ValueError(msg)
-    if n_distributions > 1:
-        msg = f"There are {n_distributions} distributions, but expecting one only"
-        warn(msg, category=UserWarning)
-    return distribution_defs[0]
-
-
-def _get_states(
+def get_states(
     model: ModelDefinition, to_latex: Callable[[str], str] | None = None
 ) -> dict[StateID, State]:
     initial_state = get_initial_state(model, to_latex)
@@ -121,7 +103,7 @@ def _get_states(
 def get_initial_state(
     model: ModelDefinition, to_latex: Callable[[str], str] | None = None
 ) -> State:
-    distribution_def = _get_distribution_def(model)
+    distribution_def = get_distribution_def(model)
     decay_description = distribution_def["decay_description"]
     kinematics = decay_description["kinematics"]
     return _to_particle(kinematics["initial_state"], to_latex)
@@ -130,7 +112,7 @@ def get_initial_state(
 def get_final_state(
     model: ModelDefinition, to_latex: Callable[[str], str] | None = None
 ) -> dict[FinalStateID, State]:
-    distribution_def = _get_distribution_def(model)
+    distribution_def = get_distribution_def(model)
     decay_description = distribution_def["decay_description"]
     kinematics = decay_description["kinematics"]
     final_state_def = kinematics["final_state"]
