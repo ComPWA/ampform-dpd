@@ -178,9 +178,11 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
         R"$J^P$",
         R"mass (MeV)",
         R"width (MeV)",
-        R"$L_\mathrm{dec}^\mathrm{min}$",
-        R"$L_\mathrm{prod}^\mathrm{min}$",
     ]
+    if any(c.outgoing_ls is not None for c in decay_chains):
+        column_names.append(R"$L_\mathrm{dec}^\mathrm{min}$")
+    if any(c.incoming_ls is not None for c in decay_chains):
+        column_names.append(R"$L_\mathrm{prod}^\mathrm{min}$")
     src = _create_markdown_table_header(column_names)
     for chain in decay_chains:
         child1, child2 = map(aslatex, chain.decay_products)
