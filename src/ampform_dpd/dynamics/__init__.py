@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import sympy as sp
 from ampform.dynamics import formulate_form_factor
 from ampform.kinematics.phasespace import Kallen
 from ampform.sympy import unevaluated
+
+if TYPE_CHECKING:
+    from sympy.printing.latex import LatexPrinter
 
 
 @unevaluated
@@ -148,7 +151,6 @@ class EnergyDependentWidth(sp.Expr):
     m2: Any
     L: Any
     R: Any
-    _latex_repr_ = R"\Gamma\left({s}\right)"
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, L, R = self.args
@@ -163,6 +165,15 @@ class EnergyDependentWidth(sp.Expr):
             ff / ff0,
             evaluate=False,
         )
+
+    def _latex_repr_(self, printer: LatexPrinter) -> str:
+        s = printer._print(self.s)  # pyright:ignore[reportPrivateUsage]
+        if self.L == 0:
+            if self.m1 == 0 and self.m2 == 0:
+                return printer._print(self.Γ0)  # pyright:ignore[reportPrivateUsage]
+            return Rf"\Gamma\left({s}\right)"
+        L = printer._print(self.L)  # pyright:ignore[reportPrivateUsage]
+        return Rf"\Gamma_{{{L}}}\left({s}\right)"
 
 
 @unevaluated
