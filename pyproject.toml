@@ -330,7 +330,7 @@ ignore-names = [
     "RUF100",
 ]
 "setup.py" = ["D100"]
-"src/ampform_dpd/io.py" = ["S403"]
+"src/ampform_dpd/io/__init__.py" = ["S403"]
 "tests/*" = [
     "D",
     "INP001",
