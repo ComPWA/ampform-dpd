@@ -338,6 +338,9 @@ ignore-names = [
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.pylint]
+allow-dunder-method-names = ["_latex_repr_"]
+
 [tool.tomlsort]
 all = false
 ignore_case = true
