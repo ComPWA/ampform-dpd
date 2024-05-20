@@ -29,9 +29,6 @@ from ampform_dpd.decay import (
     get_decay_product_ids,
     to_particle,
 )
-from ampform_dpd.io import (
-    simplify_latex_rendering,  # noqa: F401  # pyright:ignore[reportUnusedImport]
-)
 from ampform_dpd.spin import create_spin_range
 
 
