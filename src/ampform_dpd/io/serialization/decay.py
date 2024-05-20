@@ -13,7 +13,11 @@ from ampform_dpd.decay import (
     ThreeBodyDecay,
     ThreeBodyDecayChain,
 )
-from ampform_dpd.io.serialization.format import get_decay_chains, get_distribution_def
+from ampform_dpd.io.serialization.format import (
+    Topology,
+    get_decay_chains,
+    get_distribution_def,
+)
 
 if TYPE_CHECKING:
     from ampform_dpd.io.serialization.format import (
@@ -134,3 +138,16 @@ def _to_particle(
         parity=None,
         index=definition["index"],
     )
+
+
+def get_spectator_id(topology: Topology) -> FinalStateID:
+    """Get the spectator ID from a reference topology.
+
+    >>> get_spectator_id([1, [2, 3]])
+    1
+    """
+    spectator_candidates = {i for i in topology if isinstance(i, int)}
+    if len(spectator_candidates) != 1:
+        msg = f"Reference topology {topology} seems not to be a three-body decay"
+        raise ValueError(msg)
+    return next(iter(spectator_candidates))

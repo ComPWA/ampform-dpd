@@ -156,3 +156,8 @@ def get_function_definition(
     if candidates:
         msg += f" Did you mean any of these? {', '.join(sorted(candidates))}"
     raise KeyError(msg)
+
+
+def get_reference_topology(model: ModelDefinition) -> Topology:
+    distribution_def = get_distribution_def(model)
+    return distribution_def["decay_description"]["reference_topology"]

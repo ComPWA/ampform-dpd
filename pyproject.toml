@@ -332,6 +332,7 @@ ignore-names = [
 ]
 "setup.py" = ["D100"]
 "src/ampform_dpd/io/__init__.py" = ["S403"]
+"src/ampform_dpd/io/serialization/amplitude.py" = ["E741"]
 "src/ampform_dpd/io/serialization/format.py" = ["E741"]
 "tests/*" = [
     "D",
