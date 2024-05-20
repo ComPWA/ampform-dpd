@@ -30,6 +30,7 @@ import sympy as sp
 from ampform.io import aslatex
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
+from ampform_dpd import DefinedExpression
 from ampform_dpd._cache import get_readable_hash, get_system_cache_directory
 from ampform_dpd.decay import (
     IsobarNode,
@@ -84,6 +85,21 @@ def _(obj: Particle, with_jp: bool = False, only_jp: bool = False, **kwargs) -> 
         jp = _render_jp(obj)
         return Rf"{obj.latex}\left[{jp}\right]"
     return obj.latex
+
+
+@aslatex.register(DefinedExpression)
+def _(obj: DefinedExpression, **kwargs) -> str:
+    latex = R"\begin{array}{rcl}" + "\n"
+    expr = obj.expression
+    unfolded = expr.doit(deep=False)
+    if expr == unfolded:
+        latex += Rf"  {aslatex(obj.expression, **kwargs)} \\" + "\n"
+    else:
+        latex += Rf"  {aslatex(expr)} &=& {aslatex(unfolded)} \\" + "\n"
+    for lhs, rhs in obj.definitions.items():
+        latex += Rf"  {aslatex(lhs)} &=& {aslatex(rhs)} \\" + "\n"
+    latex += R"\end{array}"
+    return latex
 
 
 def _render_jp(particle: Particle) -> str:
