@@ -63,7 +63,7 @@ def formulate(  # noqa: PLR0914
         symbol: create_spin_range(states[i].spin)  # type:ignore[index]
         for i, symbol in enumerate(helicity_symbols)
     }
-    amplitude_definitions = {}
+    amplitude_definitions = {}  # type:ignore[var-annotated]
     angle_definitions = {}
     parameter_defaults = {}
     n_chains = len(get_decay_chains(model))
@@ -78,7 +78,9 @@ def formulate(  # noqa: PLR0914
                 msg = f"Expected an expression, got {amp_expr!r}"
                 raise TypeError(msg)
             helicity_substitutions = dict(zip(helicity_symbols, helicity_values))
-            amplitude_definitions[amp_symbol] = amp_expr.subs(helicity_substitutions)
+            existing_amplitude = amplitude_definitions.get(amp_symbol, sp.Integer(0))
+            existing_amplitude += amp_expr.subs(helicity_substitutions)
+            amplitude_definitions[amp_symbol] = existing_amplitude
             angle_definitions[θij] = θij_expr
             parameter_defaults.update(dict(parameters))
     aligned_amp, zeta_defs = formulate_aligned_amplitude(model, *helicity_symbols)
