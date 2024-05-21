@@ -8,8 +8,7 @@ from typing import TYPE_CHECKING, Any
 import sympy as sp
 from ampform.dynamics import formulate_form_factor
 from ampform.kinematics.phasespace import Kallen
-from ampform.sympy import argument, unevaluated
-from attrs import asdict, frozen
+from ampform.sympy import unevaluated
 
 if TYPE_CHECKING:
     from sympy.printing.latex import LatexPrinter
@@ -221,12 +220,12 @@ class FormFactor(sp.Expr):
 class MultichannelBreitWigner(sp.Expr):
     s: Any
     mass: Any
-    channels: tuple[ChannelArguments, ...] = argument(sympify=False)
+    channels: tuple[ChannelArguments, ...]
 
     def evaluate(self):
         s = self.s
         m0 = self.mass
-        width = sum(channel.formulate_width(s, m0) for channel in self.channels)
+        width = sum(channel.evaluate() for channel in self.channels)
         return BreitWigner(s, m0, width)
 
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
@@ -237,26 +236,21 @@ class MultichannelBreitWigner(sp.Expr):
         return latex
 
 
-@frozen
-class ChannelArguments:
+@unevaluated
+class ChannelArguments(sp.Expr):
+    s: Any
+    m0: Any
     width: Any
     m1: Any = 0
     m2: Any = 0
     angular_momentum: Any = 0
     meson_radius: Any = 1
+    _latex_repr_ = R"\Gamma^\text{channel}\left({{s}}, {{m0}}, {{width}}\right)"
 
-    def __attrs_post_init__(self) -> None:
-        for name, value in asdict(self).items():
-            object.__setattr__(self, name, sp.sympify(value))
-
-    def formulate_width(self, s: Any, m0: Any) -> sp.Expr:
-        Γ0 = self.width
-        m1 = self.m1
-        m2 = self.m2
-        L = self.angular_momentum
-        R = self.meson_radius
+    def evaluate(self) -> sp.Expr:
+        s, m0, Γ0, m1, m2, L, R = self.args
         ff = FormFactor(s, m1, m2, L, R) ** 2
-        return Γ0 * m0 / sp.sqrt(s) * ff
+        return Γ0 * m0 / sp.sqrt(s) * ff  # type:ignore[operator]
 
 
 @unevaluated
