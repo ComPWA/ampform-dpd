@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import difflib
 import sys
-from typing import TYPE_CHECKING, Literal, TypedDict, Union
+from typing import TYPE_CHECKING, List, Literal, TypedDict, Union
 from warnings import warn
 
 from ampform_dpd.decay import FinalStateID
@@ -39,7 +39,7 @@ class DecayDescription(TypedDict):
     appendix: dict
 
 
-Topology = list[Union[FinalStateID, "Topology"]]
+Topology = List[Union[FinalStateID, "Topology"]]
 """Topology definition as a list of final state IDs."""
 
 
