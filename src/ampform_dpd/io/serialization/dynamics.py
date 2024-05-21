@@ -164,7 +164,7 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
             mi2: channel_definition["mb"],
         })
     return DefinedExpression(
-        expression=MultichannelBreitWigner(s, mass, channels),
+        expression=MultichannelBreitWigner(s, mass, tuple(channels)),
         definitions=parameter_defaults,
     )
 

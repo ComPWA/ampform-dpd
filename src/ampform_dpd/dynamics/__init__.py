@@ -221,7 +221,7 @@ class FormFactor(sp.Expr):
 class MultichannelBreitWigner(sp.Expr):
     s: Any
     mass: Any
-    channels: list[ChannelArguments] = argument(sympify=False)
+    channels: tuple[ChannelArguments, ...] = argument(sympify=False)
 
     def evaluate(self):
         s = self.s
