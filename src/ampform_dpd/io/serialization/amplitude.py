@@ -124,7 +124,7 @@ def formulate_chain_amplitude(  # noqa: PLR0914, PLR0917
     for vertex in chain_definition["vertices"]:
         dynamics *= formulate_form_factor(vertex, model)
     # -----------------------
-    weight, weight_val = _get_weight(chain_definition)
+    weight, weight_val = _get_weight(chain_definition, to_latex)
     # -----------------------
     (i, λi_val), (j, λj_val) = _get_decay_product_helicities(chain_definition)
     θij, θij_expr = formulate_scattering_angle(i, j)

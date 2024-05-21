@@ -59,5 +59,5 @@ def test_get_resonance_helicity(model_definition: ModelDefinition):
 def test_get_weight(model_definition: ModelDefinition):
     chain_defs = get_decay_chains(model_definition)
     symbol, value = _get_weight(chain_defs[0])
-    assert symbol.name == "c^{L1405[1/2]}[1/2, 0, 0]"
+    assert symbol.name == R"c^{L1405[1/2]}_{\frac{1}{2}, 0, 0}"
     assert value == 7.38649400481717 + 1.971018433257411j
