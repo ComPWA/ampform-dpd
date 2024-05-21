@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import difflib
 import sys
-from typing import TYPE_CHECKING, List, Literal, TypedDict, Union
+from typing import TYPE_CHECKING, List, Literal, Tuple, TypedDict, Union
 from warnings import warn
 
 from ampform_dpd.decay import FinalStateID
@@ -77,7 +77,7 @@ class LSVertex(Vertex):
     s: str
 
 
-Node = tuple[Union[FinalStateID, "Node"], Union[FinalStateID, "Node"]]
+Node = Tuple[Union[FinalStateID, "Node"], Union[FinalStateID, "Node"]]
 """Node definition within a `.Topology`."""
 ParityFactor = Literal["+", "-", ""]
 
