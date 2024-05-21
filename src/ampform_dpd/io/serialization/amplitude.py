@@ -209,9 +209,9 @@ def _get_weight(
         value = value.real
     resonance_latex = to_latex(chain_definition["name"])
     _, resonance_helicity = _get_resonance_helicity(chain_definition)
-    c = sp.IndexedBase(f"c^{{{resonance_latex}[{resonance_helicity}]}}")
-    λ1, λ2, λ3 = _get_final_state_helicities(chain_definition).values()
-    symbol = c[λ1, λ2, λ3]
+    helicities = _get_final_state_helicities(chain_definition).values()
+    subscript = ", ".join(sp.latex(λ) for λ in helicities)
+    symbol = sp.Symbol(f"c^{{{resonance_latex}[{resonance_helicity}]}}_{{{subscript}}}")
     return symbol, value
 
 
