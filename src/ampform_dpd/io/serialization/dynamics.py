@@ -162,6 +162,7 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
         parameter_defaults.update({
             mi1: channel_definition["ma"],
             mi2: channel_definition["mb"],
+            Γi: channel_definition["gsq"],
         })
     return DefinedExpression(
         expression=MultichannelBreitWigner(s, mass, tuple(channels)),
