@@ -84,10 +84,10 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
         s = to_mandelstam_symbol(node)
         m1, m2 = (to_mass_symbol(i) for i in node)
         if all(isinstance(i, int) for i in node):
-            meson_radius = sp.Symbol(R"R_\mathrm{res}")
+            meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
         else:
             initial_state = get_initial_state(model)
-            meson_radius = sp.Symbol(f"R_{{{initial_state.latex}}}")
+            meson_radius = sp.Symbol(f"R_{{{initial_state.latex}}}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
             expression=FormFactor(s, m1, m2, angular_momentum, meson_radius),
@@ -107,12 +107,12 @@ def formulate_breit_wigner(
     node = propagator["node"]
     i, j = node
     s = to_mandelstam_symbol(node)
-    mass = sp.Symbol(f"m_{{{resonance}}}")
-    width = sp.Symbol(Rf"\Gamma_{{{resonance}}}")
+    mass = sp.Symbol(f"m_{{{resonance}}}", nonnegative=True)
+    width = sp.Symbol(Rf"\Gamma_{{{resonance}}}", nonnegative=True)
     m1 = to_mass_symbol(i)
     m2 = to_mass_symbol(j)
     angular_momentum = int(function_definition["l"])
-    d = sp.Symbol(R"R_\mathrm{res}")
+    d = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
     return DefinedExpression(
         expression=BreitWigner(s, mass, width, m1, m2, angular_momentum, d),
         definitions={
@@ -137,12 +137,12 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
     node = propagator["node"]
     i, j = node
     s = to_mandelstam_symbol(node)
-    mass = sp.Symbol(f"m_{{{resonance}}}")
-    width = sp.Symbol(Rf"\Gamma_{{{resonance}}}")
+    mass = sp.Symbol(f"m_{{{resonance}}}", nonnegative=True)
+    width = sp.Symbol(Rf"\Gamma_{{{resonance}}}", nonnegative=True)
     m1 = to_mass_symbol(i)
     m2 = to_mass_symbol(j)
     angular_momentum = int(channel_definitions[0]["l"])
-    d = sp.Symbol(f"R_{{{resonance}}}")
+    d = sp.Symbol(f"R_{{{resonance}}}", nonnegative=True)
     channels = [ChannelArguments(width, m1, m2, angular_momentum, d)]
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         mass: function_definition["mass"],

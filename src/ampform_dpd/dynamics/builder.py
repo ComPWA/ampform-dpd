@@ -102,8 +102,8 @@ def _get_angular_momentum(isobar: IsobarNode) -> int:
 
 def _create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:
     if isinstance(isobar.parent, State):
-        return sp.Symbol(Rf"R_{{{isobar.parent.latex}}}")
-    return sp.Symbol(R"R_\mathrm{res}")
+        return sp.Symbol(Rf"R_{{{isobar.parent.latex}}}", nonnegative=True)
+    return sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
 
 
 def create_mass_symbol(particle: IsobarNode | Particle) -> sp.Symbol:
