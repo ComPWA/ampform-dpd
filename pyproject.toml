@@ -32,6 +32,7 @@ dependencies = [
     "qrules >=0.10.0",
     "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
+    'typing-extensions; python_version <"3.11.0"',
 ]
 description = "Symbolic expressions for Dalitz-Plot Decomposition"
 dynamic = ["version"]
@@ -55,6 +56,7 @@ doc = [
     "ipywidgets",
     "matplotlib",
     "myst-nb >=0.14", # nb_render_markdown_format for Markdown tables
+    "pandas",
     "sphinx-api-relink >=0.0.4",
     "sphinx-book-theme",
     "sphinx-codeautolink[ipython]",
@@ -322,8 +324,17 @@ ignore-names = [
 ]
 "docs/conf.py" = ["D100"]
 "jpsi2ksp.ipynb" = ["PLC2701"]
+"serialization.ipynb" = [
+    "E741",
+    "N813",
+    "PLC2403",
+    "PLC2701",
+    "RUF100",
+]
 "setup.py" = ["D100"]
-"src/ampform_dpd/io.py" = ["S403"]
+"src/ampform_dpd/io/__init__.py" = ["S403"]
+"src/ampform_dpd/io/serialization/amplitude.py" = ["E741"]
+"src/ampform_dpd/io/serialization/format.py" = ["E741"]
 "tests/*" = [
     "D",
     "INP001",
@@ -338,6 +349,9 @@ ignore-names = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint.pylint]
+allow-dunder-method-names = ["_latex_repr_"]
 
 [tool.tomlsort]
 all = false

@@ -30,7 +30,7 @@ class Particle:
     name: str
     latex: str
     spin: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
-    parity: Literal[-1, 1]
+    parity: Literal[-1, 1] | None
     mass: float
     width: float
 

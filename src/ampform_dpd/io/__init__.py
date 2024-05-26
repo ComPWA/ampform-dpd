@@ -30,6 +30,7 @@ import sympy as sp
 from ampform.io import aslatex
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
+from ampform_dpd import DefinedExpression
 from ampform_dpd._cache import get_readable_hash, get_system_cache_directory
 from ampform_dpd.decay import (
     IsobarNode,
@@ -86,12 +87,29 @@ def _(obj: Particle, with_jp: bool = False, only_jp: bool = False, **kwargs) -> 
     return obj.latex
 
 
+@aslatex.register(DefinedExpression)
+def _(obj: DefinedExpression, **kwargs) -> str:
+    latex = R"\begin{array}{rcl}" + "\n"
+    expr = obj.expression
+    unfolded = expr.doit(deep=False)
+    if expr == unfolded:
+        latex += Rf"  {aslatex(obj.expression, **kwargs)} \\" + "\n"
+    else:
+        latex += Rf"  {aslatex(expr)} &=& {aslatex(unfolded)} \\" + "\n"
+    for lhs, rhs in obj.definitions.items():
+        latex += Rf"  {aslatex(lhs)} &=& {aslatex(rhs)} \\" + "\n"
+    latex += R"\end{array}"
+    return latex
+
+
 def _render_jp(particle: Particle) -> str:
-    parity = "-" if particle.parity < 0 else "+"
     if particle.spin.denominator == 1:
         spin = sp.latex(particle.spin)
     else:
         spin = Rf"\frac{{{particle.spin.numerator}}}{{{particle.spin.denominator}}}"
+    if particle.parity is None:
+        return f"J={spin}"
+    parity = "-" if particle.parity < 0 else "+"
     return f"{spin}^{parity}"
 
 
@@ -176,9 +194,11 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
         R"$J^P$",
         R"mass (MeV)",
         R"width (MeV)",
-        R"$L_\mathrm{dec}^\mathrm{min}$",
-        R"$L_\mathrm{prod}^\mathrm{min}$",
     ]
+    if any(c.outgoing_ls is not None for c in decay_chains):
+        column_names.append(R"$L_\mathrm{dec}^\mathrm{min}$")
+    if any(c.incoming_ls is not None for c in decay_chains):
+        column_names.append(R"$L_\mathrm{prod}^\mathrm{min}$")
     src = _create_markdown_table_header(column_names)
     for chain in decay_chains:
         child1, child2 = map(aslatex, chain.decay_products)

@@ -1,13 +1,17 @@
 """Functions for dynamics lineshapes and kinematics."""
 
+# pyright:reportPrivateUsage=false
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import sympy as sp
 from ampform.dynamics import formulate_form_factor
 from ampform.kinematics.phasespace import Kallen
 from ampform.sympy import unevaluated
+
+if TYPE_CHECKING:
+    from sympy.printing.latex import LatexPrinter
 
 
 @unevaluated
@@ -148,7 +152,6 @@ class EnergyDependentWidth(sp.Expr):
     m2: Any
     L: Any
     R: Any
-    _latex_repr_ = R"\Gamma\left({s}\right)"
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, L, R = self.args
@@ -163,6 +166,15 @@ class EnergyDependentWidth(sp.Expr):
             ff / ff0,
             evaluate=False,
         )
+
+    def _latex_repr_(self, printer: LatexPrinter) -> str:
+        s = printer._print(self.s)  # pyright:ignore[reportPrivateUsage]
+        if self.L == 0:
+            if self.m1 == 0 and self.m2 == 0:
+                return printer._print(self.Γ0)  # pyright:ignore[reportPrivateUsage]
+            return Rf"\Gamma\left({s}\right)"
+        L = printer._print(self.L)  # pyright:ignore[reportPrivateUsage]
+        return Rf"\Gamma_{{{L}}}\left({s}\right)"
 
 
 @unevaluated
@@ -202,3 +214,87 @@ class FormFactor(sp.Expr):
             angular_momentum=angular_momentum,
             meson_radius=meson_radius,
         )
+
+
+@unevaluated
+class MultichannelBreitWigner(sp.Expr):
+    s: Any
+    mass: Any
+    channels: tuple[ChannelArguments, ...]
+
+    def evaluate(self):
+        s = self.s
+        m0 = self.mass
+        width = sum(channel.evaluate() for channel in self.channels)
+        return BreitWigner(s, m0, width)
+
+    def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
+        latex = R"\mathcal{R}^\mathrm{BW}_\mathrm{multi}\left("
+        latex += printer._print(self.s) + "; "
+        latex += ", ".join(printer._print(channel.width) for channel in self.channels)
+        latex += R"\right)"
+        return latex
+
+
+@unevaluated
+class ChannelArguments(sp.Expr):
+    s: Any
+    m0: Any
+    width: Any
+    m1: Any = 0
+    m2: Any = 0
+    angular_momentum: Any = 0
+    meson_radius: Any = 1
+    _latex_repr_ = R"\Gamma^\text{channel}\left({{s}}, {{m0}}, {{width}}\right)"
+
+    def evaluate(self) -> sp.Expr:
+        s, m0, Γ0, m1, m2, L, R = self.args
+        ff = FormFactor(s, m1, m2, L, R) ** 2
+        return Γ0 * m0 / sp.sqrt(s) * ff  # type:ignore[operator]
+
+
+@unevaluated
+class BreitWigner(sp.Expr):
+    s: Any
+    mass: Any
+    width: Any
+    m1: Any = 0
+    m2: Any = 0
+    angular_momentum: Any = 0
+    meson_radius: Any = 1
+
+    def evaluate(self):
+        width = self.energy_dependent_width()
+        expr = SimpleBreitWigner(self.s, self.mass, width)
+        if self.angular_momentum == 0 and self.m1 == 0 and self.m2 == 0:
+            return expr.evaluate()
+        return expr
+
+    def energy_dependent_width(self) -> sp.Expr:
+        s, m0, Γ0, m1, m2, L, d = self.args
+        if L == 0 and m1 == 0 and m2 == 0:
+            return Γ0  # type:ignore[return-value]
+        return EnergyDependentWidth(s, m0, Γ0, m1, m2, L, d)
+
+    def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
+        s = printer._print(self.s)
+        function_symbol = R"\mathcal{R}^\mathrm{BW}"
+        mass = printer._print(self.mass)
+        width = printer._print(self.width)
+        arg = Rf"\left({s}; {mass}, {width}\right)"
+        L = printer._print(self.angular_momentum)
+        if isinstance(self.angular_momentum, sp.Integer):
+            return Rf"{function_symbol}_{{L={L}}}{arg}"
+        return Rf"{function_symbol}_{{{L}}}{arg}"
+
+
+@unevaluated
+class SimpleBreitWigner(sp.Expr):
+    s: Any
+    mass: Any
+    width: Any
+    _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}\left({s}; {mass}, {width}\right)"
+
+    def evaluate(self):
+        s, m0, Γ0 = self.args
+        return 1 / (m0**2 - s - m0 * Γ0 * 1j)

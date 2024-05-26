@@ -23,7 +23,7 @@ from ampform_dpd.dynamics import FormFactor, RelativisticBreitWigner
 
 def formulate_breit_wigner_with_form_factor(
     decay: ThreeBodyDecayChain,
-) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
+) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
     decay_node = decay.decay_node
     s = get_mandelstam_s(decay_node)
     parameter_defaults = {}
@@ -41,7 +41,7 @@ def formulate_breit_wigner_with_form_factor(
 
 def _create_form_factor(
     s: sp.Symbol, isobar: IsobarNode
-) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
+) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
     if isinstance(isobar.parent, State):
         inv_mass = sp.Symbol("m0", nonnegative=True)
     else:
@@ -56,7 +56,7 @@ def _create_form_factor(
         angular_momentum=_get_angular_momentum(isobar),
         meson_radius=meson_radius,
     )
-    parameter_defaults = {
+    parameter_defaults: dict[sp.Symbol, complex | float] = {
         meson_radius: 1,
         outgoing_state_mass1: to_particle(isobar.child1).mass,
         outgoing_state_mass2: to_particle(isobar.child2).mass,
@@ -68,7 +68,7 @@ def _create_form_factor(
 
 def _create_breit_wigner(
     s: sp.Symbol, isobar: DecayNode
-) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
+) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
     outgoing_state_mass1 = create_mass_symbol(isobar.child1)
     outgoing_state_mass2 = create_mass_symbol(isobar.child2)
     angular_momentum = _get_angular_momentum(isobar)
@@ -85,7 +85,7 @@ def _create_breit_wigner(
         angular_momentum=angular_momentum,
         meson_radius=meson_radius,
     )
-    parameter_defaults = {
+    parameter_defaults: dict[sp.Symbol, complex | float] = {
         res_mass: isobar.parent.mass,
         res_width: isobar.parent.width,
         meson_radius: 1,
@@ -102,8 +102,8 @@ def _get_angular_momentum(isobar: IsobarNode) -> int:
 
 def _create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:
     if isinstance(isobar.parent, State):
-        return sp.Symbol(Rf"R_{{{isobar.parent.latex}}}")
-    return sp.Symbol(R"R_\mathrm{res}")
+        return sp.Symbol(Rf"R_{{{isobar.parent.latex}}}", nonnegative=True)
+    return sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
 
 
 def create_mass_symbol(particle: IsobarNode | Particle) -> sp.Symbol:

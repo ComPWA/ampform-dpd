@@ -37,6 +37,7 @@ add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
+    "ampform_dpd.io.serialization.dynamics.T": "typing.TypeVar",
     "DecayNode": ("obj", "ampform_dpd.decay.DecayNode"),
     "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
@@ -44,6 +45,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "InitialStateID": ("obj", "ampform_dpd.decay.InitialStateID"),
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
+    "Node": ("obj", "ampform_dpd.io.serialization.format.Node"),
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PoolSum": "ampform.sympy.PoolSum",
@@ -57,6 +59,8 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "sp.Symbol": "sympy.core.symbol.Symbol",
     "StateID": ("obj", "ampform_dpd.decay.StateID"),
     "StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
+    "Topology": ("obj", "ampform_dpd.io.serialization.format.Topology"),
+    "typing_extensions.Required": ("obj", "typing.Required"),
 }
 api_target_types: dict[str, str] = {}
 author = "Common Partial Wave Analysis"
