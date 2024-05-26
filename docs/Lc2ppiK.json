@@ -742,11 +742,11 @@
       "variables": [
         {
           "node": [3, 1],
-          "mass_angles": ["m_31", "phi_31", "cos_theta_31"]
+          "mass_phi_costheta": ["m_31", "phi_31", "cos_theta_31"]
         },
         {
           "node": [[3, 1], 2],
-          "mass_angles": ["m_31_2", "phi_31_2", "cos_theta_31_2"]
+          "mass_phi_costheta": ["m_31_2", "phi_31_2", "cos_theta_31_2"]
         }
       ],
       "parameters": []
