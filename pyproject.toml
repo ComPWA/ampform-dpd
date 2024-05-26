@@ -46,6 +46,7 @@ dev = [
     "ampform-dpd[jupyter]",
     "ampform-dpd[sty]",
     "ampform-dpd[test]",
+    "sphinx-autobuild!=2024.04.*",
     "sphinx-autobuild",
     "tox >=1.9", # for skip_install, use_develop
 ]
