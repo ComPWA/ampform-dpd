@@ -4,14 +4,10 @@ from collections import abc
 from typing import TYPE_CHECKING, Callable, Protocol, TypeVar, cast
 
 import sympy as sp
+from ampform.dynamics.form_factor import FormFactor
 
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import (
-    BreitWigner,
-    ChannelArguments,
-    FormFactor,
-    MultichannelBreitWigner,
-)
+from ampform_dpd.dynamics import BreitWigner, ChannelArguments, MultichannelBreitWigner
 from ampform_dpd.io.serialization.decay import get_initial_state
 from ampform_dpd.io.serialization.format import (
     BlattWeisskopfDefinition,

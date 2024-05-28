@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import sympy as sp
+from ampform.dynamics.form_factor import FormFactor
 
 from ampform_dpd import to_particle
 from ampform_dpd.decay import (
@@ -18,7 +19,7 @@ from ampform_dpd.decay import (
     State,
     ThreeBodyDecayChain,
 )
-from ampform_dpd.dynamics import FormFactor, RelativisticBreitWigner
+from ampform_dpd.dynamics import RelativisticBreitWigner
 
 
 def formulate_breit_wigner_with_form_factor(

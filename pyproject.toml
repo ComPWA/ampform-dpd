@@ -25,7 +25,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "ampform >=0.15.1", # aslatex with keyword arguments
+    "ampform >=0.15.4", # aslatex with keyword arguments
     "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
     "numpy",

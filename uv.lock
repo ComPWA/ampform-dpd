@@ -191,7 +191,7 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", specifier = ">=0.15.1" },
+    { name = "ampform", specifier = ">=0.15.4" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
     { name = "numpy" },
