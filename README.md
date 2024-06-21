@@ -1,6 +1,6 @@
 # Symbolic Dalitz-Plot Decomposition
 
-[![GPLv3+ license](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 [![PyPI package](https://badge.fury.io/py/ampform-dpd.svg)](https://pypi.org/project/ampform-dpd)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/ampform-dpd)](https://pypi.org/project/ampform-dpd)
