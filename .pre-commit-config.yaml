@@ -55,7 +55,7 @@ repos:
       - id: colab-toc-visible
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.5
+    rev: v0.5.0
     hooks:
       - id: ruff
         args: [--fix]
@@ -96,7 +96,7 @@ repos:
           - --in-place
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.8.2
+    rev: v8.9.0
     hooks:
       - id: cspell
 
@@ -122,6 +122,6 @@ repos:
           - python
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.364
+    rev: v1.1.369
     hooks:
       - id: pyright
