@@ -73,8 +73,8 @@ jax = [
 ]
 jupyter = [
     "ampform-dpd[doc]",
-    "jupyterlab",
     "jupyterlab >=3.0",
+    "jupyterlab",
     "jupyterlab-code-formatter >=3.0.0",
     "jupyterlab-git",
     "jupyterlab-lsp",
