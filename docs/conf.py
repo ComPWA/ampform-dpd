@@ -65,7 +65,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
 api_target_types: dict[str, str] = {}
 author = "Common Partial Wave Analysis"
 autodoc_default_options = {
-    "exclude-members": ", ".join([
+    "exclude-members": ", ".join([  # noqa: FLY002
         "default_assumptions",
         "doit",
         "evaluate",
