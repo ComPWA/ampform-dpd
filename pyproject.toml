@@ -146,6 +146,10 @@ ignore_missing_imports = true
 module = ["cloudpickle.*"]
 
 [[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["sympy.*"]
+
+[[tool.mypy.overrides]]
 check_untyped_defs = true
 disallow_incomplete_defs = false
 disallow_untyped_defs = false
