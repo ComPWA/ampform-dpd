@@ -226,41 +226,13 @@ docstring-code-format = true
 line-ending = "lf"
 
 [tool.ruff.lint]
-extend-select = [
-    "A",
-    "B",
-    "BLE",
-    "C4",
-    "C90",
-    "D",
-    "EM",
-    "ERA",
-    "FA",
-    "I",
-    "ICN",
-    "INP",
-    "ISC",
-    "N",
-    "NPY",
-    "PGH",
-    "PIE",
-    "PL",
-    "Q",
-    "RET",
-    "RSE",
-    "RUF",
-    "S",
-    "SIM",
-    "T20",
-    "TCH",
-    "TID",
-    "TRY",
-    "UP",
-    "YTT",
-]
 ignore = [
+    "ANN",
+    "ARG00",
     "B028",
     "C408",
+    "COM812",
+    "CPY001",
     "D101",
     "D102",
     "D103",
@@ -270,16 +242,34 @@ ignore = [
     "D213",
     "D407",
     "D416",
+    "DOC",
     "E501",
+    "FBT",
+    "FURB101",
+    "FURB103",
+    "FURB140",
+    "G004",
     "ISC001",
     "ISC003",
     "PLC2401",
     "PLR0913",
     "PLW1514",
+    "PT001",
+    "PTH",
     "S301",
     "SIM108",
 ]
+select = ["ALL"]
 task-tags = ["cspell"]
+
+[tool.ruff.lint.flake8-builtins]
+builtins-ignorelist = ["display"]
+
+[tool.ruff.lint.flake8-self]
+ignore-names = [
+    "_latex",
+    "_print",
+]
 
 [tool.ruff.lint.isort]
 split-on-trailing-comma = false
@@ -342,10 +332,10 @@ ignore-names = [
     "INP001",
     "PGH001",
     "PLC2701",
-    "PLR0913",
     "PLR2004",
     "PLR6301",
     "S101",
+    "SLF001",
     "T20",
 ]
 
