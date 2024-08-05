@@ -48,6 +48,7 @@
   "python.analysis.autoImportCompletions": false,
   "python.analysis.inlayHints.pytestParameters": true,
   "python.analysis.typeCheckingMode": "strict",
+  "python.terminal.activateEnvironment": false,
   "python.testing.pytestArgs": ["--color=no"],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
