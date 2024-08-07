@@ -123,7 +123,7 @@ nest-asyncio==1.6.0
 nodeenv==1.9.1
 notebook-shim==0.2.4
 numba==0.60.0
-numpy==2.0.1
+numpy==1.26.4
 oauthlib==3.2.2
 opt-einsum==3.3.0
 overrides==7.7.0

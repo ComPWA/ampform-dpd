@@ -69,6 +69,7 @@ doc = [
     "tqdm",
 ]
 jax = [
+    "numpy==1.*",
     "tensorwaves[jax]",
 ]
 jupyter = [
