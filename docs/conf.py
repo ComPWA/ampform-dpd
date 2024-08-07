@@ -20,6 +20,7 @@ set_intersphinx_version_remapping({
         "8.0.6": "8.0.5",
         "8.1.1": "8.1.2",
     },
+    "matplotlib": {"3.9.1.post1": "3.9.1"},
     "mpl-interactions": {"0.24.1": "0.24.0"},
 })
 
@@ -65,7 +66,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
 api_target_types: dict[str, str] = {}
 author = "Common Partial Wave Analysis"
 autodoc_default_options = {
-    "exclude-members": ", ".join([
+    "exclude-members": ", ".join([  # noqa: FLY002
         "default_assumptions",
         "doit",
         "evaluate",

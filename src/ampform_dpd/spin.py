@@ -64,7 +64,7 @@ def create_spin_range(spin: SupportsFloat) -> list[sp.Rational]:
 
 
 def create_rational_range(
-    __from: SupportsFloat, __to: SupportsFloat
+    __from: SupportsFloat, __to: SupportsFloat, /
 ) -> list[sp.Rational]:
     """Create a range of rational numbers, especially useful for spin projections.
 

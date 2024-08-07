@@ -308,7 +308,7 @@ def perform_cached_lambdify(  # type:ignore[misc]  # pyright:ignore[reportIncons
 def simplify_latex_rendering() -> None:
     """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
 
-    def _print_Indexed_latex(self, printer, *args):  # noqa: N802
+    def _print_Indexed_latex(self, printer, *args) -> str:  # noqa: N802
         base = printer._print(self.base)
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"
