@@ -197,17 +197,23 @@ pytest src tests \
 """
 
 [tool.pixi.feature.dev.tasks.doc]
-cmd = "sphinx-build -nW --keep-going -b html docs/ docs/_build/html"
+cmd = """
+sphinx-build \
+    --builder html \
+    --fail-on-warning \
+    --keep-going \
+    docs/ docs/_build/html
+"""
 env = {FORCE_COLOR = "yes"}
 
 [tool.pixi.feature.dev.tasks.doclive]
 cmd = """
 sphinx-autobuild \
     --open-browser \
-    --re-ignore '.*/.ipynb_checkpoints/.*' \
     --re-ignore '.*/__pycache__/.*' \
-    --re-ignore '.*\\.pkl' \
+    --re-ignore '.*/.ipynb_checkpoints/.*' \
     --re-ignore '.*\\.pdf' \
+    --re-ignore '.*\\.pkl' \
     --re-ignore '.*\\.png' \
     --re-ignore '.*\\.svg' \
     --re-ignore '.*\\.tmp' \
@@ -236,8 +242,8 @@ env = {EXECUTE_NB = "yes", FORCE_COLOR = "yes"}
 [tool.pixi.feature.dev.tasks.linkcheck]
 cmd = """
 sphinx-build \
-    -T \
-    -b linkcheck \
+    --builder linkcheck \
+    --show-traceback \
     docs/ docs/_build/linkcheck
 """
 env = {FORCE_COLOR = "yes"}
