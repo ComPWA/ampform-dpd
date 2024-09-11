@@ -135,6 +135,8 @@ namespaces = false
 where = ["src"]
 
 [tool.setuptools_scm]
+local_scheme = "no-local-version"
+version_scheme = "post-release"
 write_to = "src/ampform_dpd/version.py"
 
 [tool.mypy]
@@ -155,6 +157,109 @@ check_untyped_defs = true
 disallow_incomplete_defs = false
 disallow_untyped_defs = false
 module = ["tests.*"]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.activation.env]
+PRETTIER_LEGACY_CLI = "1"
+PYTHONHASHSEED = "0"
+
+[tool.pixi.dependencies]
+graphviz = "*"
+python = "3.9.*"
+
+[tool.pixi.environments]
+default = {features = [
+    "dev",
+    "doc",
+    "jax",
+    "jupyter",
+    "numba",
+    "sty",
+    "tensorflow",
+    "test",
+    "tf",
+    "types",
+]}
+
+[tool.pixi.feature.dev.tasks.ci]
+depends_on = ["cov", "docnb", "linkcheck", "sty"]
+
+[tool.pixi.feature.dev.tasks.cov]
+cmd = """
+pytest src tests \
+    --cov-fail-under=50 \
+    --cov-report=html \
+    --cov-report=xml \
+    --cov=ampform_dpd
+"""
+
+[tool.pixi.feature.dev.tasks.doc]
+cmd = """
+sphinx-build \
+    --builder html \
+    --fail-on-warning \
+    --keep-going \
+    docs/ docs/_build/html
+"""
+env = {FORCE_COLOR = "yes"}
+
+[tool.pixi.feature.dev.tasks.doclive]
+cmd = """
+sphinx-autobuild \
+    --open-browser \
+    --re-ignore '.*/__pycache__/.*' \
+    --re-ignore '.*/.ipynb_checkpoints/.*' \
+    --re-ignore '.*\\.pdf' \
+    --re-ignore '.*\\.pkl' \
+    --re-ignore '.*\\.png' \
+    --re-ignore '.*\\.svg' \
+    --re-ignore '.*\\.tmp' \
+    --re-ignore 'docs/_build/.*' \
+    --re-ignore 'docs/_images/.*' \
+    --re-ignore 'docs/api/.*' \
+    --re-ignore 'docs/export/.*' \
+    --watch docs \
+    --watch src \
+    docs/ docs/_build/html
+"""
+env = {FORCE_COLOR = "yes"}
+
+[tool.pixi.feature.dev.tasks.docnb]
+cmd = "pixi run doc"
+env = {EXECUTE_NB = "yes", FORCE_COLOR = "yes"}
+
+[tool.pixi.feature.dev.tasks.docnb-force]
+cmd = "pixi run doc"
+env = {FORCE_COLOR = "yes", FORCE_EXECUTE_NB = "yes"}
+
+[tool.pixi.feature.dev.tasks.docnblive]
+cmd = "pixi run doclive"
+env = {EXECUTE_NB = "yes", FORCE_COLOR = "yes"}
+
+[tool.pixi.feature.dev.tasks.linkcheck]
+cmd = """
+sphinx-build \
+    --builder linkcheck \
+    --show-traceback \
+    docs/ docs/_build/linkcheck
+"""
+env = {FORCE_COLOR = "yes"}
+
+[tool.pixi.feature.dev.tasks.nb]
+cmd = "pytest --nbmake --nbmake-timeout=3600 docs"
+
+[tool.pixi.feature.dev.tasks.sty]
+cmd = "pre-commit run  -a"
+env = {SKIP = "pyright"}
+
+[tool.pixi.feature.dev.tasks.tests]
+cmd = "pytest"
+
+[tool.pixi.pypi-dependencies]
+ampform-dpd = {path = ".", editable = true}
 
 [tool.pyright]
 reportArgumentType = false
@@ -221,7 +326,6 @@ src = [
     "src",
     "tests",
 ]
-target-version = "py38"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -361,6 +465,5 @@ sort_first = [
     "tool.setuptools",
     "tool.setuptools_scm",
 ]
-sort_table_keys = true
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true

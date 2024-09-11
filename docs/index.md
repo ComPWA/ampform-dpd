@@ -139,6 +139,7 @@ Notice the general structure:
 If $k=1$, we have $\hat\theta_{k(1)}=0$, so the Wigner&nbsp;$d$ function for the production isobar reduces to a Kronecker delta, $d^J_{\nu,\tau-\lambda'_k}\!\left(\hat\theta_{k(1)}\right) = \delta_{\nu,\tau-\lambda'_k}$.
 
 [^1]: Alternatively, one can sum over all resonances themselves, so that one has a dynamic function&nbsp;$X_\mathcal{R}(\sigma_k)$ for each resonance&nbsp;$\mathcal{R}$ in subsystem&nbsp;$k$.
+
 [^2]: See also {cite}`JPAC:2021rxu`, Section&nbsp;2.1.
 
 Equation&nbsp;{eq}`aligned-amplitude` is written in terms of _helicity_ couplings, but can be rewritten in terms of _$LS$&nbsp;couplings_, using

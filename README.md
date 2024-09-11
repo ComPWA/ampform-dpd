@@ -9,7 +9,6 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/ComPWA/ampform-dpd/main.svg)](https://results.pre-commit.ci/latest/github/ComPWA/ampform-dpd/main)
 [![Test coverage](https://codecov.io/gh/ComPWA/ampform-dpd/branch/main/graph/badge.svg)](https://codecov.io/gh/ComPWA/ampform-dpd)
 
-[![GitPod](https://img.shields.io/badge/gitpod-open-blue?logo=gitpod)](https://gitpod.io/#https://github.com/ComPWA/ampform-dpd)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Spelling checked](https://img.shields.io/badge/cspell-checked-brightgreen.svg)](https://github.com/streetsidesoftware/cspell/tree/master/packages/cspell)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
