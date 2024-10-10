@@ -190,8 +190,8 @@ intersphinx_mapping = {
 }
 linkcheck_anchors = False
 linkcheck_ignore = [
-    "https://github.com/ComPWA/polarimetry",
-    "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=9",
+    "https://doi.org/10.1103",
+    "https://journals.aps.org/prd",
 ]
 myst_enable_extensions = [
     "amsmath",
