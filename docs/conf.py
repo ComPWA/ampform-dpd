@@ -172,7 +172,7 @@ html_theme_options = {
 html_title = REPO_TITLE
 intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
-    "ampform": (f"https://ampform.readthedocs.io/en/{pin('ampform')}", None),
+    "ampform": (f"https://ampform.readthedocs.io/{pin('ampform')}", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "compwa": ("https://compwa.github.io", None),
     "graphviz": ("https://graphviz.readthedocs.io/en/stable", None),
@@ -181,12 +181,9 @@ intersphinx_mapping = {
     "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
     "numpy": (f"https://numpy.org/doc/{pin_minor('numpy')}", None),
     "python": ("https://docs.python.org/3", None),
-    "qrules": (f"https://qrules.readthedocs.io/en/{pin('qrules')}", None),
+    "qrules": (f"https://qrules.readthedocs.io/{pin('qrules')}", None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": (
-        f"https://tensorwaves.readthedocs.io/en/{pin('tensorwaves')}",
-        None,
-    ),
+    "tensorwaves": (f"https://tensorwaves.readthedocs.io/{pin('tensorwaves')}", None),
 }
 linkcheck_anchors = False
 linkcheck_ignore = [
