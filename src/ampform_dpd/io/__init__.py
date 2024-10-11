@@ -23,7 +23,7 @@ import pickle
 from collections import abc
 from importlib.metadata import version
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Iterable, Mapping, Sequence, overload
+from typing import TYPE_CHECKING, Any, overload
 
 import cloudpickle
 import sympy as sp
@@ -41,6 +41,8 @@ from ampform_dpd.decay import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping, Sequence
+
     from tensorwaves.function import (
         ParametrizedBackendFunction,
         PositionalArgumentFunction,

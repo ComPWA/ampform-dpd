@@ -40,6 +40,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "ampform_dpd.io.serialization.dynamics.T": "typing.TypeVar",
     "DecayNode": ("obj", "ampform_dpd.decay.DecayNode"),
+    "EdgeType": "typing.TypeVar",
     "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FrozenTransition": "qrules.topology.FrozenTransition",
@@ -47,6 +48,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
     "Node": ("obj", "ampform_dpd.io.serialization.format.Node"),
+    "NodeType": "typing.TypeVar",
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PoolSum": "ampform.sympy.PoolSum",
@@ -172,7 +174,7 @@ html_theme_options = {
 html_title = REPO_TITLE
 intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
-    "ampform": (f"https://ampform.readthedocs.io/en/{pin('ampform')}", None),
+    "ampform": (f"https://ampform.readthedocs.io/{pin('ampform')}", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "compwa": ("https://compwa.github.io", None),
     "graphviz": ("https://graphviz.readthedocs.io/en/stable", None),
@@ -181,17 +183,14 @@ intersphinx_mapping = {
     "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
     "numpy": (f"https://numpy.org/doc/{pin_minor('numpy')}", None),
     "python": ("https://docs.python.org/3", None),
-    "qrules": (f"https://qrules.readthedocs.io/en/{pin('qrules')}", None),
+    "qrules": (f"https://qrules.readthedocs.io/{pin('qrules')}", None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": (
-        f"https://tensorwaves.readthedocs.io/en/{pin('tensorwaves')}",
-        None,
-    ),
+    "tensorwaves": (f"https://tensorwaves.readthedocs.io/{pin('tensorwaves')}", None),
 }
 linkcheck_anchors = False
 linkcheck_ignore = [
-    "https://github.com/ComPWA/polarimetry",
-    "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=9",
+    "https://doi.org/10.1103",
+    "https://journals.aps.org/prd",
 ]
 myst_enable_extensions = [
     "amsmath",
