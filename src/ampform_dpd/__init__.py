@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import abc
-from functools import lru_cache
+from functools import cache
 from itertools import product
 from typing import Any, Literal, Protocol
 from warnings import warn
@@ -289,7 +289,7 @@ def _create_coupling_symbol(
     return H[resonance, interaction.L, interaction.S]
 
 
-@lru_cache(maxsize=None)
+@cache
 def _get_coupling_base(
     helicity_coupling: bool, typ: Literal["production", "decay"]
 ) -> sp.IndexedBase:
@@ -331,7 +331,7 @@ def _formulate_clebsch_gordan_factors(
     return sqrt_factor * cg_ll * cg_ss
 
 
-@lru_cache(maxsize=None)
+@cache
 def _generate_amplitude_index_bases() -> dict[FinalStateID, sp.IndexedBase]:
     return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # type:ignore[arg-type]
 

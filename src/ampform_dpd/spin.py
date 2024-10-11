@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Generator, SupportsFloat, SupportsInt
+from typing import TYPE_CHECKING, SupportsFloat, SupportsInt
 
 import sympy as sp
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 def generate_ls_couplings(

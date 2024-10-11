@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import difflib
 import sys
-from typing import TYPE_CHECKING, List, Literal, Tuple, TypedDict, Union
+from typing import TYPE_CHECKING, Literal, TypedDict, Union
 from warnings import warn
 
 from ampform_dpd.decay import FinalStateID
@@ -39,7 +39,7 @@ class DecayDescription(TypedDict):
     appendix: dict
 
 
-Topology = List[Union[FinalStateID, "Topology"]]
+Topology = list[Union[FinalStateID, "Topology"]]
 """Topology definition as a list of final state IDs."""
 
 
@@ -77,7 +77,7 @@ class LSVertex(Vertex):
     s: str
 
 
-Node = Tuple[Union[FinalStateID, "Node"], Union[FinalStateID, "Node"]]
+Node = tuple[Union[FinalStateID, "Node"], Union[FinalStateID, "Node"]]
 """Node definition within a `.Topology`."""
 ParityFactor = Literal["+", "-", ""]
 

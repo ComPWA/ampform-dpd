@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterable, SupportsFloat
+from typing import TYPE_CHECKING, SupportsFloat
 
 import sympy as sp
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from attrs import Attribute
 
     from ampform_dpd.decay import LSCoupling, ThreeBodyDecayChain

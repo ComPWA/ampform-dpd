@@ -5,7 +5,7 @@ import logging
 from collections import abc, defaultdict
 from functools import singledispatch
 from pathlib import Path
-from typing import Any, Iterable, NoReturn, TypeVar, overload
+from typing import TYPE_CHECKING, Any, NoReturn, TypeVar, overload
 
 import attrs
 import qrules
@@ -23,6 +23,9 @@ from ampform_dpd.decay import (
     ThreeBodyDecay,
     ThreeBodyDecayChain,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 _LOGGER = logging.getLogger(__name__)
 
