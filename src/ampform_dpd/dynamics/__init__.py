@@ -6,7 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import sympy as sp
-from ampform.dynamics import formulate_form_factor
+from ampform.dynamics.form_factor import FormFactor
 from ampform.kinematics.phasespace import Kallen
 from ampform.sympy import unevaluated
 
@@ -193,27 +193,6 @@ class BlattWeisskopf(sp.Expr):
         return sp.Piecewise(*[
             (sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()
         ])
-
-
-@unevaluated
-class FormFactor(sp.Expr):
-    s: Any
-    m1: Any
-    m2: Any
-    angular_momentum: Any
-    meson_radius: Any
-
-    _latex_repr_ = R"\mathcal{{F}}_{{{angular_momentum}}}\left({s}, {m1}, {m2}\right)"
-
-    def evaluate(self):
-        s, m1, m2, angular_momentum, meson_radius = self.args
-        return formulate_form_factor(
-            s=s,
-            m_a=m1,
-            m_b=m2,
-            angular_momentum=angular_momentum,
-            meson_radius=meson_radius,
-        )
 
 
 @unevaluated
