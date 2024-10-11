@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from functools import lru_cache
+from functools import cache
 from textwrap import dedent
 from typing import TYPE_CHECKING, Generic, Literal, TypeVar, overload
 from warnings import warn
@@ -170,7 +170,7 @@ class ThreeBodyDecayChain:
         return self.parent
 
     @property
-    @lru_cache(maxsize=None)  # noqa: B019
+    @cache  # noqa: B019
     def final_state(self) -> tuple[FinalState, FinalState, FinalState]:
         final_state = (*self.decay_products, self.spectator)
         return tuple(sorted(final_state, key=lambda x: x.index))  # type:ignore[return-value]
@@ -202,7 +202,7 @@ class ThreeBodyDecayChain:
     def spectator(self) -> FinalState:
         return self._get_child_of_type(State)
 
-    @lru_cache(maxsize=None)  # noqa: B019
+    @cache  # noqa: B019
     def _get_child_of_type(self, typ: type[T]) -> T:
         for child in self.decay.children:
             if isinstance(child, typ):
