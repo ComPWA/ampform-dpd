@@ -23,7 +23,6 @@ __pycache__/
 .pytest_cache/
 .virtual_documents/
 *.pyc
-*condaenv.*
 coverage.*
 htmlcov/
 prof/
@@ -31,7 +30,6 @@ typings/
 
 # Virtual environments
 *venv/
-.pixi/
 .tox/
 pyvenv*/
 
