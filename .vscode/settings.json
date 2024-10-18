@@ -33,10 +33,6 @@
   "cSpell.enabled": true,
   "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
-  "files.associations": {
-    "**/.constraints/py*.txt": "pip-requirements",
-    "**/pixi.lock": "yaml"
-  },
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "gitlens.telemetry.enabled": false,
@@ -51,7 +47,6 @@
   "notebook.gotoSymbols.showAllSymbols": true,
   "python.analysis.autoImportCompletions": false,
   "python.analysis.inlayHints.pytestParameters": true,
-  "python.analysis.typeCheckingMode": "strict",
   "python.terminal.activateEnvironment": false,
   "python.testing.pytestArgs": ["--color=no"],
   "python.testing.pytestEnabled": true,
@@ -63,7 +58,7 @@
   "ruff.organizeImports": true,
   "search.exclude": {
     "**/tests/**/__init__.py": true,
-    ".constraints/*.txt": true,
+    "**/uv.lock": true,
     "typings/**": true
   },
   "telemetry.telemetryLevel": "off",
