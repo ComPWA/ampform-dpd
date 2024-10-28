@@ -59,6 +59,7 @@ dependencies = [
     { name = "ampform" },
     { name = "attrs" },
     { name = "cloudpickle" },
+    { name = "numpy" },
     { name = "qrules" },
     { name = "sympy" },
     { name = "tensorwaves", extra = ["jax"] },
@@ -66,15 +67,8 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-jax = [
-    { name = "numpy" },
-    { name = "tensorwaves", extra = ["jax"] },
-]
 numba = [
     { name = "tensorwaves", extra = ["numba"] },
-]
-tensorflow = [
-    { name = "tensorwaves", extra = ["tf"] },
 ]
 tf = [
     { name = "tensorwaves", extra = ["tf"] },
@@ -195,14 +189,12 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "ampform", specifier = ">=0.15.1" },
-    { name = "ampform-dpd", extras = ["tf"], marker = "extra == 'tensorflow'" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
-    { name = "numpy", marker = "extra == 'jax'", specifier = "==1.*" },
+    { name = "numpy", specifier = "~=1.0" },
     { name = "qrules", specifier = ">=0.10.0" },
     { name = "sympy", specifier = ">=1.10" },
     { name = "tensorwaves", extras = ["jax"] },
-    { name = "tensorwaves", extras = ["jax"], marker = "extra == 'jax'" },
     { name = "tensorwaves", extras = ["numba"], marker = "extra == 'numba'" },
     { name = "tensorwaves", extras = ["tf"], marker = "extra == 'tf'" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
