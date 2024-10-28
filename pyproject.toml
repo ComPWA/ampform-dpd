@@ -84,7 +84,7 @@ jupyter = [
     "jupyterlab-myst",
     "python-lsp-ruff",
     "python-lsp-server[rope]",
-    {include-group = "doc"},
+    {include-group = "notebooks"},
 ]
 notebooks = [
     "graphviz",
