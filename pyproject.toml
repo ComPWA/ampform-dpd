@@ -101,18 +101,11 @@ style = [
     {include-group = "types"},
 ]
 test = [
-    "numpy",
     "pytest",
     "pytest-cov",
     "pytest-xdist",
 ]
-types = [
-    "docutils",
-    "pybtex",
-    "pytest",
-    "sphinx",
-    "sphinx-api-relink",
-]
+types = ["sphinx-api-relink"]
 
 [tool.setuptools]
 include-package-data = false

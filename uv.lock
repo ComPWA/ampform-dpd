@@ -76,7 +76,6 @@ tf = [
 
 [package.dependency-groups]
 dev = [
-    { name = "docutils" },
     { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -89,16 +88,13 @@ dev = [
     { name = "mypy" },
     { name = "myst-nb" },
     { name = "nbmake" },
-    { name = "numpy" },
     { name = "pandas" },
-    { name = "pybtex" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extra = ["rope"] },
     { name = "ruff" },
-    { name = "sphinx" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-autobuild" },
     { name = "sphinx-book-theme" },
@@ -164,24 +160,15 @@ notebooks = [
     { name = "tqdm" },
 ]
 style = [
-    { name = "docutils" },
     { name = "mypy" },
-    { name = "pybtex" },
-    { name = "pytest" },
-    { name = "sphinx" },
     { name = "sphinx-api-relink" },
 ]
 test = [
-    { name = "numpy" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
 ]
 types = [
-    { name = "docutils" },
-    { name = "pybtex" },
-    { name = "pytest" },
-    { name = "sphinx" },
     { name = "sphinx-api-relink" },
 ]
 
@@ -201,7 +188,6 @@ requires-dist = [
 
 [package.metadata.dependency-groups]
 dev = [
-    { name = "docutils" },
     { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -215,16 +201,13 @@ dev = [
     { name = "mypy" },
     { name = "myst-nb" },
     { name = "nbmake" },
-    { name = "numpy" },
     { name = "pandas" },
-    { name = "pybtex" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extras = ["rope"] },
     { name = "ruff" },
-    { name = "sphinx" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-autobuild" },
     { name = "sphinx-book-theme" },
@@ -291,26 +274,15 @@ notebooks = [
     { name = "tqdm" },
 ]
 style = [
-    { name = "docutils" },
     { name = "mypy" },
-    { name = "pybtex" },
-    { name = "pytest" },
-    { name = "sphinx" },
     { name = "sphinx-api-relink" },
 ]
 test = [
-    { name = "numpy" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
 ]
-types = [
-    { name = "docutils" },
-    { name = "pybtex" },
-    { name = "pytest" },
-    { name = "sphinx" },
-    { name = "sphinx-api-relink" },
-]
+types = [{ name = "sphinx-api-relink" }]
 
 [[package]]
 name = "anyio"
