@@ -172,7 +172,6 @@ style = [
     { name = "sphinx-api-relink" },
 ]
 test = [
-    { name = "nbmake" },
     { name = "numpy" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -300,7 +299,6 @@ style = [
     { name = "sphinx-api-relink" },
 ]
 test = [
-    { name = "nbmake" },
     { name = "numpy" },
     { name = "pytest" },
     { name = "pytest-cov" },

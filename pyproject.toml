@@ -56,6 +56,7 @@ Tracker = "https://github.com/ComPWA/ampform-dpd/issues"
 
 [dependency-groups]
 dev = [
+    "nbmake",
     "ruff",
     "sphinx-autobuild",
     {include-group = "doc"},
@@ -100,7 +101,6 @@ style = [
     {include-group = "types"},
 ]
 test = [
-    "nbmake",
     "numpy",
     "pytest",
     "pytest-cov",
