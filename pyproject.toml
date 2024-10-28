@@ -104,7 +104,10 @@ test = [
     "pytest-cov",
     "pytest-xdist",
 ]
-types = ["sphinx-api-relink"]
+types = [
+    "pytest",
+    "sphinx-api-relink",
+]
 
 [tool.setuptools]
 include-package-data = false

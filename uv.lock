@@ -152,6 +152,7 @@ notebooks = [
 ]
 style = [
     { name = "mypy" },
+    { name = "pytest" },
     { name = "sphinx-api-relink" },
 ]
 test = [
@@ -160,6 +161,7 @@ test = [
     { name = "pytest-xdist" },
 ]
 types = [
+    { name = "pytest" },
     { name = "sphinx-api-relink" },
 ]
 
@@ -255,6 +257,7 @@ notebooks = [
 ]
 style = [
     { name = "mypy" },
+    { name = "pytest" },
     { name = "sphinx-api-relink" },
 ]
 test = [
@@ -262,7 +265,10 @@ test = [
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
 ]
-types = [{ name = "sphinx-api-relink" }]
+types = [
+    { name = "pytest" },
+    { name = "sphinx-api-relink" },
+]
 
 [[package]]
 name = "anyio"
