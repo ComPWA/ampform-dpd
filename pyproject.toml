@@ -28,6 +28,7 @@ dependencies = [
     "ampform >=0.15.1", # aslatex with keyword arguments
     "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
+    "numpy~=1.0",
     "qrules >=0.10.0",
     "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
@@ -40,78 +41,8 @@ name = "ampform-dpd"
 requires-python = ">=3.9"
 
 [project.optional-dependencies]
-dev = [
-    "ampform-dpd[doc]",
-    "ampform-dpd[jupyter]",
-    "ampform-dpd[sty]",
-    "ampform-dpd[test]",
-    "sphinx-autobuild",
-    "tox",
-]
-doc = [
-    "ampform-dpd[notebooks]",
-    "myst-nb",
-    "sphinx-api-relink",
-    "sphinx-book-theme",
-    "sphinx-codeautolink[ipython]",
-    "sphinx-copybutton",
-    "sphinx-design",
-    "sphinx-pybtex-etal-style",
-    "sphinx-togglebutton",
-    "sphinxcontrib-bibtex",
-]
-jax = [
-    "numpy==1.*",
-    "tensorwaves[jax]",
-]
-jupyter = [
-    "ampform-dpd[doc]",
-    "jupyterlab",
-    "jupyterlab-code-formatter >=3.0.0",
-    "jupyterlab-git",
-    "jupyterlab-lsp",
-    "jupyterlab-myst",
-    "python-lsp-ruff",
-    "python-lsp-server[rope]",
-]
-notebooks = [
-    "graphviz",
-    "ipympl",
-    "ipywidgets",
-    "matplotlib",
-    "pandas",
-    "tensorwaves[phsp]",
-    "tqdm",
-]
-numba = [
-    "tensorwaves[numba]",
-]
-sty = [
-    "ampform-dpd[types]",
-    "mypy",
-    "pre-commit-uv",
-    "ruff",
-]
-tensorflow = [
-    "ampform-dpd[tf]",
-]
-test = [
-    "nbmake",
-    "numpy",
-    "pytest",
-    "pytest-cov",
-    "pytest-xdist",
-]
-tf = [
-    "tensorwaves[tf]",
-]
-types = [
-    "docutils",
-    "pybtex",
-    "pytest",
-    "sphinx",
-    "sphinx-api-relink",
-]
+numba = ["tensorwaves[numba]"]
+tf = ["tensorwaves[tf]"]
 
 [project.readme]
 content-type = "text/markdown"
@@ -122,6 +53,61 @@ Changelog = "https://github.com/ComPWA/ampform-dpd/releases"
 Documentation = "https://compwa.github.io/ampform-dpd"
 Source = "https://github.com/ComPWA/ampform-dpd"
 Tracker = "https://github.com/ComPWA/ampform-dpd/issues"
+
+[dependency-groups]
+dev = [
+    "nbmake",
+    "ruff",
+    "sphinx-autobuild",
+    {include-group = "doc"},
+    {include-group = "jupyter"},
+    {include-group = "style"},
+    {include-group = "test"},
+]
+doc = [
+    "myst-nb",
+    "sphinx-api-relink",
+    "sphinx-book-theme",
+    "sphinx-codeautolink[ipython]",
+    "sphinx-copybutton",
+    "sphinx-design",
+    "sphinx-pybtex-etal-style",
+    "sphinx-togglebutton",
+    "sphinxcontrib-bibtex",
+    {include-group = "notebooks"},
+]
+jupyter = [
+    "jupyterlab",
+    "jupyterlab-code-formatter",
+    "jupyterlab-git",
+    "jupyterlab-lsp",
+    "jupyterlab-myst",
+    "python-lsp-ruff",
+    "python-lsp-server[rope]",
+    {include-group = "notebooks"},
+]
+notebooks = [
+    "graphviz",
+    "ipympl",
+    "ipywidgets",
+    "matplotlib",
+    "pandas",
+    "tensorwaves[phsp]",
+    "tqdm",
+]
+style = [
+    "mypy",
+    {include-group = "types"},
+]
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+types = [
+    "pytest",
+    "sphinx-api-relink",
+]
 
 [tool.setuptools]
 include-package-data = false
@@ -185,6 +171,8 @@ reportUnusedFunction = true
 reportUnusedImport = true
 reportUnusedVariable = true
 typeCheckingMode = "strict"
+venv = ".venv"
+venvPath = "."
 
 [tool.pytest.ini_options]
 addopts = [
@@ -480,7 +468,4 @@ allowlist_externals =
 commands =
     pre-commit run --all-files {posargs}
 description = Perform all linting, formatting, and spelling checks
-setenv =
-    {[testenv]setenv}
-    SKIP = pyright
 """
