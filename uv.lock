@@ -66,6 +66,21 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+jax = [
+    { name = "numpy" },
+    { name = "tensorwaves", extra = ["jax"] },
+]
+numba = [
+    { name = "tensorwaves", extra = ["numba"] },
+]
+tensorflow = [
+    { name = "tensorwaves", extra = ["tf"] },
+]
+tf = [
+    { name = "tensorwaves", extra = ["tf"] },
+]
+
+[package.dependency-groups]
 dev = [
     { name = "docutils" },
     { name = "graphviz" },
@@ -120,10 +135,6 @@ doc = [
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
 ]
-jax = [
-    { name = "numpy" },
-    { name = "tensorwaves", extra = ["jax"] },
-]
 jupyter = [
     { name = "graphviz" },
     { name = "ipympl" },
@@ -158,20 +169,13 @@ notebooks = [
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
 ]
-numba = [
-    { name = "tensorwaves", extra = ["numba"] },
-]
-sty = [
+style = [
     { name = "docutils" },
     { name = "mypy" },
     { name = "pybtex" },
     { name = "pytest" },
-    { name = "ruff" },
     { name = "sphinx" },
     { name = "sphinx-api-relink" },
-]
-tensorflow = [
-    { name = "tensorwaves", extra = ["tf"] },
 ]
 test = [
     { name = "nbmake" },
@@ -179,9 +183,6 @@ test = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
-]
-tf = [
-    { name = "tensorwaves", extra = ["tf"] },
 ]
 types = [
     { name = "docutils" },
@@ -194,60 +195,131 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "ampform", specifier = ">=0.15.1" },
-    { name = "ampform-dpd", extras = ["doc"], marker = "extra == 'dev'" },
-    { name = "ampform-dpd", extras = ["doc"], marker = "extra == 'jupyter'" },
-    { name = "ampform-dpd", extras = ["jupyter"], marker = "extra == 'dev'" },
-    { name = "ampform-dpd", extras = ["notebooks"], marker = "extra == 'doc'" },
-    { name = "ampform-dpd", extras = ["sty"], marker = "extra == 'dev'" },
-    { name = "ampform-dpd", extras = ["test"], marker = "extra == 'dev'" },
     { name = "ampform-dpd", extras = ["tf"], marker = "extra == 'tensorflow'" },
-    { name = "ampform-dpd", extras = ["types"], marker = "extra == 'sty'" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
-    { name = "docutils", marker = "extra == 'types'" },
-    { name = "graphviz", marker = "extra == 'notebooks'" },
-    { name = "ipympl", marker = "extra == 'notebooks'" },
-    { name = "ipywidgets", marker = "extra == 'notebooks'" },
-    { name = "jupyterlab", marker = "extra == 'jupyter'" },
-    { name = "jupyterlab-code-formatter", marker = "extra == 'jupyter'", specifier = ">=3.0.0" },
-    { name = "jupyterlab-git", marker = "extra == 'jupyter'" },
-    { name = "jupyterlab-lsp", marker = "extra == 'jupyter'" },
-    { name = "jupyterlab-myst", marker = "extra == 'jupyter'" },
-    { name = "matplotlib", marker = "extra == 'notebooks'" },
-    { name = "mypy", marker = "extra == 'sty'" },
-    { name = "myst-nb", marker = "extra == 'doc'" },
-    { name = "nbmake", marker = "extra == 'test'" },
     { name = "numpy", marker = "extra == 'jax'", specifier = "==1.*" },
-    { name = "numpy", marker = "extra == 'test'" },
-    { name = "pandas", marker = "extra == 'notebooks'" },
-    { name = "pybtex", marker = "extra == 'types'" },
-    { name = "pytest", marker = "extra == 'test'" },
-    { name = "pytest", marker = "extra == 'types'" },
-    { name = "pytest-cov", marker = "extra == 'test'" },
-    { name = "pytest-xdist", marker = "extra == 'test'" },
-    { name = "python-lsp-ruff", marker = "extra == 'jupyter'" },
-    { name = "python-lsp-server", extras = ["rope"], marker = "extra == 'jupyter'" },
     { name = "qrules", specifier = ">=0.10.0" },
-    { name = "ruff", marker = "extra == 'sty'" },
-    { name = "sphinx", marker = "extra == 'types'" },
-    { name = "sphinx-api-relink", marker = "extra == 'doc'" },
-    { name = "sphinx-api-relink", marker = "extra == 'types'" },
-    { name = "sphinx-autobuild", marker = "extra == 'dev'" },
-    { name = "sphinx-book-theme", marker = "extra == 'doc'" },
-    { name = "sphinx-codeautolink", extras = ["ipython"], marker = "extra == 'doc'" },
-    { name = "sphinx-copybutton", marker = "extra == 'doc'" },
-    { name = "sphinx-design", marker = "extra == 'doc'" },
-    { name = "sphinx-pybtex-etal-style", marker = "extra == 'doc'" },
-    { name = "sphinx-togglebutton", marker = "extra == 'doc'" },
-    { name = "sphinxcontrib-bibtex", marker = "extra == 'doc'" },
     { name = "sympy", specifier = ">=1.10" },
     { name = "tensorwaves", extras = ["jax"] },
     { name = "tensorwaves", extras = ["jax"], marker = "extra == 'jax'" },
     { name = "tensorwaves", extras = ["numba"], marker = "extra == 'numba'" },
-    { name = "tensorwaves", extras = ["phsp"], marker = "extra == 'notebooks'" },
     { name = "tensorwaves", extras = ["tf"], marker = "extra == 'tf'" },
-    { name = "tqdm", marker = "extra == 'notebooks'" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+
+[package.metadata.dependency-groups]
+dev = [
+    { name = "docutils" },
+    { name = "graphviz" },
+    { name = "ipympl" },
+    { name = "ipywidgets" },
+    { name = "jupyterlab" },
+    { name = "jupyterlab-code-formatter" },
+    { name = "jupyterlab-code-formatter", specifier = ">=3.0.0" },
+    { name = "jupyterlab-git" },
+    { name = "jupyterlab-lsp" },
+    { name = "jupyterlab-myst" },
+    { name = "matplotlib" },
+    { name = "mypy" },
+    { name = "myst-nb" },
+    { name = "nbmake" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "pybtex" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-xdist" },
+    { name = "python-lsp-ruff" },
+    { name = "python-lsp-server", extras = ["rope"] },
+    { name = "ruff" },
+    { name = "sphinx" },
+    { name = "sphinx-api-relink" },
+    { name = "sphinx-autobuild" },
+    { name = "sphinx-book-theme" },
+    { name = "sphinx-codeautolink", extras = ["ipython"] },
+    { name = "sphinx-copybutton" },
+    { name = "sphinx-design" },
+    { name = "sphinx-pybtex-etal-style" },
+    { name = "sphinx-togglebutton" },
+    { name = "sphinxcontrib-bibtex" },
+    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tqdm" },
+]
+doc = [
+    { name = "graphviz" },
+    { name = "ipympl" },
+    { name = "ipywidgets" },
+    { name = "matplotlib" },
+    { name = "myst-nb" },
+    { name = "pandas" },
+    { name = "sphinx-api-relink" },
+    { name = "sphinx-book-theme" },
+    { name = "sphinx-codeautolink", extras = ["ipython"] },
+    { name = "sphinx-copybutton" },
+    { name = "sphinx-design" },
+    { name = "sphinx-pybtex-etal-style" },
+    { name = "sphinx-togglebutton" },
+    { name = "sphinxcontrib-bibtex" },
+    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tqdm" },
+]
+jupyter = [
+    { name = "graphviz" },
+    { name = "ipympl" },
+    { name = "ipywidgets" },
+    { name = "jupyterlab" },
+    { name = "jupyterlab-code-formatter" },
+    { name = "jupyterlab-code-formatter", specifier = ">=3.0.0" },
+    { name = "jupyterlab-git" },
+    { name = "jupyterlab-lsp" },
+    { name = "jupyterlab-myst" },
+    { name = "matplotlib" },
+    { name = "myst-nb" },
+    { name = "pandas" },
+    { name = "python-lsp-ruff" },
+    { name = "python-lsp-server", extras = ["rope"] },
+    { name = "sphinx-api-relink" },
+    { name = "sphinx-book-theme" },
+    { name = "sphinx-codeautolink", extras = ["ipython"] },
+    { name = "sphinx-copybutton" },
+    { name = "sphinx-design" },
+    { name = "sphinx-pybtex-etal-style" },
+    { name = "sphinx-togglebutton" },
+    { name = "sphinxcontrib-bibtex" },
+    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tqdm" },
+]
+notebooks = [
+    { name = "graphviz" },
+    { name = "ipympl" },
+    { name = "ipywidgets" },
+    { name = "matplotlib" },
+    { name = "pandas" },
+    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tqdm" },
+]
+style = [
+    { name = "docutils" },
+    { name = "mypy" },
+    { name = "pybtex" },
+    { name = "pytest" },
+    { name = "sphinx" },
+    { name = "sphinx-api-relink" },
+]
+test = [
+    { name = "nbmake" },
+    { name = "numpy" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-xdist" },
+]
+types = [
+    { name = "docutils" },
+    { name = "pybtex" },
+    { name = "pytest" },
+    { name = "sphinx" },
+    { name = "sphinx-api-relink" },
 ]
 
 [[package]]
