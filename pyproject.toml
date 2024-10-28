@@ -46,7 +46,6 @@ dev = [
     "ampform-dpd[sty]",
     "ampform-dpd[test]",
     "sphinx-autobuild",
-    "tox",
 ]
 doc = [
     "ampform-dpd[notebooks]",
@@ -89,7 +88,6 @@ numba = [
 sty = [
     "ampform-dpd[types]",
     "mypy",
-    "pre-commit-uv",
     "ruff",
 ]
 tensorflow = [
