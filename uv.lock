@@ -7,6 +7,9 @@ resolution-markers = [
     "python_full_version < '3.10'",
 ]
 
+[manifest]
+constraints = [{ name = "numpy", specifier = "~=1.0" }]
+
 [[package]]
 name = "absl-py"
 version = "2.1.0"
@@ -191,7 +194,7 @@ requires-dist = [
     { name = "ampform", specifier = ">=0.15.1" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
-    { name = "numpy", specifier = "~=1.0" },
+    { name = "numpy" },
     { name = "qrules", specifier = ">=0.10.0" },
     { name = "sympy", specifier = ">=1.10" },
     { name = "tensorwaves", extras = ["jax"] },
