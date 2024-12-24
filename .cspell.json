@@ -1,4 +1,10 @@
 {
+  "enableFiletypes": [
+    "git-commit",
+    "github-actions-workflow",
+    "julia",
+    "jupyter"
+  ],
   "flagWords": [
     "analyse",
     "colour",
@@ -130,6 +136,7 @@
     "yticks"
   ],
   "language": "en-US",
+  "useGitignore": true,
   "version": "0.2",
   "words": [
     "AmpForm",
@@ -168,12 +175,5 @@
     "SymPy",
     "TensorWaves",
     "Weisskopf"
-  ],
-  "enableFiletypes": [
-    "git-commit",
-    "github-actions-workflow",
-    "julia",
-    "jupyter"
-  ],
-  "useGitignore": true
+  ]
 }
