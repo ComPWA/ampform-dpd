@@ -77,7 +77,7 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
     if not function_name:
         return DefinedExpression()
     function_definition = get_function_definition(function_name, model)
-    function_definition = cast(BlattWeisskopfDefinition, function_definition)
+    function_definition = cast("BlattWeisskopfDefinition", function_definition)
     function_type = function_definition["type"]
     if function_type == "BlattWeisskopf":
         node = vertex["node"]
@@ -103,7 +103,7 @@ def formulate_breit_wigner(
     propagator: Propagator, resonance: str, model: ModelDefinition
 ) -> DefinedExpression:
     function_definition = get_function_definition(propagator["parametrization"], model)
-    function_definition = cast(BreitWignerDefinition, function_definition)
+    function_definition = cast("BreitWignerDefinition", function_definition)
     node = propagator["node"]
     i, j = node
     s = to_mandelstam_symbol(node)
@@ -129,7 +129,7 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
     propagator: Propagator, resonance: str, model: ModelDefinition
 ) -> DefinedExpression:
     function_definition = get_function_definition(propagator["parametrization"], model)
-    function_definition = cast(MultichannelBreitWignerDefinition, function_definition)
+    function_definition = cast("MultichannelBreitWignerDefinition", function_definition)
     channel_definitions = function_definition["channels"]
     if len(channel_definitions) < 2:  # noqa: PLR2004
         msg = "Need at least two channels for a multi-channel Breit-Wigner"

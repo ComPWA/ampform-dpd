@@ -225,7 +225,7 @@ def _get_resonance_helicity(
         node = vertex["node"]
         if all(isinstance(i, int) for i in node):
             continue
-        vertex = cast(HelicityVertex, vertex)
+        vertex = cast("HelicityVertex", vertex)
         helicities = vertex.get("helicities")
         if helicities is None:  # pyright:ignore[reportUnnecessaryComparison]
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
@@ -243,7 +243,7 @@ def _get_final_state_helicities(
     vertices = chain_definition["vertices"]
     collected_helicities: dict[FinalStateID, sp.Rational] = {}
     for vertex in vertices:
-        vertex = cast(HelicityVertex, vertex)
+        vertex = cast("HelicityVertex", vertex)
         helicities = vertex.get("helicities")
         if helicities is None:  # pyright:ignore[reportUnnecessaryComparison]
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
@@ -271,15 +271,15 @@ def formulate_recoupling(  # noqa: PLR0914
     node = vertex["node"]
     λa, λb = map(_get_helicity_symbol, node)
     if vertex_type in {"helicity", "parity"}:
-        vertex = cast(HelicityVertex, vertex)
+        vertex = cast("HelicityVertex", vertex)
         λa0, λb0 = (sp.Rational(v) for v in vertex["helicities"])
         if vertex_type == "parity":
-            vertex = cast(ParityVertex, vertex)
+            vertex = cast("ParityVertex", vertex)
             f = _sign_to_value(vertex.get("parity_factor", "+"))
             return ParityRecoupling(λa, λb, λa0, λb0, f)
         return HelicityRecoupling(λa, λb, λa0, λb0)
     if vertex_type == "ls":
-        vertex = cast(LSVertex, vertex)
+        vertex = cast("LSVertex", vertex)
         l = int(vertex["l"])
         s = sp.Rational(vertex["s"])
         ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
