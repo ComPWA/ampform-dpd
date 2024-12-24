@@ -18,6 +18,7 @@ repos:
       - id: check-dev-files
         args:
           - --doc-apt-packages=graphviz
+          - --environment-variables=PYTHONHASHSEED=0
           - --github-pages
           - --repo-name=ampform-dpd
           - --repo-title=AmpForm-DPD
