@@ -272,10 +272,6 @@ def perform_cached_lambdify(  # type:ignore[misc]  # pyright:ignore[reportIncons
             directory will be put under the home directory, or to the path specified by
             the environment variable :code:`SYMPY_CACHE_DIR`.
 
-    .. tip:: For a faster cache, set `PYTHONHASHSEED
-        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
-        fixed value.
-
     .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
     if cache_directory is None:

@@ -374,8 +374,6 @@ commands =
     pytest {posargs}
 description = Run all unit tests
 passenv = *
-setenv =
-    PYTHONHASHSEED = 0
 
 [testenv:cov]
 allowlist_externals =

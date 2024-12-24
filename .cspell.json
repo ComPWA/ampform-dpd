@@ -167,7 +167,6 @@
     "pyplot",
     "pyright",
     "pytest",
-    "PYTHONHASHSEED",
     "QRules",
     "recoupling",
     "recouplings",
