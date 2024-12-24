@@ -28,7 +28,7 @@ dependencies = [
     "ampform >=0.15.1", # aslatex with keyword arguments
     "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
-    "numpy~=1.0",
+    "numpy",
     "qrules >=0.10.0",
     "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
@@ -470,3 +470,6 @@ commands =
     pre-commit run --all-files {posargs}
 description = Perform all linting, formatting, and spelling checks
 """
+
+[tool.uv]
+constraint-dependencies = ["numpy~=1.0"]
