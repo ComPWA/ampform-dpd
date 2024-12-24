@@ -28,10 +28,13 @@ from typing import TYPE_CHECKING, Any, overload
 import cloudpickle
 import sympy as sp
 from ampform.io import aslatex
+from ampform.sympy._cache import (
+    get_readable_hash,  # noqa: PLC2701
+    get_system_cache_directory,  # noqa: PLC2701
+)
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
 from ampform_dpd import DefinedExpression
-from ampform_dpd._cache import get_readable_hash, get_system_cache_directory
 from ampform_dpd.decay import (
     IsobarNode,
     Particle,
