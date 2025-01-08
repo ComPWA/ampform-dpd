@@ -432,26 +432,17 @@ description = "Set up a server to directly preview changes to the HTML pages"
 [tool.tox.env.docnb]
 base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
 description = "{[tool.tox.env.doc]description} with cached notebook execution"
-set_env = [
-    {replace = "ref", of = ["tool.tox.env.doc.set_env"], extend = true},
-    {EXECUTE_NB = "yes"},
-]
+set_env.EXECUTE_NB = "yes"
 
 [tool.tox.env.docnb-force]
 base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
 description = "{[tool.tox.env.doc]description} with notebook execution (no cache)"
-set_env = [
-    {replace = "ref", of = ["tool.tox.env.doc.set_env"], extend = true},
-    {FORCE_EXECUTE_NB = "yes"},
-]
+set_env.FORCE_EXECUTE_NB = "yes"
 
 [tool.tox.env.docnblive]
 base = ["tool.tox.env.doclive", "tool.tox.env_run_base"]
 description = "{[tool.tox.env.doclive]description} with cached notebook execution"
-set_env = [
-    {replace = "ref", of = ["tool.tox.env.doclive.set_env"], extend = true},
-    {EXECUTE_NB = "yes"},
-]
+set_env.EXECUTE_NB = "yes"
 
 [tool.tox.env.linkcheck]
 allowlist_externals = ["sphinx-build"]
