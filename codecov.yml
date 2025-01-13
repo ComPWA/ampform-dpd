@@ -21,13 +21,10 @@ coverage:
         target: 0
         threshold: 0%
         base: auto
-        branches: null
         if_no_uploads: error
         if_not_found: success
         if_ci_failed: error
         only_pulls: false
-        flags: null
-        paths: null
     changes: false
 
 parsers:
