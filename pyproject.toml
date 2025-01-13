@@ -478,5 +478,4 @@ description = "Perform all linting, formatting, and spelling checks"
 [tool.uv]
 constraint-dependencies = [
     "numpy~=1.0",
-    "pygments!=2.19.*", # https://github.com/felix-hilden/sphinx-codeautolink/issues/152
 ]
