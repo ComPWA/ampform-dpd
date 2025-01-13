@@ -351,123 +351,133 @@ sort_first = [
     "project",
     "tool.setuptools",
     "tool.setuptools_scm",
+    "tool.tox.env_run_base",
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
 
 [tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist =
-    cov,
-    docnb-force,
-    linkcheck,
-    sty,
-skip_install = True
-skip_missing_interpreters = True
-skipsdist = True
+env_list = [
+    "cov",
+    "docnb-force",
+    "linkcheck",
+    "sty",
+]
+no_package = true
+requires = ["tox>=4.21.0"]
+skip_install = true
+skip_missing_interpreters = true
 
-[testenv]
-allowlist_externals =
-    pytest
-commands =
-    pytest {posargs}
-description = Run all unit tests
-passenv = *
+[tool.tox.env_run_base]
+allowlist_externals = ["pytest"]
+commands = [["pytest", {replace = "posargs", extend = true}]]
+description = "Run all unit tests"
+pass_env = ["*"]
 
-[testenv:cov]
-allowlist_externals =
-    pytest
-commands =
-    pytest {posargs:src tests} \
-        --cov-fail-under=50 \
-        --cov-report=html \
-        --cov-report=xml \
-        --cov=ampform_dpd
-description = Compute test coverage
+[tool.tox.env.cov]
+allowlist_externals = ["pytest"]
+commands = [
+    [
+        "pytest",
+        {replace = "posargs", extend = true},
+        "--cov-fail-under=58",
+        "--cov-report=html",
+        "--cov-report=xml",
+        "--cov=ampform_dpd",
+    ],
+]
+description = "Compute test coverage"
 
-[testenv:doc]
-allowlist_externals =
-    sphinx-build
-commands =
-    sphinx-build \
-        --builder=html \
-        --fail-on-warning \
-        --keep-going \
-        docs/ docs/_build/html
-description = Build documentation with Sphinx
+[tool.tox.env.doc]
+allowlist_externals = ["sphinx-build"]
+commands = [
+    [
+        "sphinx-build",
+        "--builder=html",
+        "--fail-on-warning",
+        "--keep-going",
+        "docs/",
+        "docs/_build/html",
+    ],
+]
+description = "Build documentation with Sphinx"
 
-[testenv:docnb]
-base = doc
-description = {[testenv:doc]description} with cached notebook execution
-setenv =
-    {[testenv:doc]setenv}
-    EXECUTE_NB = yes
+[tool.tox.env.doclive]
+allowlist_externals = ["sphinx-autobuild"]
+commands = [
+    [
+        "sphinx-autobuild",
+        "--ignore=docs/_build/",
+        "--ignore=docs/_images/",
+        "--ignore=docs/api/",
+        "--ignore=docs/export/",
+        "--open-browser",
+        "--port=0",
+        "--re-ignore='.*/__pycache__/.*'",
+        "--re-ignore='.*/.ipynb_checkpoints/.*'",
+        "--re-ignore='.*/.virtual_documents/.*'",
+        "--re-ignore='.*\\.pdf'",
+        "--re-ignore='.*\\.pkl'",
+        "--re-ignore='.*\\.png'",
+        "--re-ignore='.*\\.svg'",
+        "--re-ignore='.*\\.tmp'",
+        "--watch=docs",
+        "--watch=src",
+        "docs/",
+        "docs/_build/html",
+    ],
+]
+description = "Set up a server to directly preview changes to the HTML pages"
 
-[testenv:docnb-force]
-base = doc
-description = {[testenv:doc]description} with notebook execution (no cache)
-setenv =
-    {[testenv:doc]setenv}
-    FORCE_EXECUTE_NB = yes
+[tool.tox.env.docnb]
+base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+description = "{[tool.tox.env.doc]description} with cached notebook execution"
+set_env.EXECUTE_NB = "yes"
 
-[testenv:doclive]
-allowlist_externals =
-    sphinx-autobuild
-commands =
-    sphinx-autobuild \
-        --ignore=docs/_build/ \
-        --ignore=docs/_images/ \
-        --ignore=docs/api/ \
-        --ignore=docs/export/ \
-        --open-browser \
-        --port=0 \
-        --re-ignore='.*/__pycache__/.*' \
-        --re-ignore='.*/.ipynb_checkpoints/.*' \
-        --re-ignore='.*/.virtual_documents/.*' \
-        --re-ignore='.*\\.pdf' \
-        --re-ignore='.*\\.pkl' \
-        --re-ignore='.*\\.png' \
-        --re-ignore='.*\\.svg' \
-        --re-ignore='.*\\.tmp' \
-        --watch=docs \
-        --watch=src \
-        docs/ docs/_build/html
-description = Set up a server to directly preview changes to the HTML pages
+[tool.tox.env.docnb-force]
+base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+description = "{[tool.tox.env.doc]description} with notebook execution (no cache)"
+set_env.FORCE_EXECUTE_NB = "yes"
 
-[testenv:docnblive]
-base = doclive
-description = {[testenv:doclive]description} with cached notebook execution
-setenv =
-    {[testenv:doclive]setenv}
-    EXECUTE_NB = yes
+[tool.tox.env.docnblive]
+base = ["tool.tox.env.doclive", "tool.tox.env_run_base"]
+description = "{[tool.tox.env.doclive]description} with cached notebook execution"
+set_env.EXECUTE_NB = "yes"
 
-[testenv:linkcheck]
-allowlist_externals =
-    sphinx-build
-commands =
-    sphinx-build \
-        --builder=linkcheck \
-        --show-traceback \
-        docs/ docs/_build/linkcheck
-description = Check external links in the documentation (requires internet connection)
-setenv =
-    PYTHONWARNINGS =
+[tool.tox.env.linkcheck]
+allowlist_externals = ["sphinx-build"]
+commands = [
+    [
+        "sphinx-build",
+        "--builder=linkcheck",
+        "--show-traceback",
+        "docs/",
+        "docs/_build/linkcheck",
+    ],
+]
+description = "Check external links in the documentation (requires internet connection)"
+set_env.PYTHONWARNINGS = ""
 
-[testenv:nb]
-allowlist_externals =
-    pytest
-commands =
-    pytest --nbmake --nbmake-timeout=3600 {posargs:docs}
-description = Run all notebooks with pytest
+[tool.tox.env.nb]
+allowlist_externals = ["pytest"]
+commands = [
+    [
+        "pytest",
+        "--nbmake",
+        "--nbmake-timeout=0",
+        "{posargs:docs}",
+    ],
+]
+description = "Run all notebooks with pytest"
 
-[testenv:sty]
-allowlist_externals =
-    pre-commit
-commands =
-    pre-commit run --all-files {posargs}
-description = Perform all linting, formatting, and spelling checks
-"""
+[tool.tox.env.sty]
+allowlist_externals = ["pre-commit"]
+commands = [["pre-commit", "run", "--all-files", {replace = "posargs", extend = true}]]
+description = "Perform all linting, formatting, and spelling checks"
 
 [tool.uv]
-constraint-dependencies = ["numpy~=1.0"]
+constraint-dependencies = [
+    "numpy~=1.0",
+    "pygments!=2.19.*", # https://github.com/felix-hilden/sphinx-codeautolink/issues/152
+    "sphinx-codeautolink!=0.16.0",
+]

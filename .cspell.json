@@ -29,8 +29,8 @@
     ".pre-commit-config.yaml",
     ".prettierignore",
     ".readthedocs.yml",
+    ".taplo.toml",
     ".vscode/*",
-    ".vscode/.gitignore",
     "codecov.yml",
     "docs/conf.py",
     "pyproject.toml"
