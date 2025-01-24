@@ -8,11 +8,7 @@ resolution-markers = [
 ]
 
 [manifest]
-constraints = [
-    { name = "numpy", specifier = "~=1.0" },
-    { name = "pygments", specifier = "!=2.19.*" },
-    { name = "sphinx-codeautolink", specifier = "!=0.16.0" },
-]
+constraints = [{ name = "numpy", specifier = "~=1.0" }]
 
 [[package]]
 name = "absl-py"
