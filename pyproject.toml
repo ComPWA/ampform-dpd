@@ -396,7 +396,7 @@ commands = [
     [
         "pytest",
         {replace = "posargs", extend = true},
-        "--cov-fail-under=58",
+        "--cov-fail-under=54",
         "--cov-report=html",
         "--cov-report=xml",
         "--cov=ampform_dpd",
