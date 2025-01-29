@@ -18,6 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering :: Physics",
@@ -121,9 +122,16 @@ namespaces = false
 where = ["src"]
 
 [tool.setuptools_scm]
-local_scheme = "no-local-version"
-version_scheme = "only-version"
 write_to = "src/ampform_dpd/version.py"
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
 
 [tool.mypy]
 exclude = "_build"
@@ -145,7 +153,6 @@ disallow_untyped_defs = false
 module = ["tests.*"]
 
 [tool.pyright]
-exclude = ["**/.venv/"]
 reportArgumentType = false
 reportAssignmentType = false
 reportAttributeAccessIssue = false
@@ -358,6 +365,11 @@ trailing_comma_inline_array = true
 
 [tool.tox]
 env_list = [
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
     "cov",
     "docnb-force",
     "linkcheck",
@@ -369,18 +381,21 @@ skip_install = true
 skip_missing_interpreters = true
 
 [tool.tox.env_run_base]
-allowlist_externals = ["pytest"]
 commands = [["pytest", {replace = "posargs", extend = true}]]
-description = "Run all unit tests"
+dependency_groups = ["test"]
+description = "Run test suite on Python {env_name}"
+no_package = false
 pass_env = ["*"]
+runner = "uv-venv-lock-runner"
+skip_install = false
+skip_missing_interpreters = false
 
 [tool.tox.env.cov]
-allowlist_externals = ["pytest"]
 commands = [
     [
         "pytest",
         {replace = "posargs", extend = true},
-        "--cov-fail-under=58",
+        "--cov-fail-under=54",
         "--cov-report=html",
         "--cov-report=xml",
         "--cov=ampform_dpd",
@@ -390,6 +405,7 @@ description = "Compute test coverage"
 
 [tool.tox.env.doc]
 allowlist_externals = ["sphinx-build"]
+base = []
 commands = [
     [
         "sphinx-build",
@@ -397,69 +413,68 @@ commands = [
         "--fail-on-warning",
         "--keep-going",
         "docs/",
-        "docs/_build/html",
+        "docs/_build/html/",
     ],
 ]
 description = "Build documentation with Sphinx"
 
 [tool.tox.env.doclive]
 allowlist_externals = ["sphinx-autobuild"]
+base = []
 commands = [
     [
         "sphinx-autobuild",
-        "--ignore=docs/_build/",
-        "--ignore=docs/_images/",
-        "--ignore=docs/api/",
-        "--ignore=docs/export/",
-        "--open-browser",
         "--port=0",
-        "--re-ignore='.*/__pycache__/.*'",
-        "--re-ignore='.*/.ipynb_checkpoints/.*'",
-        "--re-ignore='.*/.virtual_documents/.*'",
-        "--re-ignore='.*\\.pdf'",
-        "--re-ignore='.*\\.pkl'",
-        "--re-ignore='.*\\.png'",
-        "--re-ignore='.*\\.svg'",
-        "--re-ignore='.*\\.tmp'",
-        "--watch=docs",
+        "--re-ignore=/__pycache__(/.*)?$",
+        "--re-ignore=/_build(/.*)?$",
+        "--re-ignore=/\\.cache(/.*)?$",
+        "--re-ignore=/\\.egg-info(/.*)?$",
+        "--re-ignore=/\\.ipynb_checkpoints(/.*)?$",
+        "--re-ignore=/\\.virtual_documents(/.*)?$",
+        "--re-ignore=/api(/.*)?$",
+        "--re-ignore=/docs$",
+        "--re-ignore=/version\\.py$",
+        "--re-ignore=\\.egg-info(/.*)?$",
+        "--re-ignore=\\.pkl$",
+        "--re-ignore=\\.png$",
+        "--re-ignore=\\.svg$",
         "--watch=src",
         "docs/",
-        "docs/_build/html",
+        "docs/_build/html/",
     ],
 ]
 description = "Set up a server to directly preview changes to the HTML pages"
 
 [tool.tox.env.docnb]
-base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with cached notebook execution"
 set_env.EXECUTE_NB = "yes"
 
 [tool.tox.env.docnb-force]
-base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with notebook execution (no cache)"
 set_env.FORCE_EXECUTE_NB = "yes"
 
 [tool.tox.env.docnblive]
-base = ["tool.tox.env.doclive", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doclive"]
 description = "{[tool.tox.env.doclive]description} with cached notebook execution"
 set_env.EXECUTE_NB = "yes"
 
 [tool.tox.env.linkcheck]
-allowlist_externals = ["sphinx-build"]
+base = ["tool.tox.env.doc"]
 commands = [
     [
         "sphinx-build",
         "--builder=linkcheck",
         "--show-traceback",
         "docs/",
-        "docs/_build/linkcheck",
+        "docs/_build/linkcheck/",
     ],
 ]
 description = "Check external links in the documentation (requires internet connection)"
 set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.nb]
-allowlist_externals = ["pytest"]
 commands = [
     [
         "pytest",
@@ -469,15 +484,28 @@ commands = [
     ],
 ]
 description = "Run all notebooks with pytest"
+with_dev = true
 
 [tool.tox.env.sty]
 allowlist_externals = ["pre-commit"]
+base = []
 commands = [["pre-commit", "run", "--all-files", {replace = "posargs", extend = true}]]
 description = "Perform all linting, formatting, and spelling checks"
+
+[tool.tox.labels]
+doc = [
+    "docnb-force",
+    "linkcheck",
+]
+test = [
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
+]
 
 [tool.uv]
 constraint-dependencies = [
     "numpy~=1.0",
-    "pygments!=2.19.*", # https://github.com/felix-hilden/sphinx-codeautolink/issues/152
-    "sphinx-codeautolink!=0.16.0",
 ]
