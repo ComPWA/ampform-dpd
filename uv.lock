@@ -4693,7 +4693,7 @@ wheels = [
 
 [[package]]
 name = "tensorwaves"
-version = "0.4.12"
+version = "0.4.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -4703,9 +4703,9 @@ dependencies = [
     { name = "sympy" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/da/2f/09fc85518aaf261d33cedd233ea15c5d2a145968e9117a16025025d3c0ba/tensorwaves-0.4.12.tar.gz", hash = "sha256:8748a6fcfc66cf254c4cad10ead107958481ea68cdf59ccec71c5f34fa6bafa7", size = 121021 }
+sdist = { url = "https://files.pythonhosted.org/packages/4f/e0/5074f0bd9bf1e4cd2564619960855d848853e86f75af5cbe740b19a5d2b8/tensorwaves-0.4.13.tar.gz", hash = "sha256:69188837d843247b245db2844c12e06768bb62360aecfa5e85b00bd6f0749a02", size = 355267 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ee/31/fc8717d8a350bf3296ee038930f0ba852723587767fd333df145faac1a10/tensorwaves-0.4.12-py3-none-any.whl", hash = "sha256:f0268bc5e36a11d4a463249596edc2f2cee0aae128c2a99a23da36291666786b", size = 47071 },
+    { url = "https://files.pythonhosted.org/packages/aa/8f/ee59a61deb5f20f733749de4b7f39ff42d299787a1f241bd2dcc2f1e2e4e/tensorwaves-0.4.13-py3-none-any.whl", hash = "sha256:c576125c047d83e98dff6ac9e4fe72244b89a69e262dc1d455cb92e1b8314c5f", size = 42103 },
 ]
 
 [package.optional-dependencies]
@@ -4720,10 +4720,12 @@ numba = [
     { name = "numba", version = "0.61.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
 phsp = [
+    { name = "numpy" },
     { name = "phasespace", extra = ["tf"] },
     { name = "tensorflow" },
 ]
 tf = [
+    { name = "numpy" },
     { name = "tensorflow" },
 ]
 
