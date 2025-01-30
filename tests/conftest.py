@@ -28,7 +28,7 @@ def jpsi2pksigma_reaction(request: SubRequest) -> ReactionInfo:
         initial_state=[("J/psi(1S)", [+1])],
         final_state=["K0", ("Sigma+", [+0.5]), ("p~", [+0.5])],
         allowed_interaction_types="strong",
-        allowed_intermediate_particles=["Sigma(1660)"],
+        allowed_intermediate_particles=["N(1700)+", "Sigma(1660)"],
         formalism=request.param,
     )
 
