@@ -23,12 +23,12 @@ from ampform_dpd.dynamics import RelativisticBreitWigner
 
 
 def formulate_breit_wigner_with_form_factor(
-    decay: ThreeBodyDecayChain,
+    decay_chain: ThreeBodyDecayChain,
 ) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
-    decay_node = decay.decay_node
+    decay_node = decay_chain.decay_node
     s = get_mandelstam_s(decay_node)
     parameter_defaults = {}
-    production_ff, new_pars = _create_form_factor(s, decay.production_node)
+    production_ff, new_pars = _create_form_factor(s, decay_chain.production_node)
     parameter_defaults.update(new_pars)
     decay_ff, new_pars = _create_form_factor(s, decay_node)
     parameter_defaults.update(new_pars)

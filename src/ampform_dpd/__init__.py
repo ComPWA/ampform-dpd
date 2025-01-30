@@ -52,6 +52,7 @@ class DalitzPlotDecompositionBuilder:
         self,
         decay: ThreeBodyDecay,
         min_ls: tuple[bool, bool] | bool = True,
+        all_subsystems: bool = False,
     ) -> None:
         """Amplitude builder for the helicity formalism with Dalitz-plot decomposition.
 
@@ -62,6 +63,8 @@ class DalitzPlotDecompositionBuilder:
                 element of the `tuple` defines whether to use helicity couplings on the
                 **production** `.IsobarNode` and the second configures the **decay**
                 `.IsobarNode`.
+            all_subsystems: Formulate the amplitude model for all allowed subsystems in
+                the decay, even if they do not exist in the `.ThreeBodyDecay` object.
         """
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
@@ -76,6 +79,7 @@ class DalitzPlotDecompositionBuilder:
         else:
             msg = f"Cannot configure helicity couplings with a {type(min_ls).__name__}"
             raise NotImplementedError(msg, min_ls)
+        self.all_subsystems = all_subsystems
 
     def formulate(
         self,
@@ -94,8 +98,12 @@ class DalitzPlotDecompositionBuilder:
         angle_definitions = {}
         parameter_defaults = {}
         args: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
+        if self.all_subsystems:
+            subsystem_ids: list[FinalStateID] = [1, 2, 3]
+        else:
+            subsystem_ids = sorted(_get_subsystem_ids(self.decay))
         for args in product(*allowed_helicities.values()):  # type:ignore[assignment]
-            for sub_system in _get_subsystem_ids(self.decay):
+            for sub_system in subsystem_ids:
                 chain_model = self.formulate_subsystem_amplitude(*args, sub_system)  # type:ignore[arg-type]
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)

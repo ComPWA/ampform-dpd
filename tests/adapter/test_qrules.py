@@ -1,11 +1,10 @@
+# cspell:ignore pksigma
 # pyright: reportPrivateUsage=false
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, SupportsFloat
 
-import attrs
 import pytest
-import qrules
 
 from ampform_dpd.adapter.qrules import (
     _convert_transition,
@@ -19,48 +18,8 @@ from ampform_dpd.adapter.qrules import (
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
-    from _pytest.fixtures import SubRequest
     from qrules.topology import FrozenTransition
     from qrules.transition import ReactionInfo, StateTransition
-
-
-@pytest.fixture(scope="session")
-def a2pipipi_reaction() -> ReactionInfo:
-    return qrules.generate_transitions(
-        initial_state="a(1)(1260)0",
-        final_state=["pi0", "pi0", "pi0"],
-        allowed_intermediate_particles=["a(0)(980)0"],
-        formalism="helicity",
-    )
-
-
-@pytest.fixture(scope="session", params=["canonical-helicity", "helicity"])
-def jpsi2pksigma_reaction(request: SubRequest) -> ReactionInfo:  # cspell:ignore pksigma
-    return qrules.generate_transitions(
-        initial_state=[("J/psi(1S)", [+1])],
-        final_state=["K0", ("Sigma+", [+0.5]), ("p~", [+0.5])],
-        allowed_interaction_types="strong",
-        allowed_intermediate_particles=["Sigma(1660)"],
-        formalism=request.param,
-    )
-
-
-@pytest.fixture(scope="session")
-def xib2pkk_reaction() -> ReactionInfo:
-    reaction = qrules.generate_transitions(
-        initial_state="Xi(b)-",
-        final_state=["p", "K-", "K-"],
-        allowed_intermediate_particles=["Lambda(1520)"],
-        formalism="helicity",
-    )
-    swapped_transitions = tuple(
-        attrs.evolve(t, topology=t.topology.swap_edges(1, 2))
-        for t in reaction.transitions
-    )
-    return qrules.transition.ReactionInfo(
-        transitions=reaction.transitions + swapped_transitions,
-        formalism=reaction.formalism,
-    )
 
 
 def test_convert_transitions(xib2pkk_reaction: ReactionInfo):
@@ -81,31 +40,39 @@ def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
 
     ls_couplings = [_get_couplings(t) for t in transitions]
     if reaction.formalism == "canonical-helicity":
-        assert len(ls_couplings) == 2
+        assert len(ls_couplings) == 3
         assert ls_couplings == [
             (
-                {"L": 0, "S": 1.0},
+                {"L": 0, "S": 1},
                 {"L": 1, "S": 0.5},
             ),
             (
-                {"L": 2, "S": 1.0},
+                {"L": 2, "S": 1},
                 {"L": 1, "S": 0.5},
+            ),
+            (
+                {"L": 1, "S": 2},
+                {"L": 2, "S": 0.5},
             ),
         ]
     else:
-        assert len(ls_couplings) == 1
+        assert len(ls_couplings) == 2
         for ls_coupling in ls_couplings:
             for ls in ls_coupling:
                 assert ls == {"L": None, "S": None}
 
     min_ls_transitions = filter_min_ls(transitions)
     ls_couplings = [_get_couplings(t) for t in min_ls_transitions]
-    assert len(ls_couplings) == 1
+    assert len(ls_couplings) == 2
     if reaction.formalism == "canonical-helicity":
         assert ls_couplings == [
             (
-                {"L": 0, "S": 1.0},
+                {"L": 0, "S": 1},
                 {"L": 1, "S": 0.5},
+            ),
+            (
+                {"L": 1, "S": 2},
+                {"L": 2, "S": 0.5},
             ),
         ]
 
@@ -181,26 +148,60 @@ def test_to_three_body_decay(jpsi2pksigma_reaction: ReactionInfo, min_ls: bool):
         2: "Sigma+",
         3: "p~",
     }
+    n_chains = len(decay.chains)
     if reaction.formalism == "canonical-helicity":
+        production_ls = [c.incoming_ls for c in decay.chains]
+        decay_ls = [c.outgoing_ls for c in decay.chains]
         if min_ls:
-            assert len(decay.chains) == 1
-            assert decay.chains[0].incoming_ls == LSCoupling(L=0, S=1)
-            assert decay.chains[0].outgoing_ls == LSCoupling(L=1, S=0.5)
+            assert n_chains == 2
+            assert production_ls == [
+                LSCoupling(L=1, S=1),
+                LSCoupling(L=0, S=1),
+            ]
+            assert decay_ls == [
+                LSCoupling(L=2, S=0.5),
+                LSCoupling(L=1, S=0.5),
+            ]
         else:
-            assert len(decay.chains) == 2
-            assert decay.chains[1].incoming_ls == LSCoupling(L=2, S=1)
-            assert decay.chains[1].outgoing_ls == LSCoupling(L=1, S=0.5)
+            assert n_chains == 4
+            assert production_ls == [
+                LSCoupling(L=1, S=1),
+                LSCoupling(L=1, S=2),
+                LSCoupling(L=0, S=1),
+                LSCoupling(L=2, S=1),
+            ]
+            assert decay_ls == [
+                LSCoupling(L=2, S=0.5),
+                LSCoupling(L=2, S=0.5),
+                LSCoupling(L=1, S=0.5),
+                LSCoupling(L=1, S=0.5),
+            ]
     elif reaction.formalism == "helicity":
-        assert len(decay.chains) == 1
-        assert decay.chains[0].incoming_ls is None
-        assert decay.chains[0].outgoing_ls is None
+        assert n_chains == 2
+        for chain in decay.chains:
+            assert chain.incoming_ls is None
+            assert chain.outgoing_ls is None
+    resonance_names = set()
     for chain in decay.chains:
         assert isinstance(chain.resonance, Particle)
-        assert chain.resonance.name == "Sigma(1660)~-"
+        resonance_names.add(chain.resonance.name)
+    assert resonance_names == {
+        "N(1700)+",
+        "Sigma(1660)~-",
+    }
 
 
 def _get_couplings(transition: StateTransition) -> tuple[dict, dict]:
     return tuple(  # type:ignore[return-value]
-        {"L": node.l_magnitude, "S": node.s_magnitude}
+        {"L": _to_float(node.l_magnitude), "S": _to_float(node.s_magnitude)}
         for node in transition.interactions.values()
     )
+
+
+def _to_float(value: SupportsFloat | None) -> float | int | None:
+    if value is None:
+        return None
+    value = float(value)
+    if value.is_integer():
+        return int(value)
+    return value
