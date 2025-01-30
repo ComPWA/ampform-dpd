@@ -7,6 +7,7 @@ import pytest
 
 from ampform_dpd import DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
+from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
@@ -25,6 +26,11 @@ class TestDalitzPlotDecompositionBuilder:
         builder = DalitzPlotDecompositionBuilder(
             decay, min_ls=min_ls, all_subsystems=all_subsystems
         )
+        if jpsi2pksigma_reaction.formalism == "canonical-helicity":
+            for chain in builder.decay.chains:
+                builder.dynamics_choices.register_builder(
+                    chain, formulate_breit_wigner_with_form_factor
+                )
         if all_subsystems:
             with pytest.warns(
                 UserWarning,
