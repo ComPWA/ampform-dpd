@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from functools import cache
 from typing import TYPE_CHECKING, overload
 
 import cloudpickle
@@ -11,6 +12,7 @@ from ampform.sympy.cached import (
     unfold,  # noqa: F401  # pyright: ignore[reportUnusedImport]
     xreplace,  # noqa: F401  # pyright: ignore[reportUnusedImport]
 )
+from frozendict import frozendict
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
 if TYPE_CHECKING:
@@ -33,10 +35,6 @@ def lambdify(
     *,
     backend: str = "jax",
 ) -> ParametrizedBackendFunction: ...
-@cache_to_disk(
-    dump_function=cloudpickle.dump,
-    dependencies=["cloudpickle", "ampform", "jax", "sympy"],
-)
 def lambdify(
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
@@ -60,6 +58,22 @@ def lambdify(
 
     .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
+    if parameters is None:
+        return _lambdify_impl(expr, backend)
+    return _lambdify_impl(expr, frozendict(parameters), backend)
+
+
+@cache
+@cache_to_disk(
+    dump_function=cloudpickle.dump,
+    function_name="lambdify",
+    dependencies=["cloudpickle", "ampform", "jax", "sympy"],
+)
+def _lambdify_impl(
+    expr: sp.Expr,
+    parameters: frozendict[sp.Symbol, ParameterValue] | None,
+    backend: str,
+):
     if parameters is None:
         return create_function(expr, backend)
     return create_parametrized_function(expr, parameters, backend)
