@@ -58,6 +58,9 @@ def lambdify(
 
     .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
+    if isinstance(parameters, str):
+        backend = parameters
+        parameters = None
     if parameters is None:
         return _lambdify_impl(expr, backend=backend)
     return _lambdify_impl(expr, frozendict(parameters), backend=backend)
