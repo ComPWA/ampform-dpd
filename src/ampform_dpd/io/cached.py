@@ -74,7 +74,7 @@ def lambdify(
 )
 def _lambdify_impl(
     expr: sp.Expr,
-    parameters: frozendict[sp.Symbol, ParameterValue] | None,
+    parameters: frozendict[sp.Symbol, ParameterValue] | None = None,
     *,
     backend: str = "jax",
 ):
