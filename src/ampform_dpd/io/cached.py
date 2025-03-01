@@ -59,8 +59,8 @@ def lambdify(
     .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
     if parameters is None:
-        return _lambdify_impl(expr, backend)
-    return _lambdify_impl(expr, frozendict(parameters), backend)
+        return _lambdify_impl(expr, backend=backend)
+    return _lambdify_impl(expr, frozendict(parameters), backend=backend)
 
 
 @cache
@@ -72,7 +72,8 @@ def lambdify(
 def _lambdify_impl(
     expr: sp.Expr,
     parameters: frozendict[sp.Symbol, ParameterValue] | None,
-    backend: str,
+    *,
+    backend: str = "jax",
 ):
     if parameters is None:
         return create_function(expr, backend)
