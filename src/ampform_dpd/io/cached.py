@@ -33,7 +33,10 @@ def lambdify(
     *,
     backend: str = "jax",
 ) -> ParametrizedBackendFunction: ...
-@cache_to_disk(dump_function=cloudpickle.dump, dependencies=["jax", "sympy"])
+@cache_to_disk(
+    dump_function=cloudpickle.dump,
+    dependencies=["cloudpickle", "ampform", "jax", "sympy"],
+)
 def lambdify(
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
