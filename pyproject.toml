@@ -509,10 +509,5 @@ test = [
     "3.13",
 ]
 
-[tool.uv]
-constraint-dependencies = [
-    "numpy~=1.0",
-]
-
 [tool.uv.sources]
 ampform = {git = "https://github.com/ComPWA/ampform", rev = "a043ffe7"}
