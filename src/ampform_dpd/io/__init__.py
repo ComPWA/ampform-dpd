@@ -18,21 +18,11 @@ This code originates from `ComPWA/ampform#280
 
 from __future__ import annotations
 
-import logging
-import pickle
 from collections import abc
-from importlib.metadata import version
-from pathlib import Path
-from typing import TYPE_CHECKING, Any, overload
+from typing import TYPE_CHECKING
 
-import cloudpickle
 import sympy as sp
 from ampform.io import aslatex
-from ampform.sympy._cache import (
-    get_readable_hash,  # noqa: PLC2701
-    get_system_cache_directory,  # noqa: PLC2701
-)
-from tensorwaves.function.sympy import create_function, create_parametrized_function
 
 from ampform_dpd import DefinedExpression
 from ampform_dpd.decay import (
@@ -43,16 +33,12 @@ from ampform_dpd.decay import (
     ThreeBodyDecayChain,
 )
 
+from .cached import (
+    lambdify as perform_cached_lambdify,  # noqa: F401  # pyright: ignore[reportUnusedImport]
+)
+
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Mapping, Sequence
-
-    from tensorwaves.function import (
-        ParametrizedBackendFunction,
-        PositionalArgumentFunction,
-    )
-    from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
-
-_LOGGER = logging.getLogger(__name__)
+    from collections.abc import Iterable, Sequence
 
 
 @aslatex.register(IsobarNode)
@@ -229,81 +215,6 @@ def _create_markdown_table_header(column_names: list[str]):
 
 def _create_markdown_table_row(items: Iterable):
     return "| " + " | ".join(f"{i}" for i in items) + " |\n"
-
-
-@overload
-def perform_cached_lambdify(
-    expr: sp.Expr,
-    backend: str = "jax",
-    directory: str | None = None,
-) -> PositionalArgumentFunction: ...
-
-
-@overload
-def perform_cached_lambdify(
-    expr: sp.Expr,
-    parameters: Mapping[sp.Symbol, ParameterValue],
-    backend: str = "jax",
-    directory: str | None = None,
-) -> ParametrizedBackendFunction: ...
-
-
-def perform_cached_lambdify(  # type:ignore[misc]  # pyright:ignore[reportInconsistentOverload]
-    expr: sp.Expr,
-    parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
-    backend: str = "jax",
-    cache_directory: Path | str | None = None,
-) -> ParametrizedFunction | Function:
-    """Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.
-
-    The cached result is fetched from disk if the hash of the expression is the same as
-    the hash embedded in the filename.
-
-    Args:
-        expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
-            :func:`~tensorwaves.function.sympy.create_function` or
-            :func:`~tensorwaves.function.sympy.create_parametrized_function`.
-        parameters: Specify this argument in order to create a
-            `~tensorwaves.function.ParametrizedBackendFunction` instead of a
-            `~tensorwaves.function.PositionalArgumentFunction`.
-        backend: The choice of backend for the created numerical function. **WARNING**:
-            this function has only been tested for :code:`backend="jax"`!
-        directory: The directory in which to cache the result. If `None`, the cache
-            directory will be put under the home directory, or to the path specified by
-            the environment variable :code:`SYMPY_CACHE_DIR`.
-
-    .. seealso:: :func:`ampform.sympy.perform_cached_doit`
-    """
-    if cache_directory is None:
-        system_cache_dir = get_system_cache_directory()
-        backend_version = version(backend)
-        cache_directory = (
-            Path(system_cache_dir) / "ampform_dpd" / f"{backend}-v{backend_version}"
-        )
-    if not isinstance(cache_directory, Path):
-        cache_directory = Path(cache_directory)
-    cache_directory.mkdir(exist_ok=True, parents=True)
-    if parameters is None:
-        hash_obj: Any = expr
-    else:
-        hash_obj = (
-            expr,
-            tuple((s, parameters[s]) for s in sorted(parameters, key=str)),
-        )
-    h = get_readable_hash(hash_obj)
-    filename = cache_directory / f"{h}.pkl"
-    if filename.exists():
-        with open(filename, "rb") as f:
-            return pickle.load(f)
-    _LOGGER.warning(f"Cached function file {filename} not found, lambdifying...")
-    func: ParametrizedFunction | Function
-    if parameters is None:
-        func = create_function(expr, backend)
-    else:
-        func = create_parametrized_function(expr, parameters, backend)
-    with open(filename, "wb") as f:
-        cloudpickle.dump(func, f)
-    return func
 
 
 def simplify_latex_rendering() -> None:
