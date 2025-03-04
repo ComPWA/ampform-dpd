@@ -10,6 +10,9 @@ from sphinx_api_relink.helpers import (
 )
 
 set_intersphinx_version_remapping({
+    "ampform": {
+        "0.15.7.dev7+g0fe1065": "0.15.6",
+    },
     "ipython": {
         "8.12.2": "8.12.1",
         "8.12.3": "8.12.1",
