@@ -10,6 +10,9 @@ from sphinx_api_relink.helpers import (
 )
 
 set_intersphinx_version_remapping({
+    "ampform": {
+        "0.15.7.dev7+g0fe1065": "0.15.6",
+    },
     "ipython": {
         "8.12.2": "8.12.1",
         "8.12.3": "8.12.1",
@@ -181,7 +184,7 @@ intersphinx_mapping = {
     "compwa": ("https://compwa.github.io", None),
     "graphviz": ("https://graphviz.readthedocs.io/en/stable", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
-    "jax": ("https://jax.readthedocs.io/en/latest", None),
+    "jax": ("https://docs.jax.dev/en/latest", None),
     "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
     "numpy": (f"https://numpy.org/doc/{pin_minor('numpy')}", None),
     "python": ("https://docs.python.org/3", None),

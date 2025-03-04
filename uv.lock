@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.9"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -59,16 +60,12 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.15.6"
-source = { registry = "https://pypi.org/simple" }
+version = "0.15.7.dev7+g0fe1065"
+source = { git = "https://github.com/ComPWA/ampform?rev=0fe1065c#0fe1065c81ee06b3184f22c477b5dbd3b37b4652" }
 dependencies = [
     { name = "attrs" },
     { name = "qrules" },
     { name = "sympy" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/23/1c/3871ab0d982be05eb73b71a55628d3385ea09641e91399ffb6d7520f05b5/ampform-0.15.6.tar.gz", hash = "sha256:fffdfb997ead36dc146e72cce937227b2709bef75db9cdacdc61b9139e8b2417", size = 366368 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/da/48/3f09a743f4e5d3694e52ea3db17a71c85a4995abc358e4c44d6f4ecef529/ampform-0.15.6-py3-none-any.whl", hash = "sha256:80e74f17880cf0a8f8941912c314adeff8522fcec683b37ed194ed7679255fda", size = 86608 },
 ]
 
 [[package]]
@@ -192,7 +189,7 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", specifier = ">=0.15.4" },
+    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=0fe1065c" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
     { name = "numpy" },
@@ -203,6 +200,7 @@ requires-dist = [
     { name = "tensorwaves", extras = ["tf"], marker = "extra == 'tf'" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
+provides-extras = ["numba", "tf"]
 
 [package.metadata.requires-dev]
 dev = [

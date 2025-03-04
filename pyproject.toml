@@ -26,7 +26,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "ampform >=0.15.4", # aslatex with keyword arguments
+    "ampform >=0.15.7", # aslatex with keyword arguments; ampform.sympy.cached module
     "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
     "numpy",
@@ -328,7 +328,7 @@ ignore-names = [
     "RUF100",
 ]
 "setup.py" = ["D100"]
-"src/ampform_dpd/io/__init__.py" = ["S403"]
+"src/ampform_dpd/io/cached.py" = ["S403"]
 "src/ampform_dpd/io/serialization/amplitude.py" = ["E741"]
 "src/ampform_dpd/io/serialization/format.py" = ["E741"]
 "tests/*" = [
@@ -512,3 +512,6 @@ test = [
 constraint-dependencies = [
     "numpy~=1.0",
 ]
+
+[tool.uv.sources]
+ampform = {git = "https://github.com/ComPWA/ampform", rev = "0fe1065c"}
