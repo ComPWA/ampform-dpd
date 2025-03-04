@@ -184,7 +184,7 @@ intersphinx_mapping = {
     "compwa": ("https://compwa.github.io", None),
     "graphviz": ("https://graphviz.readthedocs.io/en/stable", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
-    "jax": ("https://jax.readthedocs.io/en/latest", None),
+    "jax": ("https://docs.jax.dev/en/latest", None),
     "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
     "numpy": (f"https://numpy.org/doc/{pin_minor('numpy')}", None),
     "python": ("https://docs.python.org/3", None),
