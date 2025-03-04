@@ -25,17 +25,19 @@ if TYPE_CHECKING:
 
 
 @overload
-def lambdify(expr: sp.Expr, backend: str = "jax") -> PositionalArgumentFunction: ...
+def lambdify(expr: sp.Expr, *, backend: str = "jax") -> PositionalArgumentFunction: ...
 @overload
 def lambdify(
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue],
+    *,
     backend: str = "jax",
 ) -> ParametrizedBackendFunction: ...
-@cache_to_disk(dump_function=cloudpickle.dump)  # type:ignore[misc]
+@cache_to_disk(dump_function=cloudpickle.dump)
 def lambdify(
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
+    *,
     backend: str = "jax",
 ) -> ParametrizedFunction | Function:
     """Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.
