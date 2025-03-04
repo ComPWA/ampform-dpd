@@ -52,8 +52,8 @@ def lambdify(
         parameters: Specify this argument in order to create a
             `~tensorwaves.function.ParametrizedBackendFunction` instead of a
             `~tensorwaves.function.PositionalArgumentFunction`.
-        backend: The choice of backend for the created numerical function. **WARNING**:
-            this function has only been tested for :code:`backend="jax"`!
+        backend: The choice of backend for the created numerical function.
+            **WARNING**: this function has only been tested for :code:`backend="jax"`!
 
     .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
