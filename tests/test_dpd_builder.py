@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+import sympy as sp
 
 from ampform_dpd import DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
@@ -53,3 +54,90 @@ class TestDalitzPlotDecompositionBuilder:
         if not all_subsystems:
             expected_variables.remove("theta_23")
         assert {s.name for s in model.variables} == expected_variables
+
+    @pytest.mark.parametrize("min_ls", [False, True])
+    @pytest.mark.parametrize("use_coefficients", [False, True])
+    def test_use_coefficients(
+        self, jpsi2pksigma_reaction: ReactionInfo, min_ls: bool, use_coefficients: bool
+    ):
+        if jpsi2pksigma_reaction.formalism == "helicity" and not min_ls:
+            pytest.skip("Helicity formalism with all LS not supported")
+        transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=min_ls)
+        builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
+        model = builder.formulate(
+            reference_subsystem=2,
+            use_coefficients=use_coefficients,
+        )
+        amplitudes = [expr.doit() for expr in model.amplitudes.values()]
+        amplitudes = [expr for expr in amplitudes if expr]
+
+        coupling_symbols: set[str] = set()
+        for expr in amplitudes:
+            symbols = {s for s in expr.free_symbols if isinstance(s, sp.Indexed)}
+            coupling_symbols.update(symbols)
+
+        n_coupling_symbols = len(coupling_symbols)
+        coupling_symbols_str = sorted(str(s) for s in coupling_symbols)
+        if use_coefficients:
+            if min_ls:  # HELICITY BASE
+                assert n_coupling_symbols == 20
+                assert coupling_symbols_str == [
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[-1/2, -1/2, 0, -1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[-1/2, -1/2, 0, 1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[-1/2, 1/2, 0, -1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[-1/2, 1/2, 0, 1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[-3/2, -1/2, 0, -1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[-3/2, -1/2, 0, 1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[1/2, -1/2, 0, -1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[1/2, -1/2, 0, 1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[1/2, 1/2, 0, -1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[1/2, 1/2, 0, 1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[3/2, 1/2, 0, -1/2]",
+                    R"\mathcal{H}^\mathrm{N(1700)^{+}}[3/2, 1/2, 0, 1/2]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[-1/2, -1/2, -1/2, 0]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[-1/2, -1/2, 1/2, 0]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[-1/2, 1/2, -1/2, 0]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[-1/2, 1/2, 1/2, 0]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[1/2, -1/2, -1/2, 0]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[1/2, -1/2, 1/2, 0]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[1/2, 1/2, -1/2, 0]",
+                    R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[1/2, 1/2, 1/2, 0]",
+                ]
+            else:  # CANONICAL BASE
+                assert n_coupling_symbols == 4
+                assert coupling_symbols_str == [
+                    R"\mathcal{H}^\mathrm{LS,N(1700)^{+}}[1, 1, 2, 1/2]",
+                    R"\mathcal{H}^\mathrm{LS,N(1700)^{+}}[1, 2, 2, 1/2]",
+                    R"\mathcal{H}^\mathrm{LS,\overline{\Sigma}(1660)^{-}}[0, 1, 1, 1/2]",
+                    R"\mathcal{H}^\mathrm{LS,\overline{\Sigma}(1660)^{-}}[2, 1, 1, 1/2]",
+                ]
+        else:  # noqa: PLR5501
+            if min_ls:  # HELICITY BASE
+                assert n_coupling_symbols == 14
+                assert coupling_symbols_str == [
+                    R"\mathcal{H}^\mathrm{decay}[N(1700)^{+}, 0, -1/2]",
+                    R"\mathcal{H}^\mathrm{decay}[N(1700)^{+}, 0, 1/2]",
+                    R"\mathcal{H}^\mathrm{decay}[\overline{\Sigma}(1660)^{-}, -1/2, 0]",
+                    R"\mathcal{H}^\mathrm{decay}[\overline{\Sigma}(1660)^{-}, 1/2, 0]",
+                    R"\mathcal{H}^\mathrm{production}[N(1700)^{+}, -1/2, -1/2]",
+                    R"\mathcal{H}^\mathrm{production}[N(1700)^{+}, -1/2, 1/2]",
+                    R"\mathcal{H}^\mathrm{production}[N(1700)^{+}, -3/2, -1/2]",
+                    R"\mathcal{H}^\mathrm{production}[N(1700)^{+}, 1/2, -1/2]",
+                    R"\mathcal{H}^\mathrm{production}[N(1700)^{+}, 1/2, 1/2]",
+                    R"\mathcal{H}^\mathrm{production}[N(1700)^{+}, 3/2, 1/2]",
+                    R"\mathcal{H}^\mathrm{production}[\overline{\Sigma}(1660)^{-}, -1/2, -1/2]",
+                    R"\mathcal{H}^\mathrm{production}[\overline{\Sigma}(1660)^{-}, -1/2, 1/2]",
+                    R"\mathcal{H}^\mathrm{production}[\overline{\Sigma}(1660)^{-}, 1/2, -1/2]",
+                    R"\mathcal{H}^\mathrm{production}[\overline{\Sigma}(1660)^{-}, 1/2, 1/2]",
+                ]
+            else:  # CANONICAL BASE
+                assert n_coupling_symbols == 6
+                assert coupling_symbols_str == [
+                    R"\mathcal{H}^\mathrm{LS,decay}[N(1700)^{+}, 2, 1/2]",
+                    R"\mathcal{H}^\mathrm{LS,decay}[\overline{\Sigma}(1660)^{-}, 1, 1/2]",
+                    R"\mathcal{H}^\mathrm{LS,production}[N(1700)^{+}, 1, 1]",
+                    R"\mathcal{H}^\mathrm{LS,production}[N(1700)^{+}, 1, 2]",
+                    R"\mathcal{H}^\mathrm{LS,production}[\overline{\Sigma}(1660)^{-}, 0, 1]",
+                    R"\mathcal{H}^\mathrm{LS,production}[\overline{\Sigma}(1660)^{-}, 2, 1]",
+                ]
