@@ -344,13 +344,9 @@ def _get_coefficient_base(
     if prod_helicity_basis and dec_helicity_basis:
         return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{{resonance}}}")
     if prod_helicity_basis:
-        return sp.IndexedBase(
-            Rf"{{}}^{{\lambda}}_{{LS}}\mathcal{{H}}^\mathrm{{{resonance}}}"
-        )
+        return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{LS,\lambda,{resonance}}}")
     if dec_helicity_basis:
-        return sp.IndexedBase(
-            Rf"{{}}^{{LS}}_{{\lambda}}\mathcal{{H}}^\mathrm{{{resonance}}}"
-        )
+        return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{\lambda,LS,{resonance}}}")
     return sp.IndexedBase(Rf"\mathcal{{H}}^\mathrm{{LS,{resonance}}}")
 
 
