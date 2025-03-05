@@ -80,7 +80,7 @@ class TestDalitzPlotDecompositionBuilder:
         n_coupling_symbols = len(coupling_symbols)
         coupling_symbols_str = sorted(str(s) for s in coupling_symbols)
         if use_coefficients:
-            if min_ls:  # HELICITY BASE
+            if min_ls:  # HELICITY BASIS
                 assert n_coupling_symbols == 20
                 assert coupling_symbols_str == [
                     R"\mathcal{H}^\mathrm{N(1700)^{+}}[-1/2, -1/2, 0, -1/2]",
@@ -104,7 +104,7 @@ class TestDalitzPlotDecompositionBuilder:
                     R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[1/2, 1/2, -1/2, 0]",
                     R"\mathcal{H}^\mathrm{\overline{\Sigma}(1660)^{-}}[1/2, 1/2, 1/2, 0]",
                 ]
-            else:  # CANONICAL BASE
+            else:  # CANONICAL BASIS
                 assert n_coupling_symbols == 4
                 assert coupling_symbols_str == [
                     R"\mathcal{H}^\mathrm{LS,N(1700)^{+}}[1, 1, 2, 1/2]",
@@ -112,9 +112,11 @@ class TestDalitzPlotDecompositionBuilder:
                     R"\mathcal{H}^\mathrm{LS,\overline{\Sigma}(1660)^{-}}[0, 1, 1, 1/2]",
                     R"\mathcal{H}^\mathrm{LS,\overline{\Sigma}(1660)^{-}}[2, 1, 1, 1/2]",
                 ]
-        else:  # noqa: PLR5501
-            if min_ls:  # HELICITY BASE
+        else:
+            n_products = len(_collect_products(amplitudes))
+            if min_ls:  # HELICITY BASIS
                 assert n_coupling_symbols == 14
+                assert n_products == 20
                 assert coupling_symbols_str == [
                     R"\mathcal{H}^\mathrm{decay}[N(1700)^{+}, 0, -1/2]",
                     R"\mathcal{H}^\mathrm{decay}[N(1700)^{+}, 0, 1/2]",
@@ -131,8 +133,9 @@ class TestDalitzPlotDecompositionBuilder:
                     R"\mathcal{H}^\mathrm{production}[\overline{\Sigma}(1660)^{-}, 1/2, -1/2]",
                     R"\mathcal{H}^\mathrm{production}[\overline{\Sigma}(1660)^{-}, 1/2, 1/2]",
                 ]
-            else:  # CANONICAL BASE
+            else:  # CANONICAL BASIS
                 assert n_coupling_symbols == 6
+                assert n_products == 4
                 assert coupling_symbols_str == [
                     R"\mathcal{H}^\mathrm{LS,decay}[N(1700)^{+}, 2, 1/2]",
                     R"\mathcal{H}^\mathrm{LS,decay}[\overline{\Sigma}(1660)^{-}, 1, 1/2]",
@@ -141,3 +144,13 @@ class TestDalitzPlotDecompositionBuilder:
                     R"\mathcal{H}^\mathrm{LS,production}[\overline{\Sigma}(1660)^{-}, 0, 1]",
                     R"\mathcal{H}^\mathrm{LS,production}[\overline{\Sigma}(1660)^{-}, 2, 1]",
                 ]
+
+
+def _collect_products(amplitudes: list[sp.Expr]) -> list[tuple[sp.Indexed, sp.Indexed]]:
+    products = set()
+    for amp in amplitudes:
+        for node in sp.postorder_traversal(amp):
+            couplings = {s for s in node.free_symbols if isinstance(s, sp.Indexed)}
+            if len(couplings) == 2:
+                products.add(tuple(sorted(couplings, key=str)))
+    return sorted(products, key=str)
