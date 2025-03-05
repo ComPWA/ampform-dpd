@@ -311,10 +311,8 @@ def _create_scaling_factors(
     )
     if one_scalar_per_chain:
         h = _get_coefficient_base(R, prod_helicity_basis, dec_helicity_basis)
-        return h.__getitem__(  # noqa: PLC2801  # Python <3.11
-            *h_prod.indices[1:],
-            *h_dec.indices[1:],
-        )
+        indices = (*h_prod.indices[1:], *h_dec.indices[1:])
+        return h.__getitem__(indices)  # noqa: PLC2801
     return h_prod, h_dec
 
 
