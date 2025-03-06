@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     ("min_ls", "expected_hashes"),
     [
-        pytest.param(True, ["1ad2a8b", "97aff31", "97aff31"], id="min-ls"),
-        pytest.param(False, ["821a833", "a5641ec", "a5641ec"], id="all-ls"),
+        pytest.param(True, ["f84b0d0", "dce2d15", "dce2d15"], id="min-ls"),
+        pytest.param(False, ["a1f3c08", "6c73933", "6c73933"], id="all-ls"),
     ],
 )
 def test_hashes(
@@ -54,6 +54,7 @@ def reaction() -> ReactionInfo:
         allowed_interaction_types="strong",
         allowed_intermediate_particles=[
             "N(1650)+",  # largest branching fraction
+            "Sigma(1385)",  # largest branching fraction
             "Sigma(1775)",  # high LS couplings
         ],
         formalism="canonical-helicity",
