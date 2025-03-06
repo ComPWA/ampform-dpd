@@ -9,7 +9,6 @@
 from __future__ import annotations
 
 import sympy as sp
-from ampform.dynamics.form_factor import FormFactor
 
 from ampform_dpd import to_particle
 from ampform_dpd.decay import (
@@ -27,44 +26,7 @@ def formulate_breit_wigner_with_form_factor(
 ) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
     decay_node = decay_chain.decay_node
     s = get_mandelstam_s(decay_node)
-    parameter_defaults = {}
-    production_ff, new_pars = _create_form_factor(s, decay_chain.production_node)
-    parameter_defaults.update(new_pars)
-    decay_ff, new_pars = _create_form_factor(s, decay_node)
-    parameter_defaults.update(new_pars)
-    breit_wigner, new_pars = _create_breit_wigner(s, decay_node)
-    parameter_defaults.update(new_pars)
-    return (
-        production_ff * decay_ff * breit_wigner,
-        parameter_defaults,
-    )
-
-
-def _create_form_factor(
-    s: sp.Symbol, isobar: IsobarNode
-) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
-    if isinstance(isobar.parent, State):
-        inv_mass = sp.Symbol("m0", nonnegative=True)
-    else:
-        inv_mass = get_mandelstam_s(isobar)
-    outgoing_state_mass1 = create_mass_symbol(isobar.child1)
-    outgoing_state_mass2 = create_mass_symbol(isobar.child2)
-    meson_radius = _create_meson_radius_symbol(isobar)
-    form_factor = FormFactor(
-        s=inv_mass**2,
-        m1=outgoing_state_mass1,
-        m2=outgoing_state_mass2,
-        angular_momentum=_get_angular_momentum(isobar),
-        meson_radius=meson_radius,
-    )
-    parameter_defaults: dict[sp.Symbol, complex | float] = {
-        meson_radius: 1,
-        outgoing_state_mass1: to_particle(isobar.child1).mass,
-        outgoing_state_mass2: to_particle(isobar.child2).mass,
-    }
-    if not inv_mass.name.startswith("s"):
-        parameter_defaults[inv_mass] = to_particle(isobar).mass
-    return form_factor, parameter_defaults
+    return _create_breit_wigner(s, decay_node)
 
 
 def _create_breit_wigner(
