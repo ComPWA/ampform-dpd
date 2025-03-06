@@ -104,6 +104,7 @@ style = [
 test = [
     "pytest",
     "pytest-cov",
+    "pytest-xdist",
 ]
 types = [
     "pytest",

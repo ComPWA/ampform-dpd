@@ -19,7 +19,6 @@ repos:
         args:
           - --doc-apt-packages=graphviz
           - --github-pages
-          - --pytest-single-threaded
           - --repo-name=ampform-dpd
           - --repo-title=AmpForm-DPD
       - id: colab-toc-visible
