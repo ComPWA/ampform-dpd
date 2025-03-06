@@ -28,12 +28,14 @@ def formulate_breit_wigner_with_form_factor(
     decay_node = decay_chain.decay_node
     s = get_mandelstam_s(decay_node)
     parameter_defaults = {}
+    production_ff, new_pars = _create_form_factor(s, decay_chain.production_node)
+    parameter_defaults.update(new_pars)
     decay_ff, new_pars = _create_form_factor(s, decay_node)
     parameter_defaults.update(new_pars)
     breit_wigner, new_pars = _create_breit_wigner(s, decay_node)
     parameter_defaults.update(new_pars)
     return (
-        decay_ff * breit_wigner,
+        production_ff * decay_ff * breit_wigner,
         parameter_defaults,
     )
 
