@@ -35,8 +35,7 @@ def test_hashes(
             chain, formulate_breit_wigner_with_form_factor
         )
     model = builder.formulate(reference_subsystem=2)
-    amplitudes = {k: model.amplitudes[k] for k in sorted(model.amplitudes, key=str)}
-    intensity_expr = model.intensity.doit().xreplace(amplitudes)
+    intensity_expr = model.full_expression
     hashes = []
     for _ in range(len(expected_hashes)):
         hashes.append(get_readable_hash(intensity_expr)[:7])
