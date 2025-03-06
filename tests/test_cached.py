@@ -8,7 +8,6 @@ from ampform.sympy._cache import get_readable_hash
 
 from ampform_dpd import DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
-from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
@@ -18,8 +17,8 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     ("min_ls", "expected_hashes"),
     [
-        pytest.param(True, ["684fc61", "0423d35"], id="min-ls"),
-        pytest.param(False, ["a3afa2e", "13a6bf7"], id="all-ls"),
+        pytest.param(True, ["3f71859", "fc22af0"], id="min-ls"),
+        pytest.param(False, ["62ae342", "19bddfd"], id="all-ls"),
     ],
 )
 def test_hashes(
@@ -30,10 +29,6 @@ def test_hashes(
     transitions = normalize_state_ids(reaction.transitions)
     decay = to_three_body_decay(transitions, min_ls=min_ls)
     builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
-    for chain in builder.decay.chains:
-        builder.dynamics_choices.register_builder(
-            chain, formulate_breit_wigner_with_form_factor
-        )
     model = builder.formulate(reference_subsystem=2)
     intensity_expr = model.full_expression
     hashes = []
