@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+import qrules
 from ampform.sympy._cache import get_readable_hash
 
 from ampform_dpd import DalitzPlotDecompositionBuilder
@@ -13,24 +14,20 @@ if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize(
-    ("min_ls", "folded_hash", "unfolded_hash"),
+    ("min_ls", "expected_hashes"),
     [
-        (True, "dbca20f", "c81d961"),
-        (False, "158e632", "a873a4f"),
+        pytest.param(True, ["1ad2a8b", "97aff31", "97aff31"], id="min-ls"),
+        pytest.param(False, ["821a833", "a5641ec", "a5641ec"], id="all-ls"),
     ],
-    ids=["min_ls", "all_ls_couplings"],
 )
 def test_hashes(
-    jpsi2pksigma_reaction: ReactionInfo,
+    reaction: ReactionInfo,
     min_ls: bool,
-    folded_hash: str,
-    unfolded_hash: str,
+    expected_hashes: list[str],
 ):
-    reaction = jpsi2pksigma_reaction
-    if reaction.formalism == "helicity":
-        pytest.skip("Test for helicity formalism not supported")
-    transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
+    transitions = normalize_state_ids(reaction.transitions)
     decay = to_three_body_decay(transitions, min_ls=min_ls)
     builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
     for chain in builder.decay.chains:
@@ -38,8 +35,26 @@ def test_hashes(
             chain, formulate_breit_wigner_with_form_factor
         )
     model = builder.formulate(reference_subsystem=2)
-    intensity_expr = model.full_expression
-    h = get_readable_hash(intensity_expr)[:7]
-    assert h == folded_hash
-    h = get_readable_hash(intensity_expr.doit())[:7]
-    assert h == unfolded_hash
+    amplitudes = {k: model.amplitudes[k] for k in sorted(model.amplitudes, key=str)}
+    intensity_expr = model.intensity.doit().xreplace(amplitudes)
+    hashes = []
+    for _ in range(len(expected_hashes)):
+        hashes.append(get_readable_hash(intensity_expr)[:7])
+        intensity_expr = intensity_expr.doit()
+    assert hashes == expected_hashes
+    assert hashes[0] != hashes[1]
+    assert hashes[1] == hashes[2]
+
+
+@pytest.fixture(scope="session")
+def reaction() -> ReactionInfo:
+    return qrules.generate_transitions(
+        initial_state=[("J/psi(1S)", [+1])],
+        final_state=["K0", ("Sigma+", [+0.5]), ("p~", [+0.5])],
+        allowed_interaction_types="strong",
+        allowed_intermediate_particles=[
+            "N(1650)+",  # largest branching fraction
+            "Sigma(1775)",  # high LS couplings
+        ],
+        formalism="canonical-helicity",
+    )
