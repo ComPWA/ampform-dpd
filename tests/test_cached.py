@@ -44,6 +44,47 @@ def test_hashes(
     assert hashes[0] != hashes[1]
 
 
+def test_amplitude_doit_hashes(reaction: ReactionInfo):
+    transitions = normalize_state_ids(reaction.transitions)
+    decay = to_three_body_decay(transitions, min_ls=True)
+    builder = DalitzPlotDecompositionBuilder(decay, min_ls=True)
+    for chain in builder.decay.chains:
+        builder.dynamics_choices.register_builder(
+            chain, formulate_breit_wigner_with_form_factor
+        )
+    model = builder.formulate(reference_subsystem=2)
+    hashes = {
+        str(k).replace("^", "").replace(" ", ""): get_readable_hash(expr.doit())[:7]
+        for k, expr in model.amplitudes.items()
+    }
+    assert hashes == {
+        "A2[-1,0,-1/2,-1/2]": "a1910b8",
+        "A2[-1,0,-1/2,1/2]": "b9eaf6a",
+        "A2[-1,0,1/2,-1/2]": "1412e07",
+        "A2[-1,0,1/2,1/2]": "3a20c48",
+        "A2[0,0,-1/2,-1/2]": "4db0a0f",
+        "A2[0,0,-1/2,1/2]": "12fb7b5",
+        "A2[0,0,1/2,-1/2]": "62e5046",
+        "A2[0,0,1/2,1/2]": "460a678",
+        "A2[1,0,-1/2,-1/2]": "ae9e3c1",
+        "A2[1,0,-1/2,1/2]": "319ebf8",
+        "A2[1,0,1/2,-1/2]": "eabd8a2",
+        "A2[1,0,1/2,1/2]": "e056ca3",
+        "A3[-1,0,-1/2,-1/2]": "af5bec4",
+        "A3[-1,0,-1/2,1/2]": "2d6eecc",
+        "A3[-1,0,1/2,-1/2]": "ffad279",
+        "A3[-1,0,1/2,1/2]": "b6397ed",
+        "A3[0,0,-1/2,-1/2]": "af87321",
+        "A3[0,0,-1/2,1/2]": "f63556d",
+        "A3[0,0,1/2,-1/2]": "265e0c4",
+        "A3[0,0,1/2,1/2]": "5c1ad8f",
+        "A3[1,0,-1/2,-1/2]": "fa1de87",
+        "A3[1,0,-1/2,1/2]": "97e8803",
+        "A3[1,0,1/2,-1/2]": "4055af1",
+        "A3[1,0,1/2,1/2]": "1f28272",
+    }
+
+
 @pytest.fixture(scope="session")
 def reaction() -> ReactionInfo:
     return qrules.generate_transitions(
