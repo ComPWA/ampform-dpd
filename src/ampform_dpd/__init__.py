@@ -44,17 +44,7 @@ class AmplitudeModel:
 
     @property
     def full_expression(self) -> sp.Expr:
-        def unfold_poolsums(expr: sp.Expr) -> sp.Expr:  # cspell:ignore poolsums
-            substitutions = {
-                node: node.evaluate()
-                for node in sp.postorder_traversal(expr)  # cspell:ignore postorder
-                if isinstance(node, PoolSum)
-            }
-            return expr.xreplace(substitutions)
-
-        intensity = self.intensity.evaluate()
-        intensity = unfold_poolsums(intensity)
-        return intensity.xreplace(self.amplitudes)
+        return self.intensity.doit().xreplace(self.amplitudes)
 
 
 class DalitzPlotDecompositionBuilder:
