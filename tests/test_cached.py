@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     ("min_ls", "expected_hashes"),
     [
         pytest.param(True, ["3f71859", "fc22af0"], id="min-ls"),
-        pytest.param(False, ["62ae342", "19bddfd"], id="all-ls"),
+        pytest.param(False, ["62ae342", "d63b768"], id="all-ls"),
     ],
 )
 def test_hashes(
