@@ -44,7 +44,8 @@ class AmplitudeModel:
 
     @property
     def full_expression(self) -> sp.Expr:
-        return self.intensity.doit().xreplace(self.amplitudes)
+        evaluated_amplitudes = {k: v.doit() for k, v in self.amplitudes.items()}
+        return self.intensity.doit().xreplace(evaluated_amplitudes)
 
 
 class DalitzPlotDecompositionBuilder:
