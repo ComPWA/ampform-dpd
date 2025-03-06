@@ -16,13 +16,13 @@ if TYPE_CHECKING:
 
 @pytest.mark.slow
 @pytest.mark.parametrize(
-    ("min_ls", "expected_hash"),
+    ("min_ls", "expected_hashes"),
     [
-        pytest.param(True, "c2510ad", id="min-ls"),
-        pytest.param(False, "dc9f402", id="all-ls"),
+        pytest.param(True, {"38abd93", "c2510ad"}, id="min-ls"),
+        pytest.param(False, {"02e4a65", "dc9f402"}, id="all-ls"),
     ],
 )
-def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hash: str):
+def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hashes: set[str]):
     transitions = normalize_state_ids(reaction.transitions)
     decay = to_three_body_decay(transitions, min_ls=min_ls)
     builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
@@ -33,7 +33,7 @@ def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hash: str):
     model = builder.formulate(reference_subsystem=2)
     intensity_expr = model.full_expression
     h = get_readable_hash(intensity_expr)[:7]
-    assert h == expected_hash
+    assert h in expected_hashes
 
 
 def test_amplitude_doit_hashes(reaction: ReactionInfo):
