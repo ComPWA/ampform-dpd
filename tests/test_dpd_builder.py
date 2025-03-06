@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+import qrules
 import sympy as sp
 
 from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
@@ -141,6 +142,41 @@ class TestDalitzPlotDecompositionBuilder:
                     R"\mathcal{H}^\mathrm{LS,production}[\overline{\Sigma}(1660)^{-}, 0, 1]",
                     R"\mathcal{H}^\mathrm{LS,production}[\overline{\Sigma}(1660)^{-}, 2, 1]",
                 ]
+
+    @pytest.mark.parametrize("basis", ["canonical", "helicity"])
+    @pytest.mark.parametrize("resonance", ["N(1675)", "Sigma(1775)"])
+    def test_use_coefficients_combinations(self, basis: str, resonance: str):  # noqa: PLR0914
+        reaction = qrules.generate_transitions(
+            initial_state=[("J/psi(1S)", [+1])],
+            final_state=[("Sigma+", [+0.5]), "K0", ("p~", [+0.5])],
+            allowed_interaction_types="strong",
+            allowed_intermediate_particles=[resonance],
+            formalism="canonical-helicity",
+        )
+        transitions = normalize_state_ids(reaction.transitions)
+        min_ls = basis == "helicity"
+        decay = to_three_body_decay(transitions, min_ls)
+        builder = DalitzPlotDecompositionBuilder(decay, min_ls)
+        # cspell:ignore coeff
+        reference_subsystem = 1 if resonance.startswith("Sigma") else 3
+        coupling_model = builder.formulate(reference_subsystem)  # type:ignore[arg-type]
+        coeff_model = builder.formulate(reference_subsystem, use_coefficients=True)  # type:ignore[arg-type]
+        coupling_amplitudes = _get_physical_amplitudes(coupling_model)
+        coeff_amplitudes = _get_physical_amplitudes(coeff_model)
+
+        couplings = _collect_indexed_symbols(coupling_amplitudes)
+        coefficients = _collect_indexed_symbols(coeff_amplitudes)
+        coupling_products = _collect_products(coupling_amplitudes)
+
+        n_couplings = len(couplings)
+        n_decay_couplings = len({s for s in couplings if "decay" in s.name})
+        n_production_couplings = len({s for s in couplings if "production" in s.name})
+        assert n_couplings == n_decay_couplings + n_production_couplings
+
+        n_coupling_products = len(coupling_products)
+        n_coefficients = len(coefficients)
+        assert n_coefficients == n_coupling_products
+        assert n_coefficients == n_decay_couplings * n_production_couplings
 
 
 def _collect_indexed_symbols(amplitudes: list[sp.Expr]) -> set[sp.Indexed]:
