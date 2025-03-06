@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     ("min_ls", "expected_hashes"),
     [
-        pytest.param(True, ["379b7db", "55c6034", "55c6034"], id="min-ls"),
-        pytest.param(False, ["1655900", "d9a3ec8", "d9a3ec8"], id="all-ls"),
+        pytest.param(True, ["684fc61", "0423d35", "0423d35"], id="min-ls"),
+        pytest.param(False, ["a3afa2e", "13a6bf7", "13a6bf7"], id="all-ls"),
     ],
 )
 def test_hashes(
