@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import pytest
 import sympy as sp
 
-from ampform_dpd import DalitzPlotDecompositionBuilder
+from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
 from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
 
@@ -69,13 +69,8 @@ class TestDalitzPlotDecompositionBuilder:
             reference_subsystem=2,
             use_coefficients=use_coefficients,
         )
-        amplitudes = [expr.doit() for expr in model.amplitudes.values()]
-        amplitudes = [expr for expr in amplitudes if expr]
-
-        coupling_symbols: set[str] = set()
-        for expr in amplitudes:
-            symbols = {s for s in expr.free_symbols if isinstance(s, sp.Indexed)}
-            coupling_symbols.update(symbols)
+        amplitudes = _get_physical_amplitudes(model)
+        coupling_symbols = _collect_indexed_symbols(amplitudes)
 
         n_coupling_symbols = len(coupling_symbols)
         coupling_symbols_str = sorted(str(s) for s in coupling_symbols)
@@ -148,6 +143,14 @@ class TestDalitzPlotDecompositionBuilder:
                 ]
 
 
+def _collect_indexed_symbols(amplitudes: list[sp.Expr]) -> set[sp.Indexed]:
+    coupling_symbols: set[str] = set()
+    for expr in amplitudes:
+        symbols = {s for s in expr.free_symbols if isinstance(s, sp.Indexed)}
+        coupling_symbols.update(symbols)
+    return coupling_symbols
+
+
 def _collect_products(amplitudes: list[sp.Expr]) -> list[tuple[sp.Indexed, sp.Indexed]]:
     products = set()
     for amp in amplitudes:
@@ -156,3 +159,8 @@ def _collect_products(amplitudes: list[sp.Expr]) -> list[tuple[sp.Indexed, sp.In
             if len(couplings) == 2:
                 products.add(tuple(sorted(couplings, key=str)))
     return sorted(products, key=str)
+
+
+def _get_physical_amplitudes(model: AmplitudeModel) -> list[sp.Expr]:
+    amplitudes = [expr.doit() for expr in model.amplitudes.values()]
+    return [expr for expr in amplitudes if expr]
