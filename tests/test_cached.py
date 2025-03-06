@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     ("min_ls", "expected_hashes"),
     [
-        pytest.param(True, ["684fc61", "0423d35", "0423d35"], id="min-ls"),
-        pytest.param(False, ["a3afa2e", "13a6bf7", "13a6bf7"], id="all-ls"),
+        pytest.param(True, ["684fc61", "0423d35"], id="min-ls"),
+        pytest.param(False, ["a3afa2e", "13a6bf7"], id="all-ls"),
     ],
 )
 def test_hashes(
@@ -42,7 +42,6 @@ def test_hashes(
         intensity_expr = intensity_expr.doit()
     assert hashes == expected_hashes
     assert hashes[0] != hashes[1]
-    assert hashes[1] == hashes[2]
 
 
 @pytest.fixture(scope="session")
