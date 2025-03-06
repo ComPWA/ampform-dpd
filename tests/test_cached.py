@@ -31,10 +31,10 @@ def test_hashes(
     builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
     model = builder.formulate(reference_subsystem=2)
     intensity_expr = model.full_expression
-    hashes = []
-    for _ in range(len(expected_hashes)):
-        hashes.append(get_readable_hash(intensity_expr)[:7])
+    hashes = [get_readable_hash(intensity_expr)[:7]]
+    for _ in range(len(expected_hashes) - 1):
         intensity_expr = intensity_expr.doit()
+        hashes.append(get_readable_hash(intensity_expr)[:7])
     assert hashes == expected_hashes
     assert hashes[0] != hashes[1]
 
