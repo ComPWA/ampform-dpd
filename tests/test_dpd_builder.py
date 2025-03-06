@@ -79,6 +79,7 @@ class TestDalitzPlotDecompositionBuilder:
 
         n_coupling_symbols = len(coupling_symbols)
         coupling_symbols_str = sorted(str(s) for s in coupling_symbols)
+        # ----==== COEFFICIENTS ===--- #
         if use_coefficients:
             if min_ls:  # HELICITY BASIS
                 assert n_coupling_symbols == 20
@@ -112,6 +113,7 @@ class TestDalitzPlotDecompositionBuilder:
                     R"\mathcal{H}^\mathrm{LS,\overline{\Sigma}(1660)^{-}}[0, 1, 1, 1/2]",
                     R"\mathcal{H}^\mathrm{LS,\overline{\Sigma}(1660)^{-}}[2, 1, 1, 1/2]",
                 ]
+        # ----==== COUPLING ===--- #
         else:
             n_products = len(_collect_products(amplitudes))
             if min_ls:  # HELICITY BASIS
