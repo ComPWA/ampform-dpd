@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
+from functools import cache
 from typing import TYPE_CHECKING, overload
 
 import cloudpickle
 from ampform.sympy._cache import cache_to_disk  # noqa: PLC2701
-from ampform.sympy.cached import (
-    doit,  # noqa: F401  # pyright: ignore[reportUnusedImport]
-    unfold,  # noqa: F401  # pyright: ignore[reportUnusedImport]
-    xreplace,  # noqa: F401  # pyright: ignore[reportUnusedImport]
-)
+from ampform.sympy.cached import doit, simplify, subs, trigsimp, unfold, xreplace
+from frozendict import frozendict
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
 if TYPE_CHECKING:
@@ -23,6 +21,16 @@ if TYPE_CHECKING:
     )
     from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
+__all__ = [
+    "doit",
+    "lambdify",
+    "simplify",
+    "subs",
+    "trigsimp",
+    "unfold",
+    "xreplace",
+]
+
 
 @overload
 def lambdify(expr: sp.Expr, *, backend: str = "jax") -> PositionalArgumentFunction: ...
@@ -33,10 +41,6 @@ def lambdify(
     *,
     backend: str = "jax",
 ) -> ParametrizedBackendFunction: ...
-@cache_to_disk(
-    dump_function=cloudpickle.dump,
-    dependencies=["cloudpickle", "ampform", "jax", "sympy"],
-)
 def lambdify(
     expr: sp.Expr,
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
@@ -60,6 +64,26 @@ def lambdify(
 
     .. seealso:: :func:`ampform.sympy.perform_cached_doit`
     """
+    if isinstance(parameters, str):
+        backend = parameters
+        parameters = None
+    if parameters is None:
+        return _lambdify_impl(expr, backend=backend)
+    return _lambdify_impl(expr, frozendict(parameters), backend=backend)
+
+
+@cache
+@cache_to_disk(
+    dump_function=cloudpickle.dump,
+    function_name="lambdify",
+    dependencies=["cloudpickle", "ampform", "jax", "sympy"],
+)
+def _lambdify_impl(
+    expr: sp.Expr,
+    parameters: frozendict[sp.Symbol, ParameterValue] | None = None,
+    *,
+    backend: str = "jax",
+):
     if parameters is None:
         return create_function(expr, backend)
     return create_parametrized_function(expr, parameters, backend)

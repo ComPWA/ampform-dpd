@@ -1,5 +1,4 @@
 version = 1
-revision = 1
 requires-python = ">=3.9"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -60,10 +59,11 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.15.7.dev7+g0fe1065"
-source = { git = "https://github.com/ComPWA/ampform?rev=0fe1065c#0fe1065c81ee06b3184f22c477b5dbd3b37b4652" }
+version = "0.15.7.dev11+ga043ffe"
+source = { git = "https://github.com/ComPWA/ampform?rev=a043ffe7#a043ffe7144f5a72c207995105bda1dc3aa8be81" }
 dependencies = [
     { name = "attrs" },
+    { name = "frozendict" },
     { name = "qrules" },
     { name = "sympy" },
 ]
@@ -75,6 +75,7 @@ dependencies = [
     { name = "ampform" },
     { name = "attrs" },
     { name = "cloudpickle" },
+    { name = "frozendict" },
     { name = "numpy" },
     { name = "qrules" },
     { name = "sympy" },
@@ -189,9 +190,10 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=0fe1065c" },
+    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=a043ffe7" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
+    { name = "frozendict" },
     { name = "numpy" },
     { name = "qrules", specifier = ">=0.10.0" },
     { name = "sympy", specifier = ">=1.10" },
@@ -200,7 +202,6 @@ requires-dist = [
     { name = "tensorwaves", extras = ["tf"], marker = "extra == 'tf'" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
-provides-extras = ["numba", "tf"]
 
 [package.metadata.requires-dev]
 dev = [

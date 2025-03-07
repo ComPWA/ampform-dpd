@@ -12,6 +12,7 @@ from sphinx_api_relink.helpers import (
 set_intersphinx_version_remapping({
     "ampform": {
         "0.15.7.dev7+g0fe1065": "0.15.6",
+        "0.15.7.dev11+ga043ffe": "0.15.6",
     },
     "ipython": {
         "8.12.2": "8.12.1",
@@ -52,6 +53,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "InitialStateID": ("obj", "ampform_dpd.decay.InitialStateID"),
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
+    "Model": "ampform.sympy.cached.Model",
     "Node": ("obj", "ampform_dpd.io.serialization.format.Node"),
     "NodeType": "typing.TypeVar",
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
@@ -61,6 +63,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "qrules.topology.EdgeType": "typing.TypeVar",
     "qrules.topology.NodeType": "typing.TypeVar",
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "sp.Basic": "sympy.core.basic.Basic",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Rational": "sympy.core.numbers.Rational",
@@ -214,6 +217,9 @@ nb_execution_show_tb = True
 nb_execution_timeout = -1
 nb_output_stderr = "show"
 nb_render_markdown_format = "myst"
+nitpick_ignore = [
+    ("py:class", "ampform.sympy.cached.Model"),
+]
 nitpicky = True
 primary_domain = "py"
 project = REPO_TITLE
