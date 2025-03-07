@@ -7,11 +7,7 @@ from typing import TYPE_CHECKING, overload
 
 import cloudpickle
 from ampform.sympy._cache import cache_to_disk  # noqa: PLC2701
-from ampform.sympy.cached import (
-    doit,  # noqa: F401  # pyright: ignore[reportUnusedImport]
-    unfold,  # noqa: F401  # pyright: ignore[reportUnusedImport]
-    xreplace,  # noqa: F401  # pyright: ignore[reportUnusedImport]
-)
+from ampform.sympy.cached import doit, unfold, xreplace
 from frozendict import frozendict
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
@@ -24,6 +20,13 @@ if TYPE_CHECKING:
         PositionalArgumentFunction,
     )
     from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
+
+__all__ = [
+    "doit",
+    "lambdify",
+    "unfold",
+    "xreplace",
+]
 
 
 @overload
