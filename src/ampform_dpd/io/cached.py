@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, overload
 
 import cloudpickle
 from ampform.sympy._cache import cache_to_disk  # noqa: PLC2701
-from ampform.sympy.cached import doit, unfold, xreplace
+from ampform.sympy.cached import doit, simplify, subs, trigsimp, unfold, xreplace
 from frozendict import frozendict
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 
@@ -24,6 +24,9 @@ if TYPE_CHECKING:
 __all__ = [
     "doit",
     "lambdify",
+    "simplify",
+    "subs",
+    "trigsimp",
     "unfold",
     "xreplace",
 ]
