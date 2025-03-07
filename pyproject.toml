@@ -26,13 +26,13 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "ampform >=0.15.7", # aslatex with keyword arguments; ampform.sympy.cached module
-    "attrs >=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
+    "ampform>=0.15.7", # aslatex with keyword arguments; ampform.sympy.cached module
+    "attrs>=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
     "frozendict",
     "numpy",
-    "qrules >=0.10.0",
-    "sympy >=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
+    "qrules>=0.10.0",
+    "sympy>=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
     'typing-extensions; python_version <"3.11.0"',
 ]
@@ -508,11 +508,3 @@ test = [
     "3.12",
     "3.13",
 ]
-
-[tool.uv]
-constraint-dependencies = [
-    "numpy~=1.0",
-]
-
-[tool.uv.sources]
-ampform = {git = "https://github.com/ComPWA/ampform", rev = "a043ffe7"}

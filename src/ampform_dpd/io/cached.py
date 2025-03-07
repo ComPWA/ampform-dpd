@@ -62,7 +62,7 @@ def lambdify(
         backend: The choice of backend for the created numerical function.
             **WARNING**: this function has only been tested for :code:`backend="jax"`!
 
-    .. seealso:: :func:`ampform.sympy.perform_cached_doit`
+    .. seealso:: :mod:`ampform.sympy.cached`
     """
     if isinstance(parameters, str):
         backend = parameters
