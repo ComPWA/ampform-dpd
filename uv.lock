@@ -59,13 +59,17 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.15.7.dev11+ga043ffe"
-source = { git = "https://github.com/ComPWA/ampform?rev=a043ffe7#a043ffe7144f5a72c207995105bda1dc3aa8be81" }
+version = "0.15.7"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
     { name = "frozendict" },
     { name = "qrules" },
     { name = "sympy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/bf/a5/f1b45b55c1486bd8dbacf4380b8e65575efd7c98bb90b08900fd5c2bfacb/ampform-0.15.7.tar.gz", hash = "sha256:0d4a7af2cd6eb18b39f2ffec48001d70464c39f0085c8b90f0744450c36bfa3a", size = 371491 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fb/37/34462914cd0d7fa833e47f0a44055448cf7bfeb30292606571c853d57547/ampform-0.15.7-py3-none-any.whl", hash = "sha256:ddfc346a0c9bb48b95be5a5f79dff557af742cbc4a2b2a9721fceecebc1fab98", size = 88351 },
 ]
 
 [[package]]
@@ -190,7 +194,7 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=a043ffe7" },
+    { name = "ampform", specifier = ">=0.15.7" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
     { name = "frozendict" },
