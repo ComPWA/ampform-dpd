@@ -6,6 +6,7 @@ from functools import cache
 from typing import TYPE_CHECKING, overload
 
 import cloudpickle
+import sympy as sp
 from ampform.sympy._cache import cache_to_disk  # noqa: PLC2701
 from ampform.sympy.cached import doit, simplify, subs, trigsimp, unfold, xreplace
 from frozendict import frozendict
@@ -14,7 +15,6 @@ from tensorwaves.function.sympy import create_function, create_parametrized_func
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    import sympy as sp
     from tensorwaves.function import (
         ParametrizedBackendFunction,
         PositionalArgumentFunction,
@@ -67,9 +67,13 @@ def lambdify(
     if isinstance(parameters, str):
         backend = parameters
         parameters = None
+    expr = expr.xreplace({
+        s: _to_symbol(s) for s in expr.free_symbols if isinstance(s, sp.Indexed)
+    })
     if parameters is None:
         return _lambdify_impl(expr, backend=backend)
-    return _lambdify_impl(expr, frozendict(parameters), backend=backend)
+    parameters = frozendict({_to_symbol(s): v for s, v in parameters.items()})
+    return _lambdify_impl(expr, parameters, backend=backend)
 
 
 @cache
@@ -87,3 +91,9 @@ def _lambdify_impl(
     if parameters is None:
         return create_function(expr, backend)
     return create_parametrized_function(expr, parameters, backend)
+
+
+def _to_symbol(symbol: sp.Symbol) -> sp.Symbol:
+    if isinstance(symbol, sp.Indexed):
+        return sp.Symbol(symbol.name)
+    return symbol
