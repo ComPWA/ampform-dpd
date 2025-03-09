@@ -59,8 +59,8 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.15.8.dev3+g1e2af8c.d20250309"
-source = { git = "https://github.com/ComPWA/ampform?rev=1e2af8c9#1e2af8c9ef981a23dd61bfa7438d6e3c1d5b4bd8" }
+version = "0.15.8.dev5+g2f5814b.d20250309"
+source = { git = "https://github.com/ComPWA/ampform?rev=2f5814be#2f5814be8567fe9807ce01908e7b39c5fd18a662" }
 dependencies = [
     { name = "attrs" },
     { name = "frozendict" },
@@ -190,7 +190,7 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=1e2af8c9" },
+    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=2f5814be" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cloudpickle" },
     { name = "frozendict" },
