@@ -510,4 +510,4 @@ test = [
 ]
 
 [tool.uv.sources]
-ampform = {git = "https://github.com/ComPWA/ampform", rev = "984ed4bf"}
+ampform = {git = "https://github.com/ComPWA/ampform", rev = "1e2af8c9"}
