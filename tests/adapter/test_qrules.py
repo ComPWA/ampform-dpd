@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable, SupportsFloat
 
 import pytest
+from qrules import InteractionType, StateTransitionManager
 
 from ampform_dpd.adapter.qrules import (
     _convert_transition,
@@ -115,6 +116,21 @@ def test_normalize_state_ids_reaction(jpsi2pksigma_reaction: ReactionInfo):
 
         for i in transition012.states:
             assert transition012.states[i] == transition123.states[i + 1]
+
+
+def test_normalize_state_ids_problem_set():
+    stm = StateTransitionManager(
+        initial_state=[("J/psi(1S)", [-1, +1])],
+        final_state=["K0", "Sigma+", "p~"],
+        allowed_intermediate_particles=["N(1700)", "Sigma(1750)"],
+        formalism="helicity",
+        mass_conservation_factor=0,
+    )
+    stm.set_allowed_interaction_types([InteractionType.STRONG, InteractionType.EM])
+    problem_sets = stm.create_problem_sets()
+    some_problem_set = normalize_state_ids(problem_sets[3600.0][0])
+    assert set(some_problem_set.initial_facts.initial_states) == {0}
+    assert set(some_problem_set.initial_facts.final_states) == {1, 2, 3}
 
 
 def test_permute_equal_final_states(

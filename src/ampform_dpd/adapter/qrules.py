@@ -10,8 +10,14 @@ from typing import TYPE_CHECKING, Any, NoReturn, TypeVar, overload
 import attrs
 import qrules
 from qrules.quantum_numbers import InteractionProperties
-from qrules.topology import EdgeType, FrozenTransition, NodeType
-from qrules.transition import ReactionInfo, StateTransition, Topology
+from qrules.topology import (
+    EdgeType,
+    FrozenTransition,
+    MutableTransition,
+    NodeType,
+    Transition,
+)
+from qrules.transition import ProblemSet, ReactionInfo, Topology
 
 from ampform_dpd.decay import (
     FinalStateID,
@@ -240,12 +246,25 @@ def _(obj: ReactionInfo) -> ReactionInfo:
     )
 
 
-@_impl_normalize_state_ids.register(FrozenTransition)  # type:ignore[attr-defined]
-def _(obj: StateTransition) -> StateTransition:
+_Transition = TypeVar("_Transition", FrozenTransition, MutableTransition)
+
+
+@_impl_normalize_state_ids.register(FrozenTransition)
+@_impl_normalize_state_ids.register(MutableTransition)
+def _(obj: _Transition) -> _Transition:
     return attrs.evolve(
         obj,
         topology=_impl_normalize_state_ids(obj.topology),
         states={new: obj.states[old] for new, old in enumerate(sorted(obj.states))},
+    )
+
+
+@_impl_normalize_state_ids.register(ProblemSet)
+def _(obj: ProblemSet) -> ProblemSet:
+    return ProblemSet(
+        initial_facts=_impl_normalize_state_ids(obj.initial_facts),
+        solving_settings=_impl_normalize_state_ids(obj.solving_settings),
+        topology=_impl_normalize_state_ids(obj.topology),
     )
 
 
@@ -260,7 +279,15 @@ def _(obj: abc.Iterable[T]) -> list[T]:
     return [_impl_normalize_state_ids(x) for x in obj]
 
 
-T = TypeVar("T", ReactionInfo, StateTransition, Topology)
+T = TypeVar(
+    "T",
+    FrozenTransition,
+    MutableTransition,
+    ProblemSet,
+    ReactionInfo,
+    Topology,
+    Transition,
+)
 """Type variable for the input and output of :func:`normalize_state_ids`."""
 
 
