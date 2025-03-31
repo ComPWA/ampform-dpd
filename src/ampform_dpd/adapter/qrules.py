@@ -280,7 +280,13 @@ def _(obj: abc.Iterable[T]) -> list[T]:
 
 
 T = TypeVar(
-    "T", FrozenTransition, MutableTransition, ProblemSet, ReactionInfo, Transition
+    "T",
+    FrozenTransition,
+    MutableTransition,
+    ProblemSet,
+    ReactionInfo,
+    Topology,
+    Transition,
 )
 """Type variable for the input and output of :func:`normalize_state_ids`."""
 
