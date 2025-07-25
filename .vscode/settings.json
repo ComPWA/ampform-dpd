@@ -31,10 +31,6 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.enabled": true,
-  "coverage-gutters.coverageFileNames": ["coverage.xml"],
-  "coverage-gutters.coverageReportFileName": "**/htmlcov/index.html",
-  "coverage-gutters.showGutterCoverage": false,
-  "coverage-gutters.showLineCoverage": true,
   "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
   "files.eol": "\n",
@@ -53,7 +49,7 @@
   "python.analysis.inlayHints.pytestParameters": true,
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.terminal.activateEnvironment": false,
-  "python.testing.pytestArgs": ["--color=no", "--verbose", "--verbose"],
+  "python.testing.pytestArgs": ["--numprocesses=auto"],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "redhat.telemetry.enabled": false,
@@ -67,6 +63,8 @@
     "typings/**": true
   },
   "telemetry.telemetryLevel": "off",
+  "testing.coverageToolbarEnabled": true,
+  "testing.showCoverageInExplorer": true,
   "yaml.schemas": {
     "https://raw.githubusercontent.com/ComPWA/qrules/0.10.x/src/qrules/particle-validation.json": [
       "*particle*.y*ml"
