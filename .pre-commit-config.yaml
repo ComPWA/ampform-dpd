@@ -13,7 +13,7 @@ repos:
       - id: check-useless-excludes
 
   - repo: https://github.com/ComPWA/policy
-    rev: aea1b0776308878a8b81986ca712cbc97e882075
+    rev: 0.6.4
     hooks:
       - id: check-dev-files
         args:
@@ -54,7 +54,7 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.5
+    rev: v0.12.7
     hooks:
       - id: ruff
         args: [--fix]
@@ -126,6 +126,6 @@ repos:
       - id: pyright
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.8.3
+    rev: 0.8.5
     hooks:
       - id: uv-lock
