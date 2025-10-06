@@ -57,18 +57,6 @@ class P(sp.Expr):
 
 
 @unevaluated
-class Q(sp.Expr):
-    s: Any
-    m0: Any
-    mk: Any
-    _latex_repr_ = R"q_{{_{{{m0},{mk}}}}}\left({s}\right)"
-
-    def evaluate(self):
-        s, m0, mk = self.args
-        return sp.sqrt(Kallen(s, m0**2, mk**2)) / (2 * m0)  # <-- not s!
-
-
-@unevaluated
 class BreitWignerMinL(sp.Expr):
     s: Any
     decaying_mass: Any
@@ -85,8 +73,8 @@ class BreitWignerMinL(sp.Expr):
 
     def evaluate(self):  # noqa: PLR0914
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
-        q = Q(s, m_top, m_spec)
-        q0 = Q(m0**2, m_top, m_spec)
+        q = P(m_top**2, sp.sqrt(s), m_spec)
+        q0 = P(m_top**2,m0, m_spec)
         p = P(s, m1, m2)
         p0 = P(m0**2, m1, m2)
         width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
