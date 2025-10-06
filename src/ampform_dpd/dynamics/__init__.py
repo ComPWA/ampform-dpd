@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
-from ampform.kinematics.phasespace import Kallen
+from ampform.dynamics.phasespace import BreakupMomentum
 from ampform.sympy import unevaluated
 
 if TYPE_CHECKING:
@@ -45,18 +45,6 @@ class RelativisticBreitWigner(sp.Expr):
 
 
 @unevaluated
-class P(sp.Expr):
-    s: Any
-    mi: Any
-    mj: Any
-    _latex_repr_ = R"p_{{_{{{mi},{mj}}}}}\left({s}\right)"
-
-    def evaluate(self):
-        s, mi, mj = self.args
-        return sp.sqrt(Kallen(s, mi**2, mj**2)) / (2 * sp.sqrt(s))
-
-
-@unevaluated
 class BreitWignerMinL(sp.Expr):
     s: Any
     decaying_mass: Any
@@ -73,10 +61,10 @@ class BreitWignerMinL(sp.Expr):
 
     def evaluate(self):  # noqa: PLR0914
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
-        q = P(m_top**2, sp.sqrt(s), m_spec)
-        q0 = P(m_top**2, m0, m_spec)
-        p = P(s, m1, m2)
-        p0 = P(m0**2, m1, m2)
+        q = BreakupMomentum(m_top**2, sp.sqrt(s), m_spec)
+        q0 = BreakupMomentum(m_top**2, m0, m_spec)
+        p = BreakupMomentum(s, m1, m2)
+        p0 = BreakupMomentum(m0**2, m1, m2)
         width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
         return sp.Mul(
             (q / q0) ** l_prod,
@@ -121,10 +109,10 @@ class FlattéSWave(sp.Expr):
 
     def evaluate(self):
         s, m0, (Γ1, Γ2), (ma1, mb1), (ma2, mb2) = self.args
-        p = P(s, ma1, mb1)
-        p0 = P(m0**2, ma2, mb2)
-        q = P(s, ma2, mb2)
-        q0 = P(m0**2, ma2, mb2)
+        p = BreakupMomentum(s, ma1, mb1)
+        p0 = BreakupMomentum(m0**2, ma2, mb2)
+        q = BreakupMomentum(s, ma2, mb2)
+        q0 = BreakupMomentum(m0**2, ma2, mb2)
         Γ1 *= (p / p0) * m0 / sp.sqrt(s)
         Γ2 *= (q / q0) * m0 / sp.sqrt(s)
         Γ = Γ1 + Γ2
@@ -143,8 +131,8 @@ class EnergyDependentWidth(sp.Expr):
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, L, R = self.args
-        p = P(s, m1, m2)
-        p0 = P(m0**2, m1, m2)
+        p = BreakupMomentum(s, m1, m2)
+        p0 = BreakupMomentum(m0**2, m1, m2)
         ff = BlattWeisskopf(p * R, L) ** 2
         ff0 = BlattWeisskopf(p0 * R, L) ** 2
         return sp.Mul(
