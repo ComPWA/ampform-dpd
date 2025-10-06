@@ -74,7 +74,7 @@ class BreitWignerMinL(sp.Expr):
     def evaluate(self):  # noqa: PLR0914
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
         q = P(m_top**2, sp.sqrt(s), m_spec)
-        q0 = P(m_top**2,m0, m_spec)
+        q0 = P(m_top**2, m0, m_spec)
         p = P(s, m1, m2)
         p0 = P(m0**2, m1, m2)
         width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
