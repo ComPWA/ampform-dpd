@@ -107,8 +107,10 @@ def _create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:
     return sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
 
 
-def create_mass_symbol(particle: IsobarNode | Particle) -> sp.Symbol:
+def create_mass_symbol(particle: IsobarNode | Particle | State) -> sp.Symbol:
     particle = to_particle(particle)
+    if isinstance(particle, State):
+        return sp.Symbol(f"m{particle.index}", nonnegative=True)
     return sp.Symbol(f"m_{{{particle.latex}}}", nonnegative=True)
 
 
