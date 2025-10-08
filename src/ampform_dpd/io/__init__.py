@@ -173,8 +173,8 @@ def _as_resonance_markdown_table(items: Sequence[Particle | State]) -> str:
             f"{int(1e3 * particle.mass):,.0f}",
             f"{int(1e3 * particle.width):,.0f}",
         ]
-        if render_index and isinstance(particle, State):
-            row_items.insert(0, particle.index)
+        if render_index:
+            row_items.insert(0, particle.index if isinstance(particle, State) else " ")
         src += _create_markdown_table_row(row_items)
     return src
 
