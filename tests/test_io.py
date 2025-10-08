@@ -1,8 +1,12 @@
 # pyright: reportPrivateUsage=false
 from __future__ import annotations
 
-from ampform_dpd.decay import IsobarNode, Particle
-from ampform_dpd.io import aslatex
+from textwrap import dedent
+
+from attrs import asdict
+
+from ampform_dpd.decay import IsobarNode, Particle, State
+from ampform_dpd.io import as_markdown_table, aslatex
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 dummy_args = {"mass": 0, "width": 0}
@@ -35,3 +39,18 @@ def test_aslatex_isobar_node():
     node = IsobarNode(Λ1520, p, K, interaction=(2, 1))
     latex = aslatex(node)
     assert latex == R"\left(\Lambda(1520) \xrightarrow[S=1]{L=2} p K^-\right)"
+
+
+def test_as_markdown_table_particles():
+    p_state = State(**asdict(p), index=1)
+    k_state = State(**asdict(K), index=2)
+    particles = [p_state, k_state, π]
+    src = as_markdown_table(particles)
+    expected = dedent(R"""
+    | index | name | LaTeX | $J^P$ | mass (MeV) | width (MeV) |
+    | --- | --- | --- | --- | --- | --- |
+    | 1 | `p` | $p$ | $\frac{1}{2}^+$ | 0 | 0 |
+    | 2 | `K-` | $K^-$ | $0^-$ | 0 | 0 |
+    |   | `π+` | $\pi^+$ | $0^-$ | 0 | 0 |
+    """)
+    assert src.strip() == expected.strip()
