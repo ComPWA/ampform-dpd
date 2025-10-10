@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     ("min_ls", "expected_hashes"),
     [
         pytest.param(True, {"544cb15"}, id="min-ls"),
-        pytest.param(False, {"7300a10"}, id="all-ls"),
+        pytest.param(False, {"01968bc", "7300a10"}, id="all-ls"),
     ],
 )
 def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hashes: set[str]):
