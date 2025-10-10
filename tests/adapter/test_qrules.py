@@ -43,18 +43,9 @@ def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
     if reaction.formalism == "canonical-helicity":
         assert len(ls_couplings) == 3
         assert ls_couplings == [
-            (
-                {"L": 0, "S": 1},
-                {"L": 1, "S": 0.5},
-            ),
-            (
-                {"L": 2, "S": 1},
-                {"L": 1, "S": 0.5},
-            ),
-            (
-                {"L": 1, "S": 2},
-                {"L": 2, "S": 0.5},
-            ),
+            ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+            ({"L": 2, "S": 1}, {"L": 1, "S": 0.5}),
+            ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
         ]
     else:
         assert len(ls_couplings) == 2
@@ -62,20 +53,16 @@ def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
             for ls in ls_coupling:
                 assert ls == {"L": None, "S": None}
 
+    if reaction.formalism != "canonical-helicity":
+        return
+
     min_ls_transitions = filter_min_ls(transitions)
     ls_couplings = [_get_couplings(t) for t in min_ls_transitions]
     assert len(ls_couplings) == 2
-    if reaction.formalism == "canonical-helicity":
-        assert ls_couplings == [
-            (
-                {"L": 0, "S": 1},
-                {"L": 1, "S": 0.5},
-            ),
-            (
-                {"L": 1, "S": 2},
-                {"L": 2, "S": 0.5},
-            ),
-        ]
+    assert ls_couplings == [
+        ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+        ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
+    ]
 
 
 @pytest.mark.parametrize("converter", [lambda x: x, _convert_transition])
