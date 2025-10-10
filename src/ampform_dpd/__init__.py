@@ -59,7 +59,7 @@ class DalitzPlotDecompositionBuilder:
     def __init__(
         self,
         decay: ThreeBodyDecay,
-        min_ls: tuple[bool, bool] | bool = True,
+        min_ls: bool | tuple[bool, bool] = True,
         all_subsystems: bool = False,
     ) -> None:
         """Amplitude builder for the helicity formalism with Dalitz-plot decomposition.
