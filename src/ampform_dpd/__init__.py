@@ -31,6 +31,7 @@ from ampform_dpd.decay import (
     get_decay_product_ids,
     to_particle,
 )
+from ampform_dpd.dynamics.builder import create_mass_symbol
 from ampform_dpd.spin import create_spin_range
 
 if TYPE_CHECKING:
@@ -485,7 +486,7 @@ def formulate_non_resonant(
 
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
     return {
-        sp.Symbol(f"m{i}", nonnegative=True): decay.states[i].mass
+        create_mass_symbol(decay.states[i]): decay.states[i].mass
         for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
     }
 
