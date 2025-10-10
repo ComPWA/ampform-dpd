@@ -38,7 +38,7 @@ _LOGGER = logging.getLogger(__name__)
 
 def to_three_body_decay(
     transitions: Iterable[FrozenTransition],
-    min_ls: bool = False,
+    min_ls: bool | tuple[bool, bool] = False,
 ) -> ThreeBodyDecay:
     transitions = tuple(transitions)
     if not transitions:
@@ -180,25 +180,55 @@ def _to_ls_coupling(node: Any) -> LSCoupling | None:
 
 def filter_min_ls(
     transitions: Iterable[FrozenTransition[EdgeType, NodeType]],
+    node_ids: set[int] | None = None,
 ) -> tuple[FrozenTransition[EdgeType, NodeType], ...]:
-    grouped_transitions = defaultdict(list)
+    available_node_ids = {i for t in transitions for i in t.interactions}
+    if available_node_ids != {0, 1}:
+        msg = (
+            "Can only filter minimum L-S couplings for transitions with exactly two"
+            f" interaction node IDs, 0 and 1, but got {available_node_ids}"
+        )
+        raise ValueError(msg)
+    if any(len(t.intermediate_states) != 1 for t in transitions):
+        msg = "Can only filter minimum L-S couplings for transitions with exactly one intermediate state"
+        raise ValueError(msg)
+    if node_ids is None:
+        node_ids = available_node_ids
+    grouped_transitions: dict[
+        tuple[
+            EdgeType,
+            tuple[int, ...],
+            tuple[()] | tuple[NodeType] | tuple[NodeType, NodeType],
+        ],
+        list[FrozenTransition[EdgeType, NodeType]],
+    ] = defaultdict(list)
     for transition in transitions:
-        key = tuple(
-            (state, _get_decay_product_ids(transition.topology, resonance_id))
-            for resonance_id, state in transition.intermediate_states.items()
+        (resonance_id, resonance), *_ = transition.intermediate_states.items()
+        key = (
+            resonance,
+            _get_decay_product_ids(transition.topology, resonance_id),
+            tuple(
+                node
+                for i, node in transition.interactions.items()
+                if node and i not in node_ids
+            ),
         )
         grouped_transitions[key].append(transition)
-    min_transitions = []
+    min_transitions: list[FrozenTransition[EdgeType, NodeType]] = []
     for group in grouped_transitions.values():
-        transition, *_ = group
+        transition0, *_ = group
         min_transition: FrozenTransition[EdgeType, NodeType] = FrozenTransition(
-            topology=transition.topology,
-            states=transition.states,
+            topology=transition0.topology,
+            states=transition0.states,
             interactions={
                 i: None
                 if any(t.interactions[i] is None for t in group)
-                else min(t.interactions[i] for t in group)  # type:ignore[type-var]
-                for i in transition.interactions
+                else (
+                    min(t.interactions[i] for t in group)
+                    if i in node_ids
+                    else transition0.interactions[i]
+                )
+                for i in transition0.interactions
             },
         )
         min_transitions.append(min_transition)

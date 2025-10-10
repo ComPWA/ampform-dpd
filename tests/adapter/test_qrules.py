@@ -74,6 +74,29 @@ def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
         ],
     }
 
+    min_ls_transitions = filter_min_ls(transitions, node_ids={0})
+    ls_couplings = _group_couplings(min_ls_transitions)
+    assert ls_couplings == {
+        "N(1700)+": [
+            ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
+        ],
+        "Sigma(1660)~-": [
+            ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+        ],
+    }
+
+    min_ls_transitions = filter_min_ls(transitions, node_ids={1})
+    ls_couplings = _group_couplings(min_ls_transitions)
+    assert ls_couplings == {
+        "N(1700)+": [
+            ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
+        ],
+        "Sigma(1660)~-": [
+            ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+            ({"L": 2, "S": 1}, {"L": 1, "S": 0.5}),
+        ],
+    }
+
 
 @pytest.mark.parametrize("converter", [lambda x: x, _convert_transition])
 def test_get_equal_final_state_ids(
