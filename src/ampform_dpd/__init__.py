@@ -96,6 +96,16 @@ class DalitzPlotDecompositionBuilder:
         cleanup_summations: bool = False,
         use_coefficients: bool = False,
     ) -> AmplitudeModel:
+        """Formulate the amplitude model given the configuration of this builder.
+
+        Args:
+            reference_subsystem: The subsystem to use as reference for the alignment of
+                helicities. If `None`, the subsystem with the most resonances is chosen.
+            cleanup_summations: Whether to remove helicity indices in the summations if
+                their corresponding state is spinless.
+            use_coefficients: Whether to use a single complex coefficient per decay
+                chain, instead of separate coefficients for each helicity coupling.
+        """
         if reference_subsystem is None:
             reference_subsystem = _get_best_reference_subsystems(self.decay)
         else:
