@@ -51,7 +51,16 @@ def to_three_body_decay(
         _LOGGER.warning("Relabeled initial state to 0 and final states to 1, 2, 3")
     transitions = convert_transitions(transitions)
     if min_ls:
-        transitions = filter_min_ls(transitions)
+        if isinstance(min_ls, bool):
+            node_ids = None
+        else:
+            production_min_ls, decay_min_ls = min_ls
+            node_ids = set()
+            if production_min_ls:
+                node_ids.add(0)
+            if decay_min_ls:
+                node_ids.add(1)
+        transitions = filter_min_ls(transitions, node_ids)
     some_transition = transitions[0]
     (initial_state_id, initial_state), *_ = some_transition.initial_states.items()
     outer_states = (
