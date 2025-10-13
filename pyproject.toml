@@ -284,6 +284,7 @@ sequence = [
     {ref = "test-py 3.11"},
     {ref = "test-py 3.12"},
     {ref = "test-py 3.13"},
+    {ref = "test-py 3.14"},
     {ref = "test-py 3.9"},
 ]
 
