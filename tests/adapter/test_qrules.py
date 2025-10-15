@@ -107,7 +107,7 @@ def test_normalize_state_ids_reaction(jpsi2pksigma_reaction: ReactionInfo):
 
     transitions123 = normalize_state_ids(reaction012.transitions)
     for transition012, transition123 in zip(
-        reaction012.transitions, transitions123, strict=False
+        reaction012.transitions, transitions123, strict=True
     ):
         assert set(transition123.initial_states) == {0}
         assert set(transition123.final_states) == {1, 2, 3}

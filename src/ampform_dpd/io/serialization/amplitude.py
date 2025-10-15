@@ -80,7 +80,7 @@ def formulate(  # noqa: PLR0914
                 msg = f"Expected an expression, got {amp_expr!r}"
                 raise TypeError(msg)
             helicity_substitutions = dict(
-                zip(helicity_symbols, helicity_values, strict=False)
+                zip(helicity_symbols, helicity_values, strict=True)
             )
             existing_amplitude = amplitude_definitions.get(amp_symbol, sp.Integer(0))
             existing_amplitude += amp_expr.subs(helicity_substitutions)
@@ -172,7 +172,7 @@ def _get_decay_product_helicities(
                 raise ValueError(msg, vertex)
             return tuple(
                 (i, sp.Rational(λ))
-                for i, λ in zip(node, helicities, strict=False)  # type:ignore[assignment,call-overload,return-value]
+                for i, λ in zip(node, helicities, strict=True)  # type:ignore[assignment,call-overload,return-value]
             )
     msg = "Could not fine a helicity for any resonance node"
     raise ValueError(msg)
@@ -237,7 +237,7 @@ def _get_resonance_helicity(
         if helicities is None:  # pyright:ignore[reportUnnecessaryComparison]
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
             raise ValueError(msg, vertex)
-        for helicity, sub_node in zip(helicities, node, strict=False):
+        for helicity, sub_node in zip(helicities, node, strict=True):
             if isinstance(sub_node, abc.Sequence) and len(sub_node) == 2:  # noqa: PLR2004
                 return tuple(sub_node), sp.Rational(helicity)  # type:ignore[return-value]
     msg = "Could not find a resonance node"
@@ -255,7 +255,7 @@ def _get_final_state_helicities(
         if helicities is None:  # pyright:ignore[reportUnnecessaryComparison]
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
             raise ValueError(msg, vertex)  # type:ignore[index]
-        for helicity, node in zip(helicities, vertex["node"], strict=False):
+        for helicity, node in zip(helicities, vertex["node"], strict=True):
             if not isinstance(node, int):
                 continue
             collected_helicities[node] = sp.Rational(helicity)
