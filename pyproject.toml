@@ -20,7 +20,6 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering",
@@ -41,7 +40,7 @@ description = "Symbolic expressions for Dalitz-Plot Decomposition"
 dynamic = ["version"]
 license = {file = "LICENSE"}
 name = "ampform-dpd"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 [project.optional-dependencies]
 numba = ["tensorwaves[numba]"]
@@ -285,7 +284,6 @@ sequence = [
     {ref = "test-py 3.12"},
     {ref = "test-py 3.13"},
     {ref = "test-py 3.14"},
-    {ref = "test-py 3.9"},
 ]
 
 [tool.poe.tasks.test-py]
