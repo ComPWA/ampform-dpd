@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import sympy as sp
 
@@ -20,7 +20,7 @@ from ampform_dpd.io.serialization.format import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Callable, Iterable
 
     from ampform_dpd.io.serialization.format import (
         DecayChain,
