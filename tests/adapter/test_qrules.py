@@ -2,6 +2,8 @@
 # pyright: reportPrivateUsage=false
 from __future__ import annotations
 
+from collections import defaultdict
+from collections.abc import Callable
 from typing import TYPE_CHECKING, SupportsFloat
 
 import pytest
@@ -19,7 +21,7 @@ from ampform_dpd.adapter.qrules import (
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterable
 
     from qrules.topology import FrozenTransition
     from qrules.transition import ReactionInfo, StateTransition
@@ -41,43 +43,60 @@ def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
         t for t in reaction.transitions if t.states[3].spin_projection == +0.5
     )
 
-    ls_couplings = [_get_couplings(t) for t in transitions]
+    ls_couplings = _group_couplings(transitions)
     if reaction.formalism == "canonical-helicity":
-        assert len(ls_couplings) == 3
-        assert ls_couplings == [
-            (
-                {"L": 0, "S": 1},
-                {"L": 1, "S": 0.5},
-            ),
-            (
-                {"L": 2, "S": 1},
-                {"L": 1, "S": 0.5},
-            ),
-            (
-                {"L": 1, "S": 2},
-                {"L": 2, "S": 0.5},
-            ),
-        ]
+        assert ls_couplings == {
+            "N(1700)+": [
+                ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
+            ],
+            "Sigma(1660)~-": [
+                ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+                ({"L": 2, "S": 1}, {"L": 1, "S": 0.5}),
+            ],
+        }
     else:
         assert len(ls_couplings) == 2
-        for ls_coupling in ls_couplings:
-            for ls in ls_coupling:
-                assert ls == {"L": None, "S": None}
+        assert ls_couplings == {
+            "N(1700)+": [({"L": None, "S": None}, {"L": None, "S": None})],
+            "Sigma(1660)~-": [({"L": None, "S": None}, {"L": None, "S": None})],
+        }
+
+    if reaction.formalism != "canonical-helicity":
+        return
 
     min_ls_transitions = filter_min_ls(transitions)
-    ls_couplings = [_get_couplings(t) for t in min_ls_transitions]
-    assert len(ls_couplings) == 2
-    if reaction.formalism == "canonical-helicity":
-        assert ls_couplings == [
-            (
-                {"L": 0, "S": 1},
-                {"L": 1, "S": 0.5},
-            ),
-            (
-                {"L": 1, "S": 2},
-                {"L": 2, "S": 0.5},
-            ),
-        ]
+    ls_couplings = _group_couplings(min_ls_transitions)
+    assert ls_couplings == {
+        "N(1700)+": [
+            ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
+        ],
+        "Sigma(1660)~-": [
+            ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+        ],
+    }
+
+    min_ls_transitions = filter_min_ls(transitions, node_ids={0})
+    ls_couplings = _group_couplings(min_ls_transitions)
+    assert ls_couplings == {
+        "N(1700)+": [
+            ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
+        ],
+        "Sigma(1660)~-": [
+            ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+        ],
+    }
+
+    min_ls_transitions = filter_min_ls(transitions, node_ids={1})
+    ls_couplings = _group_couplings(min_ls_transitions)
+    assert ls_couplings == {
+        "N(1700)+": [
+            ({"L": 1, "S": 2}, {"L": 2, "S": 0.5}),
+        ],
+        "Sigma(1660)~-": [
+            ({"L": 0, "S": 1}, {"L": 1, "S": 0.5}),
+            ({"L": 2, "S": 1}, {"L": 1, "S": 0.5}),
+        ],
+    }
 
 
 @pytest.mark.parametrize("converter", [lambda x: x, _convert_transition])
@@ -209,6 +228,17 @@ def test_to_three_body_decay(jpsi2pksigma_reaction: ReactionInfo, min_ls: bool):
         "N(1700)+",
         "Sigma(1660)~-",
     }
+
+
+def _group_couplings(
+    transitions: Iterable[StateTransition],
+) -> dict[str, tuple[dict, dict]]:
+    groupings = defaultdict(list)
+    for transition in transitions:
+        resonance, *_ = transition.intermediate_states.values()
+        ls_values = _get_couplings(transition)
+        groupings[resonance.particle.name].append(ls_values)
+    return dict(groupings)
 
 
 def _get_couplings(transition: StateTransition) -> tuple[dict, dict]:
