@@ -1,4 +1,17 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from qrules.transition import ReactionInfo
+
+from ampform_dpd import (
+    _get_best_reference_subsystems,  # pyright: ignore[reportPrivateUsage]
+)
+from ampform_dpd.adapter.qrules import to_three_body_decay
 from ampform_dpd.decay import IsobarNode, Particle
+
+if TYPE_CHECKING:
+    from qrules.transition import ReactionInfo
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 dummy_args = dict(mass=0, width=0)
@@ -20,3 +33,16 @@ class TestIsobarNode:
         assert node.interaction is not None
         assert node.interaction.L == L
         assert node.interaction.S == S
+
+
+def test_get_best_reference_subsystems(
+    a2pipipi_reaction: ReactionInfo,
+    xib2pkk_reaction: ReactionInfo,
+    jpsi2pksigma_reaction: ReactionInfo,
+):
+    decay = to_three_body_decay(a2pipipi_reaction.transitions)
+    assert _get_best_reference_subsystems(decay) == 1
+    decay = to_three_body_decay(xib2pkk_reaction.transitions)
+    assert _get_best_reference_subsystems(decay) == 2
+    decay = to_three_body_decay(jpsi2pksigma_reaction.transitions)
+    assert _get_best_reference_subsystems(decay) == 2

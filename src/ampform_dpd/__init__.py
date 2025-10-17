@@ -90,12 +90,25 @@ class DalitzPlotDecompositionBuilder:
 
     def formulate(
         self,
-        reference_subsystem: FinalStateID = 1,
+        reference_subsystem: FinalStateID | None = None,
         *,
         cleanup_summations: bool = False,
         use_coefficients: bool = False,
     ) -> AmplitudeModel:
-        _check_reference_subsystems(self.decay, reference_subsystem)
+        """Formulate the amplitude model given the configuration of this builder.
+
+        Args:
+            reference_subsystem: The subsystem to use as reference for the alignment of
+                helicities. If `None`, the subsystem with the most resonances is chosen.
+            cleanup_summations: Whether to remove helicity indices in the summations if
+                their corresponding state is spinless.
+            use_coefficients: Whether to use a single complex coefficient per decay
+                chain, instead of separate coefficients for each helicity coupling.
+        """
+        if reference_subsystem is None:
+            reference_subsystem = _get_best_reference_subsystems(self.decay)
+        else:
+            _check_reference_subsystems(self.decay, reference_subsystem)
         helicity_symbols: tuple[sp.Symbol, sp.Symbol, sp.Symbol, sp.Symbol] = (
             sp.symbols("lambda:4", rational=True)
         )
@@ -243,9 +256,12 @@ class DalitzPlotDecompositionBuilder:
         λ1: sp.Rational | sp.Symbol,
         λ2: sp.Rational | sp.Symbol,
         λ3: sp.Rational | sp.Symbol,
-        reference_subsystem: FinalStateID = 1,
+        reference_subsystem: FinalStateID | None = None,
     ) -> tuple[PoolSum, dict[sp.Symbol, sp.Expr]]:
-        _check_reference_subsystems(self.decay, reference_subsystem)
+        if reference_subsystem is None:
+            reference_subsystem = _get_best_reference_subsystems(self.decay)
+        else:
+            _check_reference_subsystems(self.decay, reference_subsystem)
         wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
         _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
         j0, j1, j2, j3 = (self.decay.states[i].spin for i in sorted(self.decay.states))
@@ -271,6 +287,17 @@ def _product(obj: Any | Iterable):
     if isinstance(obj, abc.Iterable):
         return functools.reduce(operator.mul, obj)
     return obj
+
+
+def _get_best_reference_subsystems(decay: ThreeBodyDecay) -> FinalStateID:
+    subsystem_ids = _get_subsystem_ids(decay)
+    if not subsystem_ids:
+        msg = f"Decay {_get_decay_description(decay)} has no subsystems"
+        raise ValueError(msg)
+    resonances_per_subsystem = [
+        (k, len(decay.get_subsystem(k).chains)) for k in subsystem_ids
+    ]
+    return max(resonances_per_subsystem, key=operator.itemgetter(1))[0]
 
 
 def _check_reference_subsystems(
