@@ -11,38 +11,23 @@ from __future__ import annotations
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
 
-from ampform_dpd import to_particle
-from ampform_dpd.decay import (
-    DecayNode,
-    IsobarNode,
-    Particle,
-    State,
-    ThreeBodyDecayChain,
-)
+from ampform_dpd import DefinedExpression, create_mass_symbol, to_particle
+from ampform_dpd.decay import DecayNode, IsobarNode, State, ThreeBodyDecayChain
 from ampform_dpd.dynamics import RelativisticBreitWigner
 
 
 def formulate_breit_wigner_with_form_factor(
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
+) -> DefinedExpression:
     decay_node = decay_chain.decay_node
     s = get_mandelstam_s(decay_node)
-    parameter_defaults = {}
-    production_ff, new_pars = _create_form_factor(s, decay_chain.production_node)
-    parameter_defaults.update(new_pars)
-    decay_ff, new_pars = _create_form_factor(s, decay_node)
-    parameter_defaults.update(new_pars)
-    breit_wigner, new_pars = _create_breit_wigner(s, decay_node)
-    parameter_defaults.update(new_pars)
-    return (
-        production_ff * decay_ff * breit_wigner,
-        parameter_defaults,
-    )
+    production_ff = _create_form_factor(s, decay_chain.production_node)
+    decay_ff = _create_form_factor(s, decay_node)
+    breit_wigner = _create_breit_wigner(s, decay_node)
+    return production_ff * decay_ff * breit_wigner
 
 
-def _create_form_factor(
-    s: sp.Symbol, isobar: IsobarNode
-) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
+def _create_form_factor(s: sp.Symbol, isobar: IsobarNode) -> DefinedExpression:
     if isinstance(isobar.parent, State):
         inv_mass = sp.Symbol("m0", nonnegative=True)
     else:
@@ -64,12 +49,10 @@ def _create_form_factor(
     }
     if not inv_mass.name.startswith("s"):
         parameter_defaults[inv_mass] = to_particle(isobar).mass
-    return form_factor, parameter_defaults
+    return DefinedExpression(form_factor, parameter_defaults)
 
 
-def _create_breit_wigner(
-    s: sp.Symbol, isobar: DecayNode
-) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
+def _create_breit_wigner(s: sp.Symbol, isobar: DecayNode) -> DefinedExpression:
     outgoing_state_mass1 = create_mass_symbol(isobar.child1)
     outgoing_state_mass2 = create_mass_symbol(isobar.child2)
     angular_momentum = _get_angular_momentum(isobar)
@@ -91,7 +74,7 @@ def _create_breit_wigner(
         res_width: isobar.parent.width,
         meson_radius: 1,
     }
-    return breit_wigner_expr, parameter_defaults
+    return DefinedExpression(breit_wigner_expr, parameter_defaults)
 
 
 def _get_angular_momentum(isobar: IsobarNode) -> int:
@@ -105,13 +88,6 @@ def _create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:
     if isinstance(isobar.parent, State):
         return sp.Symbol(Rf"R_{{{isobar.parent.latex}}}", nonnegative=True)
     return sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
-
-
-def create_mass_symbol(particle: IsobarNode | Particle | State) -> sp.Symbol:
-    particle = to_particle(particle)
-    if isinstance(particle, State):
-        return sp.Symbol(f"m{particle.index}", nonnegative=True)
-    return sp.Symbol(f"m_{{{particle.latex}}}", nonnegative=True)
 
 
 def get_mandelstam_s(decay: DecayNode) -> sp.Symbol:

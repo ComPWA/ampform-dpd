@@ -89,7 +89,7 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
             expression=FormFactor(s, m1, m2, angular_momentum, meson_radius),
-            definitions={
+            parameters={
                 meson_radius: function_definition["radius"],
             },
         )
@@ -113,7 +113,7 @@ def formulate_breit_wigner(
     d = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
     return DefinedExpression(
         expression=BreitWigner(s, mass, width, m1, m2, angular_momentum, d),
-        definitions={
+        parameters={
             mass: function_definition["mass"],
             width: function_definition["width"],
             m1: function_definition["ma"],
@@ -164,7 +164,7 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
         })
     return DefinedExpression(
         expression=MultichannelBreitWigner(s, mass, tuple(channels)),
-        definitions=parameter_defaults,
+        parameters=parameter_defaults,
     )
 
 

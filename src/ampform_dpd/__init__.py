@@ -24,6 +24,7 @@ from ampform_dpd.decay import (
     IsobarNode,
     LSCoupling,
     Particle,
+    State,
     ThreeBodyDecay,
     ThreeBodyDecayChain,
     _get_decay_description,  # pyright:ignore[reportPrivateUsage]
@@ -31,7 +32,6 @@ from ampform_dpd.decay import (
     get_decay_product_ids,
     to_particle,
 )
-from ampform_dpd.dynamics.builder import create_mass_symbol
 from ampform_dpd.spin import create_spin_range
 
 if TYPE_CHECKING:
@@ -185,8 +185,8 @@ class DalitzPlotDecompositionBuilder:
         parameter_defaults: dict[sp.Basic, complex] = {}
         for chain in self.decay.get_subsystem(subsystem_id).chains:
             formulate_dynamics = self.dynamics_choices.get_builder(chain.resonance.name)
-            dynamics, new_parameters = formulate_dynamics(chain)
-            parameter_defaults.update(new_parameters)
+            dynamics = formulate_dynamics(chain)
+            parameter_defaults.update(dynamics.parameters)
             resonance_spin = sp.Rational(chain.resonance.spin)
             resonance_helicities = create_spin_range(resonance_spin)
             for λR_val in resonance_helicities:
@@ -213,7 +213,7 @@ class DalitzPlotDecompositionBuilder:
             sub_amp_expr = (
                 sp.KroneckerDelta(λ[0], λR - λ[k])
                 * (-1) ** (spin[k] - λ[k])
-                * dynamics
+                * dynamics.expression
                 * Wigner.d(resonance_spin, λR, λ[i] - λ[j], θij)
                 * _product(scaling_factors)
                 * (-1) ** (spin[j] - λ[j])
@@ -457,7 +457,7 @@ class DynamicsConfigurator:
 
     def get_builder(self, identifier) -> DynamicsBuilder:
         chain = self.__get_chain(identifier)
-        return self.__dynamics_builders.get(chain, formulate_non_resonant)
+        return self.__dynamics_builders.get(chain, lambda _: DefinedExpression())
 
     def __get_chain(self, identifier) -> ThreeBodyDecayChain:
         if isinstance(identifier, ThreeBodyDecayChain):
@@ -477,38 +477,30 @@ class DynamicsConfigurator:
 
 
 class DynamicsBuilder(Protocol):
-    def __call__(
-        self, decay_chain: ThreeBodyDecayChain
-    ) -> tuple[sp.Expr, dict[sp.Symbol, float | complex]]: ...
+    def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression: ...
 
 
 @define
 class DefinedExpression:
     expression: sp.Expr = sp.S.One
-    definitions: dict[sp.Symbol, complex | float] = field(factory=dict)
+    parameters: dict[sp.Symbol, complex | float] = field(factory=dict)
 
     def __mul__(self, other: Any) -> DefinedExpression:
         if isinstance(other, DefinedExpression):
             return DefinedExpression(
                 expression=self.expression * other.expression,
-                definitions={**self.definitions, **other.definitions},
+                parameters={**self.parameters, **other.parameters},
             )
         if isinstance(other, abc.Sequence) and len(other) == 2:  # noqa: PLR2004
             expression, definitions = other
             return DefinedExpression(
                 expression=self.expression * expression,
-                definitions={**self.definitions, **definitions},
+                parameters={**self.parameters, **definitions},
             )
         return DefinedExpression(
             expression=self.expression * other,
-            definitions=self.definitions,
+            parameters=self.parameters,
         )
-
-
-def formulate_non_resonant(
-    decay_chain: ThreeBodyDecayChain,
-) -> tuple[sp.Expr, dict[sp.Symbol, float | complex]]:
-    return sp.Rational(1), {}
 
 
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
@@ -516,6 +508,13 @@ def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
         create_mass_symbol(decay.states[i]): decay.states[i].mass
         for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
     }
+
+
+def create_mass_symbol(particle: IsobarNode | Particle | State) -> sp.Symbol:
+    particle = to_particle(particle)
+    if isinstance(particle, State):
+        return sp.Symbol(f"m{particle.index}", nonnegative=True)
+    return sp.Symbol(f"m_{{{particle.latex}}}", nonnegative=True)
 
 
 def formulate_invariants(decay: ThreeBodyDecay) -> dict[sp.Symbol, sp.Expr]:
