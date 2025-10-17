@@ -87,7 +87,7 @@ def _(obj: DefinedExpression, **kwargs) -> str:
         latex += Rf"  {aslatex(obj.expression, **kwargs)} \\" + "\n"
     else:
         latex += Rf"  {aslatex(expr)} &=& {aslatex(unfolded)} \\" + "\n"
-    for lhs, rhs in obj.definitions.items():
+    for lhs, rhs in obj.parameters.items():
         latex += Rf"  {aslatex(lhs)} &=& {aslatex(rhs)} \\" + "\n"
     latex += R"\end{array}"
     return latex

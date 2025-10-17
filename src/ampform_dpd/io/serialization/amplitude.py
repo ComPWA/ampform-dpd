@@ -154,7 +154,7 @@ def formulate_chain_amplitude(  # noqa: PLR0914, PLR0917
     return {
         amplitude_symbol: amplitude_expression,
         weight: weight_val,
-        **dynamics.definitions,
+        **dynamics.parameters,
         θij: θij_expr,
     }
 
