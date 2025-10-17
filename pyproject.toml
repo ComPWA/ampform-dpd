@@ -20,7 +20,6 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering",
@@ -41,7 +40,7 @@ description = "Symbolic expressions for Dalitz-Plot Decomposition"
 dynamic = ["version"]
 license = {file = "LICENSE"}
 name = "ampform-dpd"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 [project.optional-dependencies]
 numba = ["tensorwaves[numba]"]
@@ -86,6 +85,7 @@ jupyter = [
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
+    "jupyterlab-quickopen",
     "python-lsp-ruff",
     "python-lsp-server[rope]",
     {include-group = "notebooks"},
@@ -248,6 +248,11 @@ env = {EXECUTE_NB = "yes"}
 help = "Set up a server to directly preview changes to the HTML pages with cached notebook execution"
 sequence = ["doclive"]
 
+[tool.poe.tasks.lab]
+args = [{name = "paths", default = "", positional = true}]
+cmd = "jupyter lab ${paths}"
+help = "Run Jupyter Lab"
+
 [tool.poe.tasks.linkcheck]
 cmd = """
 sphinx-build \
@@ -285,7 +290,6 @@ sequence = [
     {ref = "test-py 3.12"},
     {ref = "test-py 3.13"},
     {ref = "test-py 3.14"},
-    {ref = "test-py 3.9"},
 ]
 
 [tool.poe.tasks.test-py]

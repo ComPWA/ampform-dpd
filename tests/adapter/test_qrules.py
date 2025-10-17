@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import TYPE_CHECKING, Callable, SupportsFloat
+from collections.abc import Callable
+from typing import TYPE_CHECKING, SupportsFloat
 
 import pytest
 from qrules import InteractionType, StateTransitionManager
@@ -20,7 +21,7 @@ from ampform_dpd.adapter.qrules import (
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Callable, Iterable
 
     from qrules.topology import FrozenTransition
     from qrules.transition import ReactionInfo, StateTransition
@@ -124,7 +125,9 @@ def test_normalize_state_ids_reaction(jpsi2pksigma_reaction: ReactionInfo):
     assert set(reaction123.final_state) == {1, 2, 3}
 
     transitions123 = normalize_state_ids(reaction012.transitions)
-    for transition012, transition123 in zip(reaction012.transitions, transitions123):
+    for transition012, transition123 in zip(
+        reaction012.transitions, transitions123, strict=True
+    ):
         assert set(transition123.initial_states) == {0}
         assert set(transition123.final_states) == {1, 2, 3}
         assert set(transition123.intermediate_states) == {4}

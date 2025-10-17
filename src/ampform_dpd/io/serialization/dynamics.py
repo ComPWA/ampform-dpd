@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import abc
-from typing import TYPE_CHECKING, Callable, Protocol, TypeVar, cast
+from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
@@ -21,6 +21,8 @@ from ampform_dpd.io.serialization.format import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from ampform_dpd.io.serialization.format import Node
 
 T = TypeVar("T")
