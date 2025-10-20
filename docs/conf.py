@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from sphinx_api_relink.helpers import (
     get_branch_name,
     get_execution_mode,
