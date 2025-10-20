@@ -97,6 +97,7 @@ copyright = f"2022, {ORGANIZATION}"  # noqa: A001
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
+    "**.virtual_documents",
     ".DS_Store",
     "Thumbs.db",
     "_build",
