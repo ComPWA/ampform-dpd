@@ -346,6 +346,7 @@ addopts = [
     "--doctest-continue-on-failure",
     "--doctest-modules",
     "--durations=3",
+    "--ignore-glob=.virtual_documents",
     "--ignore=docs/conf.py",
     "-m not slow",
 ]
