@@ -23,6 +23,7 @@ repos:
           - --repo-name=ampform-dpd
           - --repo-title=AmpForm-DPD
       - id: colab-toc-visible
+      - id: fix-nbformat-version
       - id: remove-empty-tags
       - id: set-nb-display-name
 

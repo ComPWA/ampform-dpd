@@ -10,21 +10,35 @@ from __future__ import annotations
 
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
+from attrs import define
 
 from ampform_dpd import DefinedExpression, create_mass_symbol, to_particle
 from ampform_dpd.decay import DecayNode, IsobarNode, State, ThreeBodyDecayChain
-from ampform_dpd.dynamics import RelativisticBreitWigner
+from ampform_dpd.dynamics import RelativisticBreitWigner, SimpleBreitWigner
 
 
-def formulate_breit_wigner_with_form_factor(
-    decay_chain: ThreeBodyDecayChain,
-) -> DefinedExpression:
-    decay_node = decay_chain.decay_node
-    s = get_mandelstam_s(decay_node)
-    production_ff = _create_form_factor(s, decay_chain.production_node)
-    decay_ff = _create_form_factor(s, decay_node)
-    breit_wigner = _create_breit_wigner(s, decay_node)
-    return production_ff * decay_ff * breit_wigner
+@define
+class BreitWignerBuilder:
+    energy_dependent_width: bool = True
+    decay_form_factor: bool = True
+    production_form_factor: bool = True
+
+    def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
+        """Formulate a (relativistic) Breit-Wigner for this resonance."""
+        decay_node = decay_chain.decay_node
+        s = get_mandelstam_s(decay_node)
+        if self.energy_dependent_width:
+            expression = _create_breit_wigner(s, decay_node)
+        else:
+            expression = _create_simple_breit_wigner(s, decay_node)
+        if self.decay_form_factor:
+            expression *= _create_form_factor(s, decay_node)
+        if self.production_form_factor:
+            expression *= _create_form_factor(s, decay_chain.production_node)
+        return expression
+
+
+formulate_breit_wigner_with_form_factor = BreitWignerBuilder()
 
 
 def _create_form_factor(s: sp.Symbol, isobar: IsobarNode) -> DefinedExpression:
@@ -59,7 +73,6 @@ def _create_breit_wigner(s: sp.Symbol, isobar: DecayNode) -> DefinedExpression:
     res_mass = create_mass_symbol(isobar.parent)
     res_width = sp.Symbol(Rf"\Gamma_{{{isobar.parent.latex}}}", nonnegative=True)
     meson_radius = _create_meson_radius_symbol(isobar)
-
     breit_wigner_expr = RelativisticBreitWigner(
         s=s,
         mass0=res_mass,
@@ -75,6 +88,20 @@ def _create_breit_wigner(s: sp.Symbol, isobar: DecayNode) -> DefinedExpression:
         meson_radius: 1,
     }
     return DefinedExpression(breit_wigner_expr, parameter_defaults)
+
+
+def _create_simple_breit_wigner(s: sp.Symbol, isobar: DecayNode) -> DefinedExpression:
+    mass = create_mass_symbol(isobar.parent)
+    width = sp.Symbol(Rf"\Gamma_{{{isobar.parent.latex}}}", nonnegative=True)
+    meson_radius = _create_meson_radius_symbol(isobar)
+    return DefinedExpression(
+        expression=SimpleBreitWigner(s, mass, width),
+        parameters={
+            mass: isobar.parent.mass,
+            width: isobar.parent.width,
+            meson_radius: 1,
+        },
+    )
 
 
 def _get_angular_momentum(isobar: IsobarNode) -> int:

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from sphinx_api_relink.helpers import (
     get_branch_name,
     get_execution_mode,
@@ -97,6 +95,7 @@ copyright = f"2022, {ORGANIZATION}"  # noqa: A001
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
+    "**.virtual_documents",
     ".DS_Store",
     "Thumbs.db",
     "_build",
