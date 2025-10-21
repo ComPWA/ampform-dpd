@@ -61,17 +61,15 @@ class BreitWignerMinL(sp.Expr):
 
     def evaluate(self):  # noqa: PLR0914
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
-        q = BreakupMomentum(m_top**2, sp.sqrt(s), m_spec)
-        q0 = BreakupMomentum(m_top**2, m0, m_spec)
-        p = BreakupMomentum(s, m1, m2)
-        p0 = BreakupMomentum(m0**2, m1, m2)
+        ff_prod = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)
+        ff0_prod = FormFactor(m_top**2, m0, m_spec, l_prod, R_prod)
+        ff_dec = FormFactor(s, m1, m2, l_dec, R_dec)
+        ff0_dec = FormFactor(m0**2, m1, m2, l_dec, R_dec)
         width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
         return sp.Mul(
-            (q / q0) ** l_prod,
-            BlattWeisskopf(q * R_prod, l_prod) / BlattWeisskopf(q0 * R_prod, l_prod),
+            ff_prod / ff0_prod,
             1 / (m0**2 - s - sp.I * m0 * width),
-            (p / p0) ** l_dec,
-            BlattWeisskopf(p * R_dec, l_dec) / BlattWeisskopf(p0 * R_dec, l_dec),
+            ff_dec / ff0_dec,
             evaluate=False,
         )
 
@@ -131,13 +129,10 @@ class EnergyDependentWidth(sp.Expr):
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, L, R = self.args
-        p = BreakupMomentum(s, m1, m2)
-        p0 = BreakupMomentum(m0**2, m1, m2)
-        ff = BlattWeisskopf(p * R, L) ** 2
-        ff0 = BlattWeisskopf(p0 * R, L) ** 2
+        ff = FormFactor(s, m1, m2, L, R) ** 2
+        ff0 = FormFactor(m0**2, m1, m2, L, R) ** 2
         return sp.Mul(
             Γ0,
-            (p / p0) ** (2 * L + 1),
             m0 / sp.sqrt(s),
             ff / ff0,
             evaluate=False,
@@ -151,24 +146,6 @@ class EnergyDependentWidth(sp.Expr):
             return Rf"\Gamma\left({s}\right)"
         L = printer._print(self.L)  # pyright:ignore[reportPrivateUsage]
         return Rf"\Gamma_{{{L}}}\left({s}\right)"
-
-
-@unevaluated
-class BlattWeisskopf(sp.Expr):
-    z: Any
-    L: Any
-    _latex_repr_ = R"F_{{{L}}}\left({z}\right)"
-
-    def evaluate(self) -> sp.Piecewise:
-        z, L = self.args
-        cases = {
-            0: 1,
-            1: 1 / (1 + z**2),  # type:ignore[operator]
-            2: 1 / (9 + 3 * z**2 + z**4),  # type:ignore[operator]
-        }
-        return sp.Piecewise(*[
-            (sp.sqrt(expr), sp.Eq(L, l_val)) for l_val, expr in cases.items()
-        ])
 
 
 @unevaluated
