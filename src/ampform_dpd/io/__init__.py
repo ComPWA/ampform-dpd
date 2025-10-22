@@ -18,6 +18,8 @@ This code originates from `ComPWA/ampform#280
 
 from __future__ import annotations
 
+import logging
+import warnings
 from collections import abc
 from typing import TYPE_CHECKING
 
@@ -215,6 +217,12 @@ def _create_markdown_table_header(column_names: list[str]):
 
 def _create_markdown_table_row(items: Iterable):
     return "| " + " | ".join(f"{i}" for i in items) + " |\n"
+
+
+def mute_ampform_warnings() -> None:
+    """Mute logging and warnings of AmpForm and AmpForm-DPD."""
+    logging.getLogger("ampform.sympy._cache").setLevel(logging.ERROR)
+    warnings.filterwarnings("ignore", category=UserWarning, module="ampform_dpd.decay")
 
 
 def simplify_latex_rendering() -> None:
