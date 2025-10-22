@@ -57,6 +57,7 @@
   "ruff.importStrategy": "fromEnvironment",
   "ruff.organizeImports": true,
   "search.exclude": {
+    "**/.ipynb_checkpoints": true,
     "**/tests/**/__init__.py": true,
     "**/uv.lock": true,
     "typings/**": true
