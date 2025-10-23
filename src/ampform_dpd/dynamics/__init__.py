@@ -6,6 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import sympy as sp
+from ampform.dynamics import EnergyDependentWidth
 from ampform.dynamics.form_factor import FormFactor
 from ampform.dynamics.phasespace import BreakupMomentum
 from ampform.sympy import unevaluated
@@ -28,8 +29,6 @@ class RelativisticBreitWigner(sp.Expr):
     )
 
     def evaluate(self):
-        from ampform.dynamics import EnergyDependentWidth  # noqa: PLC0415
-
         s, m0, w0, m1, m2, angular_momentum, meson_radius = self.args
         width = EnergyDependentWidth(
             s=s,
@@ -115,37 +114,6 @@ class FlattéSWave(sp.Expr):
         Γ2 *= (q / q0) * m0 / sp.sqrt(s)
         Γ = Γ1 + Γ2
         return 1 / (m0**2 - s - sp.I * m0 * Γ)
-
-
-@unevaluated
-class EnergyDependentWidth(sp.Expr):
-    s: Any
-    m0: Any
-    Γ0: Any
-    m1: Any
-    m2: Any
-    L: Any
-    R: Any
-
-    def evaluate(self):
-        s, m0, Γ0, m1, m2, L, R = self.args
-        ff = FormFactor(s, m1, m2, L, R) ** 2
-        ff0 = FormFactor(m0**2, m1, m2, L, R) ** 2
-        return sp.Mul(
-            Γ0,
-            m0 / sp.sqrt(s),
-            ff / ff0,
-            evaluate=False,
-        )
-
-    def _latex_repr_(self, printer: LatexPrinter) -> str:
-        s = printer._print(self.s)  # pyright:ignore[reportPrivateUsage]
-        if self.L == 0:
-            if self.m1 == 0 and self.m2 == 0:
-                return printer._print(self.Γ0)  # pyright:ignore[reportPrivateUsage]
-            return Rf"\Gamma\left({s}\right)"
-        L = printer._print(self.L)  # pyright:ignore[reportPrivateUsage]
-        return Rf"\Gamma_{{{L}}}\left({s}\right)"
 
 
 @unevaluated
