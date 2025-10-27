@@ -67,6 +67,10 @@ def lambdify(
     if isinstance(parameters, str):
         backend = parameters
         parameters = None
+    if backend == "jax":
+        import jax  # noqa: PLC0415
+
+        jax.config.update("jax_enable_x64", True)
     if parameters is None:
         return _lambdify_impl(expr, backend=backend)
     return _lambdify_impl(expr, frozendict(parameters), backend=backend)
