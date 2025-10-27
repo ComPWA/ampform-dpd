@@ -8,8 +8,12 @@ from typing import TYPE_CHECKING, Any
 import sympy as sp
 from ampform.dynamics import EnergyDependentWidth
 from ampform.dynamics.form_factor import FormFactor
-from ampform.dynamics.phasespace import BreakupMomentum
-from ampform.sympy import unevaluated
+from ampform.dynamics.phasespace import (
+    BreakupMomentum,
+    PhaseSpaceFactor,
+    PhaseSpaceFactorProtocol,
+)
+from ampform.sympy import argument, unevaluated
 
 if TYPE_CHECKING:
     from sympy.printing.latex import LatexPrinter
@@ -24,6 +28,9 @@ class RelativisticBreitWigner(sp.Expr):
     m2: Any
     angular_momentum: Any
     meson_radius: Any
+    phsp_factor: PhaseSpaceFactorProtocol = argument(  # type:ignore[assignment]
+        default=PhaseSpaceFactor, sympify=False
+    )
     _latex_repr_ = (
         R"\mathcal{{R}}_{{{angular_momentum}}}\left({s}, {mass0}, {gamma0}\right)"
     )
@@ -38,6 +45,7 @@ class RelativisticBreitWigner(sp.Expr):
             m_b=m2,
             angular_momentum=angular_momentum,
             meson_radius=meson_radius,
+            phsp_factor=self.phsp_factor,
             name=Rf"\Gamma_{{{sp.latex(angular_momentum)}}}",
         )
         return (m0 * w0) / (m0**2 - s - width * m0 * sp.I)
@@ -56,6 +64,9 @@ class BreitWignerMinL(sp.Expr):
     l_prod: Any
     R_dec: Any
     R_prod: Any
+    phsp_factor: PhaseSpaceFactorProtocol = argument(  # type:ignore[assignment]
+        default=PhaseSpaceFactor, sympify=False
+    )
     _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
     def evaluate(self):  # noqa: PLR0914
@@ -64,7 +75,7 @@ class BreitWignerMinL(sp.Expr):
         ff0_prod = FormFactor(m_top**2, m0, m_spec, l_prod, R_prod)
         ff_dec = FormFactor(s, m1, m2, l_dec, R_dec)
         ff0_dec = FormFactor(m0**2, m1, m2, l_dec, R_dec)
-        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
+        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec, self.phsp_factor)
         return sp.Mul(
             ff_prod / ff0_prod,
             1 / (m0**2 - s - sp.I * m0 * width),
@@ -162,6 +173,9 @@ class BreitWigner(sp.Expr):
     m2: Any = 0
     angular_momentum: Any = 0
     meson_radius: Any = 1
+    phsp_factor: PhaseSpaceFactorProtocol = argument(  # type:ignore[assignment]
+        default=PhaseSpaceFactor, sympify=False
+    )
 
     def evaluate(self):
         width = self.energy_dependent_width()
@@ -174,7 +188,7 @@ class BreitWigner(sp.Expr):
         s, m0, Γ0, m1, m2, L, d = self.args
         if L == 0 and m1 == 0 and m2 == 0:
             return Γ0  # type:ignore[return-value]
-        return EnergyDependentWidth(s, m0, Γ0, m1, m2, L, d)
+        return EnergyDependentWidth(s, m0, Γ0, m1, m2, L, d, self.phsp_factor)
 
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
         s = printer._print(self.s)
