@@ -61,6 +61,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "sp.Basic": "sympy.core.basic.Basic",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
+    "PhaseSpaceFactorProtocol": "ampform.dynamics.phasespace.PhaseSpaceFactorProtocol",
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
     "StateID": ("obj", "ampform_dpd.decay.StateID"),

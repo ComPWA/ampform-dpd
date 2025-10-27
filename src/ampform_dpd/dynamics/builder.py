@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
+from ampform.dynamics.phasespace import PhaseSpaceFactor, PhaseSpaceFactorProtocol
 from attrs import define
 
 from ampform_dpd import DefinedExpression, create_mass_symbol, to_particle
@@ -22,13 +23,14 @@ class BreitWignerBuilder:
     energy_dependent_width: bool = True
     decay_form_factor: bool = True
     production_form_factor: bool = True
+    phsp_factor: PhaseSpaceFactorProtocol = PhaseSpaceFactor  # type:ignore[assignment]
 
     def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
         """Formulate a (relativistic) Breit-Wigner for this resonance."""
         decay_node = decay_chain.decay_node
         s = get_mandelstam_s(decay_node)
         if self.energy_dependent_width:
-            expression = _create_breit_wigner(s, decay_node)
+            expression = _create_breit_wigner(s, decay_node, self.phsp_factor)
         else:
             expression = _create_simple_breit_wigner(s, decay_node)
         if self.decay_form_factor:
@@ -66,7 +68,9 @@ def _create_form_factor(s: sp.Symbol, isobar: IsobarNode) -> DefinedExpression:
     return DefinedExpression(form_factor, parameter_defaults)
 
 
-def _create_breit_wigner(s: sp.Symbol, isobar: DecayNode) -> DefinedExpression:
+def _create_breit_wigner(
+    s: sp.Symbol, isobar: DecayNode, phsp_factor: PhaseSpaceFactorProtocol
+) -> DefinedExpression:
     outgoing_state_mass1 = create_mass_symbol(isobar.child1)
     outgoing_state_mass2 = create_mass_symbol(isobar.child2)
     angular_momentum = _get_angular_momentum(isobar)
@@ -81,6 +85,7 @@ def _create_breit_wigner(s: sp.Symbol, isobar: DecayNode) -> DefinedExpression:
         m2=outgoing_state_mass2,
         angular_momentum=angular_momentum,
         meson_radius=meson_radius,
+        phsp_factor=phsp_factor,
     )
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         res_mass: isobar.parent.mass,
