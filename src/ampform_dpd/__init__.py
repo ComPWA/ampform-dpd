@@ -5,7 +5,7 @@ from __future__ import annotations
 import functools
 import operator
 from collections import abc
-from functools import cache
+from functools import cache, wraps
 from itertools import product
 from typing import TYPE_CHECKING, Protocol
 from warnings import warn
@@ -35,7 +35,7 @@ from ampform_dpd.decay import (
 from ampform_dpd.spin import create_spin_range
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Callable, Iterable
     from typing import Any, Literal
 
 
@@ -480,21 +480,40 @@ class DynamicsBuilder(Protocol):
     def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression: ...
 
 
+def _binary_operation(op: Callable[[Any, Any], Any]):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(self: DefinedExpression, other):
+            if isinstance(other, DefinedExpression):
+                return DefinedExpression(
+                    expression=op(self.expression, other.expression),
+                    parameters=self.parameters | other.parameters,
+                )
+            return DefinedExpression(
+                expression=op(self.expression, other),
+                parameters=self.parameters,
+            )
+
+        return wrapper
+
+    return decorator
+
+
 @define
 class DefinedExpression:
     expression: sp.Expr = sp.S.One
     parameters: dict[sp.Symbol, complex | float] = field(factory=dict)
 
-    def __mul__(self, other: Any) -> DefinedExpression:
-        if isinstance(other, DefinedExpression):
-            return DefinedExpression(
-                expression=self.expression * other.expression,
-                parameters={**self.parameters, **other.parameters},
-            )
-        return DefinedExpression(
-            expression=self.expression * other,
-            parameters=self.parameters,
-        )
+    @_binary_operation(operator.mul)
+    def __mul__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    @_binary_operation(operator.add)
+    def __add__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    @_binary_operation(operator.sub)
+    def __sub__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    @_binary_operation(operator.truediv)
+    def __truediv__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    @_binary_operation(operator.pow)
+    def __pow__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
 
 
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
