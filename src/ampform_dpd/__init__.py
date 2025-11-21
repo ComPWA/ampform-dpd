@@ -244,7 +244,7 @@ class DalitzPlotDecompositionBuilder:
             decay=self.decay,
             intensity=sp.Abs(amp_symbol) ** 2,
             amplitudes={amp_symbol: amplitude_sum.expression},
-            variables={θij: θij_expr},
+            variables=amplitude_sum.variables | {θij: θij_expr},
             parameter_defaults=amplitude_sum.parameters,
         )
 
@@ -485,10 +485,12 @@ def _binary_operation(op: Callable[[Any, Any], Any]):
                 return DefinedExpression(
                     expression=op(self.expression, other.expression),
                     parameters=self.parameters | other.parameters,
+                    variables=self.variables | other.variables,
                 )
             return DefinedExpression(
                 expression=op(self.expression, other),
                 parameters=self.parameters,
+                variables=self.variables,
             )
 
         return wrapper
@@ -500,6 +502,7 @@ def _binary_operation(op: Callable[[Any, Any], Any]):
 class DefinedExpression:
     expression: sp.Expr = sp.S.One
     parameters: dict[sp.Symbol, complex | float] = field(factory=dict)
+    variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
 
     @_binary_operation(operator.mul)
     def __mul__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
