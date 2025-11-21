@@ -491,12 +491,6 @@ class DefinedExpression:
                 expression=self.expression * other.expression,
                 parameters={**self.parameters, **other.parameters},
             )
-        if isinstance(other, abc.Sequence) and len(other) == 2:  # noqa: PLR2004
-            expression, definitions = other
-            return DefinedExpression(
-                expression=self.expression * expression,
-                parameters={**self.parameters, **definitions},
-            )
         return DefinedExpression(
             expression=self.expression * other,
             parameters=self.parameters,
