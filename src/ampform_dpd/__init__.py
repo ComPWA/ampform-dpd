@@ -11,6 +11,11 @@ from typing import TYPE_CHECKING, Protocol
 from warnings import warn
 
 import sympy as sp
+from ampform.helicity import (
+    ParameterValue,
+    ParameterValues,
+    _to_parameter_values,  # noqa: PLC2701  # pyright: ignore[reportPrivateUsage]
+)
 from ampform.kinematics.phasespace import compute_third_mandelstam
 from ampform.sympy import PoolSum
 from attrs import define, field, frozen
@@ -45,7 +50,10 @@ class AmplitudeModel:
     intensity: sp.Expr = sp.S.One
     amplitudes: dict[sp.Indexed, sp.Expr] = field(factory=dict)
     variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
-    parameter_defaults: dict[sp.Symbol, float | complex] = field(factory=dict)
+    parameter_defaults: ParameterValues = field(  # type:ignore[assignment]
+        converter=_to_parameter_values,
+        factory=dict,
+    )
     masses: dict[sp.Symbol, float] = field(factory=dict)
     invariants: dict[sp.Symbol, sp.Expr] = field(factory=dict)
 
@@ -119,7 +127,7 @@ class DalitzPlotDecompositionBuilder:
         }
         amplitude_definitions = {}
         angle_definitions = {}
-        parameter_defaults = {}
+        parameter_defaults: dict[sp.Basic, ParameterValue] = {}
         args: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
         if self.all_subsystems:
             subsystem_ids: list[FinalStateID] = [1, 2, 3]
