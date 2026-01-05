@@ -37,13 +37,13 @@ def lambdify(expr: sp.Expr, *, backend: str = "jax") -> PositionalArgumentFuncti
 @overload
 def lambdify(
     expr: sp.Expr,
-    parameters: Mapping[sp.Symbol, ParameterValue],
+    parameters: Mapping[sp.Basic, ParameterValue],
     *,
     backend: str = "jax",
 ) -> ParametrizedBackendFunction: ...
 def lambdify(
     expr: sp.Expr,
-    parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
+    parameters: Mapping[sp.Basic, ParameterValue] | None = None,
     *,
     backend: str = "jax",
 ) -> ParametrizedFunction | Function:
@@ -84,7 +84,7 @@ def lambdify(
 )
 def _lambdify_impl(
     expr: sp.Expr,
-    parameters: frozendict[sp.Symbol, ParameterValue] | None = None,
+    parameters: frozendict[sp.Basic, ParameterValue] | None = None,
     *,
     backend: str = "jax",
 ):

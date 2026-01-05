@@ -521,3 +521,6 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
+
+[tool.uv.sources]
+ampform = {git = "https://github.com/ComPWA/ampform", rev = "dfab5e2411566f2a84ffae2e194979193701c075"}
