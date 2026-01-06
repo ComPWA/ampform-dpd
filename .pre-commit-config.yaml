@@ -14,7 +14,7 @@ repos:
       - id: check-useless-excludes
 
   - repo: https://github.com/ComPWA/policy
-    rev: 0.7.5
+    rev: 0.8.0
     hooks:
       - id: check-dev-files
         args:
@@ -22,6 +22,8 @@ repos:
           - --github-pages
           - --repo-name=ampform-dpd
           - --repo-title=AmpForm-DPD
+          - --type-checker=mypy
+          - --type-checker=pyright
       - id: colab-toc-visible
       - id: fix-nbformat-version
       - id: remove-empty-tags
@@ -128,6 +130,6 @@ repos:
       - id: pyright
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.21
+    rev: 0.9.22
     hooks:
       - id: uv-lock
