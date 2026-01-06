@@ -64,14 +64,14 @@ def to_three_body_decay(
     some_transition = transitions[0]
     (initial_state_id, initial_state), *_ = some_transition.initial_states.items()
     outer_states = (
-        _to_state(initial_state, index=initial_state_id),  # type:ignore[type-var]
+        _to_state(initial_state, index=initial_state_id),  # ty:ignore[invalid-argument-type]
         *[
-            _to_state(particle, index=idx)  # type:ignore[type-var]
+            _to_state(particle, index=idx)  # ty:ignore[invalid-argument-type]
             for idx, particle in some_transition.final_states.items()
         ],
     )
     return ThreeBodyDecay(
-        states={state.index: state for state in outer_states},  # type:ignore[misc]
+        states={state.index: state for state in outer_states},
         chains=tuple(sorted(_to_decay_chain(t) for t in transitions)),
     )
 
@@ -99,13 +99,13 @@ def _to_decay_chain(
             parent=parent,
             child1=IsobarNode(
                 parent=transition.states[resonance_id],
-                child1=transition.states[child1_id],  # type:ignore[arg-type]
-                child2=transition.states[child2_id],  # type:ignore[arg-type]
+                child1=transition.states[child1_id],
+                child2=transition.states[child2_id],
                 interaction=decay_node,
             ),
-            child2=transition.states[spectator_id],  # type:ignore[arg-type]
+            child2=transition.states[spectator_id],
             interaction=production_node,
-        )
+        )  # ty:ignore[invalid-argument-type]
     )
 
 
@@ -124,13 +124,13 @@ def _convert_transition(
         states={
             index: _to_particle(state)
             if index in transition.intermediate_states
-            else _to_state(state, index=index)  # type:ignore[type-var]
+            else _to_state(state, index=index)
             for index, state in transition.states.items()
-        },
+        },  # ty:ignore[invalid-argument-type]
         interactions={
             i: _to_ls_coupling(interaction)
             for i, interaction in transition.interactions.items()
-        },
+        },  # ty:ignore[invalid-argument-type]
     )
 
 
@@ -142,8 +142,8 @@ def _to_particle(
     return Particle(
         name=particle.name,
         latex=particle.name if particle.latex is None else particle.latex,
-        spin=particle.spin,
-        parity=int(particle.parity),  # type:ignore[arg-type]
+        spin=particle.spin,  # ty:ignore[invalid-argument-type]
+        parity=int(particle.parity),  # ty:ignore[invalid-argument-type]
         mass=particle.mass,
         width=particle.width,
     )
@@ -162,9 +162,9 @@ def _to_state(obj: Any, index: StateIDTemplate | None = None):
         raise NotImplementedError(msg)
     return State(
         name=obj.name,
-        latex=obj.name if obj.latex is None else obj.latex,  # pyright:ignore[reportUnnecessaryComparison]
+        latex=obj.name if obj.latex is None else obj.latex,
         spin=obj.spin,
-        parity=int(obj.parity),  # type:ignore[arg-type]
+        parity=int(obj.parity),  # ty:ignore[invalid-argument-type]
         mass=obj.mass,
         width=obj.width,
         index=index,
@@ -222,7 +222,7 @@ def filter_min_ls(
                 if node and i not in node_ids
             ),
         )
-        grouped_transitions[key].append(transition)
+        grouped_transitions[key].append(transition)  # ty:ignore[invalid-argument-type]
     min_transitions: list[FrozenTransition[EdgeType, NodeType]] = []
     for group in grouped_transitions.values():
         transition0, *_ = group
@@ -238,7 +238,7 @@ def filter_min_ls(
                     else transition0.interactions[i]
                 )
                 for i in transition0.interactions
-            },
+            },  # ty:ignore[invalid-argument-type]
         )
         min_transitions.append(min_transition)
     return tuple(min_transitions)
@@ -255,8 +255,8 @@ def _get_decay_product_ids(topology: Topology, resonance_id: int) -> tuple[int, 
 def load_particles() -> qrules.particle.ParticleCollection:
     src_dir = Path(__file__).parent.parent
     particle_database = qrules.load_default_particles()
-    additional_definitions = qrules.io.load(src_dir / "particle-definitions.yml")  # type:ignore[arg-type]
-    particle_database.update(additional_definitions)  # type:ignore[arg-type]
+    additional_definitions = qrules.io.load(src_dir / "particle-definitions.yml")
+    particle_database.update(additional_definitions)  # ty:ignore[invalid-argument-type]
     return particle_database
 
 
@@ -264,7 +264,7 @@ def load_particles() -> qrules.particle.ParticleCollection:
 def normalize_state_ids(obj: T) -> T: ...
 @overload
 def normalize_state_ids(obj: Iterable[T]) -> list[T]: ...
-def normalize_state_ids(obj):  # pyright:ignore[reportInconsistentOverload]
+def normalize_state_ids(obj):
     """Relabel the state IDs so that they lie in the range :math:`[0, N)`."""
     return _impl_normalize_state_ids(obj)
 
@@ -276,11 +276,11 @@ def _impl_normalize_state_ids(obj) -> NoReturn:
     raise NotImplementedError(msg)
 
 
-@_impl_normalize_state_ids.register(ReactionInfo)  # type:ignore[attr-defined]
+@_impl_normalize_state_ids.register(ReactionInfo)
 def _(obj: ReactionInfo) -> ReactionInfo:
     return ReactionInfo(
         # no attrs.evolve() in order to call __attrs_post_init__()
-        transitions=[_impl_normalize_state_ids(g) for g in obj.transitions],
+        transitions=[_impl_normalize_state_ids(g) for g in obj.transitions],  # ty:ignore[invalid-argument-type]
         formalism=obj.formalism,
     )
 
@@ -307,13 +307,13 @@ def _(obj: ProblemSet) -> ProblemSet:
     )
 
 
-@_impl_normalize_state_ids.register(Topology)  # type:ignore[attr-defined]
+@_impl_normalize_state_ids.register(Topology)
 def _(obj: Topology) -> Topology:
     mapping = {old: new for new, old in enumerate(sorted(obj.edges))}
     return obj.relabel_edges(mapping)
 
 
-@_impl_normalize_state_ids.register(abc.Iterable)  # type:ignore[attr-defined]
+@_impl_normalize_state_ids.register(abc.Iterable)
 def _(obj: abc.Iterable[T]) -> list[T]:
     return [_impl_normalize_state_ids(x) for x in obj]
 
@@ -340,7 +340,7 @@ def permute_equal_final_states(
 def permute_equal_final_states(
     obj: FrozenTransition[EdgeType, NodeType],
 ) -> list[FrozenTransition[EdgeType, NodeType]]: ...
-def permute_equal_final_states(obj: T) -> T:  # type:ignore[misc]  # pyright:ignore[reportInconsistentOverload]
+def permute_equal_final_states(obj: T) -> T:
     return _impl_permute_equal_final_states(obj)
 
 
@@ -353,7 +353,7 @@ def _impl_permute_equal_final_states(obj) -> NoReturn:
 @_impl_permute_equal_final_states.register(ReactionInfo)
 def _(obj: ReactionInfo) -> ReactionInfo:
     return ReactionInfo(
-        transitions=permute_equal_final_states(obj.transitions),
+        transitions=permute_equal_final_states(obj.transitions),  # ty:ignore[invalid-argument-type]
         formalism=obj.formalism,
     )
 
@@ -396,8 +396,8 @@ def _get_equal_final_state_ids(
         particle_to_id[key].append(idx)
     all_equal_state_ids = [set(ids) for ids in particle_to_id.values() if len(ids) > 1]
     if not all_equal_state_ids:
-        return tuple()  # type:ignore[return-value]
-    return tuple(sorted(all_equal_state_ids[0]))  # type:ignore[return-value]
+        return tuple()
+    return tuple(sorted(all_equal_state_ids[0]))
 
 
 def _uniqueness_repr(obj: Any) -> str:

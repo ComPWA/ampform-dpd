@@ -1,6 +1,5 @@
 """Functions for dynamics lineshapes and kinematics."""
 
-# pyright:reportPrivateUsage=false
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -28,7 +27,7 @@ class RelativisticBreitWigner(sp.Expr):
     m2: Any
     angular_momentum: Any
     meson_radius: Any
-    phsp_factor: PhaseSpaceFactorProtocol = argument(  # type:ignore[assignment]
+    phsp_factor: PhaseSpaceFactorProtocol = argument(
         default=PhaseSpaceFactor, sympify=False
     )
     _latex_repr_ = (
@@ -38,17 +37,17 @@ class RelativisticBreitWigner(sp.Expr):
     def evaluate(self):
         s, m0, w0, m1, m2, angular_momentum, meson_radius = self.args
         width = EnergyDependentWidth(
-            s=s,
-            mass0=m0,
-            gamma0=w0,
-            m_a=m1,
-            m_b=m2,
-            angular_momentum=angular_momentum,
-            meson_radius=meson_radius,
-            phsp_factor=self.phsp_factor,
-            name=Rf"\Gamma_{{{sp.latex(angular_momentum)}}}",
+            s=s,  # ty:ignore[unknown-argument]
+            mass0=m0,  # ty:ignore[unknown-argument]
+            gamma0=w0,  # ty:ignore[unknown-argument]
+            m_a=m1,  # ty:ignore[unknown-argument]
+            m_b=m2,  # ty:ignore[unknown-argument]
+            angular_momentum=angular_momentum,  # ty:ignore[unknown-argument]
+            meson_radius=meson_radius,  # ty:ignore[unknown-argument]
+            phsp_factor=self.phsp_factor,  # ty:ignore[unknown-argument]
+            name=Rf"\Gamma_{{{sp.latex(angular_momentum)}}}",  # ty:ignore[unknown-argument]
         )
-        return (m0 * w0) / (m0**2 - s - width * m0 * sp.I)
+        return (m0 * w0) / (m0**2 - s - width * m0 * sp.I)  # ty:ignore[unsupported-operator]
 
 
 @unevaluated
@@ -64,21 +63,21 @@ class BreitWignerMinL(sp.Expr):
     l_prod: Any
     R_dec: Any
     R_prod: Any
-    phsp_factor: PhaseSpaceFactorProtocol = argument(  # type:ignore[assignment]
+    phsp_factor: PhaseSpaceFactorProtocol = argument(
         default=PhaseSpaceFactor, sympify=False
     )
     _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
     def evaluate(self):  # noqa: PLR0914
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
-        ff_prod = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)
-        ff0_prod = FormFactor(m_top**2, m0, m_spec, l_prod, R_prod)
+        ff_prod = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)  # ty:ignore[unsupported-operator]
+        ff0_prod = FormFactor(m_top**2, m0, m_spec, l_prod, R_prod)  # ty:ignore[unsupported-operator]
         ff_dec = FormFactor(s, m1, m2, l_dec, R_dec)
-        ff0_dec = FormFactor(m0**2, m1, m2, l_dec, R_dec)
-        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec, self.phsp_factor)
+        ff0_dec = FormFactor(m0**2, m1, m2, l_dec, R_dec)  # ty:ignore[unsupported-operator]
+        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec, self.phsp_factor)  # ty:ignore[invalid-argument-type]
         return sp.Mul(
             ff_prod / ff0_prod,
-            1 / (m0**2 - s - sp.I * m0 * width),
+            1 / (m0**2 - s - sp.I * m0 * width),  # ty:ignore[unsupported-operator]
             ff_dec / ff0_dec,
             evaluate=False,
         )
@@ -96,13 +95,14 @@ class BuggBreitWigner(sp.Expr):
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, γ = self.args
-        s_A = m1**2 - m2**2 / 2  # Adler zero  # noqa: N806
+        # Adler zero
+        s_A = m1**2 - m2**2 / 2  # noqa: N806  # ty:ignore[unsupported-operator]
         g_squared = sp.Mul(
-            (s - s_A) / (m0**2 - s_A),
-            m0 * Γ0 * sp.exp(-γ * s),
+            (s - s_A) / (m0**2 - s_A),  # ty:ignore[unsupported-operator]
+            m0 * Γ0 * sp.exp(-γ * s),  # ty:ignore[unsupported-operator]
             evaluate=False,
         )
-        return 1 / (m0**2 - s - sp.I * g_squared)
+        return 1 / (m0**2 - s - sp.I * g_squared)  # ty:ignore[unsupported-operator]
 
 
 @unevaluated
@@ -116,7 +116,8 @@ class FlattéSWave(sp.Expr):
     _latex_repr_ = R"\mathcal{{R}}^\mathrm{{Flatté}}\left({s}\right)"
 
     def evaluate(self):
-        s, m0, (Γ1, Γ2), (ma1, mb1), (ma2, mb2) = self.args
+        m0: sp.Expr
+        s, m0, (Γ1, Γ2), (ma1, mb1), (ma2, mb2) = self.args  # ty:ignore[not-iterable, invalid-assignment]
         p = BreakupMomentum(s, ma1, mb1)
         p0 = BreakupMomentum(m0**2, ma2, mb2)
         q = BreakupMomentum(s, ma2, mb2)
@@ -137,7 +138,7 @@ class MultichannelBreitWigner(sp.Expr):
         s = self.s
         m0 = self.mass
         width = sum(channel.evaluate() for channel in self.channels)
-        return BreitWigner(s, m0, width)
+        return BreitWigner(s, m0, width)  # ty:ignore[invalid-argument-type]
 
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
         latex = R"\mathcal{R}^\mathrm{BW}_\mathrm{multi}\left("
@@ -161,7 +162,7 @@ class ChannelArguments(sp.Expr):
     def evaluate(self) -> sp.Expr:
         s, m0, Γ0, m1, m2, L, R = self.args
         ff = FormFactor(s, m1, m2, L, R) ** 2
-        return Γ0 * m0 / sp.sqrt(s) * ff  # type:ignore[operator]
+        return Γ0 * m0 / sp.sqrt(s) * ff  # ty:ignore[unsupported-operator]
 
 
 @unevaluated
@@ -173,7 +174,7 @@ class BreitWigner(sp.Expr):
     m2: Any = 0
     angular_momentum: Any = 0
     meson_radius: Any = 1
-    phsp_factor: PhaseSpaceFactorProtocol = argument(  # type:ignore[assignment]
+    phsp_factor: PhaseSpaceFactorProtocol = argument(
         default=PhaseSpaceFactor, sympify=False
     )
 
@@ -187,8 +188,8 @@ class BreitWigner(sp.Expr):
     def energy_dependent_width(self) -> sp.Expr:
         s, m0, Γ0, m1, m2, L, d = self.args
         if L == 0 and m1 == 0 and m2 == 0:
-            return Γ0  # type:ignore[return-value]
-        return EnergyDependentWidth(s, m0, Γ0, m1, m2, L, d, self.phsp_factor)
+            return Γ0  # ty:ignore[invalid-return-type]
+        return EnergyDependentWidth(s, m0, Γ0, m1, m2, L, d, self.phsp_factor)  # ty:ignore[invalid-argument-type]
 
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
         s = printer._print(self.s)
@@ -211,4 +212,4 @@ class SimpleBreitWigner(sp.Expr):
 
     def evaluate(self):
         s, m0, Γ0 = self.args
-        return 1 / (m0**2 - s - m0 * Γ0 * 1j)
+        return 1 / (m0**2 - s - m0 * Γ0 * 1j)  # ty:ignore[unsupported-operator]

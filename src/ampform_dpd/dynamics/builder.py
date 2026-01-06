@@ -23,7 +23,7 @@ class BreitWignerBuilder:
     energy_dependent_width: bool = True
     decay_form_factor: bool = True
     production_form_factor: bool = True
-    phsp_factor: PhaseSpaceFactorProtocol = PhaseSpaceFactor  # type:ignore[assignment]
+    phsp_factor: PhaseSpaceFactorProtocol = PhaseSpaceFactor
 
     def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
         """Formulate a (relativistic) Breit-Wigner for this resonance."""
@@ -52,11 +52,11 @@ def _create_form_factor(s: sp.Symbol, isobar: IsobarNode) -> DefinedExpression:
     outgoing_state_mass2 = create_mass_symbol(isobar.child2)
     meson_radius = _create_meson_radius_symbol(isobar)
     form_factor = FormFactor(
-        s=inv_mass**2,
-        m1=outgoing_state_mass1,
-        m2=outgoing_state_mass2,
-        angular_momentum=_get_angular_momentum(isobar),
-        meson_radius=meson_radius,
+        s=inv_mass**2,  # ty:ignore[unknown-argument]
+        m1=outgoing_state_mass1,  # ty:ignore[unknown-argument]
+        m2=outgoing_state_mass2,  # ty:ignore[unknown-argument]
+        angular_momentum=_get_angular_momentum(isobar),  # ty:ignore[unknown-argument]
+        meson_radius=meson_radius,  # ty:ignore[unknown-argument]
     )
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         meson_radius: 1,
@@ -78,14 +78,14 @@ def _create_breit_wigner(
     res_width = sp.Symbol(Rf"\Gamma_{{{isobar.parent.latex}}}", nonnegative=True)
     meson_radius = _create_meson_radius_symbol(isobar)
     breit_wigner_expr = RelativisticBreitWigner(
-        s=s,
-        mass0=res_mass,
-        gamma0=res_width,
-        m1=outgoing_state_mass1,
-        m2=outgoing_state_mass2,
-        angular_momentum=angular_momentum,
-        meson_radius=meson_radius,
-        phsp_factor=phsp_factor,
+        s=s,  # ty:ignore[unknown-argument]
+        mass0=res_mass,  # ty:ignore[unknown-argument]
+        gamma0=res_width,  # ty:ignore[unknown-argument]
+        m1=outgoing_state_mass1,  # ty:ignore[unknown-argument]
+        m2=outgoing_state_mass2,  # ty:ignore[unknown-argument]
+        angular_momentum=angular_momentum,  # ty:ignore[unknown-argument]
+        meson_radius=meson_radius,  # ty:ignore[unknown-argument]
+        phsp_factor=phsp_factor,  # ty:ignore[unknown-argument]
     )
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         res_mass: isobar.parent.mass,
@@ -123,5 +123,7 @@ def _create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:
 
 
 def get_mandelstam_s(decay: DecayNode) -> sp.Symbol:
-    subsystem_id, *_ = {1, 2, 3} - {s.index for s in decay.children}  # type:ignore[union-attr]
+    subsystem_id, *_ = {1, 2, 3} - {
+        s.index for s in decay.children if isinstance(s, State)
+    }
     return sp.Symbol(f"sigma{subsystem_id}", nonnegative=True)

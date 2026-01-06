@@ -159,8 +159,8 @@ class TestDalitzPlotDecompositionBuilder:
         builder = DalitzPlotDecompositionBuilder(decay, min_ls)
         # cspell:ignore coeff
         reference_subsystem = 1 if resonance.startswith("Sigma") else 3
-        coupling_model = builder.formulate(reference_subsystem)  # type:ignore[arg-type]
-        coeff_model = builder.formulate(reference_subsystem, use_coefficients=True)  # type:ignore[arg-type]
+        coupling_model = builder.formulate(reference_subsystem)
+        coeff_model = builder.formulate(reference_subsystem, use_coefficients=True)
         coupling_amplitudes = _get_physical_amplitudes(coupling_model)
         coeff_amplitudes = _get_physical_amplitudes(coeff_model)
 
@@ -180,7 +180,7 @@ class TestDalitzPlotDecompositionBuilder:
 
 
 def _collect_indexed_symbols(amplitudes: list[sp.Expr]) -> set[sp.Indexed]:
-    coupling_symbols: set[str] = set()
+    coupling_symbols: set[sp.Indexed] = set()
     for expr in amplitudes:
         symbols = {s for s in expr.free_symbols if isinstance(s, sp.Indexed)}
         coupling_symbols.update(symbols)
@@ -194,7 +194,7 @@ def _collect_products(amplitudes: list[sp.Expr]) -> list[tuple[sp.Indexed, sp.In
             couplings = {s for s in node.free_symbols if isinstance(s, sp.Indexed)}
             if len(couplings) == 2:
                 products.add(tuple(sorted(couplings, key=str)))
-    return sorted(products, key=str)
+    return sorted(products, key=str)  # ty:ignore[invalid-return-type]
 
 
 def _get_physical_amplitudes(model: AmplitudeModel) -> list[sp.Expr]:

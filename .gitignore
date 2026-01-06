@@ -19,7 +19,6 @@ __pycache__/
 .coverage
 .coverage.*
 .ipynb_checkpoints/
-.mypy*/
 .pytest_cache/
 .virtual_documents/
 *.pyc

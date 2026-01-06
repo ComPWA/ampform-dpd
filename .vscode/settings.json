@@ -33,20 +33,21 @@
   "cSpell.enabled": true,
   "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
+  "editor.unicodeHighlight.allowedCharacters": {
+    "σ": true
+  },
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "gitlens.telemetry.enabled": false,
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "multiDiffEditor.experimental.enabled": true,
-  "mypy-type-checker.args": ["--config-file=${workspaceFolder}/pyproject.toml"],
   "notebook.codeActionsOnSave": {
     "notebook.source.organizeImports": "explicit"
   },
   "notebook.formatOnSave.enabled": true,
   "notebook.gotoSymbols.showAllSymbols": true,
-  "python.analysis.autoImportCompletions": false,
-  "python.analysis.inlayHints.pytestParameters": true,
   "python.defaultInterpreterPath": ".venv/bin/python",
+  "python.languageServer": "None",
   "python.terminal.activateEnvironment": false,
   "python.testing.pytestArgs": ["--numprocesses=auto"],
   "python.testing.pytestEnabled": true,
@@ -65,6 +66,9 @@
   "telemetry.telemetryLevel": "off",
   "testing.coverageToolbarEnabled": true,
   "testing.showCoverageInExplorer": true,
+  "ty.completions.autoImport": false,
+  "ty.diagnosticMode": "workspace",
+  "ty.importStrategy": "fromEnvironment",
   "yaml.schemas": {
     "https://raw.githubusercontent.com/ComPWA/qrules/0.10.x/src/qrules/particle-validation.json": [
       "*particle*.y*ml"

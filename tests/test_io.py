@@ -1,4 +1,3 @@
-# pyright: reportPrivateUsage=false
 from __future__ import annotations
 
 from textwrap import dedent
@@ -10,11 +9,11 @@ from ampform_dpd.io import as_markdown_table, aslatex
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 dummy_args = {"mass": 0, "width": 0}
-Λc = Particle("Λc", latex=R"\Lambda_c^+", spin=0.5, parity=+1, **dummy_args)
-p = Particle("p", latex="p", spin=0.5, parity=+1, **dummy_args)
-π = Particle("π+", latex=R"\pi^+", spin=0, parity=-1, **dummy_args)
-K = Particle("K-", latex="K^-", spin=0, parity=-1, **dummy_args)
-Λ1520 = Particle("Λ(1520)", latex=R"\Lambda(1520)", spin=1.5, parity=-1, **dummy_args)
+Λc = Particle("Λc", latex=R"\Lambda_c^+", spin=0.5, parity=+1, **dummy_args)  # ty:ignore[invalid-argument-type]
+p = Particle("p", latex="p", spin=0.5, parity=+1, **dummy_args)  # ty:ignore[invalid-argument-type]
+π = Particle("π+", latex=R"\pi^+", spin=0, parity=-1, **dummy_args)  # ty:ignore[invalid-argument-type]
+K = Particle("K-", latex="K^-", spin=0, parity=-1, **dummy_args)  # ty:ignore[invalid-argument-type]
+Λ1520 = Particle("Λ(1520)", latex=R"\Lambda(1520)", spin=1.5, parity=-1, **dummy_args)  # ty:ignore[invalid-argument-type]
 
 
 def test_aslatex_particle():
@@ -27,7 +26,7 @@ def test_aslatex_particle():
 
 
 def test_aslatex_isobar_node():
-    node = IsobarNode(Λ1520, p, K)
+    node = IsobarNode(Λ1520, p, K)  # ty:ignore[invalid-argument-type]
     latex = aslatex(node)
     assert latex == R"\left(\Lambda(1520) \to p K^-\right)"
     latex = aslatex(node, with_jp=True)
@@ -36,7 +35,7 @@ def test_aslatex_isobar_node():
     """.strip()
     assert latex == expected
 
-    node = IsobarNode(Λ1520, p, K, interaction=(2, 1))
+    node = IsobarNode(Λ1520, p, K, interaction=(2, 1))  # ty:ignore[invalid-argument-type]
     latex = aslatex(node)
     assert latex == R"\left(\Lambda(1520) \xrightarrow[S=1]{L=2} p K^-\right)"
 

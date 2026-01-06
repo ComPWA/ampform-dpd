@@ -1,5 +1,5 @@
 # cspell:ignore pksigma
-# pyright: reportPrivateUsage=false
+
 from __future__ import annotations
 
 from collections import defaultdict
@@ -194,26 +194,26 @@ def test_to_three_body_decay(jpsi2pksigma_reaction: ReactionInfo, min_ls: bool):
         if min_ls:
             assert n_chains == 2
             assert production_ls == [
-                LSCoupling(L=1, S=1),
-                LSCoupling(L=0, S=1),
+                LSCoupling(L=1, S=1),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=0, S=1),  # ty:ignore[invalid-argument-type]
             ]
             assert decay_ls == [
-                LSCoupling(L=2, S=0.5),
-                LSCoupling(L=1, S=0.5),
+                LSCoupling(L=2, S=0.5),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=1, S=0.5),  # ty:ignore[invalid-argument-type]
             ]
         else:
             assert n_chains == 4
             assert production_ls == [
-                LSCoupling(L=1, S=1),
-                LSCoupling(L=1, S=2),
-                LSCoupling(L=0, S=1),
-                LSCoupling(L=2, S=1),
+                LSCoupling(L=1, S=1),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=1, S=2),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=0, S=1),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=2, S=1),  # ty:ignore[invalid-argument-type]
             ]
             assert decay_ls == [
-                LSCoupling(L=2, S=0.5),
-                LSCoupling(L=2, S=0.5),
-                LSCoupling(L=1, S=0.5),
-                LSCoupling(L=1, S=0.5),
+                LSCoupling(L=2, S=0.5),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=2, S=0.5),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=1, S=0.5),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=1, S=0.5),  # ty:ignore[invalid-argument-type]
             ]
     elif reaction.formalism == "helicity":
         assert n_chains == 2
@@ -242,10 +242,13 @@ def _group_couplings(
 
 
 def _get_couplings(transition: StateTransition) -> tuple[dict, dict]:
-    return tuple(  # type:ignore[return-value]
+    if len(transition.interactions) != 2:
+        msg = "Expected exactly two interaction nodes"
+        raise ValueError(msg)
+    return tuple(
         {"L": _to_float(node.l_magnitude), "S": _to_float(node.s_magnitude)}
         for node in transition.interactions.values()
-    )
+    )  # ty:ignore[invalid-return-type]
 
 
 def _to_float(value: SupportsFloat | None) -> float | int | None:

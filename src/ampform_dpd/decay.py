@@ -103,11 +103,11 @@ class ThreeBodyDecay:
 
     @property
     def initial_state(self) -> InitialState:
-        return self.states[0]  # type:ignore[return-value]
+        return self.states[0]  # ty:ignore[invalid-return-type]
 
     @property
     def final_state(self) -> dict[FinalStateID, FinalState]:
-        return {s.index: s for s in self.states.values() if s.index != 0}  # type:ignore[misc]
+        return {s.index: s for s in self.states.values() if s.index != 0}  # ty:ignore[invalid-return-type]
 
     def find_chain(self, resonance_name: str) -> ThreeBodyDecayChain:
         for chain in self.chains:
@@ -123,7 +123,7 @@ class ThreeBodyDecay:
             subsystems = ", ".join(sorted(str(i) for i in _get_subsystem_ids(self)))
             msg = f"Decay {decay_description} only has subsystems {subsystems}, not {subsystem_id}"
             warn(msg, category=UserWarning)
-        return ThreeBodyDecay(self.states, filtered_chains)
+        return ThreeBodyDecay(self.states, filtered_chains)  # ty:ignore[invalid-argument-type]
 
 
 def _get_decay_description(decay: ThreeBodyDecay) -> str:
@@ -154,7 +154,7 @@ class ThreeBodyDecayChain:
     decay: ProductionNode = field(validator=instance_of(IsobarNode))
 
     def __attrs_post_init__(self) -> None:
-        outer_states: list[State[StateID]] = [self.initial_state, *self.final_state]  # type:ignore[list-item]
+        outer_states: list[State[StateID]] = [self.initial_state, *self.final_state]  # ty:ignore[invalid-assignment]
         for state in outer_states:
             if not isinstance(state, State):
                 msg = f"Not all particles in the initial or final state are not type {State.__name__}"
@@ -173,11 +173,11 @@ class ThreeBodyDecayChain:
     @cache  # noqa: B019
     def final_state(self) -> tuple[FinalState, FinalState, FinalState]:
         final_state = (*self.decay_products, self.spectator)
-        return tuple(sorted(final_state, key=lambda x: x.index))  # type:ignore[return-value]
+        return tuple(sorted(final_state, key=lambda x: x.index))  # ty:ignore[invalid-return-type]
 
     @property
     def parent(self) -> InitialState:
-        return self.decay.parent  # type:ignore[return-value]
+        return self.decay.parent
 
     @property
     def resonance(self) -> Particle:
@@ -193,10 +193,10 @@ class ThreeBodyDecayChain:
 
     @property
     def decay_products(self) -> tuple[FinalState, FinalState]:
-        return (  # type:ignore[return-value]
+        return (
             to_particle(self.decay_node.child1),
             to_particle(self.decay_node.child2),
-        )
+        )  # ty:ignore[invalid-return-type]
 
     @property
     def spectator(self) -> FinalState:
@@ -206,7 +206,7 @@ class ThreeBodyDecayChain:
     def _get_child_of_type(self, typ: type[T]) -> T:
         for child in self.decay.children:
             if isinstance(child, typ):
-                return child
+                return child  # ty:ignore[invalid-return-type]
         msg = f"The production node does not have any children that are of type {typ.__name__}"
         raise ValueError(msg)
 

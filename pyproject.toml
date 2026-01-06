@@ -98,7 +98,8 @@ notebooks = [
     "tqdm",
 ]
 style = [
-    "mypy",
+    "ty",
+    {include-group = "notebooks"},
     {include-group = "types"},
 ]
 test = [
@@ -140,25 +141,6 @@ omit = [
     "tests/**/*.py",
 ]
 source = ["src"]
-
-[tool.mypy]
-exclude = "_build"
-show_error_codes = true
-warn_unused_configs = true
-
-[[tool.mypy.overrides]]
-ignore_missing_imports = true
-module = ["cloudpickle.*"]
-
-[[tool.mypy.overrides]]
-ignore_missing_imports = true
-module = ["sympy.*"]
-
-[[tool.mypy.overrides]]
-check_untyped_defs = true
-disallow_incomplete_defs = false
-disallow_untyped_defs = false
-module = ["tests.*"]
 
 [tool.poe.executor]
 isolated = true
@@ -319,35 +301,6 @@ default = "3.13"
 help = "Selected Python version"
 name = "version"
 positional = true
-
-[tool.pyright]
-reportArgumentType = false
-reportAssignmentType = false
-reportAttributeAccessIssue = false
-reportCallIssue = false
-reportGeneralTypeIssues = false
-reportImportCycles = false
-reportIncompatibleMethodOverride = false
-reportMissingParameterType = false
-reportMissingTypeArgument = false
-reportMissingTypeStubs = false
-reportOperatorIssue = false
-reportPrivateImportUsage = false
-reportReturnType = false
-reportUnknownArgumentType = false
-reportUnknownLambdaType = false
-reportUnknownMemberType = false
-reportUnknownParameterType = false
-reportUnknownVariableType = false
-reportUnnecessaryContains = false
-reportUnnecessaryIsInstance = false
-reportUnusedClass = true
-reportUnusedFunction = true
-reportUnusedImport = true
-reportUnusedVariable = true
-typeCheckingMode = "strict"
-venv = ".venv"
-venvPath = "."
 
 [tool.pytest.ini_options]
 addopts = [
@@ -530,6 +483,29 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
+
+[[tool.ty.overrides]]
+include = [
+    "docs/comparison/d2kkk.ipynb",
+    "docs/comparison/jpsi2phipipi.ipynb",
+    "docs/comparison/jpsi2pipipi.ipynb",
+    "docs/index.ipynb",
+    "docs/jpsi2ksp.ipynb",
+    "docs/xib2pkk.ipynb",
+]
+
+[tool.ty.overrides.rules]
+invalid-argument-type = "ignore"
+invalid-assignment = "ignore"
+invalid-return-type = "ignore"
+unresolved-attribute = "ignore"
+unsupported-operator = "ignore"
+
+[tool.ty.rules]
+division-by-zero = "warn"
+possibly-missing-import = "warn"
+possibly-unresolved-reference = "warn"
+unused-ignore-comment = "warn"
 
 [tool.uv.sources]
 ampform = {git = "https://github.com/ComPWA/ampform", rev = "dfab5e2411566f2a84ffae2e194979193701c075"}

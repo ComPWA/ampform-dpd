@@ -29,7 +29,7 @@ def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling | No
         return obj
     if isinstance(obj, tuple):
         L, S = obj
-        return LSCoupling(L, S)
+        return LSCoupling(L, S)  # ty:ignore[invalid-argument-type]
     msg = f"Cannot convert {type(obj).__name__} to {LSCoupling.__name__}"
     raise TypeError(msg)
 

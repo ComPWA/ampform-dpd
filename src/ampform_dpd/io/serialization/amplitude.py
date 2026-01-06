@@ -13,11 +13,11 @@ from sympy.physics.quantum.cg import CG
 from sympy.physics.quantum.spin import Rotation as Wigner
 
 from ampform_dpd import (
-    AmplitudeModel,  # pyright:ignore[reportPrivateUsage]
-    _AlignmentWignerGenerator,  # pyright:ignore[reportPrivateUsage]
-    _generate_amplitude_index_bases,  # pyright:ignore[reportPrivateUsage]
+    AmplitudeModel,
+    _AlignmentWignerGenerator,
+    _generate_amplitude_index_bases,
     create_mass_symbol_mapping,
-    formulate_invariants,  # pyright:ignore[reportPrivateUsage]
+    formulate_invariants,
 )
 from ampform_dpd.angles import formulate_scattering_angle
 from ampform_dpd.io.serialization.decay import (
@@ -62,15 +62,15 @@ def formulate(  # noqa: PLR0914
     states = get_states(model)
     helicity_symbols = sp.symbols("lambda(:4)", rational=True)
     allowed_helicities = {
-        symbol: create_spin_range(states[i].spin)  # type:ignore[index]
+        symbol: create_spin_range(states[i].spin)
         for i, symbol in enumerate(helicity_symbols)
     }
-    amplitude_definitions = {}  # type:ignore[var-annotated]
+    amplitude_definitions = {}
     angle_definitions = {}
     parameter_defaults = {}
     n_chains = len(get_decay_chains(model))
     helicity_values: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
-    for helicity_values in product(*allowed_helicities.values()):  # type:ignore[assignment]
+    for helicity_values in product(*allowed_helicities.values()):
         for chain_idx in range(n_chains):
             amp_defs = formulate_chain_amplitude(
                 *helicity_values, model, chain_idx, to_latex, additional_builders
@@ -93,19 +93,19 @@ def formulate(  # noqa: PLR0914
     masses = create_mass_symbol_mapping(decay)
     parameter_defaults.update(masses)
     if cleanup_summations:
-        aligned_amp = aligned_amp.cleanup()  # type:ignore[assignment]
+        aligned_amp = aligned_amp.cleanup()
     intensity = PoolSum(
         sp.Abs(aligned_amp) ** 2,
         *allowed_helicities.items(),
     )
     if cleanup_summations:
-        intensity = intensity.cleanup()  # type:ignore[assignment]
+        intensity = intensity.cleanup()
     return AmplitudeModel(
         decay=decay,
         intensity=intensity,
-        amplitudes=amplitude_definitions,  # type:ignore[arg-type]
-        variables=angle_definitions,  # type:ignore[arg-type]
-        parameter_defaults=parameter_defaults,  # type:ignore[arg-type]
+        amplitudes=amplitude_definitions,
+        variables=angle_definitions,
+        parameter_defaults=parameter_defaults,
         masses=masses,
         invariants=formulate_invariants(decay),
     )
@@ -171,8 +171,7 @@ def _get_decay_product_helicities(
                 msg = "Vertex does not contain helicities. Is it an LS vertex?"
                 raise ValueError(msg, vertex)
             return tuple(
-                (i, sp.Rational(λ))
-                for i, λ in zip(node, helicities, strict=True)  # type:ignore[assignment,call-overload,return-value]
+                (i, sp.Rational(λ)) for i, λ in zip(node, helicities, strict=True)
             )
     msg = "Could not fine a helicity for any resonance node"
     raise ValueError(msg)
@@ -206,7 +205,7 @@ def formulate_aligned_amplitude(
         (_λ2, create_spin_range(j2)),
         (_λ3, create_spin_range(j3)),
     )
-    return amp_expr, wigner_generator.angle_definitions  # type:ignore[return-value]
+    return amp_expr, wigner_generator.angle_definitions
 
 
 def _get_weight(
@@ -234,12 +233,12 @@ def _get_resonance_helicity(
             continue
         vertex = cast("HelicityVertex", vertex)
         helicities = vertex.get("helicities")
-        if helicities is None:  # pyright:ignore[reportUnnecessaryComparison]
+        if helicities is None:
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
             raise ValueError(msg, vertex)
         for helicity, sub_node in zip(helicities, node, strict=True):
             if isinstance(sub_node, abc.Sequence) and len(sub_node) == 2:  # noqa: PLR2004
-                return tuple(sub_node), sp.Rational(helicity)  # type:ignore[return-value]
+                return tuple(sub_node), sp.Rational(helicity)
     msg = "Could not find a resonance node"
     raise ValueError(msg)
 
@@ -252,9 +251,9 @@ def _get_final_state_helicities(
     for vertex in vertices:
         vertex = cast("HelicityVertex", vertex)
         helicities = vertex.get("helicities")
-        if helicities is None:  # pyright:ignore[reportUnnecessaryComparison]
+        if helicities is None:
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
-            raise ValueError(msg, vertex)  # type:ignore[index]
+            raise ValueError(msg, vertex)
         for helicity, node in zip(helicities, vertex["node"], strict=True):
             if not isinstance(node, int):
                 continue
@@ -382,7 +381,7 @@ class ParityRecoupling(sp.Expr):
 
     def evaluate(self) -> sp.Expr:
         λa, λb, λa0, λb0, f = self.args
-        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)  # type:ignore[operator]
+        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)
 
 
 @unevaluated
@@ -401,7 +400,7 @@ class LSRecoupling(sp.Expr):
     def evaluate(self) -> sp.Expr:
         λa, λb, l, s, ja, jb, j = self.args
         return (
-            sp.sqrt((2 * l + 1) / (2 * j + 1))  # type:ignore[operator]
-            * CG(ja, λa, jb, -λb, s, λa - λb)  # type:ignore[operator]
-            * CG(l, 0, s, λa - λb, j, λa - λb)  # type:ignore[operator]
+            sp.sqrt((2 * l + 1) / (2 * j + 1))
+            * CG(ja, λa, jb, -λb, s, λa - λb)
+            * CG(l, 0, s, λa - λb, j, λa - λb)
         )

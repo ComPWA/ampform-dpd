@@ -5,16 +5,17 @@ from __future__ import annotations
 import functools
 import operator
 from collections import abc
+from collections.abc import Callable
 from functools import cache
 from itertools import product
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING
 from warnings import warn
 
 import sympy as sp
 from ampform.helicity import (
     ParameterValue,
     ParameterValues,
-    _to_parameter_values,  # noqa: PLC2701  # pyright: ignore[reportPrivateUsage]
+    _to_parameter_values,  # noqa: PLC2701
 )
 from ampform.kinematics.phasespace import compute_third_mandelstam
 from ampform.sympy import PoolSum
@@ -32,8 +33,8 @@ from ampform_dpd.decay import (
     State,
     ThreeBodyDecay,
     ThreeBodyDecayChain,
-    _get_decay_description,  # pyright:ignore[reportPrivateUsage]
-    _get_subsystem_ids,  # pyright:ignore[reportPrivateUsage]
+    _get_decay_description,
+    _get_subsystem_ids,
     get_decay_product_ids,
     to_particle,
 )
@@ -50,7 +51,7 @@ class AmplitudeModel:
     intensity: sp.Expr = sp.S.One
     amplitudes: dict[sp.Indexed, sp.Expr] = field(factory=dict)
     variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
-    parameter_defaults: ParameterValues = field(  # type:ignore[assignment]
+    parameter_defaults: ParameterValues = field(
         converter=_to_parameter_values,
         factory=dict,
     )
@@ -122,39 +123,41 @@ class DalitzPlotDecompositionBuilder:
             sp.symbols("lambda:4", rational=True)
         )
         allowed_helicities = {
-            symbol: create_spin_range(self.decay.states[i].spin)  # type:ignore[index]
+            symbol: create_spin_range(self.decay.states[i].spin)  # ty:ignore[invalid-argument-type]
             for i, symbol in enumerate(helicity_symbols)
         }
         amplitude_definitions = {}
         angle_definitions = {}
         parameter_defaults: dict[sp.Basic, ParameterValue] = {}
-        args: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
         if self.all_subsystems:
             subsystem_ids: list[FinalStateID] = [1, 2, 3]
         else:
             subsystem_ids = sorted(_get_subsystem_ids(self.decay))
-        for args in product(*allowed_helicities.values()):  # type:ignore[assignment]
+        for args in product(*allowed_helicities.values()):
             for sub_system in subsystem_ids:
                 chain_model = self.formulate_subsystem_amplitude(
-                    *args, sub_system, use_coefficients=use_coefficients
+                    *args,
+                    sub_system,  # ty:ignore[too-many-positional-arguments]
+                    use_coefficients=use_coefficients,
                 )
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)
                 parameter_defaults.update(chain_model.parameter_defaults)
         aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
-            *helicity_symbols, reference_subsystem
+            *helicity_symbols,
+            reference_subsystem,  # ty:ignore[too-many-positional-arguments]
         )
         angle_definitions.update(zeta_defs)
         masses = create_mass_symbol_mapping(self.decay)
-        parameter_defaults.update(masses)
+        parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
         if cleanup_summations:
-            aligned_amp = aligned_amp.cleanup()  # type:ignore[assignment]
+            aligned_amp = aligned_amp.cleanup()
         intensity = PoolSum(
             sp.Abs(aligned_amp) ** 2,
             *allowed_helicities.items(),
         )
         if cleanup_summations:
-            intensity = intensity.cleanup()  # type:ignore[assignment]
+            intensity = intensity.cleanup()
         return AmplitudeModel(
             decay=self.decay,
             intensity=PoolSum(
@@ -163,7 +166,7 @@ class DalitzPlotDecompositionBuilder:
             ),
             amplitudes=amplitude_definitions,
             variables=angle_definitions,
-            parameter_defaults=parameter_defaults,
+            parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
             masses=masses,
             invariants=formulate_invariants(self.decay),
         )
@@ -194,7 +197,7 @@ class DalitzPlotDecompositionBuilder:
         for chain in self.decay.get_subsystem(subsystem_id).chains:
             formulate_dynamics = self.dynamics_choices.get_builder(chain.resonance.name)
             dynamics = formulate_dynamics(chain)
-            parameter_defaults.update(dynamics.parameters)
+            parameter_defaults.update(dynamics.parameters)  # ty:ignore[no-matching-overload]
             resonance_spin = sp.Rational(chain.resonance.spin)
             resonance_helicities = create_spin_range(resonance_spin)
             for λR_val in resonance_helicities:
@@ -256,7 +259,7 @@ class DalitzPlotDecompositionBuilder:
             intensity=sp.Abs(amp_symbol) ** 2,
             amplitudes={amp_symbol: amp_expr},
             variables={θij: θij_expr},
-            parameter_defaults=parameter_defaults,
+            parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
         )
 
     def formulate_aligned_amplitude(
@@ -289,7 +292,7 @@ class DalitzPlotDecompositionBuilder:
             (_λ2, create_spin_range(j2)),
             (_λ3, create_spin_range(j3)),
         )
-        return amp_expr, wigner_generator.angle_definitions  # type:ignore[return-value]
+        return amp_expr, wigner_generator.angle_definitions
 
 
 def _product(obj: Any | Iterable):
@@ -306,7 +309,7 @@ def _get_best_reference_subsystems(decay: ThreeBodyDecay) -> FinalStateID:
     resonances_per_subsystem = [
         (k, len(decay.get_subsystem(k).chains)) for k in subsystem_ids
     ]
-    return max(resonances_per_subsystem, key=operator.itemgetter(1))[0]
+    return max(resonances_per_subsystem, key=operator.itemgetter(1))[0]  # ty:ignore[invalid-return-type]
 
 
 def _check_reference_subsystems(
@@ -429,12 +432,12 @@ def _formulate_clebsch_gordan_factors(
 
 @cache
 def _generate_amplitude_index_bases() -> dict[FinalStateID, sp.IndexedBase]:
-    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # type:ignore[arg-type]
+    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # ty:ignore[no-matching-overload]
 
 
 class _AlignmentWignerGenerator:
     def __init__(self, reference_subsystem: FinalStateID = 1) -> None:
-        self.angle_definitions: dict[sp.Symbol, sp.acos] = {}
+        self.angle_definitions: dict[sp.Symbol, sp.Expr] = {}
         self.reference_subsystem = reference_subsystem
 
     def __call__(
@@ -484,10 +487,6 @@ class DynamicsConfigurator:
         return self.__decay
 
 
-class DynamicsBuilder(Protocol):
-    def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression: ...
-
-
 @define
 class DefinedExpression:
     expression: sp.Expr = sp.S.One
@@ -511,9 +510,12 @@ class DefinedExpression:
         )
 
 
+DynamicsBuilder = Callable[[ThreeBodyDecayChain], DefinedExpression]
+
+
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
     return {
-        create_mass_symbol(decay.states[i]): decay.states[i].mass
+        create_mass_symbol(decay.states[i]): decay.states[i].mass  # ty:ignore[invalid-argument-type]
         for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
     }
 

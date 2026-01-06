@@ -19,7 +19,7 @@ def formulate_scattering_angle(
     if not {state_id, sibling_id} <= {1, 2, 3}:
         msg = "Child IDs need to be one of 1, 2, 3"
         raise ValueError(msg)
-    if {state_id, sibling_id} in {  # pyright: ignore[reportUnnecessaryContains]
+    if {state_id, sibling_id} in {
         (2, 1),
         (3, 2),
         (1, 3),
@@ -54,7 +54,7 @@ def formulate_theta_hat_angle(
         raise ValueError(msg)
     symbol = sp.Symbol(Rf"\hat\theta_{isobar_id}({aligned_subsystem})", real=True)
     if isobar_id == aligned_subsystem:
-        return symbol, sp.S.Zero
+        return symbol, sp.S.Zero  # ty:ignore[invalid-return-type]
     if (isobar_id, aligned_subsystem) in {(3, 1), (1, 2), (2, 3)}:
         remaining_id = next(iter(allowed_ids - {isobar_id, aligned_subsystem}))
         m0 = sp.Symbol("m0", nonnegative=True)
@@ -72,7 +72,7 @@ def formulate_theta_hat_angle(
         )
         return symbol, theta
     _, theta = formulate_theta_hat_angle(aligned_subsystem, isobar_id)
-    return symbol, -theta
+    return symbol, -theta  # ty:ignore[invalid-return-type]
 
 
 def formulate_zeta_angle(  # noqa: C901, PLR0911, PLR0914
@@ -92,7 +92,7 @@ def formulate_zeta_angle(  # noqa: C901, PLR0911, PLR0914
         _, zeta = formulate_zeta_angle(rotated_state, aligned_subsystem, rotated_state)
         return zeta_symbol, zeta
     if aligned_subsystem == reference_subsystem:
-        return zeta_symbol, sp.S.Zero
+        return zeta_symbol, sp.S.Zero  # ty:ignore[invalid-return-type]
     m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
     σ1, σ2, σ3 = sp.symbols("sigma1:4", nonnegative=True)
     if (rotated_state, aligned_subsystem, reference_subsystem) == (1, 1, 3):
@@ -162,7 +162,7 @@ def formulate_zeta_angle(  # noqa: C901, PLR0911, PLR0914
         _, zeta = formulate_zeta_angle(
             rotated_state, reference_subsystem, aligned_subsystem
         )
-        return zeta_symbol, -zeta
+        return zeta_symbol, -zeta  # ty:ignore[invalid-return-type]
     msg = (
         "No expression for"
         f" ζ^{rotated_state}_{aligned_subsystem}({reference_subsystem})"

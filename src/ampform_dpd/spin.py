@@ -75,7 +75,7 @@ def create_rational_range(
     [-1/2, 1/2, 3/2]
     """
     spin_range = arange(float(__from), +float(__to) + 0.5)
-    return list(map(sp.Rational, spin_range))
+    return [sp.Rational(x) for x in spin_range]
 
 
 def arange(x_1: float, x_2: float, delta: float = 1.0) -> Generator[float, None, None]:

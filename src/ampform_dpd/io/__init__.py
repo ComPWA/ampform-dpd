@@ -35,9 +35,7 @@ from ampform_dpd.decay import (
     ThreeBodyDecayChain,
 )
 
-from .cached import (
-    lambdify as perform_cached_lambdify,  # noqa: F401  # pyright: ignore[reportUnusedImport]
-)
+from .cached import lambdify as perform_cached_lambdify  # noqa: F401
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -106,15 +104,17 @@ def _render_jp(particle: Particle) -> str:
     return f"{spin}^{parity}"
 
 
-def as_markdown_table(obj: Sequence) -> str:
+def as_markdown_table(
+    obj: ThreeBodyDecay | ThreeBodyDecayChain | Sequence[Particle],
+) -> str:
     """Render objects a `str` suitable for generating a table."""
     if isinstance(obj, ThreeBodyDecay):
         return _as_decay_markdown_table(obj.chains)
     item_type = _determine_item_type(obj)
     if item_type in {Particle, State}:
-        return _as_resonance_markdown_table(obj)
+        return _as_resonance_markdown_table(obj)  # ty:ignore[invalid-argument-type]
     if item_type is ThreeBodyDecayChain:
-        return _as_decay_markdown_table(obj)
+        return _as_decay_markdown_table(obj)  # ty:ignore[invalid-argument-type]
     msg = (
         f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
     )
@@ -155,7 +155,7 @@ def _determine_item_type(obj) -> type:
     return item_type
 
 
-def _as_resonance_markdown_table(items: Sequence[Particle | State]) -> str:
+def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
     column_names = [
         "name",
         "LaTeX",
@@ -171,7 +171,7 @@ def _as_resonance_markdown_table(items: Sequence[Particle | State]) -> str:
         row_items = [
             f"`{particle.name}`",
             f"${particle.latex}$",
-            Rf"${aslatex(particle, only_jp=True)}$",  # type:ignore[call-arg]
+            Rf"${aslatex(particle, only_jp=True)}$",
             f"{int(1e3 * particle.mass):,.0f}",
             f"{int(1e3 * particle.width):,.0f}",
         ]
@@ -197,7 +197,7 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
         child1, child2 = map(aslatex, chain.decay_products)
         row_items: list = [
             Rf"${chain.resonance.latex} \to {child1} {child2}$",
-            Rf"${aslatex(chain.resonance, only_jp=True)}$",  # type:ignore[call-arg]
+            Rf"${aslatex(chain.resonance, only_jp=True)}$",
             f"{int(1e3 * chain.resonance.mass):,.0f}",
             f"{int(1e3 * chain.resonance.width):,.0f}",
         ]
@@ -233,4 +233,4 @@ def simplify_latex_rendering() -> None:
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"
 
-    sp.Indexed._latex = _print_Indexed_latex  # type:ignore[attr-defined]
+    sp.Indexed._latex = _print_Indexed_latex  # ty:ignore[unresolved-attribute]

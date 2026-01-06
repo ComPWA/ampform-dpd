@@ -40,7 +40,7 @@ def to_decay(
         chains=sorted({
             to_decay_chain(chain, initial_state, final_state, to_latex)
             for chain in get_decay_chains(model)
-        }),
+        }),  # ty:ignore[invalid-argument-type]
     )
 
 
@@ -72,7 +72,7 @@ def to_decay_chain(
                 child2=final_state[child2_id],
             ),
             child2=final_state[spectator_id],
-        )
+        )  # ty:ignore[invalid-argument-type]
     )
 
 
@@ -93,7 +93,7 @@ def __find_decay_product_ids(
     for vertex in vertices:
         node = vertex["node"]
         if all(isinstance(i, int) for i in node) and len(node) == 2:  # noqa: PLR2004
-            return tuple(node)  # type:ignore[return-value]
+            return tuple(node)
     msg = "Could not find a node that has two final state items (decay node)"
     raise ValueError(msg)
 
@@ -103,7 +103,7 @@ def get_states(
 ) -> dict[StateID, State]:
     initial_state = get_initial_state(model, to_latex)
     final_state = get_final_state(model, to_latex)
-    return {initial_state.index: initial_state, **final_state}  # type:ignore[dict-item]
+    return {initial_state.index: initial_state, **final_state}
 
 
 def get_initial_state(

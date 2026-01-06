@@ -88,7 +88,7 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
             meson_radius = sp.Symbol(f"R_{{{initial_state.latex}}}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
-            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius),
+            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius),  # ty:ignore[invalid-argument-type]
             parameters={
                 meson_radius: function_definition["radius"],
             },
@@ -112,7 +112,7 @@ def formulate_breit_wigner(
     angular_momentum = int(function_definition["l"])
     d = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
     return DefinedExpression(
-        expression=BreitWigner(s, mass, width, m1, m2, angular_momentum, d),
+        expression=BreitWigner(s, mass, width, m1, m2, angular_momentum, d),  # ty:ignore[invalid-argument-type]
         parameters={
             mass: function_definition["mass"],
             width: function_definition["width"],
@@ -141,7 +141,7 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
     m2 = to_mass_symbol(j)
     angular_momentum = int(channel_definitions[0]["l"])
     d = sp.Symbol(f"R_{{{resonance}}}", nonnegative=True)
-    channels = [ChannelArguments(s, mass, width, m1, m2, angular_momentum, d)]
+    channels = [ChannelArguments(s, mass, width, m1, m2, angular_momentum, d)]  # ty:ignore[invalid-argument-type]
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         mass: function_definition["mass"],
         width: channel_definitions[0]["gsq"],
@@ -156,14 +156,14 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
         mi1 = sp.Symbol(f"m_{{a,{channel_idx}}}", nonnegative=True)
         mi2 = sp.Symbol(f"m_{{b,{channel_idx}}}", nonnegative=True)
         angular_momentum = int(channel_definition["l"])
-        channels.append(ChannelArguments(s, mass, Γi, mi1, mi2, angular_momentum, d))
+        channels.append(ChannelArguments(s, mass, Γi, mi1, mi2, angular_momentum, d))  # ty:ignore[invalid-argument-type]
         parameter_defaults.update({
             mi1: channel_definition["ma"],
             mi2: channel_definition["mb"],
             Γi: channel_definition["gsq"],
         })
     return DefinedExpression(
-        expression=MultichannelBreitWigner(s, mass, tuple(channels)),
+        expression=MultichannelBreitWigner(s, mass, tuple(channels)),  # ty:ignore[invalid-argument-type]
         parameters=parameter_defaults,
     )
 
@@ -196,7 +196,7 @@ def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
         and all(isinstance(i, int) for i in node_item)
         and len(node_item) == 2  # noqa: PLR2004
     ):
-        k, *_ = {1, 2, 3} - set(node_item)  # type:ignore[arg-type]
+        k, *_ = {1, 2, 3} - set(node_item)
         return sp.Symbol(f"sigma{k}", nonnegative=True)
     msg = f"Cannot create mass symbol for node {node_item}"
     raise NotImplementedError(msg)

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import sympy as sp
 
 from ampform_dpd.io.serialization.decay import (
-    get_decay_chains,  # pyright:ignore[reportPrivateUsage]
+    get_decay_chains,
     get_final_state,
     get_initial_state,
     get_states,
