@@ -76,7 +76,6 @@ tf = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "jupyterlab" },
@@ -88,13 +87,13 @@ dev = [
     { name = "matplotlib" },
     { name = "mypy" },
     { name = "myst-nb" },
-    { name = "nbmake" },
     { name = "pandas" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extra = ["rope"] },
+    { name = "qrules", extra = ["viz"] },
     { name = "ruff" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-autobuild", version = "2024.10.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -110,12 +109,12 @@ dev = [
     { name = "tqdm" },
 ]
 doc = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "matplotlib" },
     { name = "myst-nb" },
     { name = "pandas" },
+    { name = "qrules", extra = ["viz"] },
     { name = "sphinx-api-relink" },
     { name = "sphinx-book-theme" },
     { name = "sphinx-codeautolink", extra = ["ipython"] },
@@ -128,7 +127,6 @@ doc = [
     { name = "tqdm" },
 ]
 jupyter = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "jupyterlab" },
@@ -141,15 +139,16 @@ jupyter = [
     { name = "pandas" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extra = ["rope"] },
+    { name = "qrules", extra = ["viz"] },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
 ]
 notebooks = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "matplotlib" },
     { name = "pandas" },
+    { name = "qrules", extra = ["viz"] },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -186,7 +185,6 @@ provides-extras = ["numba", "tf"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "jupyterlab" },
@@ -198,13 +196,13 @@ dev = [
     { name = "matplotlib" },
     { name = "mypy" },
     { name = "myst-nb" },
-    { name = "nbmake" },
     { name = "pandas" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-xdist" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extras = ["rope"] },
+    { name = "qrules", extras = ["viz"] },
     { name = "ruff" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-autobuild" },
@@ -219,12 +217,12 @@ dev = [
     { name = "tqdm" },
 ]
 doc = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "matplotlib" },
     { name = "myst-nb" },
     { name = "pandas" },
+    { name = "qrules", extras = ["viz"] },
     { name = "sphinx-api-relink" },
     { name = "sphinx-book-theme" },
     { name = "sphinx-codeautolink", extras = ["ipython"] },
@@ -237,7 +235,6 @@ doc = [
     { name = "tqdm" },
 ]
 jupyter = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "jupyterlab" },
@@ -250,15 +247,16 @@ jupyter = [
     { name = "pandas" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extras = ["rope"] },
+    { name = "qrules", extras = ["viz"] },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
 ]
 notebooks = [
-    { name = "graphviz" },
     { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "matplotlib" },
     { name = "pandas" },
+    { name = "qrules", extras = ["viz"] },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -2836,22 +2834,6 @@ wheels = [
 ]
 
 [[package]]
-name = "nbmake"
-version = "1.5.5"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "ipykernel" },
-    { name = "nbclient" },
-    { name = "nbformat" },
-    { name = "pygments" },
-    { name = "pytest" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/43/9a/aae201cee5639e1d562b3843af8fd9f8d018bb323e776a2b973bdd5fc64b/nbmake-1.5.5.tar.gz", hash = "sha256:239dc868ea13a7c049746e2aba2c229bd0f6cdbc6bfa1d22f4c88638aa4c5f5c", size = 85929, upload-time = "2024-12-23T18:33:46.774Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/eb/be/b257e12f9710819fde40adc972578bee6b72c5992da1bc8369bef2597756/nbmake-1.5.5-py3-none-any.whl", hash = "sha256:c6fbe6e48b60cacac14af40b38bf338a3b88f47f085c54ac5b8639ff0babaf4b", size = 12818, upload-time = "2024-12-23T18:33:44.566Z" },
-]
-
-[[package]]
 name = "nest-asyncio"
 version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -3919,6 +3901,11 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/5c/2a/b521d475bfb441c89539a557f8fa9fec6d800b5307a70805adb63be0e81a/qrules-0.10.6.tar.gz", hash = "sha256:863137bdfa73daf38f993c2d7d4afe56dd2ef5fa27d9c52d688e33a7403be720", size = 294509, upload-time = "2025-10-13T13:47:25.395Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/fe/a8/24f7375451b2dfa19a97c8503223e8ad369776f50b65067b7f99823f23f1/qrules-0.10.6-py3-none-any.whl", hash = "sha256:ad53798bce95986b57b737fc711a6c9893f848d7f9b7823291b86b4c7a685f99", size = 80753, upload-time = "2025-10-13T13:47:23.843Z" },
+]
+
+[package.optional-dependencies]
+viz = [
+    { name = "graphviz" },
 ]
 
 [[package]]

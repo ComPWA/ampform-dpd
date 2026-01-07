@@ -58,7 +58,6 @@ Tracker = "https://github.com/ComPWA/ampform-dpd/issues"
 
 [dependency-groups]
 dev = [
-    "nbmake",
     "ruff",
     "sphinx-autobuild",
     {include-group = "doc"},
@@ -90,11 +89,11 @@ jupyter = [
     {include-group = "notebooks"},
 ]
 notebooks = [
-    "graphviz",
     "ipympl",
     "ipywidgets",
     "matplotlib",
     "pandas",
+    "qrules[viz]",
     "tensorwaves[phsp]",
     "tqdm",
 ]
@@ -161,8 +160,10 @@ disallow_incomplete_defs = false
 disallow_untyped_defs = false
 module = ["tests.*"]
 
-[tool.poe]
-executor.type = "uv"
+[tool.poe.executor]
+isolated = true
+no-group = "dev"
+type = "uv"
 
 [tool.poe.tasks.all]
 help = "Run all continuous integration (CI) tasks locally"
@@ -264,15 +265,24 @@ env = {PYTHONWARNINGS = ""}
 help = "Check external links in the documentation (requires internet connection)"
 
 [tool.poe.tasks.nb]
-cmd = "pytest --nbmake --nbmake-timeout=0 docs"
+cmd = "pytest --nbmake --nbmake-timeout=0 ${paths}"
+executor = {group = "notebooks", with = "nbmake"}
 help = "Run all notebooks"
 
+[[tool.poe.tasks.nb.args]]
+default = "docs"
+multiple = true
+name = "paths"
+positional = true
+
 [tool.poe.tasks.style]
-cmd = "uv run --group style --isolated --no-dev pre-commit run --all-files"
+cmd = "pre-commit run --all-files"
+executor = {group = "style"}
 help = "Perform all linting, formatting, and spelling checks"
 
 [tool.poe.tasks.test]
 cmd = "pytest --numprocesses=auto ${paths}"
+executor = {group = "test"}
 help = "Run all unit tests"
 
 [[tool.poe.tasks.test.args]]
