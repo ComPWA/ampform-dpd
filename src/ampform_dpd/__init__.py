@@ -50,7 +50,7 @@ class AmplitudeModel:
     decay: ThreeBodyDecay
     intensity: sp.Expr = sp.S.One
     amplitudes: dict[sp.Indexed, sp.Expr] = field(factory=dict)
-    variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
+    variables: dict[sp.Basic, sp.Expr] = field(factory=dict)
     parameter_defaults: ParameterValues = field(
         converter=_to_parameter_values,
         factory=dict,

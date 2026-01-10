@@ -54,7 +54,7 @@ class TestDalitzPlotDecompositionBuilder:
         }
         if not all_subsystems:
             expected_variables.remove("theta_23")
-        assert {s.name for s in model.variables} == expected_variables
+        assert {str(s) for s in model.variables} == expected_variables
 
     @pytest.mark.parametrize("min_ls", [False, True])
     @pytest.mark.parametrize("use_coefficients", [False, True])
