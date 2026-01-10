@@ -183,9 +183,9 @@ requires-dist = [
     { name = "numpy" },
     { name = "qrules", specifier = ">=0.10.0" },
     { name = "sympy", specifier = ">=1.10" },
-    { name = "tensorwaves", extras = ["jax"] },
-    { name = "tensorwaves", extras = ["numba"], marker = "extra == 'numba'" },
-    { name = "tensorwaves", extras = ["tf"], marker = "extra == 'tf'" },
+    { name = "tensorwaves", extras = ["jax"], git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
+    { name = "tensorwaves", extras = ["numba"], marker = "extra == 'numba'", git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
+    { name = "tensorwaves", extras = ["tf"], marker = "extra == 'tf'", git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 provides-extras = ["numba", "tf"]
@@ -219,7 +219,7 @@ dev = [
     { name = "sphinx-pybtex-etal-style" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex" },
-    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tensorwaves", extras = ["phsp"], git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
     { name = "tqdm" },
     { name = "ty" },
 ]
@@ -238,7 +238,7 @@ doc = [
     { name = "sphinx-pybtex-etal-style" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex" },
-    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tensorwaves", extras = ["phsp"], git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
     { name = "tqdm" },
 ]
 jupyter = [
@@ -255,7 +255,7 @@ jupyter = [
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extras = ["rope"] },
     { name = "qrules", extras = ["viz"] },
-    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tensorwaves", extras = ["phsp"], git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
     { name = "tqdm" },
 ]
 notebooks = [
@@ -264,7 +264,7 @@ notebooks = [
     { name = "matplotlib" },
     { name = "pandas" },
     { name = "qrules", extras = ["viz"] },
-    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tensorwaves", extras = ["phsp"], git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
     { name = "tqdm" },
 ]
 style = [
@@ -275,7 +275,7 @@ style = [
     { name = "pytest" },
     { name = "qrules", extras = ["viz"] },
     { name = "sphinx-api-relink" },
-    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tensorwaves", extras = ["phsp"], git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46" },
     { name = "tqdm" },
     { name = "ty" },
 ]
@@ -4858,8 +4858,8 @@ wheels = [
 
 [[package]]
 name = "tensorwaves"
-version = "0.4.14"
-source = { registry = "https://pypi.org/simple" }
+version = "0.4.15.dev18+g6bb5d19e6"
+source = { git = "https://github.com/ComPWA/tensorwaves?rev=6bb5d19e6cb75775e521d9dec724c4fd3d61df46#6bb5d19e6cb75775e521d9dec724c4fd3d61df46" }
 dependencies = [
     { name = "attrs" },
     { name = "iminuit" },
@@ -4868,10 +4868,6 @@ dependencies = [
     { name = "pyyaml" },
     { name = "sympy" },
     { name = "tqdm" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/01/98/21bf25703dccb791f28893815963a3298a26ff853ff6172be5046e4f8b67/tensorwaves-0.4.14.tar.gz", hash = "sha256:dc81b4849373ef94ee2e73ccda5769c56a3a617f8887d3dcb5be57c568f7d805", size = 457807, upload-time = "2025-10-13T16:02:51.709Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/84/00/02e66ba88c4e37808880b235cfa72159801e853cffc8895a2e72b9c4bd8a/tensorwaves-0.4.14-py3-none-any.whl", hash = "sha256:825cf0dea4aaea44f2504ace00a4cf83a8f140c2bdda931f0c0e0967db15a9ed", size = 42988, upload-time = "2025-10-13T16:02:50.094Z" },
 ]
 
 [package.optional-dependencies]

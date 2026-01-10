@@ -233,7 +233,7 @@ sequence = ["doclive"]
 [tool.poe.tasks.lab]
 args = [{name = "paths", default = "", positional = true}]
 cmd = "jupyter lab ${paths}"
-help = "Run Jupyter Lab"
+help = "Launch Jupyter Lab"
 
 [tool.poe.tasks.linkcheck]
 cmd = """
@@ -263,7 +263,7 @@ executor = {group = "style"}
 help = "Perform all linting, formatting, and spelling checks"
 
 [tool.poe.tasks.test]
-cmd = "pytest --numprocesses=auto ${paths}"
+cmd = "pytest -m 'slow or not slow' --numprocesses=auto ${paths}"
 executor = {group = "test"}
 help = "Run all unit tests"
 
@@ -276,31 +276,38 @@ positional = true
 [tool.poe.tasks.test-all]
 help = "Run all tests on each supported Python version"
 sequence = [
-    {ref = "test-py 3.10"},
-    {ref = "test-py 3.11"},
-    {ref = "test-py 3.12"},
-    {ref = "test-py 3.13"},
-    {ref = "test-py 3.14"},
+    {ref = "test-py310 ${paths}"},
+    {ref = "test-py311 ${paths}"},
+    {ref = "test-py312 ${paths}"},
+    {ref = "test-py313 ${paths}"},
+    {ref = "test-py314 ${paths}"},
 ]
 
-[tool.poe.tasks.test-py]
-cmd = """
-uv run \
-    --group=test \
-    --isolated \
-    --no-dev \
-    --python=${version} \
-    pytest \
-        -m 'slow or not slow' \
-        --numprocesses=auto
-"""
-help = "Run all tests on a specific Python version"
-
-[[tool.poe.tasks.test-py.args]]
-default = "3.13"
-help = "Selected Python version"
-name = "version"
+[[tool.poe.tasks.test-all.args]]
+default = ""
+multiple = true
+name = "paths"
 positional = true
+
+[tool.poe.tasks.test-py310]
+env = {UV_PYTHON = "3.10"}
+ref = "test"
+
+[tool.poe.tasks.test-py311]
+env = {UV_PYTHON = "3.11"}
+ref = "test"
+
+[tool.poe.tasks.test-py312]
+env = {UV_PYTHON = "3.12"}
+ref = "test"
+
+[tool.poe.tasks.test-py313]
+env = {UV_PYTHON = "3.13"}
+ref = "test"
+
+[tool.poe.tasks.test-py314]
+env = {UV_PYTHON = "3.14"}
+ref = "test"
 
 [tool.pytest.ini_options]
 addopts = [
@@ -378,6 +385,7 @@ ignore = [
     "PLW1514",
     "PT001",
     "PTH",
+    "RUF067",
     "S301",
     "SIM108",
 ]
@@ -485,6 +493,12 @@ spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
 
 [[tool.ty.overrides]]
+include = ["docs/serialization.ipynb"]
+
+[tool.ty.overrides.rules]
+invalid-key = "ignore"
+
+[[tool.ty.overrides]]
 include = [
     "docs/comparison/d2kkk.ipynb",
     "docs/comparison/jpsi2phipipi.ipynb",
@@ -512,3 +526,4 @@ unused-ignore-comment = "warn"
 
 [tool.uv.sources]
 ampform = {git = "https://github.com/ComPWA/ampform", rev = "efa52389815763f82308b45af28b4f7c36cd5844"}
+tensorwaves = {git = "https://github.com/ComPWA/tensorwaves", rev = "6bb5d19e6cb75775e521d9dec724c4fd3d61df46"}

@@ -8,6 +8,7 @@ from sphinx_api_relink.helpers import (
 )
 
 set_intersphinx_version_remapping({
+    "ampform": {"0.15.12.dev18+gefa523898": "0.15.11"},
     "ipython": {
         "8.12.2": "8.12.1",
         "8.12.3": "8.12.1",
@@ -18,9 +19,11 @@ set_intersphinx_version_remapping({
         "8.0.6": "8.0.5",
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
+        "8.1.8": "8.1.5",
     },
     "matplotlib": {"3.9.1.post1": "3.9.1"},
     "mpl-interactions": {"0.24.1": "0.24.0"},
+    "tensorwaves": {"0.4.15.dev18+g6bb5d19e6": "0.4.14"},
 })
 
 BRANCH = get_branch_name()
@@ -53,6 +56,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "NodeType": "typing.TypeVar",
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
+    "PhaseSpaceFactorProtocol": "ampform.dynamics.phasespace.PhaseSpaceFactorProtocol",
     "PoolSum": "ampform.sympy.PoolSum",
     "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "qrules.topology.EdgeType": "typing.TypeVar",
@@ -61,7 +65,6 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "sp.Basic": "sympy.core.basic.Basic",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
-    "PhaseSpaceFactorProtocol": "ampform.dynamics.phasespace.PhaseSpaceFactorProtocol",
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
     "StateID": ("obj", "ampform_dpd.decay.StateID"),

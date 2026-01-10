@@ -511,6 +511,7 @@ class DefinedExpression:
 
 
 DynamicsBuilder = Callable[[ThreeBodyDecayChain], DefinedExpression]
+"""Protocol for functions that formulate dynamics expressions for decay chains."""
 
 
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:

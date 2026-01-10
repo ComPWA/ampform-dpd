@@ -62,7 +62,7 @@ def formulate(  # noqa: PLR0914
     states = get_states(model)
     helicity_symbols = sp.symbols("lambda(:4)", rational=True)
     allowed_helicities = {
-        symbol: create_spin_range(states[i].spin)
+        symbol: create_spin_range(states[i].spin)  # ty:ignore[invalid-argument-type]
         for i, symbol in enumerate(helicity_symbols)
     }
     amplitude_definitions = {}
@@ -73,7 +73,11 @@ def formulate(  # noqa: PLR0914
     for helicity_values in product(*allowed_helicities.values()):
         for chain_idx in range(n_chains):
             amp_defs = formulate_chain_amplitude(
-                *helicity_values, model, chain_idx, to_latex, additional_builders
+                *helicity_values,
+                model,  # ty:ignore[too-many-positional-arguments]
+                chain_idx,
+                to_latex,
+                additional_builders,
             )
             (amp_symbol, amp_expr), *parameters, (θij, θij_expr) = amp_defs.items()
             if not isinstance(amp_expr, sp.Expr):
@@ -105,7 +109,7 @@ def formulate(  # noqa: PLR0914
         intensity=intensity,
         amplitudes=amplitude_definitions,
         variables=angle_definitions,
-        parameter_defaults=parameter_defaults,
+        parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
         masses=masses,
         invariants=formulate_invariants(decay),
     )
@@ -172,7 +176,7 @@ def _get_decay_product_helicities(
                 raise ValueError(msg, vertex)
             return tuple(
                 (i, sp.Rational(λ)) for i, λ in zip(node, helicities, strict=True)
-            )
+            )  # ty:ignore[invalid-return-type]
     msg = "Could not fine a helicity for any resonance node"
     raise ValueError(msg)
 
@@ -189,7 +193,7 @@ def formulate_aligned_amplitude(
     wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
     _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(:4)^{\prime}", rational=True)
     states = get_states(model)
-    j0, j1, j2, j3 = (states[i].spin for i in sorted(states))
+    j0, j1, j2, j3 = (states[i].spin for i in sorted(states))  # ty:ignore[invalid-argument-type]
     A = _generate_amplitude_index_bases()
     amp_expr = PoolSum(
         sum(
@@ -258,7 +262,7 @@ def _get_final_state_helicities(
             if not isinstance(node, int):
                 continue
             collected_helicities[node] = sp.Rational(helicity)
-    return {i: collected_helicities[i] for i in sorted(collected_helicities)}
+    return {i: collected_helicities[i] for i in sorted(collected_helicities)}  # ty:ignore[invalid-argument-type, invalid-return-type]
 
 
 def formulate_recoupling(  # noqa: PLR0914
@@ -282,7 +286,7 @@ def formulate_recoupling(  # noqa: PLR0914
         if vertex_type == "parity":
             vertex = cast("ParityVertex", vertex)
             f = _sign_to_value(vertex.get("parity_factor", "+"))
-            return ParityRecoupling(λa, λb, λa0, λb0, f)
+            return ParityRecoupling(λa, λb, λa0, λb0, f)  # ty:ignore[invalid-argument-type]
         return HelicityRecoupling(λa, λb, λa0, λb0)
     if vertex_type == "ls":
         vertex = cast("LSVertex", vertex)
@@ -290,7 +294,7 @@ def formulate_recoupling(  # noqa: PLR0914
         s = sp.Rational(vertex["s"])
         ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
         j = _get_parent_spin(model, chain_idx, vertex_idx)
-        return LSRecoupling(λa, λb, l, s, ja, jb, j)
+        return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty:ignore[invalid-argument-type]
     msg = f"No implementation for vertex of type {vertex_type!r}"
     raise NotImplementedError(msg)
 
@@ -352,7 +356,7 @@ def get_existing_subsystem_ids(model: ModelDefinition) -> list[FinalStateID]:
     distribution_def = get_distribution_def(model)
     chain_defs = distribution_def["decay_description"]["chains"]
     subsystem_ids = {get_spectator_id(c["topology"]) for c in chain_defs}
-    return sorted(subsystem_ids)
+    return sorted(subsystem_ids)  # ty:ignore[invalid-return-type]
 
 
 @unevaluated
@@ -381,7 +385,7 @@ class ParityRecoupling(sp.Expr):
 
     def evaluate(self) -> sp.Expr:
         λa, λb, λa0, λb0, f = self.args
-        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)
+        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)  # ty:ignore[unsupported-operator]
 
 
 @unevaluated
@@ -400,7 +404,7 @@ class LSRecoupling(sp.Expr):
     def evaluate(self) -> sp.Expr:
         λa, λb, l, s, ja, jb, j = self.args
         return (
-            sp.sqrt((2 * l + 1) / (2 * j + 1))
-            * CG(ja, λa, jb, -λb, s, λa - λb)
-            * CG(l, 0, s, λa - λb, j, λa - λb)
+            sp.sqrt((2 * l + 1) / (2 * j + 1))  # ty:ignore[unsupported-operator]
+            * CG(ja, λa, jb, -λb, s, λa - λb)  # ty:ignore[unsupported-operator]
+            * CG(l, 0, s, λa - λb, j, λa - λb)  # ty:ignore[unsupported-operator]
         )
