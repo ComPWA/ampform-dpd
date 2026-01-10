@@ -251,15 +251,10 @@ executor = {group = "doc"}
 help = "Check external links in the documentation (requires internet connection)"
 
 [tool.poe.tasks.nb]
+args = [{name = "paths", default = "docs", multiple = true, positional = true}]
 cmd = "pytest --nbmake --nbmake-timeout=0 ${paths}"
 executor = {group = "notebooks", with = "nbmake"}
 help = "Run all notebooks"
-
-[[tool.poe.tasks.nb.args]]
-default = "docs"
-multiple = true
-name = "paths"
-positional = true
 
 [tool.poe.tasks.style]
 cmd = "pre-commit run --all-files"
@@ -529,5 +524,6 @@ possibly-unresolved-reference = "warn"
 unused-ignore-comment = "warn"
 
 [tool.uv.sources]
-ampform = {git = "https://github.com/ComPWA/ampform", rev = "efa52389815763f82308b45af28b4f7c36cd5844"}
-tensorwaves = {git = "https://github.com/ComPWA/tensorwaves", rev = "6bb5d19e6cb75775e521d9dec724c4fd3d61df46"}
+ampform = {git = "https://github.com/ComPWA/ampform", rev = "fc1d4e2920954738bb6620905f0de0a73a5a93cd"}
+qrules = {git = "https://github.com/ComPWA/qrules", rev = "33be556be51fff52869034327bcf6157eb6cf726"}
+tensorwaves = {git = "https://github.com/ComPWA/tensorwaves", rev = "916cf9202569ad5503eb1fb04e129ae0a6d8120d"}

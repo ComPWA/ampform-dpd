@@ -8,7 +8,7 @@ from sphinx_api_relink.helpers import (
 )
 
 set_intersphinx_version_remapping({
-    "ampform": {"0.15.12.dev18+gefa523898": "0.15.11"},
+    "ampform": {"0.15.12.dev25+gfc1d4e292": "0.15.11"},
     "ipython": {
         "8.12.2": "8.12.1",
         "8.12.3": "8.12.1",
@@ -23,7 +23,8 @@ set_intersphinx_version_remapping({
     },
     "matplotlib": {"3.9.1.post1": "3.9.1"},
     "mpl-interactions": {"0.24.1": "0.24.0"},
-    "tensorwaves": {"0.4.15.dev18+g6bb5d19e6": "0.4.14"},
+    "qrules": {"0.10.7.dev21+g33be556be": "0.10.6"},
+    "tensorwaves": {"0.4.15.dev19+g916cf9202": "0.4.14"},
 })
 
 BRANCH = get_branch_name()
