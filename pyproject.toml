@@ -491,6 +491,8 @@ include = [
     "docs/comparison/jpsi2pipipi.ipynb",
     "docs/index.ipynb",
     "docs/jpsi2ksp.ipynb",
+    "docs/lc2pkpi.ipynb",
+    "docs/serialization.ipynb",
     "docs/xib2pkk.ipynb",
 ]
 
@@ -498,6 +500,7 @@ include = [
 invalid-argument-type = "ignore"
 invalid-assignment = "ignore"
 invalid-return-type = "ignore"
+unknown-argument = "ignore"
 unresolved-attribute = "ignore"
 unsupported-operator = "ignore"
 
@@ -508,4 +511,4 @@ possibly-unresolved-reference = "warn"
 unused-ignore-comment = "warn"
 
 [tool.uv.sources]
-ampform = {git = "https://github.com/ComPWA/ampform", rev = "dfab5e2411566f2a84ffae2e194979193701c075"}
+ampform = {git = "https://github.com/ComPWA/ampform", rev = "efa52389815763f82308b45af28b4f7c36cd5844"}
