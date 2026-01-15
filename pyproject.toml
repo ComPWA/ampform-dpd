@@ -77,14 +77,14 @@ doc = [
     {include-group = "notebooks"},
 ]
 jupyter = [
+    "jupyter-ruff",
     "jupyterlab",
-    "jupyterlab-code-formatter",
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
     "jupyterlab-quickopen",
     "python-lsp-ruff",
-    "python-lsp-server[rope]",
+    "python-lsp-server",
     {include-group = "notebooks"},
 ]
 notebooks = [
@@ -308,7 +308,7 @@ ref = "test"
 env = {UV_PYTHON = "3.14"}
 ref = "test"
 
-[tool.pytest.ini_options]
+[tool.pytest]
 addopts = [
     "--color=yes",
     "--doctest-continue-on-failure",
@@ -316,6 +316,7 @@ addopts = [
     "--durations=3",
     "--ignore-glob=.virtual_documents",
     "--ignore=docs/conf.py",
+    "--import-mode=importlib",
     "-m not slow",
 ]
 doctest_optionflags = [
@@ -330,6 +331,7 @@ filterwarnings = [
 markers = [
     "slow: marks tests as slow (select with '-m slow')",
 ]
+minversion = "9.0"
 norecursedirs = [
     ".ipynb_checkpoints",
     "_build",
@@ -404,6 +406,7 @@ ignore-names = [
 ]
 
 [tool.ruff.lint.isort]
+known-first-party = ["ampform_dpd"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.pep8-naming]
@@ -463,7 +466,6 @@ ignore-names = [
 "tests/*" = [
     "D",
     "INP001",
-    "PGH001",
     "PLC2701",
     "PLR2004",
     "PLR6301",
@@ -521,7 +523,6 @@ unsupported-operator = "ignore"
 division-by-zero = "warn"
 possibly-missing-import = "warn"
 possibly-unresolved-reference = "warn"
-unused-ignore-comment = "warn"
 
 [tool.uv.sources]
 ampform = {git = "https://github.com/ComPWA/ampform", rev = "fc1d4e2920954738bb6620905f0de0a73a5a93cd"}
