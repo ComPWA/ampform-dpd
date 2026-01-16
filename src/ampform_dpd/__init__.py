@@ -500,7 +500,7 @@ def _binary_operation(op: Callable[[Any, Any], Any]):
 
 @define
 class DefinedExpression:
-    expression: sp.Expr = sp.S.One
+    expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)  # type:ignore[misc]
     parameters: dict[sp.Symbol, complex | float] = field(factory=dict)
     subexpressions: dict[sp.Symbol, sp.Expr] = field(factory=dict)
 
