@@ -142,7 +142,7 @@ def formulate_multichannel_breit_wigner(  # noqa: PLR0914
     angular_momentum = int(channel_definitions[0]["l"])
     d = sp.Symbol(f"R_{{{resonance}}}", nonnegative=True)
     channels = [ChannelArguments(s, mass, width, m1, m2, angular_momentum, d)]  # ty:ignore[invalid-argument-type]
-    parameter_defaults: dict[sp.Symbol, complex | float] = {
+    parameter_defaults: dict[sp.Basic, complex | float] = {
         mass: function_definition["mass"],
         width: channel_definitions[0]["gsq"],
         m1: channel_definitions[0]["ma"],

@@ -124,7 +124,7 @@ def formulate_chain_amplitude(  # noqa: PLR0914, PLR0917
     chain_idx: int,
     to_latex: Callable[[str], str] = identity_function,
     additional_builders: dict[str, PropagatorDynamicsBuilder] | None = None,
-) -> dict[sp.Symbol, complex | float | sp.Expr]:
+) -> dict[sp.Basic, complex | float | sp.Expr]:
     chain_defs = get_decay_chains(model)
     chain_definition = chain_defs[chain_idx]
     # -----------------------

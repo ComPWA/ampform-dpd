@@ -58,7 +58,7 @@ def _create_form_factor(s: sp.Symbol, isobar: IsobarNode) -> DefinedExpression:
         angular_momentum=_get_angular_momentum(isobar),  # ty:ignore[unknown-argument]
         meson_radius=meson_radius,  # ty:ignore[unknown-argument]
     )
-    parameter_defaults: dict[sp.Symbol, complex | float] = {
+    parameter_defaults: dict[sp.Basic, complex | float] = {
         meson_radius: 1,
         outgoing_state_mass1: to_particle(isobar.child1).mass,
         outgoing_state_mass2: to_particle(isobar.child2).mass,
@@ -87,7 +87,7 @@ def _create_breit_wigner(
         meson_radius=meson_radius,  # ty:ignore[unknown-argument]
         phsp_factor=phsp_factor,  # ty:ignore[unknown-argument]
     )
-    parameter_defaults: dict[sp.Symbol, complex | float] = {
+    parameter_defaults: dict[sp.Basic, complex | float] = {
         res_mass: isobar.parent.mass,
         res_width: isobar.parent.width,
         meson_radius: 1,
