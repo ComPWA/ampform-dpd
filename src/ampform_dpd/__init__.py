@@ -508,7 +508,7 @@ def _binary_operation(op: Callable[[Any, Any], Any]):
 class DefinedExpression:
     expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)
     parameters: dict[sp.Basic, complex | float] = field(factory=dict)
-    subexpressions: dict[sp.Symbol, sp.Expr] = field(factory=dict)
+    subexpressions: dict[sp.Basic, sp.Expr] = field(factory=dict)
 
     @_binary_operation(operator.mul)
     def __mul__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
