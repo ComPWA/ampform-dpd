@@ -53,8 +53,8 @@ file = "README.md"
 [project.urls]
 Changelog = "https://github.com/ComPWA/ampform-dpd/releases"
 Documentation = "https://compwa.github.io/ampform-dpd"
+Issues = "https://github.com/ComPWA/ampform-dpd/issues"
 Source = "https://github.com/ComPWA/ampform-dpd"
-Tracker = "https://github.com/ComPWA/ampform-dpd/issues"
 
 [dependency-groups]
 dev = [
