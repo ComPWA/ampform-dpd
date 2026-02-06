@@ -93,6 +93,7 @@ autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 2
 bibtex_bibfiles = ["references.bib"]
 bibtex_default_style = "unsrt_et_al"
+bibtex_use_mathjax = True
 codeautolink_concat_default = True
 copybutton_prompt_is_regexp = True
 copybutton_prompt_text = r">>> |\.\.\. "  # doctest
