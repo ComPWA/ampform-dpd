@@ -24,7 +24,7 @@ class TestDalitzPlotDecompositionBuilder:
         if jpsi2pksigma_reaction.formalism == "helicity" and not min_ls:
             pytest.skip("Helicity formalism with all LS not supported")
         transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=min_ls)
+        decay = to_three_body_decay(transitions, min_ls=min_ls)  # ty:ignore[invalid-argument-type]
         builder = DalitzPlotDecompositionBuilder(
             decay, min_ls=min_ls, all_subsystems=all_subsystems
         )
@@ -64,7 +64,7 @@ class TestDalitzPlotDecompositionBuilder:
         if jpsi2pksigma_reaction.formalism == "helicity" and not min_ls:
             pytest.skip("Helicity formalism with all LS not supported")
         transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=min_ls)
+        decay = to_three_body_decay(transitions, min_ls=min_ls)  # ty:ignore[invalid-argument-type]
         builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
         model = builder.formulate(
             reference_subsystem=2,
@@ -155,7 +155,7 @@ class TestDalitzPlotDecompositionBuilder:
         )
         transitions = normalize_state_ids(reaction.transitions)
         min_ls = basis == "helicity"
-        decay = to_three_body_decay(transitions, min_ls)
+        decay = to_three_body_decay(transitions, min_ls)  # ty:ignore[invalid-argument-type]
         builder = DalitzPlotDecompositionBuilder(decay, min_ls)
         # cspell:ignore coeff
         reference_subsystem = 1 if resonance.startswith("Sigma") else 3

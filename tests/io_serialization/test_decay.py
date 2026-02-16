@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import pytest
 import sympy as sp
 
 from ampform_dpd.io.serialization.decay import (
@@ -31,7 +32,7 @@ def test_get_initial_state(model_definition: ModelDefinition):
     assert initial_state.name == "Lc"
     assert initial_state.latex == "Lc"
     assert initial_state.spin is sp.Rational(1 / 2)
-    assert initial_state.mass == 2.28646
+    assert initial_state.mass == pytest.approx(2.28646)
     assert initial_state.parity is None
 
 

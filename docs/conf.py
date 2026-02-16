@@ -1,3 +1,6 @@
+import warnings
+
+from sphinx.deprecation import RemovedInSphinx10Warning
 from sphinx_api_relink.helpers import (
     get_branch_name,
     get_execution_mode,
@@ -8,7 +11,6 @@ from sphinx_api_relink.helpers import (
 )
 
 set_intersphinx_version_remapping({
-    "ampform": {"0.15.12.dev25+gfc1d4e292": "0.15.11"},
     "ipython": {
         "8.12.2": "8.12.1",
         "8.12.3": "8.12.1",
@@ -23,9 +25,8 @@ set_intersphinx_version_remapping({
     },
     "matplotlib": {"3.9.1.post1": "3.9.1"},
     "mpl-interactions": {"0.24.1": "0.24.0"},
-    "qrules": {"0.10.7.dev21+g33be556be": "0.10.6"},
-    "tensorwaves": {"0.4.15.dev19+g916cf9202": "0.4.14"},
 })
+warnings.filterwarnings("ignore", category=RemovedInSphinx10Warning)
 
 BRANCH = get_branch_name()
 ORGANIZATION = "ComPWA"
@@ -227,4 +228,5 @@ primary_domain = "py"
 project = REPO_TITLE
 pygments_style = "sphinx"
 release = get_package_version(PACKAGE)
+suppress_warnings = ["myst.directive_unknown"]
 version = get_package_version(PACKAGE)

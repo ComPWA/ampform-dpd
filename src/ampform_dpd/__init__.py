@@ -428,7 +428,7 @@ def _formulate_clebsch_gordan_factors(
 
 @cache
 def _generate_amplitude_index_bases() -> dict[FinalStateID, sp.IndexedBase]:
-    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # ty:ignore[no-matching-overload]
+    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # ty:ignore[invalid-return-type]
 
 
 class _AlignmentWignerGenerator:

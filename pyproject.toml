@@ -526,6 +526,3 @@ possibly-unresolved-reference = "warn"
 
 [tool.ty.terminal]
 error-on-warning = true
-
-[tool.uv.sources]
-tensorwaves = {git = "https://github.com/ComPWA/tensorwaves", rev = "377545e12f983bf6b0c6c6b1056865804d92e4eb"}
