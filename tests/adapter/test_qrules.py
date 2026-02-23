@@ -40,9 +40,7 @@ def test_convert_transitions(xib2pkk_reaction: ReactionInfo):
 def test_filter_min_ls(jpsi2pksigma_reaction: ReactionInfo):
     reaction = jpsi2pksigma_reaction
     transitions = tuple(
-        t
-        for t in reaction.transitions
-        if t.states[3].spin_projection == +0.5  # noqa: RUF069
+        t for t in reaction.transitions if t.states[3].spin_projection == +0.5
     )
 
     ls_couplings = _group_couplings(transitions)
