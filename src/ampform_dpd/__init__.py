@@ -305,7 +305,7 @@ def _get_best_reference_subsystems(decay: ThreeBodyDecay) -> FinalStateID:
     resonances_per_subsystem = [
         (k, len(decay.get_subsystem(k).chains)) for k in subsystem_ids
     ]
-    return max(resonances_per_subsystem, key=operator.itemgetter(1))[0]  # ty:ignore[invalid-return-type]
+    return max(resonances_per_subsystem, key=operator.itemgetter(1))[0]
 
 
 def _check_reference_subsystems(
@@ -528,7 +528,7 @@ DynamicsBuilder = Callable[[ThreeBodyDecayChain], DefinedExpression]
 
 def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
     return {
-        create_mass_symbol(decay.states[i]): decay.states[i].mass  # ty:ignore[invalid-argument-type]
+        create_mass_symbol(decay.states[i]): decay.states[i].mass
         for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
     }
 

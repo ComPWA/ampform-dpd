@@ -193,7 +193,7 @@ def formulate_aligned_amplitude(
     wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
     _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(:4)^{\prime}", rational=True)
     states = get_states(model)
-    j0, j1, j2, j3 = (states[i].spin for i in sorted(states))  # ty:ignore[invalid-argument-type]
+    j0, j1, j2, j3 = (states[i].spin for i in sorted(states))
     A = _generate_amplitude_index_bases()
     amp_expr = PoolSum(
         sum(
@@ -262,7 +262,7 @@ def _get_final_state_helicities(
             if not isinstance(node, int):
                 continue
             collected_helicities[node] = sp.Rational(helicity)
-    return {i: collected_helicities[i] for i in sorted(collected_helicities)}  # ty:ignore[invalid-argument-type, invalid-return-type]
+    return {i: collected_helicities[i] for i in sorted(collected_helicities)}
 
 
 def formulate_recoupling(  # noqa: PLR0914
@@ -356,7 +356,7 @@ def get_existing_subsystem_ids(model: ModelDefinition) -> list[FinalStateID]:
     distribution_def = get_distribution_def(model)
     chain_defs = distribution_def["decay_description"]["chains"]
     subsystem_ids = {get_spectator_id(c["topology"]) for c in chain_defs}
-    return sorted(subsystem_ids)  # ty:ignore[invalid-return-type]
+    return sorted(subsystem_ids)
 
 
 @unevaluated
