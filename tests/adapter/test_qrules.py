@@ -194,26 +194,26 @@ def test_to_three_body_decay(jpsi2pksigma_reaction: ReactionInfo, min_ls: bool):
         if min_ls:
             assert n_chains == 2
             assert production_ls == [
-                LSCoupling(L=1, S=1),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=0, S=1),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=1, S=1),
+                LSCoupling(L=0, S=1),
             ]
             assert decay_ls == [
-                LSCoupling(L=2, S=0.5),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=1, S=0.5),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=2, S=0.5),
+                LSCoupling(L=1, S=0.5),
             ]
         else:
             assert n_chains == 4
             assert production_ls == [
-                LSCoupling(L=1, S=1),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=1, S=2),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=0, S=1),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=2, S=1),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=1, S=1),
+                LSCoupling(L=1, S=2),
+                LSCoupling(L=0, S=1),
+                LSCoupling(L=2, S=1),
             ]
             assert decay_ls == [
-                LSCoupling(L=2, S=0.5),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=2, S=0.5),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=1, S=0.5),  # ty:ignore[invalid-argument-type]
-                LSCoupling(L=1, S=0.5),  # ty:ignore[invalid-argument-type]
+                LSCoupling(L=2, S=0.5),
+                LSCoupling(L=2, S=0.5),
+                LSCoupling(L=1, S=0.5),
+                LSCoupling(L=1, S=0.5),
             ]
     elif reaction.formalism == "helicity":
         assert n_chains == 2

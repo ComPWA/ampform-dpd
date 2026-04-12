@@ -68,12 +68,11 @@ def formulate(  # noqa: PLR0914
     amplitude_definitions = {}
     angle_definitions = {}
     parameter_defaults = {}
-    n_chains = len(get_decay_chains(model))
-    helicity_values: tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
+    n_chains: int = len(get_decay_chains(model))
     for helicity_values in product(*allowed_helicities.values()):
         for chain_idx in range(n_chains):
             amp_defs = formulate_chain_amplitude(
-                *helicity_values,
+                *helicity_values,  # ty:ignore[invalid-argument-type]
                 model,  # ty:ignore[too-many-positional-arguments]
                 chain_idx,
                 to_latex,
@@ -109,7 +108,7 @@ def formulate(  # noqa: PLR0914
         intensity=intensity,
         amplitudes=amplitude_definitions,
         variables=angle_definitions,
-        parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
+        parameter_defaults=parameter_defaults,
         masses=masses,
         invariants=formulate_invariants(decay),
     )

@@ -126,11 +126,11 @@ def _convert_transition(
             if index in transition.intermediate_states
             else _to_state(state, index=index)
             for index, state in transition.states.items()
-        },  # ty:ignore[invalid-argument-type]
+        },
         interactions={
             i: _to_ls_coupling(interaction)
             for i, interaction in transition.interactions.items()
-        },  # ty:ignore[invalid-argument-type]
+        },
     )
 
 
@@ -142,7 +142,7 @@ def _to_particle(
     return Particle(
         name=particle.name,
         latex=particle.name if particle.latex is None else particle.latex,
-        spin=particle.spin,  # ty:ignore[invalid-argument-type]
+        spin=particle.spin,
         parity=int(particle.parity),  # ty:ignore[invalid-argument-type]
         mass=particle.mass,
         width=particle.width,
@@ -238,7 +238,7 @@ def filter_min_ls(
                     else transition0.interactions[i]
                 )
                 for i in transition0.interactions
-            },  # ty:ignore[invalid-argument-type]
+            },
         )
         min_transitions.append(min_transition)
     return tuple(min_transitions)
@@ -280,7 +280,7 @@ def _impl_normalize_state_ids(obj) -> NoReturn:
 def _(obj: ReactionInfo) -> ReactionInfo:
     return ReactionInfo(
         # no attrs.evolve() in order to call __attrs_post_init__()
-        transitions=[_impl_normalize_state_ids(g) for g in obj.transitions],  # ty:ignore[invalid-argument-type]
+        transitions=[_impl_normalize_state_ids(g) for g in obj.transitions],
         formalism=obj.formalism,
     )
 
@@ -353,7 +353,7 @@ def _impl_permute_equal_final_states(obj) -> NoReturn:
 @_impl_permute_equal_final_states.register(ReactionInfo)
 def _(obj: ReactionInfo) -> ReactionInfo:
     return ReactionInfo(
-        transitions=permute_equal_final_states(obj.transitions),  # ty:ignore[invalid-argument-type]
+        transitions=permute_equal_final_states(obj.transitions),
         formalism=obj.formalism,
     )
 

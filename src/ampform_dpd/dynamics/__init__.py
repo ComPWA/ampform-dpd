@@ -29,7 +29,7 @@ class RelativisticBreitWigner(sp.Expr):
     meson_radius: Any
     phsp_factor: PhaseSpaceFactorProtocol = argument(
         default=PhaseSpaceFactor, sympify=False
-    )
+    )  # ty:ignore[invalid-assignment]
     _latex_repr_ = (
         R"\mathcal{{R}}_{{{angular_momentum}}}\left({s}, {mass0}, {gamma0}\right)"
     )
@@ -65,7 +65,7 @@ class BreitWignerMinL(sp.Expr):
     R_prod: Any
     phsp_factor: PhaseSpaceFactorProtocol = argument(
         default=PhaseSpaceFactor, sympify=False
-    )
+    )  # ty:ignore[invalid-assignment]
     _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
     def evaluate(self):  # noqa: PLR0914
@@ -176,7 +176,7 @@ class BreitWigner(sp.Expr):
     meson_radius: Any = 1
     phsp_factor: PhaseSpaceFactorProtocol = argument(
         default=PhaseSpaceFactor, sympify=False
-    )
+    )  # ty:ignore[invalid-assignment]
 
     def evaluate(self):
         width = self.energy_dependent_width()

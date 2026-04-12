@@ -123,7 +123,7 @@ class ThreeBodyDecay:
             subsystems = ", ".join(sorted(str(i) for i in _get_subsystem_ids(self)))
             msg = f"Decay {decay_description} only has subsystems {subsystems}, not {subsystem_id}"
             warn(msg, category=UserWarning)
-        return ThreeBodyDecay(self.states, filtered_chains)  # ty:ignore[invalid-argument-type]
+        return ThreeBodyDecay(self.states, filtered_chains)
 
 
 def _get_decay_description(decay: ThreeBodyDecay) -> str:
@@ -206,7 +206,7 @@ class ThreeBodyDecayChain:
     def _get_child_of_type(self, typ: type[T]) -> T:
         for child in self.decay.children:
             if isinstance(child, typ):
-                return child  # ty:ignore[invalid-return-type]
+                return child
         msg = f"The production node does not have any children that are of type {typ.__name__}"
         raise ValueError(msg)
 

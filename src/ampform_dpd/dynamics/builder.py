@@ -23,7 +23,7 @@ class BreitWignerBuilder:
     energy_dependent_width: bool = True
     decay_form_factor: bool = True
     production_form_factor: bool = True
-    phsp_factor: PhaseSpaceFactorProtocol = PhaseSpaceFactor
+    phsp_factor: PhaseSpaceFactorProtocol = PhaseSpaceFactor  # ty:ignore[invalid-assignment]
 
     def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
         """Formulate a (relativistic) Breit-Wigner for this resonance."""

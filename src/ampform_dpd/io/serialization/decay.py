@@ -40,7 +40,7 @@ def to_decay(
         chains=sorted({
             to_decay_chain(chain, initial_state, final_state, to_latex)
             for chain in get_decay_chains(model)
-        }),  # ty:ignore[invalid-argument-type]
+        }),
     )
 
 

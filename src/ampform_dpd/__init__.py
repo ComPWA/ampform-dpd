@@ -137,7 +137,7 @@ class DalitzPlotDecompositionBuilder:
         for args in product(*allowed_helicities.values()):
             for sub_system in subsystem_ids:
                 chain_model = self.formulate_subsystem_amplitude(
-                    *args,
+                    *args,  # ty:ignore[invalid-argument-type]
                     sub_system,  # ty:ignore[too-many-positional-arguments]
                     use_coefficients=use_coefficients,
                 )
@@ -167,7 +167,7 @@ class DalitzPlotDecompositionBuilder:
             ),
             amplitudes=amplitude_definitions,
             variables=angle_definitions,
-            parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
+            parameter_defaults=parameter_defaults,
             masses=masses,
             invariants=formulate_invariants(self.decay),
         )
@@ -255,7 +255,7 @@ class DalitzPlotDecompositionBuilder:
             intensity=sp.Abs(amp_symbol) ** 2,
             amplitudes={amp_symbol: amplitude_sum.expression},
             variables=amplitude_sum.subexpressions | {θij: θij_expr},
-            parameter_defaults=amplitude_sum.parameters,  # ty:ignore[invalid-argument-type]
+            parameter_defaults=amplitude_sum.parameters,
         )
 
     def formulate_aligned_amplitude(
@@ -506,20 +506,20 @@ def _binary_operation(op: Callable[[Any, Any], Any]):
 
 @define
 class DefinedExpression:
-    expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)
+    expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)  # ty:ignore[invalid-assignment]
     parameters: dict[sp.Basic, complex | float] = field(factory=dict)
     subexpressions: dict[sp.Basic, sp.Expr] = field(factory=dict)
 
     @_binary_operation(operator.mul)
-    def __mul__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    def __mul__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
     @_binary_operation(operator.add)
-    def __add__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    def __add__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
     @_binary_operation(operator.sub)
-    def __sub__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    def __sub__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
     @_binary_operation(operator.truediv)
-    def __truediv__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    def __truediv__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
     @_binary_operation(operator.pow)
-    def __pow__(self, other) -> DefinedExpression: ...  # type:ignore[empty-body]
+    def __pow__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
 
 
 DynamicsBuilder = Callable[[ThreeBodyDecayChain], DefinedExpression]
