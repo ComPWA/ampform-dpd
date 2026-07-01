@@ -21,7 +21,7 @@ from ampform_dpd.adapter.qrules import (
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable
+    from collections.abc import Iterable
 
     from qrules.topology import FrozenTransition
     from qrules.transition import ReactionInfo, StateTransition
