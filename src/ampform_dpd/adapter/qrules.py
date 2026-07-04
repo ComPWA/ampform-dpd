@@ -5,7 +5,7 @@ import logging
 from collections import abc, defaultdict
 from functools import singledispatch
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, NoReturn, TypeVar, overload
+from typing import TYPE_CHECKING, Any, TypeVar, overload
 
 import attrs
 import qrules
@@ -270,7 +270,7 @@ def normalize_state_ids(obj):
 
 
 @singledispatch
-def _impl_normalize_state_ids(obj) -> NoReturn:
+def _impl_normalize_state_ids(obj):
     """Relabel the state IDs so that they lie in the range :math:`[0, N)`."""
     msg = f"Cannot relabel edge IDs of a {type(obj).__name__}"
     raise NotImplementedError(msg)
@@ -345,7 +345,7 @@ def permute_equal_final_states(obj: T) -> T:
 
 
 @singledispatch
-def _impl_permute_equal_final_states(obj) -> NoReturn:
+def _impl_permute_equal_final_states(obj):
     msg = f"Cannot permute equal final states of a {type(obj)}"
     raise NotImplementedError(msg)
 
