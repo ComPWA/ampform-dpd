@@ -1,15 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from qrules.transition import ReactionInfo
 
 from ampform_dpd import _get_best_reference_subsystems
 from ampform_dpd.adapter.qrules import to_three_body_decay
 from ampform_dpd.decay import IsobarNode, Particle
-
-if TYPE_CHECKING:
-    from qrules.transition import ReactionInfo
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 dummy_args = dict(mass=0, width=0)

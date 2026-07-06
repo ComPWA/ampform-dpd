@@ -43,7 +43,7 @@ from ampform_dpd.spin import create_spin_range
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
-    from typing import Any, Literal
+    from typing import Literal
 
 
 @frozen
