@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from collections.abc import Callable
 from typing import TYPE_CHECKING, SupportsFloat
 
 import pytest
@@ -21,7 +20,7 @@ from ampform_dpd.adapter.qrules import (
 from ampform_dpd.decay import LSCoupling, Particle
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Callable, Iterable
 
     from qrules.topology import FrozenTransition
     from qrules.transition import ReactionInfo, StateTransition
