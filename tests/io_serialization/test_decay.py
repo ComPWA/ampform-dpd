@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
 import sympy as sp
 
@@ -11,6 +13,9 @@ from ampform_dpd.io.serialization.decay import (
     to_decay,
     to_decay_chain,
 )
+
+if TYPE_CHECKING:
+    from ampform_dpd.io.serialization.format import ModelDefinition
 
 
 def test_get_final_state(model_definition: ModelDefinition):
