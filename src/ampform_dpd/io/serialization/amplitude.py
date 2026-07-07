@@ -91,10 +91,10 @@ def formulate(  # noqa: PLR0914
             angle_definitions[θij] = θij_expr
             parameter_defaults.update(dict(parameters))
     aligned_amp, zeta_defs = formulate_aligned_amplitude(model, *helicity_symbols)
-    angle_definitions.update(zeta_defs)
+    angle_definitions.update(zeta_defs)  # ty:ignore[no-matching-overload]
     decay = to_decay(model)
     masses = create_mass_symbol_mapping(decay)
-    parameter_defaults.update(masses)
+    parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
     if cleanup_summations:
         aligned_amp = aligned_amp.cleanup()
     intensity = PoolSum(
@@ -106,9 +106,9 @@ def formulate(  # noqa: PLR0914
     return AmplitudeModel(
         decay=decay,
         intensity=intensity,
-        amplitudes=amplitude_definitions,
-        variables=angle_definitions,
-        parameter_defaults=parameter_defaults,
+        amplitudes=amplitude_definitions,  # ty:ignore[invalid-argument-type]
+        variables=angle_definitions,  # ty:ignore[invalid-argument-type]
+        parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
         masses=masses,
         invariants=formulate_invariants(decay),
     )
@@ -334,7 +334,7 @@ def _get_child_spins(
             spins.append(sp.Rational(final_state[node_item]))
         else:
             spins.append(__get_propagator_spin(chain_definition))
-    return tuple(spins)
+    return tuple(spins)  # ty:ignore[invalid-return-type]
 
 
 def __get_propagator_spin(chain_definition: DecayChain) -> sp.Rational:

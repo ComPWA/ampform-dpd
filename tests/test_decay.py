@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from qrules.transition import ReactionInfo
+from typing import TYPE_CHECKING
 
 from ampform_dpd import _get_best_reference_subsystems
 from ampform_dpd.adapter.qrules import to_three_body_decay

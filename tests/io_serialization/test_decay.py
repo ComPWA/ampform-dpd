@@ -11,7 +11,6 @@ from ampform_dpd.io.serialization.decay import (
     to_decay,
     to_decay_chain,
 )
-from ampform_dpd.io.serialization.format import ModelDefinition
 
 
 def test_get_final_state(model_definition: ModelDefinition):
