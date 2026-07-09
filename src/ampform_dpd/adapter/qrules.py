@@ -105,7 +105,7 @@ def _to_decay_chain(
             ),
             child2=transition.states[spectator_id],
             interaction=production_node,
-        )  # ty:ignore[invalid-argument-type]
+        )
     )
 
 
@@ -167,7 +167,7 @@ def _to_state(obj: Any, index: StateIDTemplate | None = None):
         parity=int(obj.parity),  # ty:ignore[invalid-argument-type]
         mass=obj.mass,
         width=obj.width,
-        index=index,
+        index=index,  # ty:ignore[invalid-argument-type]
     )
 
 
