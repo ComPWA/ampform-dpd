@@ -1,54 +1,42 @@
-[build-system]
-build-backend = "setuptools.build_meta"
-requires = [
-    "setuptools>=61.2",
-    "setuptools_scm",
-]
-
 [project]
-authors = [{name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de"}]
+name = "ampform-dpd"
+description = "Symbolic expressions for Dalitz-Plot Decomposition"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{ name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de" }]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: Apache Software License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python",
-    "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
     "Typing :: Typed",
 ]
 dependencies = [
-    "ampform>=0.15.10", # aslatex with keyword arguments; ampform.sympy.cached module
-    "attrs>=20.1.0", # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
+    "ampform>=0.15.10",  # aslatex with keyword arguments; ampform.sympy.cached module
+    "attrs>=20.1.0",  # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
     "frozendict",
     "numpy",
     "qrules>=0.10.0",
-    "sympy>=1.10", # module sympy.printing.numpy and array expressions with shape kwarg
+    "sympy>=1.10",  # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
     'typing-extensions; python_version <"3.11.0"',
 ]
-description = "Symbolic expressions for Dalitz-Plot Decomposition"
 dynamic = ["version"]
-license = {file = "LICENSE"}
-name = "ampform-dpd"
-requires-python = ">=3.10"
-
-[project.optional-dependencies]
-numba = ["tensorwaves[numba]"]
-tf = ["tensorwaves[tf]"]
 
 [project.readme]
-content-type = "text/markdown"
 file = "README.md"
+content-type = "text/markdown"
 
 [project.urls]
 Changelog = "https://github.com/ComPWA/ampform-dpd/releases"
@@ -56,13 +44,17 @@ Documentation = "https://compwa.github.io/ampform-dpd"
 Issues = "https://github.com/ComPWA/ampform-dpd/issues"
 Source = "https://github.com/ComPWA/ampform-dpd"
 
+[project.optional-dependencies]
+numba = ["tensorwaves[numba]"]
+tf = ["tensorwaves[tf]"]
+
 [dependency-groups]
 dev = [
     "ruff",
-    {include-group = "doc"},
-    {include-group = "jupyter"},
-    {include-group = "style"},
-    {include-group = "test"},
+    { include-group = "doc" },
+    { include-group = "jupyter" },
+    { include-group = "style" },
+    { include-group = "test" },
 ]
 doc = [
     "myst-nb",
@@ -74,7 +66,7 @@ doc = [
     "sphinx-pybtex-etal-style",
     "sphinx-togglebutton",
     "sphinxcontrib-bibtex",
-    {include-group = "notebooks"},
+    { include-group = "notebooks" },
 ]
 jupyter = [
     "jupyter-ruff",
@@ -85,7 +77,7 @@ jupyter = [
     "jupyterlab-quickopen",
     "python-lsp-ruff",
     "python-lsp-server",
-    {include-group = "notebooks"},
+    { include-group = "notebooks" },
 ]
 notebooks = [
     "ipympl",
@@ -98,8 +90,8 @@ notebooks = [
 ]
 style = [
     "ty",
-    {include-group = "notebooks"},
-    {include-group = "types"},
+    { include-group = "notebooks" },
+    { include-group = "types" },
 ]
 test = [
     "pytest",
@@ -111,19 +103,12 @@ types = [
     "sphinx-api-relink",
 ]
 
-[tool.setuptools]
-include-package-data = false
-package-dir = {"" = "src"}
-
-[tool.setuptools.package-data]
-ampform_dpd = ["py.typed"]
-
-[tool.setuptools.packages.find]
-namespaces = false
-where = ["src"]
-
-[tool.setuptools_scm]
-write_to = "src/ampform_dpd/version.py"
+[build-system]
+requires = [
+    "setuptools>=61.2",
+    "setuptools_scm",
+]
+build-backend = "setuptools.build_meta"
 
 [tool.compwa.policy]
 doc-apt-packages = "graphviz"
@@ -137,9 +122,7 @@ github-pages = true
 type-checker = ["ty"]
 
 [tool.coverage.report]
-exclude_also = [
-    "if TYPE_CHECKING:",
-]
+exclude_also = ["if TYPE_CHECKING:"]
 
 [tool.coverage.run]
 branch = true
@@ -170,8 +153,8 @@ sphinx-build \
     docs/ \
     docs/_build/html/
 """
-env = {PYTHONWARNINGS = ""}
-executor = {group = "doc"}
+env = { PYTHONWARNINGS = "" }
+executor = { group = "doc" }
 help = "Build documentation and API"
 
 [tool.poe.groups.doc.tasks.doclive]
@@ -198,21 +181,21 @@ sphinx-autobuild \
     docs/ \
     docs/_build/html/
 """
-executor = {group = "doc", with = "sphinx-autobuild"}
+executor = { group = "doc", with = "sphinx-autobuild" }
 help = "Set up a server to directly preview changes to the HTML pages"
 
 [tool.poe.groups.doc.tasks.docnb]
-env = {EXECUTE_NB = "yes"}
+env = { EXECUTE_NB = "yes" }
 help = "Build documentation and API with cached notebook execution"
 sequence = ["doc"]
 
 [tool.poe.groups.doc.tasks.docnb-force]
-env = {FORCE_EXECUTE_NB = "yes"}
+env = { FORCE_EXECUTE_NB = "yes" }
 help = "Build documentation and API with notebook execution (no cache)"
 sequence = ["doc"]
 
 [tool.poe.groups.doc.tasks.docnblive]
-env = {EXECUTE_NB = "yes"}
+env = { EXECUTE_NB = "yes" }
 help = "Set up a server to directly preview changes to the HTML pages with cached notebook execution"
 sequence = ["doclive"]
 
@@ -224,23 +207,23 @@ sphinx-build \
     docs/ \
     docs/_build/linkcheck/
 """
-env = {PYTHONWARNINGS = ""}
-executor = {group = "doc"}
+env = { PYTHONWARNINGS = "" }
+executor = { group = "doc" }
 help = "Check external links in the documentation (requires internet connection)"
 
 [tool.poe.groups.notebook]
 heading = "Notebooks"
 
 [tool.poe.groups.notebook.tasks.lab]
-args = [{name = "paths", default = "", positional = true}]
+args = [{ name = "paths", default = "", positional = true }]
 cmd = "jupyter lab ${paths}"
-executor = {group = "jupyter"}
+executor = { group = "jupyter" }
 help = "Launch Jupyter Lab"
 
 [tool.poe.groups.notebook.tasks.nb]
-args = [{name = "paths", default = "docs", multiple = true, positional = true}]
+args = [{ name = "paths", default = "docs", multiple = true, positional = true }]
 cmd = "pytest --nbmake --nbmake-timeout=0 ${paths}"
-executor = {group = "notebooks", with = "nbmake"}
+executor = { group = "notebooks", with = "nbmake" }
 help = "Run all notebooks"
 
 [tool.poe.groups.test]
@@ -256,7 +239,7 @@ pytest \
     --numprocesses=auto \
     ${paths}
 """
-executor = {group = "test"}
+executor = { group = "test" }
 help = "Compute how much of the source code is covered by tests"
 
 [[tool.poe.groups.test.tasks.cov.args]]
@@ -267,7 +250,7 @@ positional = true
 
 [tool.poe.groups.test.tasks.test]
 cmd = "pytest -m 'slow or not slow' --numprocesses=auto ${paths}"
-executor = {group = "test"}
+executor = { group = "test" }
 help = "Run all unit tests"
 
 [[tool.poe.groups.test.tasks.test.args]]
@@ -279,11 +262,11 @@ positional = true
 [tool.poe.groups.test.tasks.test-all]
 help = "Run all tests on each supported Python version"
 sequence = [
-    {ref = "test-py310 ${paths}"},
-    {ref = "test-py311 ${paths}"},
-    {ref = "test-py312 ${paths}"},
-    {ref = "test-py313 ${paths}"},
-    {ref = "test-py314 ${paths}"},
+    "test-py310 ${paths}",
+    "test-py311 ${paths}",
+    "test-py312 ${paths}",
+    "test-py313 ${paths}",
+    "test-py314 ${paths}",
 ]
 
 [[tool.poe.groups.test.tasks.test-all.args]]
@@ -293,23 +276,23 @@ name = "paths"
 positional = true
 
 [tool.poe.groups.test.tasks.test-py310]
-env = {UV_PYTHON = "3.10"}
+env = { UV_PYTHON = "3.10" }
 ref = "test"
 
 [tool.poe.groups.test.tasks.test-py311]
-env = {UV_PYTHON = "3.11"}
+env = { UV_PYTHON = "3.11" }
 ref = "test"
 
 [tool.poe.groups.test.tasks.test-py312]
-env = {UV_PYTHON = "3.12"}
+env = { UV_PYTHON = "3.12" }
 ref = "test"
 
 [tool.poe.groups.test.tasks.test-py313]
-env = {UV_PYTHON = "3.13"}
+env = { UV_PYTHON = "3.13" }
 ref = "test"
 
 [tool.poe.groups.test.tasks.test-py314]
-env = {UV_PYTHON = "3.14"}
+env = { UV_PYTHON = "3.14" }
 ref = "test"
 
 [tool.poe.tasks.all]
@@ -325,16 +308,21 @@ sequence = [
 
 [tool.poe.tasks.style]
 cmd = "pre-commit run --all-files"
-executor = {group = "style"}
+executor = { group = "style" }
 help = "Perform all linting, formatting, and spelling checks"
 
 [tool.poe.tasks.upgrade]
-executor = {type = "simple"}
+executor = { type = "simple" }
 help = "Upgrade lock files"
-parallel = [
-    {cmd = "pre-commit autoupdate -j8"},
-    {cmd = "uv lock --upgrade"},
-]
+parallel = ["_upgrade-precommit", "_upgrade-uv"]
+
+[tool.poe.tasks._upgrade-precommit]
+cmd = "pre-commit autoupdate -j8"
+executor = { type = "simple" }
+
+[tool.poe.tasks._upgrade-uv]
+cmd = "uv lock --upgrade"
+executor = { type = "simple" }
 
 [tool.pytest]
 addopts = [
@@ -347,37 +335,27 @@ addopts = [
     "--import-mode=importlib",
     "-m not slow",
 ]
-doctest_optionflags = [
-    "IGNORE_EXCEPTION_DETAIL",
-]
+doctest_optionflags = ["IGNORE_EXCEPTION_DETAIL"]
 filterwarnings = [
     "error",
     "ignore::pytest.PytestUnraisableExceptionWarning",
     "ignore:The `hash` argument is deprecated in favor of `unsafe_hash` and will be removed in or after August 2025.:DeprecationWarning",
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
-markers = [
-    "slow: marks tests as slow (select with '-m slow')",
-]
+markers = ["slow: marks tests as slow (select with '-m slow')"]
 minversion = "9.0"
 norecursedirs = [
     ".ipynb_checkpoints",
     "_build",
 ]
-testpaths = [
-    "src",
-    "tests",
-]
+testpaths = ["src", "tests"]
 
 [tool.ruff]
 extend-exclude = ["typings"]
 extend-include = ["*.ipynb"]
 preview = true
 show-fixes = true
-src = [
-    "src",
-    "tests",
-]
+src = ["src", "tests"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -422,7 +400,7 @@ select = ["ALL"]
 task-tags = ["cspell"]
 
 [tool.ruff.lint.flake8-builtins]
-builtins-ignorelist = ["display"]
+ignorelist = ["display"]
 
 [tool.ruff.lint.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
@@ -509,18 +487,34 @@ convention = "google"
 [tool.ruff.lint.pylint]
 allow-dunder-method-names = ["_latex_repr_"]
 
-[tool.tomlsort]
-all = false
-ignore_case = true
-in_place = true
-sort_first = [
-    "build-system",
-    "project",
-    "tool.setuptools",
-    "tool.setuptools_scm",
-]
-spaces_indent_inline_array = 4
-trailing_comma_inline_array = true
+[tool.setuptools]
+include-package-data = false
+package-dir = { "" = "src" }
+
+[tool.setuptools.package-data]
+ampform_dpd = ["py.typed"]
+
+[tool.setuptools.packages.find]
+namespaces = false
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/ampform_dpd/version.py"
+
+[tool.tombi.files]
+exclude = ["uv.lock"]
+
+[tool.tombi.format.rules]
+indent-width = 4
+line-width = 88
+
+[tool.tombi.lint.rules]
+key-empty = "off"
+
+[[tool.tombi.schemas]]
+root = "tool.compwa.policy"
+path = "https://raw.githubusercontent.com/ComPWA/policy/1a1d5e8a13c4f76cee452121b5bafe2286dec2f4/compwa-policy.schema.json"
+include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
 include = ["docs/serialization.ipynb"]
