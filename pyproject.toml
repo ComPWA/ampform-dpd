@@ -90,7 +90,6 @@ notebooks = [
 ]
 style = [
     "ty",
-    { include-group = "notebooks" },
     { include-group = "types" },
 ]
 test = [
@@ -101,6 +100,7 @@ test = [
 types = [
     "pytest",
     "sphinx-api-relink",
+    { include-group = "notebooks" },
 ]
 
 [build-system]

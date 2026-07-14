@@ -194,8 +194,17 @@ test = [
     { name = "pytest-xdist" },
 ]
 types = [
+    { name = "ipympl" },
+    { name = "ipywidgets" },
+    { name = "matplotlib", version = "3.10.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "matplotlib", version = "3.11.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "pandas", version = "3.0.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pytest" },
+    { name = "qrules", extra = ["viz"] },
     { name = "sphinx-api-relink" },
+    { name = "tensorwaves", extra = ["phsp"] },
+    { name = "tqdm" },
 ]
 
 [package.metadata]
@@ -308,8 +317,15 @@ test = [
     { name = "pytest-xdist" },
 ]
 types = [
+    { name = "ipympl" },
+    { name = "ipywidgets" },
+    { name = "matplotlib" },
+    { name = "pandas" },
     { name = "pytest" },
+    { name = "qrules", extras = ["viz"] },
     { name = "sphinx-api-relink" },
+    { name = "tensorwaves", extras = ["phsp"] },
+    { name = "tqdm" },
 ]
 
 [[package]]
