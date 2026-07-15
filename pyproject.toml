@@ -3,6 +3,7 @@ name = "ampform-dpd"
 description = "Symbolic expressions for Dalitz-Plot Decomposition"
 requires-python = ">=3.10"
 license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [{ name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de" }]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -502,7 +503,7 @@ where = ["src"]
 version_file = "src/ampform_dpd/version.py"
 
 [tool.tombi.files]
-exclude = ["uv.lock"]
+exclude = ["**/uv.lock"]
 
 [tool.tombi.format.rules]
 indent-width = 4
@@ -513,7 +514,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/1a1d5e8a13c4f76cee452121b5bafe2286dec2f4/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.0/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
