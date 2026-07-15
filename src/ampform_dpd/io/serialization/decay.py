@@ -72,7 +72,7 @@ def to_decay_chain(
                 child2=final_state[child2_id],
             ),
             child2=final_state[spectator_id],
-        )  # ty:ignore[invalid-argument-type]
+        )
     )
 
 

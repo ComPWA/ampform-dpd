@@ -43,7 +43,7 @@ from ampform_dpd.spin import create_spin_range
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
-    from typing import Any, Literal
+    from typing import Literal
 
 
 @frozen
@@ -146,9 +146,9 @@ class DalitzPlotDecompositionBuilder:
                 parameter_defaults.update(chain_model.parameter_defaults)
         aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
             *helicity_symbols,
-            reference_subsystem,  # ty:ignore[too-many-positional-arguments]
+            reference_subsystem,
         )
-        angle_definitions.update(zeta_defs)
+        angle_definitions.update(zeta_defs)  # ty:ignore[no-matching-overload]
         masses = create_mass_symbol_mapping(self.decay)
         parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
         if cleanup_summations:

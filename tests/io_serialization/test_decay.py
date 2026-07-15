@@ -13,7 +13,6 @@ from ampform_dpd.io.serialization.decay import (
     to_decay,
     to_decay_chain,
 )
-from ampform_dpd.io.serialization.format import ModelDefinition
 
 if TYPE_CHECKING:
     from ampform_dpd.io.serialization.format import ModelDefinition
