@@ -130,6 +130,26 @@ class FlattéSWave(sp.Expr):
 
 @unevaluated
 class MultichannelBreitWigner(sp.Expr):
+    r"""Breit--Wigner with a running width summed over several decay channels.
+
+    Each channel is a `ChannelArguments` term :math:`\Gamma_i(s)`, giving the lineshape
+
+    .. math::
+
+        \frac{1}{m_0^2 - s - i \sum_i g_i^2 \frac{2 p_i(s)}{\sqrt{s}} F_{L_i}^2(s)},
+
+    with :math:`g_i^2` the coupling squared of each channel, :math:`p_i` the two-body
+    break-up momentum, and :math:`F_{L_i}` the form factor. This is the convention used
+    by the `amplitude-serialization
+    <https://rub-ep1.github.io/amplitude-serialization>`_ models.
+
+    .. seealso:: `ComPWA/ampform-dpd#198
+        <https://github.com/ComPWA/ampform-dpd/issues/198>`_,
+        `RUB-EP1/amplitude-serialization#87
+        <https://github.com/RUB-EP1/amplitude-serialization/pull/87>`_, and `#90
+        <https://github.com/RUB-EP1/amplitude-serialization/pull/90>`_.
+    """
+
     s: Any
     mass: Any
     channels: tuple[ChannelArguments, ...]
@@ -150,6 +170,20 @@ class MultichannelBreitWigner(sp.Expr):
 
 @unevaluated
 class ChannelArguments(sp.Expr):
+    r"""One channel term of a `MultichannelBreitWigner` running width.
+
+    The ``width`` argument is the **coupling squared** :math:`g_i^2` (the serialized
+    ``gsq`` value), not an energy-dependent width. Following the
+    `amplitude-serialization <https://rub-ep1.github.io/amplitude-serialization>`_
+    convention, ``evaluate()`` returns
+
+    .. math::
+
+        \Gamma_i(s) = g_i^2 \frac{2 p_i(s)}{m_0 \sqrt{s}} F_{L_i}^2(s),
+
+    with :math:`p_i` the two-body break-up momentum and :math:`F_{L_i}` the form factor.
+    """
+
     s: Any
     m0: Any
     width: Any
