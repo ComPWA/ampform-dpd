@@ -161,8 +161,9 @@ class ChannelArguments(sp.Expr):
 
     def evaluate(self) -> sp.Expr:
         s, m0, Γ0, m1, m2, L, R = self.args
+        p = BreakupMomentum(s, m1, m2)
         ff = FormFactor(s, m1, m2, L, R) ** 2
-        return Γ0 * m0 / sp.sqrt(s) * ff  # ty:ignore[unsupported-operator]
+        return Γ0 * 2 * p / (m0 * sp.sqrt(s)) * ff  # ty:ignore[unsupported-operator]
 
 
 @unevaluated
