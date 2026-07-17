@@ -116,20 +116,20 @@ def _create_two_channel_breit_wigner(s: sp.Expr) -> MultichannelBreitWigner:
         ChannelArguments(
             s,
             mass,
-            sp.Float(0.35),
-            sp.Float(0.1),
-            sp.Float(0.2),
-            sp.Integer(0),
-            sp.Integer(1),
+            width=0.35,  # ty:ignore[unknown-argument]
+            m1=0.1,  # ty:ignore[unknown-argument]
+            m2=0.2,  # ty:ignore[unknown-argument]
+            angular_momentum=0,  # ty:ignore[unknown-argument]
+            meson_radius=1,  # ty:ignore[unknown-argument]
         ),
         ChannelArguments(
             s,
             mass,
-            sp.Float(0.35),
-            sp.Float(0.3),
-            sp.Float(0.25),
-            sp.Integer(0),
-            sp.Float(1.5),
+            width=0.35,  # ty:ignore[unknown-argument]
+            m1=0.3,  # ty:ignore[unknown-argument]
+            m2=0.25,  # ty:ignore[unknown-argument]
+            angular_momentum=0,  # ty:ignore[unknown-argument]
+            meson_radius=1.5,  # ty:ignore[unknown-argument]
         ),
     )
     return MultichannelBreitWigner(s, mass, channels)  # ty:ignore[invalid-argument-type]
