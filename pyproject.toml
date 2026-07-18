@@ -531,6 +531,7 @@ include = [
     "docs/index.ipynb",
     "docs/jpsi2ksp.ipynb",
     "docs/lc2pkpi.ipynb",
+    "docs/polarization.ipynb",
     "docs/serialization.ipynb",
     "docs/xib2pkk.ipynb",
 ]

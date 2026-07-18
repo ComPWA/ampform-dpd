@@ -142,11 +142,15 @@
   "useGitignore": true,
   "version": "0.2",
   "words": [
+    "allclose",
     "AmpForm",
+    "arccos",
+    "asarray",
     "Blatt",
     "Breit",
     "Bugg",
     "Clebsch",
+    "cmap",
     "coherences",
     "Colab",
     "ComPWA",
@@ -158,6 +162,7 @@
     "Gordan",
     "helicities",
     "helicity",
+    "isfinite",
     "isospin",
     "JHEP",
     "JPAC",
@@ -170,8 +175,11 @@
     "Marangotto",
     "mathbb",
     "matplotlib",
+    "mdash",
     "msigma",
+    "ndim",
     "NumPy",
+    "parametrizations",
     "PyPA",
     "pyplot",
     "pytest",
@@ -181,6 +189,7 @@
     "sympify",
     "SymPy",
     "TensorWaves",
+    "unitarity",
     "Weisskopf"
   ]
 }
