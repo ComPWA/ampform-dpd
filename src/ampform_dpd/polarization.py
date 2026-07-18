@@ -4,7 +4,7 @@ The distribution of a decay that originates from a polarized initial state depen
 the orientation of the decay plane with respect to the production frame. This
 orientation is parametrized by three Euler angles :math:`(\\phi, \\theta, \\chi)` and
 the polarization itself is described by a spin-density matrix :math:`\\rho`. See
-:cite:`Marangotto:2019ucc` and `this section
+:cite:`JPAC:2019ufm` and `this section
 <https://redeboer.github.io/phd-thesis/chapter3.html#sec-differential-decay-rate>`_ for
 the theory behind this.
 """
