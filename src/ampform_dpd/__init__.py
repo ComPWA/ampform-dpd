@@ -39,6 +39,7 @@ from ampform_dpd.decay import (
     get_decay_product_ids,
     to_particle,
 )
+from ampform_dpd.polarization import EULER_ANGLES, create_spin_density_matrix
 from ampform_dpd.spin import create_spin_range
 
 if TYPE_CHECKING:
@@ -104,6 +105,7 @@ class DalitzPlotDecompositionBuilder:
         reference_subsystem: FinalStateID | None = None,
         *,
         cleanup_summations: bool = False,
+        polarized: bool = False,
         use_coefficients: bool = False,
     ) -> AmplitudeModel:
         """Formulate the amplitude model given the configuration of this builder.
@@ -113,6 +115,10 @@ class DalitzPlotDecompositionBuilder:
                 helicities. If `None`, the subsystem with the most resonances is chosen.
             cleanup_summations: Whether to remove helicity indices in the summations if
                 their corresponding state is spinless.
+            polarized: Whether to formulate the intensity with a spin-density matrix
+                for the initial state, so that the intensity becomes differential in
+                the Euler angles that orient the decay plane. See
+                :meth:`formulate_polarized_intensity`.
             use_coefficients: Whether to use a single complex coefficient per decay
                 chain, instead of separate coefficients for each helicity coupling.
         """
@@ -144,27 +150,29 @@ class DalitzPlotDecompositionBuilder:
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)
                 parameter_defaults.update(chain_model.parameter_defaults)
-        aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
-            *helicity_symbols,
-            reference_subsystem,
-        )
+        if polarized:
+            intensity, zeta_defs = self.formulate_polarized_intensity(
+                reference_subsystem
+            )
+        else:
+            aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
+                *helicity_symbols,
+                reference_subsystem,
+            )
+            if cleanup_summations:
+                aligned_amp = aligned_amp.cleanup()
+            intensity = PoolSum(
+                sp.Abs(aligned_amp) ** 2,
+                *allowed_helicities.items(),
+            )
         angle_definitions.update(zeta_defs)  # ty:ignore[no-matching-overload]
         masses = create_mass_symbol_mapping(self.decay)
         parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
         if cleanup_summations:
-            aligned_amp = aligned_amp.cleanup()
-        intensity = PoolSum(
-            sp.Abs(aligned_amp) ** 2,
-            *allowed_helicities.items(),
-        )
-        if cleanup_summations:
             intensity = intensity.cleanup()
         return AmplitudeModel(
             decay=self.decay,
-            intensity=PoolSum(
-                sp.Abs(aligned_amp) ** 2,
-                *allowed_helicities.items(),
-            ),
+            intensity=intensity,
             amplitudes=amplitude_definitions,
             variables=angle_definitions,
             parameter_defaults=parameter_defaults,
@@ -289,6 +297,67 @@ class DalitzPlotDecompositionBuilder:
             (_λ3, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions
+
+    def formulate_polarized_intensity(  # noqa: PLR0914
+        self,
+        reference_subsystem: FinalStateID | None = None,
+    ) -> tuple[PoolSum, dict[sp.Symbol, sp.Expr]]:
+        r"""Formulate an intensity with a spin-density matrix for the initial state.
+
+        The returned intensity is differential in the Euler angles
+        :math:`(\phi, \theta, \chi)` (see
+        `~ampform_dpd.polarization.EULER_ANGLES`) that describe the orientation of
+        the three-body decay plane with respect to the frame in which the initial
+        state is produced:
+
+        .. math::
+
+            I = \sum_{\mu,\mu'} \rho_{\mu,\mu'}
+                \sum_{\nu,\nu'} \sum_{\{\lambda\}}
+                D^{j_0*}_{\mu,\nu}(\phi, \theta, \chi)\,
+                D^{j_0}_{\mu',\nu'}(\phi, \theta, \chi)\,
+                A_{\nu,\{\lambda\}} A^*_{\nu',\{\lambda\}}\,,
+
+        where :math:`A_{\nu,\{\lambda\}}` is the :meth:`aligned amplitude
+        <formulate_aligned_amplitude>` and :math:`\rho` the spin-density matrix of
+        the initial state, inserted as a
+        `~sympy.matrices.expressions.MatrixSymbol` (see
+        `~ampform_dpd.polarization.create_spin_density_matrix`). Substitute
+        :math:`\rho` with an explicit matrix to describe a specific polarization
+        scenario, for instance with
+        `~ampform_dpd.polarization.formulate_unpolarized_density`, in which case the
+        Euler angles drop out of the expression.
+        """
+        j0 = self.decay.initial_state.spin
+        initial_state_projections = create_spin_range(j0)
+        μ, μ_prime = sp.symbols(R"\mu \mu^{\prime}", rational=True)
+        ν, ν_prime = sp.symbols(R"\nu \nu^{\prime}", rational=True)
+        φ, θ, χ = EULER_ANGLES
+        ρ = create_spin_density_matrix(j0)
+        λ1, λ2, λ3 = sp.symbols("lambda1:4", rational=True)
+        final_state_helicities = {
+            symbol: create_spin_range(self.decay.final_state[i].spin)
+            for i, symbol in zip((1, 2, 3), (λ1, λ2, λ3), strict=True)
+        }
+        amp, zeta_defs = self.formulate_aligned_amplitude(
+            ν, λ1, λ2, λ3, reference_subsystem
+        )
+        amp_conj, _ = self.formulate_aligned_amplitude(
+            ν_prime, λ1, λ2, λ3, reference_subsystem
+        )
+        intensity = PoolSum(
+            ρ[j0 - μ, j0 - μ_prime]
+            * Wigner.D(j0, μ, ν, -φ, θ, -χ)
+            * Wigner.D(j0, μ_prime, ν_prime, φ, θ, χ)
+            * amp
+            * sp.conjugate(amp_conj),
+            (μ, initial_state_projections),
+            (μ_prime, initial_state_projections),
+            (ν, initial_state_projections),
+            (ν_prime, initial_state_projections),
+            *final_state_helicities.items(),
+        )
+        return intensity, zeta_defs
 
 
 def _product(obj: Any | Iterable):
