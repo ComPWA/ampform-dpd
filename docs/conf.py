@@ -43,7 +43,9 @@ EXECUTE_NB = get_execution_mode() != "off"
 add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions: dict[str, str | tuple[str, str]] = {
+    "ampform_dpd.cparity.CouplingBasis": ("obj", "ampform_dpd.cparity.CouplingBasis"),
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
+    "CouplingBasis": ("obj", "ampform_dpd.cparity.CouplingBasis"),
     "ampform_dpd.io.serialization.dynamics.T": "typing.TypeVar",
     "DecayNode": ("obj", "ampform_dpd.decay.DecayNode"),
     "EdgeType": "typing.TypeVar",
@@ -57,6 +59,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "Node": ("obj", "ampform_dpd.io.serialization.format.Node"),
     "NodeType": "typing.TypeVar",
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
+    "ParticleCollection": "qrules.particle.ParticleCollection",
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PhaseSpaceFactorProtocol": "ampform.dynamics.phasespace.PhaseSpaceFactorProtocol",
     "PoolSum": "ampform.sympy.PoolSum",
