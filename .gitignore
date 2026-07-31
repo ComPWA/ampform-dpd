@@ -32,5 +32,9 @@ typings/
 pyvenv*/
 
 # Settings
+.agents/
+.claude/
 .idea/
 **.code-workspace
+AGENTS.md
+CLAUDE.md
