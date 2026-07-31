@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import numpy as np
 import pytest
 import qrules
 import sympy as sp
@@ -10,6 +11,10 @@ import sympy as sp
 from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
 from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
+from ampform_dpd.polarization import (
+    create_final_state_coupling,
+    formulate_weak_decay_couplings,
+)
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
@@ -177,6 +182,107 @@ class TestDalitzPlotDecompositionBuilder:
         n_coefficients = len(coefficients)
         assert n_coefficients == n_coupling_products
         assert n_coefficients == n_decay_couplings * n_production_couplings
+
+
+@pytest.fixture(scope="module")
+def lc2pkpi_single_resonance_reaction() -> ReactionInfo:
+    return qrules.generate_transitions(
+        initial_state="Lambda(c)+",
+        final_state=["p", "K-", "pi+"],
+        allowed_intermediate_particles=["Lambda(1520)"],
+        formalism="helicity",
+    )
+
+
+def test_polarized_final_states(  # ruff: ignore[too-many-locals]
+    lc2pkpi_single_resonance_reaction: ReactionInfo,
+):
+    transitions = normalize_state_ids(lc2pkpi_single_resonance_reaction.transitions)
+    decay = to_three_body_decay(transitions, min_ls=True)
+    builder = DalitzPlotDecompositionBuilder(decay, min_ls=True)
+    baseline_model = builder.formulate()
+    model = builder.formulate(polarized_final_states=[1])
+
+    proton = decay.final_state[1]
+    coupling_symbols = [create_final_state_coupling(proton, h) for h in (-0.5, +0.5)]
+    assert all(s in model.parameter_defaults for s in coupling_symbols)
+
+    baseline_intensity = _to_numerical_function(baseline_model)
+    intensity = _to_numerical_function(model)
+    weak_couplings = {
+        symbol: complex(expr)
+        for symbol, expr in formulate_weak_decay_couplings(proton, alpha=-0.84).items()
+    }
+    weak_intensity = _to_numerical_function(model, weak_couplings)
+
+    phase_space_point = _find_phase_space_point(baseline_intensity, baseline_model)
+    expected = baseline_intensity(phase_space_point).real
+    rng = np.random.default_rng(seed=0)
+    for _ in range(3):
+        decay_angles = {
+            "phi_1": rng.uniform(-np.pi, +np.pi),
+            "theta_1": rng.uniform(0, np.pi),
+        }
+        computed = intensity({**phase_space_point, **decay_angles})
+        assert computed.imag == pytest.approx(0)
+        assert computed.real == pytest.approx(expected)
+        assert weak_intensity({**phase_space_point, **decay_angles}).real != (
+            pytest.approx(expected)
+        )
+
+
+@pytest.mark.parametrize(
+    ("state_id", "error_message"),
+    [
+        (2, "spinless"),
+        (4, "not one of 1, 2, 3"),
+    ],
+    ids=["spinless", "invalid-id"],
+)
+def test_polarized_final_states_invalid(
+    lc2pkpi_single_resonance_reaction: ReactionInfo, state_id: int, error_message: str
+):
+    transitions = normalize_state_ids(lc2pkpi_single_resonance_reaction.transitions)
+    decay = to_three_body_decay(transitions, min_ls=True)
+    builder = DalitzPlotDecompositionBuilder(decay, min_ls=True)
+    with pytest.raises(ValueError, match=error_message):
+        builder.formulate(polarized_final_states=[state_id])  # ty:ignore[invalid-argument-type]
+
+
+def _to_numerical_function(model: AmplitudeModel, substitutions: dict | None = None):
+    expression = (
+        model.full_expression
+        .xreplace(model.variables)
+        .xreplace(substitutions or {})
+        .xreplace(model.parameter_defaults)
+        .doit()
+    )
+    symbols = sorted(expression.free_symbols, key=str)
+    function = sp.lambdify(symbols, expression, "numpy")
+
+    def evaluate(values: dict[str, float]) -> complex:
+        with np.errstate(invalid="ignore"):
+            return complex(function(*[values[str(s)] for s in symbols]))
+
+    return evaluate
+
+
+def _find_phase_space_point(intensity, model: AmplitudeModel) -> dict[str, float]:
+    """Scan for Mandelstam values that lie on the Dalitz surface."""
+    m0, m1, m2, m3 = (float(v) for v in model.masses.values())
+    masses_squared = m0**2 + m1**2 + m2**2 + m3**2
+    for σ1 in np.linspace((m2 + m3) ** 2, (m0 - m1) ** 2, num=20):
+        for σ2 in np.linspace((m1 + m3) ** 2, (m0 - m2) ** 2, num=20):
+            values = {
+                "sigma1": σ1,
+                "sigma2": σ2,
+                "sigma3": masses_squared - σ1 - σ2,
+            }
+            computed = intensity(values)
+            if np.isfinite(computed.real) and computed.imag == pytest.approx(0):
+                return values
+    msg = "No phase space point found"
+    raise ValueError(msg)
 
 
 def _collect_indexed_symbols(amplitudes: list[sp.Expr]) -> set[sp.Indexed]:
