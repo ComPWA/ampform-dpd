@@ -21,7 +21,7 @@ def assert_spin_value(instance, attribute: Attribute, value: sp.Rational) -> Non
 
 
 def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling | None:
-    from ampform_dpd.decay import LSCoupling  # noqa: PLC0415
+    from ampform_dpd.decay import LSCoupling  # ruff: ignore[import-outside-top-level]
 
     if obj is None:
         return None

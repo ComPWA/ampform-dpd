@@ -77,7 +77,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
 api_target_types: dict[str, str] = {}
 author = "Common Partial Wave Analysis"
 autodoc_default_options = {
-    "exclude-members": ", ".join([  # noqa: FLY002
+    "exclude-members": ", ".join([  # ruff: ignore[static-join-to-f-string]
         "default_assumptions",
         "doit",
         "evaluate",
@@ -98,7 +98,7 @@ bibtex_use_mathjax = True
 codeautolink_concat_default = True
 copybutton_prompt_is_regexp = True
 copybutton_prompt_text = r">>> |\.\.\. "  # doctest
-copyright = f"2022, {ORGANIZATION}"  # noqa: A001
+copyright = f"2022, {ORGANIZATION}"
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",

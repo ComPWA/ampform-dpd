@@ -35,7 +35,7 @@ from ampform_dpd.decay import (
     ThreeBodyDecayChain,
 )
 
-from .cached import lambdify as perform_cached_lambdify  # noqa: F401
+from .cached import lambdify as perform_cached_lambdify  # ruff: ignore[unused-import]
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -112,9 +112,9 @@ def as_markdown_table(
         return _as_decay_markdown_table(obj.chains)
     item_type = _determine_item_type(obj)
     if item_type in {Particle, State}:
-        return _as_resonance_markdown_table(obj)  # ty:ignore[invalid-argument-type]
+        return _as_resonance_markdown_table(obj)  # ty: ignore[invalid-argument-type]
     if item_type is ThreeBodyDecayChain:
-        return _as_decay_markdown_table(obj)  # ty:ignore[invalid-argument-type]
+        return _as_decay_markdown_table(obj)  # ty: ignore[invalid-argument-type]
     msg = (
         f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
     )
@@ -228,9 +228,9 @@ def mute_ampform_warnings() -> None:
 def simplify_latex_rendering() -> None:
     """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
 
-    def _print_Indexed_latex(self, printer, *args) -> str:  # noqa: N802
+    def _print_Indexed_latex(self, printer, *args) -> str:  # ruff: ignore[invalid-function-name]
         base = printer._print(self.base)
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"
 
-    sp.Indexed._latex = _print_Indexed_latex  # ty:ignore[unresolved-attribute]
+    sp.Indexed._latex = _print_Indexed_latex  # ty: ignore[unresolved-attribute]

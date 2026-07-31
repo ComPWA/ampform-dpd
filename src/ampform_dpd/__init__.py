@@ -16,7 +16,7 @@ import sympy as sp
 from ampform.helicity import (
     ParameterValue,
     ParameterValues,
-    _to_parameter_values,  # noqa: PLC2701
+    _to_parameter_values,  # ruff: ignore[import-private-name]
 )
 from ampform.kinematics.phasespace import compute_third_mandelstam
 from ampform.sympy import PoolSum
@@ -89,7 +89,7 @@ class DalitzPlotDecompositionBuilder:
         if isinstance(min_ls, bool):
             self.use_production_helicity_couplings = min_ls
             self.use_decay_helicity_couplings = min_ls
-        elif isinstance(min_ls, tuple) and len(min_ls) == 2:  # noqa: PLR2004
+        elif isinstance(min_ls, tuple) and len(min_ls) == 2:  # ruff: ignore[magic-value-comparison]
             (
                 self.use_production_helicity_couplings,
                 self.use_decay_helicity_couplings,
@@ -124,7 +124,7 @@ class DalitzPlotDecompositionBuilder:
             sp.symbols("lambda:4", rational=True)
         )
         allowed_helicities = {
-            symbol: create_spin_range(self.decay.states[i].spin)  # ty:ignore[invalid-argument-type]
+            symbol: create_spin_range(self.decay.states[i].spin)  # ty: ignore[invalid-argument-type]
             for i, symbol in enumerate(helicity_symbols)
         }
         amplitude_definitions = {}
@@ -137,8 +137,8 @@ class DalitzPlotDecompositionBuilder:
         for args in product(*allowed_helicities.values()):
             for sub_system in subsystem_ids:
                 chain_model = self.formulate_subsystem_amplitude(
-                    *args,  # ty:ignore[invalid-argument-type]
-                    sub_system,  # ty:ignore[too-many-positional-arguments]
+                    *args,  # ty: ignore[invalid-argument-type]
+                    sub_system,  # ty: ignore[too-many-positional-arguments]
                     use_coefficients=use_coefficients,
                 )
                 amplitude_definitions.update(chain_model.amplitudes)
@@ -148,9 +148,9 @@ class DalitzPlotDecompositionBuilder:
             *helicity_symbols,
             reference_subsystem,
         )
-        angle_definitions.update(zeta_defs)  # ty:ignore[no-matching-overload]
+        angle_definitions.update(zeta_defs)  # ty: ignore[no-matching-overload]
         masses = create_mass_symbol_mapping(self.decay)
-        parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
+        parameter_defaults.update(masses)  # ty: ignore[no-matching-overload]
         if cleanup_summations:
             aligned_amp = aligned_amp.cleanup()
         intensity = PoolSum(
@@ -172,7 +172,7 @@ class DalitzPlotDecompositionBuilder:
             invariants=formulate_invariants(self.decay),
         )
 
-    def formulate_subsystem_amplitude(  # noqa: PLR0914
+    def formulate_subsystem_amplitude(  # ruff: ignore[too-many-locals]
         self,
         λ0: sp.Rational,
         λ1: sp.Rational,
@@ -193,7 +193,7 @@ class DalitzPlotDecompositionBuilder:
             self.decay.final_state[3].spin,
         )
         λR = sp.Symbol(R"\lambda_R", rational=True)
-        amplitude_sum = DefinedExpression(0)  # ty:ignore[invalid-argument-type]
+        amplitude_sum = DefinedExpression(0)  # ty: ignore[invalid-argument-type]
         for chain in self.decay.get_subsystem(subsystem_id).chains:
             formulate_dynamics = self.dynamics_choices.get_builder(chain.resonance.name)
             amplitude = formulate_dynamics(chain)
@@ -348,7 +348,7 @@ def _create_scaling_factors(
     if one_scalar_per_chain:
         h = _get_coefficient_base(R, prod_helicity_basis, dec_helicity_basis)
         indices = (*h_prod.indices[1:], *h_dec.indices[1:])
-        return h.__getitem__(indices)  # noqa: PLC2801
+        return h.__getitem__(indices)  # ruff: ignore[unnecessary-dunder-call]
     return h_prod, h_dec
 
 
@@ -428,7 +428,7 @@ def _formulate_clebsch_gordan_factors(
 
 @cache
 def _generate_amplitude_index_bases() -> dict[FinalStateID, sp.IndexedBase]:
-    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # ty:ignore[invalid-return-type]
+    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # ty: ignore[invalid-return-type]
 
 
 class _AlignmentWignerGenerator:
@@ -506,20 +506,20 @@ def _binary_operation(op: Callable[[Any, Any], Any]):
 
 @define
 class DefinedExpression:
-    expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)  # ty:ignore[invalid-assignment]
+    expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)  # ty: ignore[invalid-assignment]
     parameters: dict[sp.Basic, complex | float] = field(factory=dict)
     subexpressions: dict[sp.Basic, sp.Expr] = field(factory=dict)
 
     @_binary_operation(operator.mul)
-    def __mul__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __mul__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.add)
-    def __add__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __add__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.sub)
-    def __sub__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __sub__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.truediv)
-    def __truediv__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __truediv__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.pow)
-    def __pow__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __pow__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
 
 
 DynamicsBuilder = Callable[[ThreeBodyDecayChain], DefinedExpression]
