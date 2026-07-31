@@ -42,6 +42,7 @@ from ampform_dpd.decay import (
 from ampform_dpd.polarization import (
     create_final_state_coupling,
     create_final_state_decay_angles,
+    formulate_final_state_decay_angles,
 )
 from ampform_dpd.spin import create_spin_range
 
@@ -163,6 +164,9 @@ class DalitzPlotDecompositionBuilder:
                 create_final_state_coupling(state, helicity): 1 + 0j
                 for helicity in create_spin_range(state.spin)
             })
+            angle_definitions.update(  # ty:ignore[no-matching-overload]
+                formulate_final_state_decay_angles(k, reference_subsystem)
+            )
         aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
             *helicity_symbols,
             reference_subsystem,
@@ -332,7 +336,11 @@ class DalitzPlotDecompositionBuilder:
 
         where :math:`(\phi_k, \theta_k)` describe the direction of the decay
         product in the aligned rest frame of particle :math:`k` (see
-        `~ampform_dpd.polarization.create_final_state_decay_angles`). The helicity
+        `~ampform_dpd.polarization.create_final_state_decay_angles`). These angles
+        cannot be computed from the Mandelstam variables, since the decay product
+        lies outside the three-body decay plane; :meth:`formulate` therefore
+        provides their definitions in terms of four-momenta through
+        `~ampform_dpd.polarization.formulate_final_state_decay_angles`. The helicity
         :math:`\lambda_k` is summed *coherently*, while the new index
         :math:`\mu_k`, which is returned along with the new amplitude, has to be
         summed *incoherently* in the intensity. The final-state decay couplings

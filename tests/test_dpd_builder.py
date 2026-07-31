@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 import qrules
 import sympy as sp
+from ampform.sympy._array_expressions import ArraySymbol
 
 from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
@@ -250,9 +251,14 @@ def test_polarized_final_states_invalid(
 
 
 def _to_numerical_function(model: AmplitudeModel, substitutions: dict | None = None):
+    scalar_variables = {
+        symbol: expr
+        for symbol, expr in model.variables.items()
+        if not expr.atoms(ArraySymbol)  # keep four-momenta-based angles symbolic
+    }
     expression = (
         model.full_expression
-        .xreplace(model.variables)
+        .xreplace(scalar_variables)
         .xreplace(substitutions or {})
         .xreplace(model.parameter_defaults)
         .doit()
