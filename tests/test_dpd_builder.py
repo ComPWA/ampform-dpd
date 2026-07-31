@@ -24,7 +24,7 @@ class TestDalitzPlotDecompositionBuilder:
         if jpsi2pksigma_reaction.formalism == "helicity" and not min_ls:
             pytest.skip("Helicity formalism with all LS not supported")
         transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=min_ls)  # ty:ignore[invalid-argument-type]
+        decay = to_three_body_decay(transitions, min_ls=min_ls)
         builder = DalitzPlotDecompositionBuilder(
             decay, min_ls=min_ls, all_subsystems=all_subsystems
         )
@@ -64,7 +64,7 @@ class TestDalitzPlotDecompositionBuilder:
         if jpsi2pksigma_reaction.formalism == "helicity" and not min_ls:
             pytest.skip("Helicity formalism with all LS not supported")
         transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=min_ls)  # ty:ignore[invalid-argument-type]
+        decay = to_three_body_decay(transitions, min_ls=min_ls)
         builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
         model = builder.formulate(
             reference_subsystem=2,
@@ -145,7 +145,7 @@ class TestDalitzPlotDecompositionBuilder:
 
     @pytest.mark.parametrize("basis", ["canonical", "helicity"])
     @pytest.mark.parametrize("resonance", ["N(1675)", "Sigma(1775)"])
-    def test_use_coefficients_combinations(self, basis: str, resonance: str):  # noqa: PLR0914
+    def test_use_coefficients_combinations(self, basis: str, resonance: str):  # ruff: ignore[too-many-locals]
         reaction = qrules.generate_transitions(
             initial_state=[("J/psi(1S)", [+1])],
             final_state=[("Sigma+", [+0.5]), "K0", ("p~", [+0.5])],
@@ -155,7 +155,7 @@ class TestDalitzPlotDecompositionBuilder:
         )
         transitions = normalize_state_ids(reaction.transitions)
         min_ls = basis == "helicity"
-        decay = to_three_body_decay(transitions, min_ls)  # ty:ignore[invalid-argument-type]
+        decay = to_three_body_decay(transitions, min_ls)
         builder = DalitzPlotDecompositionBuilder(decay, min_ls)
         # cspell:ignore coeff
         reference_subsystem = 1 if resonance.startswith("Sigma") else 3

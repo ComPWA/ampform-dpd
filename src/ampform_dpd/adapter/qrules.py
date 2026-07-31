@@ -82,10 +82,10 @@ def _to_decay_chain(
     if len(transition.initial_states) != 1:
         msg = f"Can only handle one initial state, but got {len(transition.initial_states)}"
         raise ValueError(msg)
-    if len(transition.final_states) != 3:  # noqa: PLR2004
+    if len(transition.final_states) != 3:  # ruff: ignore[magic-value-comparison]
         msg = f"Can only handle three final states, but got {len(transition.final_states)}"
         raise ValueError(msg)
-    if len(transition.interactions) != 2:  # noqa: PLR2004
+    if len(transition.interactions) != 2:  # ruff: ignore[magic-value-comparison]
         msg = f"There are {len(transition.interactions)} interaction nodes, so this can't be a three-body decay"
         raise ValueError(msg)
     topology = transition.topology

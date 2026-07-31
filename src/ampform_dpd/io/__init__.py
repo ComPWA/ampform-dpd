@@ -35,7 +35,7 @@ from ampform_dpd.decay import (
     ThreeBodyDecayChain,
 )
 
-from .cached import lambdify as perform_cached_lambdify  # noqa: F401
+from .cached import lambdify as perform_cached_lambdify  # ruff: ignore[unused-import]
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -228,7 +228,7 @@ def mute_ampform_warnings() -> None:
 def simplify_latex_rendering() -> None:
     """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
 
-    def _print_Indexed_latex(self, printer, *args) -> str:  # noqa: N802
+    def _print_Indexed_latex(self, printer, *args) -> str:  # ruff: ignore[invalid-function-name]
         base = printer._print(self.base)
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"

@@ -16,7 +16,7 @@ import sympy as sp
 from ampform.helicity import (
     ParameterValue,
     ParameterValues,
-    _to_parameter_values,  # noqa: PLC2701
+    _to_parameter_values,  # ruff: ignore[import-private-name]
 )
 from ampform.kinematics.phasespace import compute_third_mandelstam
 from ampform.sympy import PoolSum
@@ -89,7 +89,7 @@ class DalitzPlotDecompositionBuilder:
         if isinstance(min_ls, bool):
             self.use_production_helicity_couplings = min_ls
             self.use_decay_helicity_couplings = min_ls
-        elif isinstance(min_ls, tuple) and len(min_ls) == 2:  # noqa: PLR2004
+        elif isinstance(min_ls, tuple) and len(min_ls) == 2:  # ruff: ignore[magic-value-comparison]
             (
                 self.use_production_helicity_couplings,
                 self.use_decay_helicity_couplings,
@@ -172,7 +172,7 @@ class DalitzPlotDecompositionBuilder:
             invariants=formulate_invariants(self.decay),
         )
 
-    def formulate_subsystem_amplitude(  # noqa: PLR0914
+    def formulate_subsystem_amplitude(  # ruff: ignore[too-many-locals]
         self,
         λ0: sp.Rational,
         λ1: sp.Rational,
@@ -348,7 +348,7 @@ def _create_scaling_factors(
     if one_scalar_per_chain:
         h = _get_coefficient_base(R, prod_helicity_basis, dec_helicity_basis)
         indices = (*h_prod.indices[1:], *h_dec.indices[1:])
-        return h.__getitem__(indices)  # noqa: PLC2801
+        return h.__getitem__(indices)  # ruff: ignore[unnecessary-dunder-call]
     return h_prod, h_dec
 
 

@@ -68,7 +68,7 @@ class BreitWignerMinL(sp.Expr):
     )  # ty:ignore[invalid-assignment]
     _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
 
-    def evaluate(self):  # noqa: PLR0914
+    def evaluate(self):  # ruff: ignore[too-many-locals]
         s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
         ff_prod = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)  # ty:ignore[unsupported-operator]
         ff0_prod = FormFactor(m_top**2, m0, m_spec, l_prod, R_prod)  # ty:ignore[unsupported-operator]
@@ -96,7 +96,7 @@ class BuggBreitWigner(sp.Expr):
     def evaluate(self):
         s, m0, Γ0, m1, m2, γ = self.args
         # Adler zero
-        s_A = m1**2 - m2**2 / 2  # noqa: N806  # ty:ignore[unsupported-operator]
+        s_A = m1**2 - m2**2 / 2  # ruff: ignore[non-lowercase-variable-in-function]  # ty:ignore[unsupported-operator]
         g_squared = sp.Mul(
             (s - s_A) / (m0**2 - s_A),  # ty:ignore[unsupported-operator]
             m0 * Γ0 * sp.exp(-γ * s),  # ty:ignore[unsupported-operator]

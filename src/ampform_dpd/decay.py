@@ -141,9 +141,9 @@ def get_decay_product_ids(
 ) -> tuple[FinalStateID, FinalStateID]:
     if spectator_id == 1:
         return 2, 3
-    if spectator_id == 2:  # noqa: PLR2004
+    if spectator_id == 2:  # ruff: ignore[magic-value-comparison]
         return 3, 1
-    if spectator_id == 3:  # noqa: PLR2004
+    if spectator_id == 3:  # ruff: ignore[magic-value-comparison]
         return 1, 2
     msg = f"Spectator ID has to be one of 1, 2, 3, not {spectator_id}"
     raise ValueError(msg)
@@ -159,7 +159,7 @@ class ThreeBodyDecayChain:
             if not isinstance(state, State):
                 msg = f"Not all particles in the initial or final state are not type {State.__name__}"
                 raise TypeError(msg)
-        if len({state.index for state in outer_states}) != 4:  # noqa: PLR2004
+        if len({state.index for state in outer_states}) != 4:  # ruff: ignore[magic-value-comparison]
             msg = "The initial and/or final state contains particles with the same ID:"
             for state in outer_states:
                 msg += f"\n  {state.index}: {state.name}"
@@ -170,7 +170,7 @@ class ThreeBodyDecayChain:
         return self.parent
 
     @property
-    @cache  # noqa: B019
+    @cache  # ruff: ignore[cached-instance-method]
     def final_state(self) -> tuple[FinalState, FinalState, FinalState]:
         final_state = (*self.decay_products, self.spectator)
         return tuple(sorted(final_state, key=lambda x: x.index))  # ty:ignore[invalid-return-type]
@@ -202,7 +202,7 @@ class ThreeBodyDecayChain:
     def spectator(self) -> FinalState:
         return self._get_child_of_type(State)
 
-    @cache  # noqa: B019
+    @cache  # ruff: ignore[cached-instance-method]
     def _get_child_of_type(self, typ: type[T]) -> T:
         for child in self.decay.children:
             if isinstance(child, typ):

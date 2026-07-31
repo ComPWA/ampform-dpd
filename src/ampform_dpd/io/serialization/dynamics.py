@@ -123,13 +123,13 @@ def formulate_breit_wigner(
     )
 
 
-def formulate_multichannel_breit_wigner(  # noqa: PLR0914
+def formulate_multichannel_breit_wigner(  # ruff: ignore[too-many-locals]
     propagator: Propagator, resonance: str, model: ModelDefinition
 ) -> DefinedExpression:
     function_definition = get_function_definition(propagator["parametrization"], model)
     function_definition = cast("MultichannelBreitWignerDefinition", function_definition)
     channel_definitions = function_definition["channels"]
-    if len(channel_definitions) < 2:  # noqa: PLR2004
+    if len(channel_definitions) < 2:  # ruff: ignore[magic-value-comparison]
         msg = "Need at least two channels for a multi-channel Breit-Wigner"
         raise NotImplementedError(msg)
     node = propagator["node"]
@@ -194,7 +194,7 @@ def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
     if (
         isinstance(node_item, abc.Sequence)
         and all(isinstance(i, int) for i in node_item)
-        and len(node_item) == 2  # noqa: PLR2004
+        and len(node_item) == 2  # ruff: ignore[magic-value-comparison]
     ):
         k, *_ = {1, 2, 3} - set(node_item)
         return sp.Symbol(f"sigma{k}", nonnegative=True)

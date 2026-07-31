@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import sympy as sp
 from ampform.sympy import PoolSum, unevaluated
 from sympy.functions.special.tensor_functions import (
-    KroneckerDelta as δ,  # noqa: N813, PLC2403
+    KroneckerDelta as δ,  # ruff: ignore[camelcase-imported-as-lowercase, non-ascii-import-name]
 )
 from sympy.physics.quantum.cg import CG
 from sympy.physics.quantum.spin import Rotation as Wigner
@@ -53,7 +53,7 @@ if TYPE_CHECKING:
     from ampform_dpd.io.serialization.format import ModelDefinition
 
 
-def formulate(  # noqa: PLR0914
+def formulate(  # ruff: ignore[too-many-locals]
     model: ModelDefinition,
     cleanup_summations: bool = False,
     to_latex: Callable[[str], str] = identity_function,
@@ -114,7 +114,7 @@ def formulate(  # noqa: PLR0914
     )
 
 
-def formulate_chain_amplitude(  # noqa: PLR0914, PLR0917
+def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positional-arguments]
     λ0: sp.Rational,
     λ1: sp.Rational,
     λ2: sp.Rational,
@@ -137,8 +137,8 @@ def formulate_chain_amplitude(  # noqa: PLR0914, PLR0917
     # -----------------------
     (i, λi_val), (j, λj_val) = _get_decay_product_helicities(chain_definition)
     θij, θij_expr = formulate_scattering_angle(i, j)
-    jR = sp.Rational(chain_definition["propagators"][0]["spin"])  # noqa: N806
-    R_node, λR_val = _get_resonance_helicity(chain_definition)  # noqa: N806
+    jR = sp.Rational(chain_definition["propagators"][0]["spin"])  # ruff: ignore[non-lowercase-variable-in-function]
+    R_node, λR_val = _get_resonance_helicity(chain_definition)  # ruff: ignore[non-lowercase-variable-in-function]
     λR = _get_helicity_symbol(R_node)
     # -----------------------
     A = _generate_amplitude_index_bases()
@@ -240,7 +240,7 @@ def _get_resonance_helicity(
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
             raise ValueError(msg, vertex)
         for helicity, sub_node in zip(helicities, node, strict=True):
-            if isinstance(sub_node, abc.Sequence) and len(sub_node) == 2:  # noqa: PLR2004
+            if isinstance(sub_node, abc.Sequence) and len(sub_node) == 2:  # ruff: ignore[magic-value-comparison]
                 return tuple(sub_node), sp.Rational(helicity)
     msg = "Could not find a resonance node"
     raise ValueError(msg)
@@ -264,12 +264,12 @@ def _get_final_state_helicities(
     return {i: collected_helicities[i] for i in sorted(collected_helicities)}
 
 
-def formulate_recoupling(  # noqa: PLR0914
+def formulate_recoupling(  # ruff: ignore[too-many-locals]
     model: ModelDefinition, chain_idx: int, vertex_idx: int
 ) -> sp.Expr:
     chain_definition = get_decay_chains(model)[chain_idx]
     vertex_definitions = chain_definition["vertices"]
-    if len(vertex_definitions) != 2:  # noqa: PLR2004
+    if len(vertex_definitions) != 2:  # ruff: ignore[magic-value-comparison]
         msg = f"Not a three-body decay: there are {len(vertex_definitions)} vertices"
         raise ValueError(msg)
     if vertex_idx not in {0, 1}:
