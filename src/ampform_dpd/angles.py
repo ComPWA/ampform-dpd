@@ -54,7 +54,7 @@ def formulate_theta_hat_angle(
         raise ValueError(msg)
     symbol = sp.Symbol(Rf"\hat\theta_{isobar_id}({aligned_subsystem})", real=True)
     if isobar_id == aligned_subsystem:
-        return symbol, sp.S.Zero  # ty:ignore[invalid-return-type]
+        return symbol, sp.S.Zero  # ty: ignore[invalid-return-type]
     if (isobar_id, aligned_subsystem) in {(3, 1), (1, 2), (2, 3)}:
         remaining_id = next(iter(allowed_ids - {isobar_id, aligned_subsystem}))
         m0 = sp.Symbol("m0", nonnegative=True)
@@ -72,7 +72,7 @@ def formulate_theta_hat_angle(
         )
         return symbol, theta
     _, theta = formulate_theta_hat_angle(aligned_subsystem, isobar_id)
-    return symbol, -theta  # ty:ignore[invalid-return-type]
+    return symbol, -theta  # ty: ignore[invalid-return-type]
 
 
 def formulate_zeta_angle(  # ruff: ignore[complex-structure, too-many-return-statements, too-many-locals]
@@ -92,7 +92,7 @@ def formulate_zeta_angle(  # ruff: ignore[complex-structure, too-many-return-sta
         _, zeta = formulate_zeta_angle(rotated_state, aligned_subsystem, rotated_state)
         return zeta_symbol, zeta
     if aligned_subsystem == reference_subsystem:
-        return zeta_symbol, sp.S.Zero  # ty:ignore[invalid-return-type]
+        return zeta_symbol, sp.S.Zero  # ty: ignore[invalid-return-type]
     m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
     σ1, σ2, σ3 = sp.symbols("sigma1:4", nonnegative=True)
     if (rotated_state, aligned_subsystem, reference_subsystem) == (1, 1, 3):
@@ -162,7 +162,7 @@ def formulate_zeta_angle(  # ruff: ignore[complex-structure, too-many-return-sta
         _, zeta = formulate_zeta_angle(
             rotated_state, reference_subsystem, aligned_subsystem
         )
-        return zeta_symbol, -zeta  # ty:ignore[invalid-return-type]
+        return zeta_symbol, -zeta  # ty: ignore[invalid-return-type]
     msg = (
         "No expression for"
         f" ζ^{rotated_state}_{aligned_subsystem}({reference_subsystem})"

@@ -64,9 +64,9 @@ def to_three_body_decay(
     some_transition = transitions[0]
     (initial_state_id, initial_state), *_ = some_transition.initial_states.items()
     outer_states = (
-        _to_state(initial_state, index=initial_state_id),  # ty:ignore[invalid-argument-type]
+        _to_state(initial_state, index=initial_state_id),  # ty: ignore[invalid-argument-type]
         *[
-            _to_state(particle, index=idx)  # ty:ignore[invalid-argument-type]
+            _to_state(particle, index=idx)  # ty: ignore[invalid-argument-type]
             for idx, particle in some_transition.final_states.items()
         ],
     )
@@ -143,7 +143,7 @@ def _to_particle(
         name=particle.name,
         latex=particle.name if particle.latex is None else particle.latex,
         spin=particle.spin,
-        parity=int(particle.parity),  # ty:ignore[invalid-argument-type]
+        parity=int(particle.parity),  # ty: ignore[invalid-argument-type]
         mass=particle.mass,
         width=particle.width,
     )
@@ -164,10 +164,10 @@ def _to_state(obj: Any, index: StateIDTemplate | None = None):
         name=obj.name,
         latex=obj.name if obj.latex is None else obj.latex,
         spin=obj.spin,
-        parity=int(obj.parity),  # ty:ignore[invalid-argument-type]
+        parity=int(obj.parity),  # ty: ignore[invalid-argument-type]
         mass=obj.mass,
         width=obj.width,
-        index=index,  # ty:ignore[invalid-argument-type]
+        index=index,  # ty: ignore[invalid-argument-type]
     )
 
 
@@ -222,7 +222,7 @@ def filter_min_ls(
                 if node and i not in node_ids
             ),
         )
-        grouped_transitions[key].append(transition)  # ty:ignore[invalid-argument-type]
+        grouped_transitions[key].append(transition)  # ty: ignore[invalid-argument-type]
     min_transitions: list[FrozenTransition[EdgeType, NodeType]] = []
     for group in grouped_transitions.values():
         transition0, *_ = group
@@ -256,7 +256,7 @@ def load_particles() -> qrules.particle.ParticleCollection:
     src_dir = Path(__file__).parent.parent
     particle_database = qrules.load_default_particles()
     additional_definitions = qrules.io.load(src_dir / "particle-definitions.yml")
-    particle_database.update(additional_definitions)  # ty:ignore[invalid-argument-type]
+    particle_database.update(additional_definitions)  # ty: ignore[invalid-argument-type]
     return particle_database
 
 

@@ -112,9 +112,9 @@ def as_markdown_table(
         return _as_decay_markdown_table(obj.chains)
     item_type = _determine_item_type(obj)
     if item_type in {Particle, State}:
-        return _as_resonance_markdown_table(obj)  # ty:ignore[invalid-argument-type]
+        return _as_resonance_markdown_table(obj)  # ty: ignore[invalid-argument-type]
     if item_type is ThreeBodyDecayChain:
-        return _as_decay_markdown_table(obj)  # ty:ignore[invalid-argument-type]
+        return _as_decay_markdown_table(obj)  # ty: ignore[invalid-argument-type]
     msg = (
         f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
     )
@@ -233,4 +233,4 @@ def simplify_latex_rendering() -> None:
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"
 
-    sp.Indexed._latex = _print_Indexed_latex  # ty:ignore[unresolved-attribute]
+    sp.Indexed._latex = _print_Indexed_latex  # ty: ignore[unresolved-attribute]

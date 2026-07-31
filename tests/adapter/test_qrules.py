@@ -247,7 +247,7 @@ def _get_couplings(transition: StateTransition) -> tuple[dict, dict]:
     return tuple(
         {"L": _to_float(node.l_magnitude), "S": _to_float(node.s_magnitude)}
         for node in transition.interactions.values()
-    )  # ty:ignore[invalid-return-type]
+    )  # ty: ignore[invalid-return-type]
 
 
 def _to_float(value: SupportsFloat | None) -> float | int | None:

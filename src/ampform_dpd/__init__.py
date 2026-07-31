@@ -124,7 +124,7 @@ class DalitzPlotDecompositionBuilder:
             sp.symbols("lambda:4", rational=True)
         )
         allowed_helicities = {
-            symbol: create_spin_range(self.decay.states[i].spin)  # ty:ignore[invalid-argument-type]
+            symbol: create_spin_range(self.decay.states[i].spin)  # ty: ignore[invalid-argument-type]
             for i, symbol in enumerate(helicity_symbols)
         }
         amplitude_definitions = {}
@@ -137,8 +137,8 @@ class DalitzPlotDecompositionBuilder:
         for args in product(*allowed_helicities.values()):
             for sub_system in subsystem_ids:
                 chain_model = self.formulate_subsystem_amplitude(
-                    *args,  # ty:ignore[invalid-argument-type]
-                    sub_system,  # ty:ignore[too-many-positional-arguments]
+                    *args,  # ty: ignore[invalid-argument-type]
+                    sub_system,  # ty: ignore[too-many-positional-arguments]
                     use_coefficients=use_coefficients,
                 )
                 amplitude_definitions.update(chain_model.amplitudes)
@@ -148,9 +148,9 @@ class DalitzPlotDecompositionBuilder:
             *helicity_symbols,
             reference_subsystem,
         )
-        angle_definitions.update(zeta_defs)  # ty:ignore[no-matching-overload]
+        angle_definitions.update(zeta_defs)  # ty: ignore[no-matching-overload]
         masses = create_mass_symbol_mapping(self.decay)
-        parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
+        parameter_defaults.update(masses)  # ty: ignore[no-matching-overload]
         if cleanup_summations:
             aligned_amp = aligned_amp.cleanup()
         intensity = PoolSum(
@@ -193,7 +193,7 @@ class DalitzPlotDecompositionBuilder:
             self.decay.final_state[3].spin,
         )
         λR = sp.Symbol(R"\lambda_R", rational=True)
-        amplitude_sum = DefinedExpression(0)  # ty:ignore[invalid-argument-type]
+        amplitude_sum = DefinedExpression(0)  # ty: ignore[invalid-argument-type]
         for chain in self.decay.get_subsystem(subsystem_id).chains:
             formulate_dynamics = self.dynamics_choices.get_builder(chain.resonance.name)
             amplitude = formulate_dynamics(chain)
@@ -428,7 +428,7 @@ def _formulate_clebsch_gordan_factors(
 
 @cache
 def _generate_amplitude_index_bases() -> dict[FinalStateID, sp.IndexedBase]:
-    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # ty:ignore[invalid-return-type]
+    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))  # ty: ignore[invalid-return-type]
 
 
 class _AlignmentWignerGenerator:
@@ -506,20 +506,20 @@ def _binary_operation(op: Callable[[Any, Any], Any]):
 
 @define
 class DefinedExpression:
-    expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)  # ty:ignore[invalid-assignment]
+    expression: sp.Expr = field(converter=sp.sympify, default=sp.S.One)  # ty: ignore[invalid-assignment]
     parameters: dict[sp.Basic, complex | float] = field(factory=dict)
     subexpressions: dict[sp.Basic, sp.Expr] = field(factory=dict)
 
     @_binary_operation(operator.mul)
-    def __mul__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __mul__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.add)
-    def __add__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __add__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.sub)
-    def __sub__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __sub__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.truediv)
-    def __truediv__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __truediv__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
     @_binary_operation(operator.pow)
-    def __pow__(self, other) -> DefinedExpression: ...  # ty:ignore[empty-body]
+    def __pow__(self, other) -> DefinedExpression: ...  # ty: ignore[empty-body]
 
 
 DynamicsBuilder = Callable[[ThreeBodyDecayChain], DefinedExpression]

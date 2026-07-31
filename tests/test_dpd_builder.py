@@ -194,7 +194,7 @@ def _collect_products(amplitudes: list[sp.Expr]) -> list[tuple[sp.Indexed, sp.In
             couplings = {s for s in node.free_symbols if isinstance(s, sp.Indexed)}
             if len(couplings) == 2:
                 products.add(tuple(sorted(couplings, key=str)))
-    return sorted(products, key=str)  # ty:ignore[invalid-return-type]
+    return sorted(products, key=str)  # ty: ignore[invalid-return-type]
 
 
 def _get_physical_amplitudes(model: AmplitudeModel) -> list[sp.Expr]:

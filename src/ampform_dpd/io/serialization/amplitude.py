@@ -62,7 +62,7 @@ def formulate(  # ruff: ignore[too-many-locals]
     states = get_states(model)
     helicity_symbols = sp.symbols("lambda(:4)", rational=True)
     allowed_helicities = {
-        symbol: create_spin_range(states[i].spin)  # ty:ignore[invalid-argument-type]
+        symbol: create_spin_range(states[i].spin)  # ty: ignore[invalid-argument-type]
         for i, symbol in enumerate(helicity_symbols)
     }
     amplitude_definitions = {}
@@ -72,8 +72,8 @@ def formulate(  # ruff: ignore[too-many-locals]
     for helicity_values in product(*allowed_helicities.values()):
         for chain_idx in range(n_chains):
             amp_defs = formulate_chain_amplitude(
-                *helicity_values,  # ty:ignore[invalid-argument-type]
-                model,  # ty:ignore[too-many-positional-arguments]
+                *helicity_values,  # ty: ignore[invalid-argument-type]
+                model,  # ty: ignore[too-many-positional-arguments]
                 chain_idx,
                 to_latex,
                 additional_builders,
@@ -91,10 +91,10 @@ def formulate(  # ruff: ignore[too-many-locals]
             angle_definitions[θij] = θij_expr
             parameter_defaults.update(dict(parameters))
     aligned_amp, zeta_defs = formulate_aligned_amplitude(model, *helicity_symbols)
-    angle_definitions.update(zeta_defs)  # ty:ignore[no-matching-overload]
+    angle_definitions.update(zeta_defs)  # ty: ignore[no-matching-overload]
     decay = to_decay(model)
     masses = create_mass_symbol_mapping(decay)
-    parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
+    parameter_defaults.update(masses)  # ty: ignore[no-matching-overload]
     if cleanup_summations:
         aligned_amp = aligned_amp.cleanup()
     intensity = PoolSum(
@@ -106,9 +106,9 @@ def formulate(  # ruff: ignore[too-many-locals]
     return AmplitudeModel(
         decay=decay,
         intensity=intensity,
-        amplitudes=amplitude_definitions,  # ty:ignore[invalid-argument-type]
-        variables=angle_definitions,  # ty:ignore[invalid-argument-type]
-        parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
+        amplitudes=amplitude_definitions,  # ty: ignore[invalid-argument-type]
+        variables=angle_definitions,  # ty: ignore[invalid-argument-type]
+        parameter_defaults=parameter_defaults,  # ty: ignore[invalid-argument-type]
         masses=masses,
         invariants=formulate_invariants(decay),
     )
@@ -175,7 +175,7 @@ def _get_decay_product_helicities(
                 raise ValueError(msg, vertex)
             return tuple(
                 (i, sp.Rational(λ)) for i, λ in zip(node, helicities, strict=True)
-            )  # ty:ignore[invalid-return-type]
+            )  # ty: ignore[invalid-return-type]
     msg = "Could not fine a helicity for any resonance node"
     raise ValueError(msg)
 
@@ -285,7 +285,7 @@ def formulate_recoupling(  # ruff: ignore[too-many-locals]
         if vertex_type == "parity":
             vertex = cast("ParityVertex", vertex)
             f = _sign_to_value(vertex.get("parity_factor", "+"))
-            return ParityRecoupling(λa, λb, λa0, λb0, f)  # ty:ignore[invalid-argument-type]
+            return ParityRecoupling(λa, λb, λa0, λb0, f)  # ty: ignore[invalid-argument-type]
         return HelicityRecoupling(λa, λb, λa0, λb0)
     if vertex_type == "ls":
         vertex = cast("LSVertex", vertex)
@@ -293,7 +293,7 @@ def formulate_recoupling(  # ruff: ignore[too-many-locals]
         s = sp.Rational(vertex["s"])
         ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
         j = _get_parent_spin(model, chain_idx, vertex_idx)
-        return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty:ignore[invalid-argument-type]
+        return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty: ignore[invalid-argument-type]
     msg = f"No implementation for vertex of type {vertex_type!r}"
     raise NotImplementedError(msg)
 
@@ -334,7 +334,7 @@ def _get_child_spins(
             spins.append(sp.Rational(final_state[node_item]))
         else:
             spins.append(__get_propagator_spin(chain_definition))
-    return tuple(spins)  # ty:ignore[invalid-return-type]
+    return tuple(spins)  # ty: ignore[invalid-return-type]
 
 
 def __get_propagator_spin(chain_definition: DecayChain) -> sp.Rational:
@@ -384,7 +384,7 @@ class ParityRecoupling(sp.Expr):
 
     def evaluate(self) -> sp.Expr:
         λa, λb, λa0, λb0, f = self.args
-        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)  # ty:ignore[unsupported-operator]
+        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)  # ty: ignore[unsupported-operator]
 
 
 @unevaluated
@@ -403,7 +403,7 @@ class LSRecoupling(sp.Expr):
     def evaluate(self) -> sp.Expr:
         λa, λb, l, s, ja, jb, j = self.args
         return (
-            sp.sqrt((2 * l + 1) / (2 * j + 1))  # ty:ignore[unsupported-operator]
-            * CG(ja, λa, jb, -λb, s, λa - λb)  # ty:ignore[unsupported-operator]
-            * CG(l, 0, s, λa - λb, j, λa - λb)  # ty:ignore[unsupported-operator]
+            sp.sqrt((2 * l + 1) / (2 * j + 1))  # ty: ignore[unsupported-operator]
+            * CG(ja, λa, jb, -λb, s, λa - λb)  # ty: ignore[unsupported-operator]
+            * CG(l, 0, s, λa - λb, j, λa - λb)  # ty: ignore[unsupported-operator]
         )
