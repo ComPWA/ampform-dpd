@@ -136,31 +136,33 @@ def formulate_multichannel_breit_wigner(  # ruff: ignore[too-many-locals]
     i, j = node
     s = to_mandelstam_symbol(node)
     mass = sp.Symbol(f"m_{{{resonance}}}", nonnegative=True)
-    width = sp.Symbol(Rf"\Gamma_{{{resonance}}}", nonnegative=True)
+    g_squared = sp.Symbol(Rf"\Gamma_{{{resonance}}}", nonnegative=True)
     m1 = to_mass_symbol(i)
     m2 = to_mass_symbol(j)
     angular_momentum = int(channel_definitions[0]["l"])
     d = sp.Symbol(f"R_{{{resonance}}}", nonnegative=True)
-    channels = [ChannelArguments(s, mass, width, m1, m2, angular_momentum, d)]  # ty: ignore[invalid-argument-type]
+    channels = [ChannelArguments(s, mass, g_squared, m1, m2, angular_momentum, d)]  # ty: ignore[invalid-argument-type]
     parameter_defaults: dict[sp.Basic, complex | float] = {
         mass: function_definition["mass"],
-        width: channel_definitions[0]["gsq"],
+        g_squared: channel_definitions[0]["gsq"],
         m1: channel_definitions[0]["ma"],
         m2: channel_definitions[0]["mb"],
         d: channel_definitions[0]["d"],
     }
     for channel_idx, channel_definition in enumerate(channel_definitions[1:], 2):
-        Γi = sp.Symbol(
+        g_squared_i = sp.Symbol(
             Rf"\Gamma_{{{resonance}}}^\text{{ch. {channel_idx}}}", nonnegative=True
         )
         mi1 = sp.Symbol(f"m_{{a,{channel_idx}}}", nonnegative=True)
         mi2 = sp.Symbol(f"m_{{b,{channel_idx}}}", nonnegative=True)
         angular_momentum = int(channel_definition["l"])
-        channels.append(ChannelArguments(s, mass, Γi, mi1, mi2, angular_momentum, d))  # ty: ignore[invalid-argument-type]
+        channels.append(
+            ChannelArguments(s, mass, g_squared_i, mi1, mi2, angular_momentum, d)  # ty: ignore[invalid-argument-type]
+        )
         parameter_defaults.update({
             mi1: channel_definition["ma"],
             mi2: channel_definition["mb"],
-            Γi: channel_definition["gsq"],
+            g_squared_i: channel_definition["gsq"],
         })
     return DefinedExpression(
         expression=MultichannelBreitWigner(s, mass, tuple(channels)),  # ty: ignore[invalid-argument-type]

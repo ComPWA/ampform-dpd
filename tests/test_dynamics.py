@@ -116,7 +116,7 @@ def _create_two_channel_breit_wigner(s: sp.Expr) -> MultichannelBreitWigner:
         ChannelArguments(
             s,
             mass,
-            width=0.35,  # ty:ignore[unknown-argument]
+            coupling_squared=0.35,  # ty:ignore[unknown-argument]
             m1=0.1,  # ty:ignore[unknown-argument]
             m2=0.2,  # ty:ignore[unknown-argument]
             angular_momentum=0,  # ty:ignore[unknown-argument]
@@ -125,7 +125,7 @@ def _create_two_channel_breit_wigner(s: sp.Expr) -> MultichannelBreitWigner:
         ChannelArguments(
             s,
             mass,
-            width=0.35,  # ty:ignore[unknown-argument]
+            coupling_squared=0.35,  # ty:ignore[unknown-argument]
             m1=0.3,  # ty:ignore[unknown-argument]
             m2=0.25,  # ty:ignore[unknown-argument]
             angular_momentum=0,  # ty:ignore[unknown-argument]

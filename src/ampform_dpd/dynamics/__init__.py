@@ -165,39 +165,30 @@ class MultichannelBreitWigner(sp.Expr):
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
         latex = R"\mathcal{R}^\mathrm{BW}_\mathrm{multi}\left("
         latex += printer._print(self.s) + "; "
-        latex += ", ".join(printer._print(channel.width) for channel in self.channels)
+        latex += ", ".join(
+            printer._print(channel.coupling_squared) for channel in self.channels
+        )
         latex += R"\right)"
         return latex
 
 
 @unevaluated
 class ChannelArguments(sp.Expr):
-    r"""One channel term of a `MultichannelBreitWigner` running width.
-
-    The ``width`` argument is the **coupling squared** :math:`g_i^2` (the serialized
-    ``gsq`` value), not an energy-dependent width. Following the
-    `amplitude-serialization <https://rub-ep1.github.io/amplitude-serialization>`_
-    convention, ``evaluate()`` returns
+    r"""One channel term :math:`\Gamma_i(s)` of a `MultichannelBreitWigner`.
 
     .. math::
 
-        \Gamma_i(s) = \frac{g_i^2}{m_0} \rho_i(s) F_{L_i}^2(s),
-
-    with :math:`\rho_i(s) = \frac{2 p_i(s)}{\sqrt{s}}` the
-    `~ampform.dynamics.phasespace.PhaseSpaceFactor` and :math:`F_{L_i}` the form factor.
-    The factor :math:`1/m_0` compensates the :math:`m_0\Gamma` in the denominator of
-    `SimpleBreitWigner`, so that the channels enter the `MultichannelBreitWigner` as
-    :math:`\sum_i g_i^2 \rho_i(s) F_{L_i}^2(s)`.
+        \Gamma_i(s) = \frac{g_i^2}{m_0} \rho_i(s) F_{L_i}^2(s)
     """
 
     s: Any
     m0: Any
-    width: Any
+    coupling_squared: Any
     m1: Any = 0
     m2: Any = 0
     angular_momentum: Any = 0
     meson_radius: Any = 1
-    _latex_repr_ = R"\Gamma^\text{channel}\left({{s}}, {{m0}}, {{width}}\right)"
+    _latex_repr_ = R"\Gamma^\text{{ch}}\left({s}; {m0}, {coupling_squared}\right)"
 
     def evaluate(self) -> sp.Expr:
         s, m0, g_squared, m1, m2, L, R = self.args
