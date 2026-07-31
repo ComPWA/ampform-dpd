@@ -39,6 +39,11 @@ from ampform_dpd.decay import (
     get_decay_product_ids,
     to_particle,
 )
+from ampform_dpd.polarization import (
+    create_final_state_coupling,
+    create_final_state_decay_angles,
+    formulate_final_state_decay_angles,
+)
 from ampform_dpd.spin import create_spin_range
 
 if TYPE_CHECKING:
@@ -99,11 +104,12 @@ class DalitzPlotDecompositionBuilder:
             raise NotImplementedError(msg, min_ls)
         self.all_subsystems = all_subsystems
 
-    def formulate(
+    def formulate(  # ruff: ignore[too-many-locals]
         self,
         reference_subsystem: FinalStateID | None = None,
         *,
         cleanup_summations: bool = False,
+        polarized_final_states: Iterable[FinalStateID] = (),
         use_coefficients: bool = False,
     ) -> AmplitudeModel:
         """Formulate the amplitude model given the configuration of this builder.
@@ -113,6 +119,11 @@ class DalitzPlotDecompositionBuilder:
                 helicities. If `None`, the subsystem with the most resonances is chosen.
             cleanup_summations: Whether to remove helicity indices in the summations if
                 their corresponding state is spinless.
+            polarized_final_states: IDs of final-state particles whose polarization is
+                measured through a subsequent decay. Each of these states gets an
+                additional Wigner-:math:`D` function that connects its helicity to the
+                helicity of its decay product, weighted by final-state decay couplings.
+                See :meth:`formulate_final_state_decay`.
             use_coefficients: Whether to use a single complex coefficient per decay
                 chain, instead of separate coefficients for each helicity coupling.
         """
@@ -144,6 +155,18 @@ class DalitzPlotDecompositionBuilder:
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)
                 parameter_defaults.update(chain_model.parameter_defaults)
+        polarized_final_states = _validate_polarized_final_states(
+            self.decay, polarized_final_states
+        )
+        for k in polarized_final_states:
+            state = self.decay.final_state[k]
+            parameter_defaults.update({
+                create_final_state_coupling(state, helicity): 1 + 0j
+                for helicity in create_spin_range(state.spin)
+            })
+            angle_definitions.update(  # ty:ignore[no-matching-overload]
+                formulate_final_state_decay_angles(k, reference_subsystem)
+            )
         aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
             *helicity_symbols,
             reference_subsystem,
@@ -153,17 +176,18 @@ class DalitzPlotDecompositionBuilder:
         parameter_defaults.update(masses)  # ty: ignore[no-matching-overload]
         if cleanup_summations:
             aligned_amp = aligned_amp.cleanup()
-        intensity = PoolSum(
-            sp.Abs(aligned_amp) ** 2,
-            *allowed_helicities.items(),
-        )
-        if cleanup_summations:
-            intensity = intensity.cleanup()
+        outer_helicities = dict(allowed_helicities)
+        for k in polarized_final_states:
+            λk = helicity_symbols[k]
+            aligned_amp, μk = self.formulate_final_state_decay(
+                aligned_amp, k, λk, outer_helicities.pop(λk)
+            )
+            outer_helicities[μk] = create_spin_range(self.decay.final_state[k].spin)
         return AmplitudeModel(
             decay=self.decay,
             intensity=PoolSum(
                 sp.Abs(aligned_amp) ** 2,
-                *allowed_helicities.items(),
+                *outer_helicities.items(),
             ),
             amplitudes=amplitude_definitions,
             variables=angle_definitions,
@@ -289,6 +313,73 @@ class DalitzPlotDecompositionBuilder:
             (_λ3, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions
+
+    def formulate_final_state_decay(
+        self,
+        amplitude: sp.Expr,
+        state_id: FinalStateID,
+        helicity: sp.Symbol,
+        allowed_helicities: list[sp.Rational],
+    ) -> tuple[PoolSum, sp.Symbol]:
+        r"""Attach the decay of a polarized final-state particle to an amplitude.
+
+        The polarization of final-state particle :math:`k` can be tracked through
+        its subsequent decay by attaching a Wigner-:math:`D` function that connects
+        the helicity :math:`\lambda_k` of the particle to the helicity
+        :math:`\mu_k` of its decay product:
+
+        .. math::
+
+            \tilde{A}_{\mu_k} = \sum_{\lambda_k} A_{\lambda_k}
+                D^{j_k*}_{\lambda_k,\mu_k}\left(\phi_k, \theta_k, 0\right)
+                \mathcal{H}^\mathrm{fs}_{\mu_k}\,,
+
+        where :math:`(\phi_k, \theta_k)` describe the direction of the decay
+        product in the aligned rest frame of particle :math:`k` (see
+        `~ampform_dpd.polarization.create_final_state_decay_angles`). These angles
+        cannot be computed from the Mandelstam variables, since the decay product
+        lies outside the three-body decay plane; :meth:`formulate` therefore
+        provides their definitions in terms of four-momenta through
+        `~ampform_dpd.polarization.formulate_final_state_decay_angles`. The helicity
+        :math:`\lambda_k` is summed *coherently*, while the new index
+        :math:`\mu_k`, which is returned along with the new amplitude, has to be
+        summed *incoherently* in the intensity. The final-state decay couplings
+        :math:`\mathcal{H}^\mathrm{fs}_{\mu_k}` default to :math:`1`, in
+        which case the intensity is insensitive to the polarization of particle
+        :math:`k` (unitarity of the Wigner-:math:`D` functions). For a weak decay
+        such as :math:`\Sigma^+ \to p\pi^0`, they can be fixed with
+        `~ampform_dpd.polarization.formulate_weak_decay_couplings`.
+        """
+        state = self.decay.final_state[state_id]
+        j = sp.Rational(state.spin)
+        μ = sp.Symbol(Rf"\mu_{state_id}", rational=True)
+        φ, θ = create_final_state_decay_angles(state_id)
+        new_amplitude = PoolSum(
+            amplitude
+            * Wigner.D(j, helicity, μ, -φ, θ, 0)
+            * create_final_state_coupling(state, μ),
+            (helicity, allowed_helicities),
+        )
+        return new_amplitude, μ
+
+
+def _validate_polarized_final_states(
+    decay: ThreeBodyDecay,
+    polarized_final_states: Iterable[FinalStateID],
+) -> tuple[FinalStateID, ...]:
+    state_ids = sorted(set(polarized_final_states))
+    for state_id in state_ids:
+        state = decay.final_state.get(state_id)
+        if state is None:
+            msg = f"Final-state ID {state_id} is not one of 1, 2, 3"
+            raise ValueError(msg)
+        if state.spin == 0:
+            msg = (
+                f"Cannot track the polarization of final state {state_id}:"
+                f" {state.name} is spinless"
+            )
+            raise ValueError(msg)
+    return tuple(state_ids)
 
 
 def _product(obj: Any | Iterable):
