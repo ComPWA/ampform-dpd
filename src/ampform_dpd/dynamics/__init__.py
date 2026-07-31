@@ -136,12 +136,14 @@ class MultichannelBreitWigner(sp.Expr):
 
     .. math::
 
-        \frac{1}{m_0^2 - s - i \sum_i g_i^2 \frac{2 p_i(s)}{\sqrt{s}} F_{L_i}^2(s)},
+        \frac{1}{m_0^2 - s - i \sum_i g_i^2 \rho_i(s) F_{L_i}^2(s)},
 
-    with :math:`g_i^2` the coupling squared of each channel, :math:`p_i` the two-body
-    break-up momentum, and :math:`F_{L_i}` the form factor. This is the convention used
-    by the `amplitude-serialization
-    <https://rub-ep1.github.io/amplitude-serialization>`_ models.
+    with :math:`g_i^2` the coupling squared of each channel, :math:`\rho_i` the
+    `~ampform.dynamics.phasespace.PhaseSpaceFactor`, and :math:`F_{L_i}` the form
+    factor. This is the convention used by the `amplitude-serialization
+    <https://rub-ep1.github.io/amplitude-serialization>`_ models and by
+    `HadronicLineshapes.jl
+    <https://mmikhasenko.github.io/HadronicLineshapes.jl/dev/10-breitwigner/#Multichannel-Breit-Wigner-Function>`_.
 
     .. seealso:: `ComPWA/ampform-dpd#198
         <https://github.com/ComPWA/ampform-dpd/issues/198>`_,
@@ -179,9 +181,13 @@ class ChannelArguments(sp.Expr):
 
     .. math::
 
-        \Gamma_i(s) = g_i^2 \frac{2 p_i(s)}{m_0 \sqrt{s}} F_{L_i}^2(s),
+        \Gamma_i(s) = \frac{g_i^2}{m_0} \rho_i(s) F_{L_i}^2(s),
 
-    with :math:`p_i` the two-body break-up momentum and :math:`F_{L_i}` the form factor.
+    with :math:`\rho_i(s) = \frac{2 p_i(s)}{\sqrt{s}}` the
+    `~ampform.dynamics.phasespace.PhaseSpaceFactor` and :math:`F_{L_i}` the form factor.
+    The factor :math:`1/m_0` compensates the :math:`m_0\Gamma` in the denominator of
+    `SimpleBreitWigner`, so that the channels enter the `MultichannelBreitWigner` as
+    :math:`\sum_i g_i^2 \rho_i(s) F_{L_i}^2(s)`.
     """
 
     s: Any
@@ -194,10 +200,10 @@ class ChannelArguments(sp.Expr):
     _latex_repr_ = R"\Gamma^\text{channel}\left({{s}}, {{m0}}, {{width}}\right)"
 
     def evaluate(self) -> sp.Expr:
-        s, m0, Γ0, m1, m2, L, R = self.args
-        p = BreakupMomentum(s, m1, m2)
-        ff = FormFactor(s, m1, m2, L, R) ** 2
-        return Γ0 * 2 * p / (m0 * sp.sqrt(s)) * ff  # ty:ignore[unsupported-operator]
+        s, m0, g_squared, m1, m2, L, R = self.args
+        rho = PhaseSpaceFactor(s, m1, m2)
+        ff = FormFactor(s, m1, m2, L, R)
+        return g_squared * rho * ff**2 / m0
 
 
 @unevaluated
