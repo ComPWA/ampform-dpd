@@ -15,7 +15,7 @@ def generate_ls_couplings(
     parent_spin: SupportsFloat,
     child1_spin: SupportsFloat,
     child2_spin: SupportsFloat,
-    max_L: int = 3,  # noqa: N803
+    max_L: int = 3,  # ruff: ignore[invalid-argument-name]
 ) -> list[tuple[int, sp.Rational]]:
     """Generate a list of allowed LS couplings.
 

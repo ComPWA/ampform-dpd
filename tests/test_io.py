@@ -26,7 +26,7 @@ def test_aslatex_particle():
 
 
 def test_aslatex_isobar_node():
-    node = IsobarNode(Λ1520, p, K)  # ty:ignore[invalid-argument-type]
+    node = IsobarNode(Λ1520, p, K)  # ty: ignore[invalid-argument-type]
     latex = aslatex(node)
     assert latex == R"\left(\Lambda(1520) \to p K^-\right)"
     latex = aslatex(node, with_jp=True)
@@ -35,7 +35,7 @@ def test_aslatex_isobar_node():
     """.strip()
     assert latex == expected
 
-    node = IsobarNode(Λ1520, p, K, interaction=(2, 1))  # ty:ignore[invalid-argument-type]
+    node = IsobarNode(Λ1520, p, K, interaction=(2, 1))  # ty: ignore[invalid-argument-type]
     latex = aslatex(node)
     assert latex == R"\left(\Lambda(1520) \xrightarrow[S=1]{L=2} p K^-\right)"
 

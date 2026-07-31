@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 )
 def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hashes: set[str]):
     transitions = normalize_state_ids(reaction.transitions)
-    decay = to_three_body_decay(transitions, min_ls=min_ls)  # ty:ignore[invalid-argument-type]
+    decay = to_three_body_decay(transitions, min_ls=min_ls)
     builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
     for chain in builder.decay.chains:
         builder.dynamics_choices.register_builder(
@@ -39,7 +39,7 @@ def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hashes: set[str])
 
 def test_amplitude_doit_hashes(reaction: ReactionInfo):
     transitions = normalize_state_ids(reaction.transitions)
-    decay = to_three_body_decay(transitions, min_ls=True)  # ty:ignore[invalid-argument-type]
+    decay = to_three_body_decay(transitions, min_ls=True)
     builder = DalitzPlotDecompositionBuilder(decay, min_ls=True)
     for chain in builder.decay.chains:
         builder.dynamics_choices.register_builder(

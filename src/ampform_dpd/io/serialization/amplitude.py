@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import sympy as sp
 from ampform.sympy import PoolSum, unevaluated
 from sympy.functions.special.tensor_functions import (
-    KroneckerDelta as δ,  # noqa: N813, PLC2403
+    KroneckerDelta as δ,  # ruff: ignore[camelcase-imported-as-lowercase, non-ascii-import-name]
 )
 from sympy.physics.quantum.cg import CG
 from sympy.physics.quantum.spin import Rotation as Wigner
@@ -53,7 +53,7 @@ if TYPE_CHECKING:
     from ampform_dpd.io.serialization.format import ModelDefinition
 
 
-def formulate(  # noqa: PLR0914
+def formulate(  # ruff: ignore[too-many-locals]
     model: ModelDefinition,
     cleanup_summations: bool = False,
     to_latex: Callable[[str], str] = identity_function,
@@ -62,7 +62,7 @@ def formulate(  # noqa: PLR0914
     states = get_states(model)
     helicity_symbols = sp.symbols("lambda(:4)", rational=True)
     allowed_helicities = {
-        symbol: create_spin_range(states[i].spin)  # ty:ignore[invalid-argument-type]
+        symbol: create_spin_range(states[i].spin)  # ty: ignore[invalid-argument-type]
         for i, symbol in enumerate(helicity_symbols)
     }
     amplitude_definitions = {}
@@ -72,8 +72,8 @@ def formulate(  # noqa: PLR0914
     for helicity_values in product(*allowed_helicities.values()):
         for chain_idx in range(n_chains):
             amp_defs = formulate_chain_amplitude(
-                *helicity_values,  # ty:ignore[invalid-argument-type]
-                model,  # ty:ignore[too-many-positional-arguments]
+                *helicity_values,  # ty: ignore[invalid-argument-type]
+                model,  # ty: ignore[too-many-positional-arguments]
                 chain_idx,
                 to_latex,
                 additional_builders,
@@ -91,10 +91,10 @@ def formulate(  # noqa: PLR0914
             angle_definitions[θij] = θij_expr
             parameter_defaults.update(dict(parameters))
     aligned_amp, zeta_defs = formulate_aligned_amplitude(model, *helicity_symbols)
-    angle_definitions.update(zeta_defs)  # ty:ignore[no-matching-overload]
+    angle_definitions.update(zeta_defs)  # ty: ignore[no-matching-overload]
     decay = to_decay(model)
     masses = create_mass_symbol_mapping(decay)
-    parameter_defaults.update(masses)  # ty:ignore[no-matching-overload]
+    parameter_defaults.update(masses)  # ty: ignore[no-matching-overload]
     if cleanup_summations:
         aligned_amp = aligned_amp.cleanup()
     intensity = PoolSum(
@@ -106,15 +106,15 @@ def formulate(  # noqa: PLR0914
     return AmplitudeModel(
         decay=decay,
         intensity=intensity,
-        amplitudes=amplitude_definitions,  # ty:ignore[invalid-argument-type]
-        variables=angle_definitions,  # ty:ignore[invalid-argument-type]
-        parameter_defaults=parameter_defaults,  # ty:ignore[invalid-argument-type]
+        amplitudes=amplitude_definitions,  # ty: ignore[invalid-argument-type]
+        variables=angle_definitions,  # ty: ignore[invalid-argument-type]
+        parameter_defaults=parameter_defaults,  # ty: ignore[invalid-argument-type]
         masses=masses,
         invariants=formulate_invariants(decay),
     )
 
 
-def formulate_chain_amplitude(  # noqa: PLR0914, PLR0917
+def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positional-arguments]
     λ0: sp.Rational,
     λ1: sp.Rational,
     λ2: sp.Rational,
@@ -137,8 +137,8 @@ def formulate_chain_amplitude(  # noqa: PLR0914, PLR0917
     # -----------------------
     (i, λi_val), (j, λj_val) = _get_decay_product_helicities(chain_definition)
     θij, θij_expr = formulate_scattering_angle(i, j)
-    jR = sp.Rational(chain_definition["propagators"][0]["spin"])  # noqa: N806
-    R_node, λR_val = _get_resonance_helicity(chain_definition)  # noqa: N806
+    jR = sp.Rational(chain_definition["propagators"][0]["spin"])  # ruff: ignore[non-lowercase-variable-in-function]
+    R_node, λR_val = _get_resonance_helicity(chain_definition)  # ruff: ignore[non-lowercase-variable-in-function]
     λR = _get_helicity_symbol(R_node)
     # -----------------------
     A = _generate_amplitude_index_bases()
@@ -175,7 +175,7 @@ def _get_decay_product_helicities(
                 raise ValueError(msg, vertex)
             return tuple(
                 (i, sp.Rational(λ)) for i, λ in zip(node, helicities, strict=True)
-            )  # ty:ignore[invalid-return-type]
+            )  # ty: ignore[invalid-return-type]
     msg = "Could not fine a helicity for any resonance node"
     raise ValueError(msg)
 
@@ -240,7 +240,7 @@ def _get_resonance_helicity(
             msg = "Vertex does not contain helicities. Is it an LS vertex?"
             raise ValueError(msg, vertex)
         for helicity, sub_node in zip(helicities, node, strict=True):
-            if isinstance(sub_node, abc.Sequence) and len(sub_node) == 2:  # noqa: PLR2004
+            if isinstance(sub_node, abc.Sequence) and len(sub_node) == 2:  # ruff: ignore[magic-value-comparison]
                 return tuple(sub_node), sp.Rational(helicity)
     msg = "Could not find a resonance node"
     raise ValueError(msg)
@@ -264,12 +264,12 @@ def _get_final_state_helicities(
     return {i: collected_helicities[i] for i in sorted(collected_helicities)}
 
 
-def formulate_recoupling(  # noqa: PLR0914
+def formulate_recoupling(  # ruff: ignore[too-many-locals]
     model: ModelDefinition, chain_idx: int, vertex_idx: int
 ) -> sp.Expr:
     chain_definition = get_decay_chains(model)[chain_idx]
     vertex_definitions = chain_definition["vertices"]
-    if len(vertex_definitions) != 2:  # noqa: PLR2004
+    if len(vertex_definitions) != 2:  # ruff: ignore[magic-value-comparison]
         msg = f"Not a three-body decay: there are {len(vertex_definitions)} vertices"
         raise ValueError(msg)
     if vertex_idx not in {0, 1}:
@@ -285,7 +285,7 @@ def formulate_recoupling(  # noqa: PLR0914
         if vertex_type == "parity":
             vertex = cast("ParityVertex", vertex)
             f = _sign_to_value(vertex.get("parity_factor", "+"))
-            return ParityRecoupling(λa, λb, λa0, λb0, f)  # ty:ignore[invalid-argument-type]
+            return ParityRecoupling(λa, λb, λa0, λb0, f)  # ty: ignore[invalid-argument-type]
         return HelicityRecoupling(λa, λb, λa0, λb0)
     if vertex_type == "ls":
         vertex = cast("LSVertex", vertex)
@@ -293,7 +293,7 @@ def formulate_recoupling(  # noqa: PLR0914
         s = sp.Rational(vertex["s"])
         ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
         j = _get_parent_spin(model, chain_idx, vertex_idx)
-        return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty:ignore[invalid-argument-type]
+        return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty: ignore[invalid-argument-type]
     msg = f"No implementation for vertex of type {vertex_type!r}"
     raise NotImplementedError(msg)
 
@@ -334,7 +334,7 @@ def _get_child_spins(
             spins.append(sp.Rational(final_state[node_item]))
         else:
             spins.append(__get_propagator_spin(chain_definition))
-    return tuple(spins)  # ty:ignore[invalid-return-type]
+    return tuple(spins)  # ty: ignore[invalid-return-type]
 
 
 def __get_propagator_spin(chain_definition: DecayChain) -> sp.Rational:
@@ -384,7 +384,7 @@ class ParityRecoupling(sp.Expr):
 
     def evaluate(self) -> sp.Expr:
         λa, λb, λa0, λb0, f = self.args
-        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)  # ty:ignore[unsupported-operator]
+        return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)  # ty: ignore[unsupported-operator]
 
 
 @unevaluated
@@ -403,7 +403,7 @@ class LSRecoupling(sp.Expr):
     def evaluate(self) -> sp.Expr:
         λa, λb, l, s, ja, jb, j = self.args
         return (
-            sp.sqrt((2 * l + 1) / (2 * j + 1))  # ty:ignore[unsupported-operator]
-            * CG(ja, λa, jb, -λb, s, λa - λb)  # ty:ignore[unsupported-operator]
-            * CG(l, 0, s, λa - λb, j, λa - λb)  # ty:ignore[unsupported-operator]
+            sp.sqrt((2 * l + 1) / (2 * j + 1))  # ty: ignore[unsupported-operator]
+            * CG(ja, λa, jb, -λb, s, λa - λb)  # ty: ignore[unsupported-operator]
+            * CG(l, 0, s, λa - λb, j, λa - λb)  # ty: ignore[unsupported-operator]
         )

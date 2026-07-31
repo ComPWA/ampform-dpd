@@ -52,7 +52,7 @@ def to_decay_chain(
 ) -> ThreeBodyDecayChain:
     vertices = chain_definition["vertices"]
     if to_latex is None:
-        to_latex = lambda x: x  # noqa:E731
+        to_latex = lambda x: x  # ruff: ignore[lambda-assignment]
     resonance = Particle(
         name=chain_definition["name"],
         latex=to_latex(chain_definition["name"]),
@@ -92,7 +92,7 @@ def __find_decay_product_ids(
 ) -> tuple[FinalStateID, FinalStateID]:
     for vertex in vertices:
         node = vertex["node"]
-        if all(isinstance(i, int) for i in node) and len(node) == 2:  # noqa: PLR2004
+        if all(isinstance(i, int) for i in node) and len(node) == 2:  # ruff: ignore[magic-value-comparison]
             return tuple(node)
     msg = "Could not find a node that has two final state items (decay node)"
     raise ValueError(msg)
@@ -130,7 +130,7 @@ def _to_particle(
     definition: StateDefinition, to_latex: Callable[[str], str] | None = None
 ) -> State:
     if to_latex is None:
-        to_latex = lambda x: x  # noqa:E731
+        to_latex = lambda x: x  # ruff: ignore[lambda-assignment]
     return State(
         name=definition["name"],
         latex=to_latex(definition["name"]),

@@ -366,36 +366,37 @@ line-ending = "lf"
 ignore = [
     "ANN",
     "ARG00",
-    "B028",
-    "C408",
-    "COM812",
-    "CPY001",
-    "D101",
-    "D102",
-    "D103",
-    "D105",
-    "D107",
-    "D203",
-    "D213",
-    "D407",
-    "D416",
     "DOC",
-    "E501",
     "FBT",
-    "FURB101",
-    "FURB103",
-    "FURB140",
-    "G004",
-    "ISC001",
-    "ISC003",
-    "PLC2401",
-    "PLR0913",
-    "PLW1514",
-    "PT001",
     "PTH",
-    "RUF067",
-    "S301",
-    "SIM108",
+    "any-type",
+    "explicit-string-concatenation",
+    "if-else-block-instead-of-if-exp",
+    "incorrect-blank-line-before-class",
+    "line-too-long",
+    "logging-f-string",
+    "missing-copyright-notice",
+    "missing-dashed-underline-after-section",
+    "missing-section-name-colon",
+    "missing-trailing-comma",
+    "multi-line-summary-second-line",
+    "no-explicit-stacklevel",
+    "non-ascii-name",
+    "non-empty-init-module",
+    "pytest-fixture-incorrect-parentheses-style",
+    "read-whole-file",
+    "reimplemented-starmap",
+    "single-line-implicit-string-concatenation",
+    "suspicious-pickle-usage",
+    "too-many-arguments",
+    "undocumented-magic-method",
+    "undocumented-public-class",
+    "undocumented-public-function",
+    "undocumented-public-init",
+    "undocumented-public-method",
+    "unnecessary-collection-call",
+    "unspecified-encoding",
+    "write-whole-file",
 ]
 select = ["ALL"]
 task-tags = ["cspell"]
@@ -432,54 +433,58 @@ ignore-names = [
 [tool.ruff.lint.per-file-ignores]
 "*" = ["D"]
 "*.ipynb" = [
-    "B018",
     "C90",
     "D",
-    "E303",
-    "E402",
-    "E703",
-    "N806",
-    "N816",
     "PLR09",
-    "PLR2004",
-    "PLW0602",
-    "PLW0603",
-    "PLW2901",
-    "S101",
     "T20",
     "TC00",
+    "assert",
+    "global-statement",
+    "global-variable-not-assigned",
+    "magic-value-comparison",
+    "mixed-case-variable-in-global-scope",
+    "module-import-not-at-top-of-file",
+    "non-lowercase-variable-in-function",
+    "redefined-loop-name",
+    "too-many-blank-lines",
+    "useless-expression",
+    "useless-semicolon",
 ]
 "docs/*" = [
-    "E402",
-    "INP001",
-    "PLR2004",
-    "S101",
-    "S113",
-    "T201",
+    "assert",
+    "implicit-namespace-package",
+    "magic-value-comparison",
+    "module-import-not-at-top-of-file",
+    "print",
+    "request-without-timeout",
 ]
-"docs/conf.py" = ["D100"]
-"jpsi2ksp.ipynb" = ["PLC2701"]
+"docs/conf.py" = [
+    "builtin-variable-shadowing",
+    "undocumented-public-module",
+]
+"jpsi2ksp.ipynb" = ["import-private-name"]
 "serialization.ipynb" = [
-    "E741",
-    "N813",
-    "PLC2403",
-    "PLC2701",
-    "RUF100",
+    "ambiguous-variable-name",
+    "camelcase-imported-as-lowercase",
+    "non-ascii-import-name",
+    "import-private-name",
+    "unused-noqa",
 ]
-"setup.py" = ["D100"]
-"src/ampform_dpd/io/cached.py" = ["S403"]
-"src/ampform_dpd/io/serialization/amplitude.py" = ["E741"]
-"src/ampform_dpd/io/serialization/format.py" = ["E741"]
+"setup.py" = ["undocumented-public-module"]
+"src/ampform_dpd/io/cached.py" = ["suspicious-pickle-import"]
+"src/ampform_dpd/io/serialization/amplitude.py" = ["ambiguous-variable-name"]
+"src/ampform_dpd/io/serialization/format.py" = ["ambiguous-variable-name"]
 "tests/*" = [
     "D",
-    "INP001",
-    "PLC2701",
-    "PLR2004",
-    "PLR6301",
-    "RUF069",
-    "S101",
-    "SLF001",
     "T20",
+    "assert",
+    "boolean-type-hint-positional-argument",
+    "float-equality-comparison",
+    "implicit-namespace-package",
+    "import-private-name",
+    "magic-value-comparison",
+    "no-self-use",
+    "private-member-access",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -514,7 +519,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.0/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.3/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]

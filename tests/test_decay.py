@@ -20,12 +20,12 @@ K = Particle("K-", latex="K^-", spin=0, parity=-1, **dummy_args)
 
 class TestIsobarNode:
     def test_children(self):
-        decay = IsobarNode(Λ1520, p, K)  # ty:ignore[invalid-argument-type]
+        decay = IsobarNode(Λ1520, p, K)  # ty: ignore[invalid-argument-type]
         assert decay.children == (p, K)
 
     def test_ls(self):
         L, S = 2, 1
-        node = IsobarNode(Λ1520, p, K, interaction=(L, S))  # ty:ignore[invalid-argument-type]
+        node = IsobarNode(Λ1520, p, K, interaction=(L, S))  # ty: ignore[invalid-argument-type]
         assert node.interaction is not None
         assert node.interaction.L == L
         assert node.interaction.S == S
