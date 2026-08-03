@@ -413,13 +413,15 @@ class TestMirrorSymmetry:
 
     @pytest.mark.xfail(
         reason=(
-            "Pre-existing in DalitzPlotDecompositionBuilder, unrelated to the C-parity"
-            " sign: the LS-basis Clebsch-Gordan factors are built from"
-            " IsobarNode.child1/child2, which to_three_body_decay() sorts by final-state"
-            " ID, while the isobar Wigner-d function uses the cyclic pair ordering of"
-            " get_decay_product_ids(). The two orderings differ for subsystem 2, which"
-            " gives that subsystem a spurious, (L,S)-dependent phase and breaks C"
-            " symmetry between resonances with different L."
+            "https://github.com/ComPWA/ampform-dpd/issues/202: in the LS basis, the"
+            " Clebsch-Gordan factors are built from IsobarNode.child1/child2, which"
+            " to_three_body_decay() sorts by final-state ID, while the isobar Wigner-d"
+            " function uses the cyclic pair ordering of get_decay_product_ids(). The two"
+            " differ for subsystem 2, which gives that subsystem an extra exchange phase."
+            " The derived sign is stated in the cyclic ordering, so the tie comes out"
+            " with the wrong relative sign between waves of different l. Reordering the"
+            " decay nodes cyclically makes this test pass; the helicity basis is"
+            " unaffected, see test_mirror_symmetry_is_restored_in_the_helicity_basis."
         ),
         strict=True,
     )
