@@ -204,6 +204,7 @@ intersphinx_mapping = {
 linkcheck_anchors = False
 linkcheck_ignore = [
     "https://doi.org/10.1103",
+    "https://github.com/ComPWA/jpsi-nstar",  # private repository
     "https://journals.aps.org/prd",
 ]
 myst_enable_extensions = [
