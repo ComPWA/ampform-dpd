@@ -159,8 +159,8 @@ class MultichannelBreitWigner(sp.Expr):
     def evaluate(self):
         s = self.s
         m0 = self.mass
-        width = sum(channel.evaluate() for channel in self.channels)
-        return BreitWigner(s, m0, width)  # ty: ignore[invalid-argument-type]
+        width = sp.Add(*self.channels)
+        return BreitWigner(s, m0, width)
 
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
         latex = R"\mathcal{R}^\mathrm{BW}_\mathrm{multi}\left("
