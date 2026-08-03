@@ -1,7 +1,7 @@
 {
   "distributions": [
     {
-      "name": "my_model_for_reaction_intensity",
+      "name": "default_model",
       "type": "HadronicUnpolarizedIntensity",
       "decay_description": {
         "kinematics": {
@@ -96,7 +96,7 @@
                 "parametrization": "L1520_BW"
               }
             ],
-            "weight": "0.146999 + 0.022162i",
+            "weight": "3.605175244894445 + 0.5435267843818713i",
             "vertices": [
               {
                 "type": "helicity",
@@ -123,7 +123,7 @@
                 "parametrization": "L1520_BW"
               }
             ],
-            "weight": "-0.0803435 + 0.7494165i",
+            "weight": "-1.9704378756874323 + 18.379565942050206i",
             "vertices": [
               {
                 "type": "helicity",
@@ -150,7 +150,7 @@
                 "parametrization": "L1600_BW"
               }
             ],
-            "weight": "4.929406127531439 - 0.5956915012088891i",
+            "weight": "10.062771632071723 - 1.2160303664881582i",
             "vertices": [
               {
                 "type": "helicity",
@@ -177,7 +177,7 @@
                 "parametrization": "L1600_BW"
               }
             ],
-            "weight": "-3.4228557332438796 - 2.179858885546952i",
+            "weight": "-6.987335732146143 - 4.449911731331869i",
             "vertices": [
               {
                 "type": "helicity",
@@ -258,7 +258,7 @@
                 "parametrization": "L1690_BW"
               }
             ],
-            "weight": "-0.192886 - 0.0551175i",
+            "weight": "-1.5899154261176556 - 0.4543210160355851i",
             "vertices": [
               {
                 "type": "helicity",
@@ -285,7 +285,7 @@
                 "parametrization": "L1690_BW"
               }
             ],
-            "weight": "-1.365296 - 0.1768065i",
+            "weight": "-11.25382439169629 - 1.4573757648967332i",
             "vertices": [
               {
                 "type": "helicity",
@@ -366,7 +366,7 @@
                 "parametrization": "D1232_BW"
               }
             ],
-            "weight": "-3.3890955 + 1.5259025i",
+            "weight": "-10.91657692017265 + 4.915067165836356i",
             "vertices": [
               {
                 "type": "helicity",
@@ -393,7 +393,7 @@
                 "parametrization": "D1232_BW"
               }
             ],
-            "weight": "-6.4935965 + 2.264168i",
+            "weight": "-20.916449737345527 + 7.29308576054982i",
             "vertices": [
               {
                 "type": "helicity",
@@ -420,7 +420,7 @@
                 "parametrization": "D1600_BW"
               }
             ],
-            "weight": "5.7007925 - 1.5627555i",
+            "weight": "10.394484212696474 - 2.8494349466419946i",
             "vertices": [
               {
                 "type": "helicity",
@@ -447,7 +447,7 @@
                 "parametrization": "D1600_BW"
               }
             ],
-            "weight": "3.3646055 - 0.5011915i",
+            "weight": "6.134820509903093 - 0.9138426164937006i",
             "vertices": [
               {
                 "type": "helicity",
@@ -474,7 +474,7 @@
                 "parametrization": "D1700_BW"
               }
             ],
-            "weight": "-5.18914 - 0.717436i",
+            "weight": "-29.25264941105087 - 4.044389587266232i",
             "vertices": [
               {
                 "type": "helicity",
@@ -501,7 +501,7 @@
                 "parametrization": "D1700_BW"
               }
             ],
-            "weight": "-6.437051 - 1.052785i",
+            "weight": "-36.28747656529877 - 5.93484672030687i",
             "vertices": [
               {
                 "type": "helicity",
@@ -582,7 +582,7 @@
                 "parametrization": "K892_BW"
               }
             ],
-            "weight": "0.6885560139393164 - 0.5922539890384868i",
+            "weight": "1.7222349176997693 - 1.481361689419436i",
             "vertices": [
               {
                 "type": "helicity",
@@ -609,7 +609,7 @@
                 "parametrization": "K892_BW"
               }
             ],
-            "weight": "-0.4198173614898905 - 2.398905956940163i",
+            "weight": "-1.0500585346397064 - 6.000208435743097i",
             "vertices": [
               {
                 "type": "helicity",
@@ -636,7 +636,7 @@
                 "parametrization": "K892_BW"
               }
             ],
-            "weight": "0.5773502691896258 + 0.0i",
+            "weight": "1.4440841024000803 + 0.0i",
             "vertices": [
               {
                 "type": "helicity",
@@ -663,7 +663,7 @@
                 "parametrization": "K892_BW"
               }
             ],
-            "weight": "-1.8137146937446735 - 1.9014511500518056i",
+            "weight": "-4.536512227148323 - 4.755961023685448i",
             "vertices": [
               {
                 "type": "helicity",
@@ -756,6 +756,7 @@
     {
       "name": "L1405_Flatte",
       "type": "MultichannelBreitWigner",
+      "x": "m_31_sq",
       "mass": 1.4051,
       "channels": [
         {
@@ -779,6 +780,7 @@
       "l": 2,
       "mb": 0.938272046,
       "type": "BreitWigner",
+      "x": "m_31_sq",
       "d": 1.5,
       "mass": 1.69,
       "ma": 0.493677,
@@ -789,6 +791,7 @@
       "l": 1,
       "mb": 0.13957018,
       "type": "BreitWigner",
+      "x": "m_12_sq",
       "d": 1.5,
       "mass": 1.232,
       "ma": 0.938272046,
@@ -799,6 +802,7 @@
       "l": 2,
       "mb": 0.938272046,
       "type": "BreitWigner",
+      "x": "m_31_sq",
       "d": 1.5,
       "mass": 1.518467,
       "ma": 0.493677,
@@ -809,6 +813,7 @@
       "l": 1,
       "mb": 0.938272046,
       "type": "BreitWigner",
+      "x": "m_31_sq",
       "d": 1.5,
       "mass": 1.63,
       "ma": 0.493677,
@@ -819,6 +824,7 @@
       "l": 0,
       "mb": 0.938272046,
       "type": "BreitWigner",
+      "x": "m_31_sq",
       "d": 1.5,
       "mass": 1.98819,
       "ma": 0.493677,
@@ -829,6 +835,7 @@
       "l": 1,
       "mb": 0.13957018,
       "type": "BreitWigner",
+      "x": "m_12_sq",
       "d": 1.5,
       "mass": 1.64,
       "ma": 0.938272046,
@@ -839,6 +846,7 @@
       "l": 2,
       "mb": 0.13957018,
       "type": "BreitWigner",
+      "x": "m_12_sq",
       "d": 1.5,
       "mass": 1.69,
       "ma": 0.938272046,
@@ -849,6 +857,7 @@
       "l": 1,
       "mb": 0.493677,
       "type": "BreitWigner",
+      "x": "m_23_sq",
       "d": 1.5,
       "mass": 0.8955,
       "ma": 0.13957018,
@@ -856,23 +865,20 @@
     },
     {
       "name": "K700_BuggBW",
-      "slope": 0.94106,
-      "type": "BreitWignerWidthExpLikeBugg",
-      "mass": 0.824,
-      "width": 0.478
+      "type": "generic_function",
+      "expression": "1/(0.824^2 - σ - i * 0.824 * (σ - 0.23397706275638377) / (0.824^2 - 0.23397706275638377) * 0.478 * exp(-0.941060 * σ))"
     },
     {
       "name": "K1430_BuggBW",
-      "slope": 0.020981,
-      "type": "BreitWignerWidthExpLikeBugg",
-      "mass": 1.375,
-      "width": 0.19
+      "type": "generic_function",
+      "expression": "1/(1.375^2 - σ - i * 1.375 * (σ - 0.23397706275638377) / (1.375^2 - 0.23397706275638377) * 0.190 * exp(-0.020981 * σ))"
     },
     {
       "name": "L1670_BW",
       "l": 0,
       "mb": 0.938272046,
       "type": "BreitWigner",
+      "x": "m_31_sq",
       "d": 1.5,
       "mass": 1.67,
       "ma": 0.493677,
@@ -939,7 +945,7 @@
     "amplitude_model_checksums": [
       {
         "point": "validation_point",
-        "distribution": "my_model_for_reaction_intensity",
+        "distribution": "default_model",
         "value": 9345.853380852355
       },
       {
