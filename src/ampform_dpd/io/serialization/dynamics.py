@@ -151,13 +151,22 @@ def formulate_multichannel_breit_wigner(  # ruff: ignore[too-many-locals]
     }
     for channel_idx, channel_definition in enumerate(channel_definitions[1:], 2):
         g_squared_i = sp.Symbol(
-            Rf"\Gamma_{{{resonance}}}^\text{{ch. {channel_idx}}}", nonnegative=True
+            name=Rf"\Gamma_{{{resonance}}}^\text{{ch. {channel_idx}}}",
+            nonnegative=True,
         )
         mi1 = sp.Symbol(f"m_{{a,{channel_idx}}}", nonnegative=True)
         mi2 = sp.Symbol(f"m_{{b,{channel_idx}}}", nonnegative=True)
         angular_momentum = int(channel_definition["l"])
         channels.append(
-            ChannelArguments(s, mass, g_squared_i, mi1, mi2, angular_momentum, d)  # ty: ignore[invalid-argument-type]
+            ChannelArguments(
+                s,
+                mass,
+                g_squared_i,
+                mi1,
+                mi2,
+                angular_momentum,  # ty: ignore[invalid-argument-type]
+                meson_radius=d,  # ty: ignore[unknown-argument]
+            )
         )
         parameter_defaults.update({
             mi1: channel_definition["ma"],

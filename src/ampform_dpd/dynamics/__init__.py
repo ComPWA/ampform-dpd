@@ -165,9 +165,7 @@ class MultichannelBreitWigner(sp.Expr):
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
         latex = R"\mathcal{R}^\mathrm{BW}_\mathrm{multi}\left("
         latex += printer._print(self.s) + "; "
-        latex += ", ".join(
-            printer._print(channel.coupling_squared) for channel in self.channels
-        )
+        latex += ", ".join(printer._print(c.coupling_squared) for c in self.channels)
         latex += R"\right)"
         return latex
 
