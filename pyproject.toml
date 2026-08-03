@@ -533,6 +533,7 @@ include = [
     "docs/comparison/d2kkk.ipynb",
     "docs/comparison/jpsi2phipipi.ipynb",
     "docs/comparison/jpsi2pipipi.ipynb",
+    "docs/cparity.ipynb",
     "docs/index.ipynb",
     "docs/jpsi2ksp.ipynb",
     "docs/lc2pkpi.ipynb",
