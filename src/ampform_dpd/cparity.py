@@ -48,11 +48,16 @@ For :math:`J/\psi \to p\bar p\eta`, Equation :eq:`conjugate-coupling-sign` colla
     defined on two-particle states in the pair ordering of the DPD paper. An
     implementation stacks further conventions on top of that (the :math:`(-1)^{j_2-m_2}`
     phases of Eq. (8), the angle conventions, and the alignment rotations), each of which
-    can contribute a further fixed phase that hand algebra does not see. The Dalitz plot
-    cannot arbitrate either: **both** signs give a mirror-symmetric intensity, they are
-    the :math:`C=-1` and :math:`C=+1` eigenstates of the tie, and only the interference
-    where the two conjugate bands cross differs. Cross-check the sign against the
-    amplitudes themselves before using it in a fit.
+    can contribute a further fixed phase that hand algebra does not see. Cross-check the
+    sign against the amplitudes themselves before using it in a fit.
+
+    Mirror symmetry of the Dalitz plot is only a partial check. For a model that consists
+    of a conjugate **pair** alone, both signs give a mirror-symmetric intensity: they are
+    the :math:`C=-1` and :math:`C=+1` eigenstates of the tie, and an overall factor
+    :math:`s` drops out of the modulus. As soon as the model also contains a chain that
+    charge conjugation maps onto *itself*, that chain interferes with the pair and the
+    mirror symmetry does become sensitive to :math:`s`; see the
+    :math:`J/\psi \to 3\pi` section of :doc:`/cparity`.
 
 .. warning:: In the :math:`LS` basis, `.DalitzPlotDecompositionBuilder` does not currently
     write subsystem 2 in the pair ordering that Equation :eq:`conjugate-coupling-sign`
