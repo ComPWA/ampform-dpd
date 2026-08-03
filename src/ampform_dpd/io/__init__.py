@@ -18,6 +18,7 @@ This code originates from `ComPWA/ampform#280
 
 from __future__ import annotations
 
+import inspect
 import logging
 import warnings
 from collections import abc
@@ -39,6 +40,58 @@ from .cached import lambdify as perform_cached_lambdify  # ruff: ignore[unused-i
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
+
+
+def unfold_definitions(expr: sp.Expr) -> dict[sp.Expr, sp.Expr]:
+    """Recursively unfold one representative definition per expression class.
+
+    Instances of the same class are grouped before they are unfolded. Arguments that are
+    identical across the group are retained. Different atomic arguments, such as
+    channel-indexed symbols, use the first instance as their representative. Different
+    composite arguments are replaced by a symbol named after the corresponding class
+    parameter, so that special cases such as ``h(1)`` are rendered as ``h(z)``.
+    """
+    definitions = {}
+    unfolded_classes = set()
+    queue = [expr]
+    while queue:
+        subexpression = queue.pop(0)
+        if subexpression.func in unfolded_classes:
+            continue
+        instances = [subexpression]
+        instances.extend(node for node in queue if node.func == subexpression.func)
+        queue = [node for node in queue if node.func != subexpression.func]
+        subexpression = _generalize_arguments(instances)
+        unfolded = subexpression.doit(deep=False)
+        if unfolded == subexpression:
+            continue
+        definitions[subexpression] = unfolded
+        unfolded_classes.add(subexpression.func)
+        queue.extend(
+            node
+            for node in sp.preorder_traversal(unfolded)
+            if node.func not in unfolded_classes and node.doit(deep=False) != node
+        )
+    return definitions
+
+
+def _generalize_arguments(expressions: list[sp.Expr]) -> sp.Expr:
+    expression = expressions[0]
+    if len(expressions) == 1:
+        return expression
+    parameters = list(inspect.signature(expression.func).parameters)
+    arguments = []
+    for name, values in zip(
+        parameters,
+        zip(*(expr.args for expr in expressions), strict=True),
+        strict=False,
+    ):
+        if all(v == values[0] for v in values) or all(v.is_Atom for v in values):
+            argument = values[0]
+        else:
+            argument = sp.Symbol(name)
+        arguments.append(argument)
+    return expression.func(*arguments)
 
 
 @aslatex.register(IsobarNode)
