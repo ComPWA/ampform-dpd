@@ -364,7 +364,9 @@ class HelicityRecoupling(sp.Expr):
     λb: sp.Rational | sp.Symbol
     λa0: sp.Rational | sp.Symbol
     λb0: sp.Rational | sp.Symbol
-    _latex_repr_ = R"\mathcal{{H}}^\text{{helicity}}\left({λa},{λb}|{λa0},{λb0}\right)"
+    _latex_repr_ = (
+        R"\mathcal{{H}}^\text{{helicity}}\left({λa},{λb}\middle|{λa0},{λb0}\right)"
+    )
 
     def evaluate(self) -> sp.Expr:
         λa, λb, λa0, λb0 = self.args
@@ -379,7 +381,7 @@ class ParityRecoupling(sp.Expr):
     λb0: Any
     f: Any
     _latex_repr_ = (
-        R"\mathcal{{H}}^\text{{parity}}\left({λa},{λb}|{λa0},{λb0},{f}\right)"
+        R"\mathcal{{H}}^\text{{parity}}\left({λa},{λb}\middle|{λa0},{λb0},{f}\right)"
     )
 
     def evaluate(self) -> sp.Expr:
@@ -396,9 +398,7 @@ class LSRecoupling(sp.Expr):
     ja: Any
     jb: Any
     j: Any
-    _latex_repr_ = (
-        R"\mathcal{{H}}^\text{{parity}}\left({λa},{λb}|{l},{s},{ja},{jb},{j}\right)"
-    )
+    _latex_repr_ = R"\mathcal{{H}}^\text{{parity}}\left({λa},{λb}\middle|{l},{s},{ja},{jb},{j}\right)"
 
     def evaluate(self) -> sp.Expr:
         λa, λb, l, s, ja, jb, j = self.args
