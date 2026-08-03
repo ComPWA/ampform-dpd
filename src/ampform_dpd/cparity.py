@@ -53,6 +53,14 @@ For :math:`J/\psi \to p\bar p\eta`, Equation :eq:`conjugate-coupling-sign` colla
     the :math:`C=-1` and :math:`C=+1` eigenstates of the tie, and only the interference
     where the two conjugate bands cross differs. Cross-check the sign against the
     amplitudes themselves before using it in a fit.
+
+.. warning:: In the :math:`LS` basis, `.DalitzPlotDecompositionBuilder` does not currently
+    write subsystem 2 in the pair ordering that Equation :eq:`conjugate-coupling-sign`
+    assumes (`ComPWA/ampform-dpd#202
+    <https://github.com/ComPWA/ampform-dpd/issues/202>`_), which gives that subsystem an
+    extra :math:`\eta^\text{LS}`. Until that is resolved, an :math:`LS` model whose
+    conjugate pair involves subsystem 2 is tied with the wrong **relative** sign between
+    waves of different :math:`l`. Helicity couplings are unaffected.
 """
 
 from __future__ import annotations
