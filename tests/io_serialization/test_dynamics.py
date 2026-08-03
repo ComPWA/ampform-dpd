@@ -19,8 +19,7 @@ def test_formulate_generic_function():
             GenericFunctionDefinition(
                 name="custom",
                 type="generic_function",
-                expression="1 / (2^2 - \N{GREEK SMALL LETTER SIGMA} "
-                "- i * exp(-0.5 * \N{GREEK SMALL LETTER SIGMA}))",
+                expression="1 / (2^2 - σ - i * exp(-0.5 * σ))",
             )
         ],
         domains=[],

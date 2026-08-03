@@ -110,7 +110,7 @@ def formulate_generic_function(
     return DefinedExpression(
         expression=parse_expr(
             expression,
-            local_dict={"i": sp.I, "\N{GREEK SMALL LETTER SIGMA}": mandelstam},
+            local_dict={"i": sp.I, "σ": mandelstam},
         )
     )
 
