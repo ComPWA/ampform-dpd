@@ -938,9 +938,59 @@
   "misc": {
     "amplitude_model_checksums": [
       {
-        "name": "validation_point",
+        "point": "validation_point",
         "distribution": "my_model_for_reaction_intensity",
         "value": 9345.853380852355
+      },
+      {
+        "point": "validation_point_m31sq",
+        "distribution": "L1405_Flatte",
+        "value": "-0.7480602620708737 + 0.22521439829964163i"
+      },
+      {
+        "point": "validation_point_m31sq",
+        "distribution": "L1690_BW",
+        "value": "-1.856393035564509 + 1.3970917949874666i"
+      },
+      {
+        "point": "validation_point_m12sq",
+        "distribution": "D1232_BW",
+        "value": "-0.37559145211964445 + 0.2867197317591275i"
+      },
+      {
+        "point": "validation_point_m31sq",
+        "distribution": "L1520_BW",
+        "value": "-0.6519026717262323 + 0.5513711741076602i"
+      },
+      {
+        "point": "validation_point_m31sq",
+        "distribution": "L1600_BW",
+        "value": "-0.5711605382444855 + 0.8517294114907099i"
+      },
+      {
+        "point": "validation_point_m31sq",
+        "distribution": "L2000_BW",
+        "value": "1.1399027771220511 + 0.46329136172829i"
+      },
+      {
+        "point": "validation_point_m12sq",
+        "distribution": "D1600_BW",
+        "value": "-0.7542612203250671 + 0.953349114487552i"
+      },
+      {
+        "point": "validation_point_m12sq",
+        "distribution": "D1700_BW",
+        "value": "-0.32420527030886465 + 0.9152170090261661i"
+      },
+      {
+        "point": "validation_point_m23sq",
+        "distribution": "K892_BW",
+        "value": "-1.6160420072107298 + 0.30076446839110044i"
+      },
+      {
+        "point": "validation_point_m31sq",
+        "distribution": "L1670_BW",
+        "value": "-2.383989898030206 + 0.34006358781864954i"
       }
     ]
   },
@@ -971,6 +1021,33 @@
         {
           "name": "m_31_2",
           "value": 2.28646
+        }
+      ]
+    },
+    {
+      "name": "validation_point_m12sq",
+      "parameters": [
+        {
+          "name": "m_12_sq",
+          "value": 3.2
+        }
+      ]
+    },
+    {
+      "name": "validation_point_m23sq",
+      "parameters": [
+        {
+          "name": "m_23_sq",
+          "value": 1.4
+        }
+      ]
+    },
+    {
+      "name": "validation_point_m31sq",
+      "parameters": [
+        {
+          "name": "m_31_sq",
+          "value": 3.2
         }
       ]
     }
