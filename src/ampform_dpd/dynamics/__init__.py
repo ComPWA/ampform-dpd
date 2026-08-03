@@ -244,4 +244,4 @@ class SimpleBreitWigner(sp.Expr):
 
     def evaluate(self):
         s, m0, Γ0 = self.args
-        return 1 / (m0**2 - s - m0 * Γ0 * 1j)  # ty: ignore[unsupported-operator]
+        return 1 / (m0**2 - s - sp.I * m0 * Γ0)  # ty: ignore[unsupported-operator]
