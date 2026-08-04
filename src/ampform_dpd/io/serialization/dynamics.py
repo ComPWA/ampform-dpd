@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
+from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
 from ampform_dpd.dynamics import BreitWigner, ChannelArguments, MultichannelBreitWigner
@@ -13,6 +14,7 @@ from ampform_dpd.io.serialization.format import (
     BlattWeisskopfDefinition,
     BreitWignerDefinition,
     DecayChain,
+    GenericFunctionDefinition,
     ModelDefinition,
     MultichannelBreitWignerDefinition,
     Propagator,
@@ -49,6 +51,7 @@ def formulate_dynamics(
 ) -> DefinedExpression:
     definitions: dict[str, PropagatorDynamicsBuilder] = {
         "BreitWigner": formulate_breit_wigner,
+        "generic_function": formulate_generic_function,
         "MultichannelBreitWigner": formulate_multichannel_breit_wigner,
     }
     if additional_definitions is not None:
@@ -95,6 +98,21 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
         )
     msg = f"No form factor implementation for {function_name!r}"
     raise NotImplementedError(msg)
+
+
+def formulate_generic_function(
+    propagator: Propagator, resonance: str, model: ModelDefinition
+) -> DefinedExpression:
+    function_definition = get_function_definition(propagator["parametrization"], model)
+    function_definition = cast("GenericFunctionDefinition", function_definition)
+    expression = function_definition["expression"].replace("^", "**")
+    mandelstam = to_mandelstam_symbol(propagator["node"])
+    return DefinedExpression(
+        expression=parse_expr(
+            expression,
+            local_dict={"i": sp.I, "σ": mandelstam},
+        )
+    )
 
 
 def formulate_breit_wigner(

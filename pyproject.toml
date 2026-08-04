@@ -363,6 +363,7 @@ docstring-code-format = true
 line-ending = "lf"
 
 [tool.ruff.lint]
+allowed-confusables = ["σ"]
 ignore = [
     "ANN",
     "ARG00",
