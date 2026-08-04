@@ -113,6 +113,10 @@ class BreitWignerDefinition(FunctionDefinition):
     d: float
 
 
+class GenericFunctionDefinition(FunctionDefinition):
+    expression: str
+
+
 class MultichannelBreitWignerDefinition(FunctionDefinition):
     mass: float
     channels: list[ChannelParameters]

@@ -59,13 +59,6 @@ For :math:`J/\psi \to p\bar p\eta`, Equation :eq:`conjugate-coupling-sign` colla
     mirror symmetry does become sensitive to :math:`s`; see the
     :math:`J/\psi \to 3\pi` section of :doc:`/cparity`.
 
-.. warning:: In the :math:`LS` basis, `.DalitzPlotDecompositionBuilder` does not currently
-    write subsystem 2 in the pair ordering that Equation :eq:`conjugate-coupling-sign`
-    assumes (`ComPWA/ampform-dpd#202
-    <https://github.com/ComPWA/ampform-dpd/issues/202>`_), which gives that subsystem an
-    extra :math:`\eta^\text{LS}`. Until that is resolved, an :math:`LS` model whose
-    conjugate pair involves subsystem 2 is tied with the wrong **relative** sign between
-    waves of different :math:`l`. Helicity couplings are unaffected.
 """
 
 from __future__ import annotations

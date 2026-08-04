@@ -411,20 +411,6 @@ class TestMirrorSymmetry:
         )
         assert _compute_mirror_asymmetry(model, state_map) > 1e-3
 
-    @pytest.mark.xfail(
-        reason=(
-            "https://github.com/ComPWA/ampform-dpd/issues/202: in the LS basis, the"
-            " Clebsch-Gordan factors are built from IsobarNode.child1/child2, which"
-            " to_three_body_decay() sorts by final-state ID, while the isobar Wigner-d"
-            " function uses the cyclic pair ordering of get_decay_product_ids(). The two"
-            " differ for subsystem 2, which gives that subsystem an extra exchange phase."
-            " The derived sign is stated in the cyclic ordering, so the tie comes out"
-            " with the wrong relative sign between waves of different l. Reordering the"
-            " decay nodes cyclically makes this test pass; the helicity basis is"
-            " unaffected, see test_mirror_symmetry_is_restored_in_the_helicity_basis."
-        ),
-        strict=True,
-    )
     def test_tying_restores_mirror_symmetry_for_different_waves(
         self, jpsi2etappbar_reaction: ReactionInfo
     ):
@@ -440,9 +426,6 @@ class TestMirrorSymmetry:
     def test_mirror_symmetry_is_restored_in_the_helicity_basis(
         self, jpsi2etappbar_reaction: ReactionInfo
     ):
-        """The same model in the helicity basis is unaffected by the ordering problem of
-        :meth:`test_tying_restores_mirror_symmetry_for_different_waves`, because helicity
-        couplings do not involve Clebsch-Gordan factors."""
         transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
         decay = to_three_body_decay(transitions, min_ls=True)
         state_map = get_conjugate_state_map(decay)

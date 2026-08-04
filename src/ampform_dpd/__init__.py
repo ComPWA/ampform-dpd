@@ -230,7 +230,7 @@ class DalitzPlotDecompositionBuilder:
             )
             if not self.use_decay_helicity_couplings:
                 amplitude *= _formulate_clebsch_gordan_factors(
-                    _order_decay_products(chain.decay_node, i),
+                    isobar=_order_decay_products(chain.decay_node, first_id=i),
                     helicities={
                         self.decay.final_state[i]: λ[i],
                         self.decay.final_state[j]: λ[j],
@@ -397,13 +397,13 @@ def _get_coupling_base(
 def _order_decay_products(isobar: DecayNode, first_id: FinalStateID) -> DecayNode:
     """Write the children of a decay node in the DPD cyclic pair ordering.
 
-    The Clebsch-Gordan factors of an isobar node depend on which of its two children is
+    The Clebsch--Gordan factors of an isobar node depend on which of its two children is
     listed first, and so does the isobar Wigner-:math:`d` function. The latter is
     constructed from `.get_decay_product_ids`, which follows the cyclic pair ordering
     :math:`(23)1, (31)2, (12)3` of `the DPD paper
-    <https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033>`_ (Eq. 7), so the
-    node has to be brought into that same ordering before its Clebsch-Gordan factors are
-    formulated.
+    <https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033>`_ (Eq. 7), so
+    the node has to be brought into that same ordering before its Clebsch--Gordan factors
+    are formulated.
     """
     child1 = to_particle(isobar.child1)
     if isinstance(child1, State) and child1.index == first_id:
