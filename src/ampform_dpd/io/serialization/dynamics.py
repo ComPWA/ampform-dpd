@@ -4,7 +4,7 @@ from collections import abc
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
-from ampform.dynamics.form_factor import FormFactor
+from ampform.dynamics.form_factor import FormFactor, SphericalHankel1
 from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
@@ -82,22 +82,45 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
     function_type = function_definition["type"]
     if function_type == "BlattWeisskopf":
         node = vertex["node"]
-        s = to_mandelstam_symbol(node)
-        m1, m2 = (to_mass_symbol(i) for i in node)
         if all(isinstance(i, int) for i in node):
+            s = to_mandelstam_symbol(node)
+            m1, m2 = (to_mass_symbol(i) for i in node)
             meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
         else:
+            parent_mass = to_mandelstam_symbol(node)
+            isobar_invariant, m2 = (to_mass_symbol(i) for i in node)
+            s = parent_mass**2
+            m1 = sp.sqrt(isobar_invariant)
             initial_state = get_initial_state(model)
             meson_radius = sp.Symbol(f"R_{{{initial_state.latex}}}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
-            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius),  # ty: ignore[invalid-argument-type]
+            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius)  # ty: ignore[invalid-argument-type]
+            / _blatt_weisskopf_normalization(angular_momentum),
             parameters={
                 meson_radius: function_definition["radius"],
             },
         )
     msg = f"No form factor implementation for {function_name!r}"
     raise NotImplementedError(msg)
+
+
+def _blatt_weisskopf_normalization(angular_momentum: int) -> sp.Expr:
+    r"""Undo the normalization of AmpForm's `~ampform.dynamics.form_factor.FormFactor`.
+
+    AmpForm normalizes its Blatt--Weisskopf factor to one at :math:`z=1`, whereas the
+    serialization format uses the unnormalized convention, so the form factor has to be
+    divided by this value.
+
+    >>> _blatt_weisskopf_normalization(0)
+    1
+    >>> _blatt_weisskopf_normalization(1)
+    sqrt(2)
+    >>> _blatt_weisskopf_normalization(2)
+    sqrt(13)
+    """
+    hankel = SphericalHankel1(sp.Integer(angular_momentum), sp.Integer(1))
+    return sp.Abs(hankel.doit())
 
 
 def formulate_generic_function(

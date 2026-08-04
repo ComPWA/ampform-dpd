@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import pytest
 import sympy as sp
+from ampform.dynamics.form_factor import FormFactor
 
-from ampform_dpd.io.serialization.dynamics import formulate_dynamics
+from ampform_dpd.io.serialization.dynamics import (
+    formulate_dynamics,
+    formulate_form_factor,
+)
 from ampform_dpd.io.serialization.format import (
     DecayChain,
     GenericFunctionDefinition,
@@ -52,3 +56,17 @@ def test_formulate_bugg_lineshapes(model_definition: ModelDefinition, chain_id: 
     dynamics = formulate_dynamics(chain, model_definition)
 
     assert dynamics.expression.free_symbols == {sp.Symbol("sigma1", nonnegative=True)}
+
+
+def test_formulate_form_factor_uses_serialized_normalization(
+    model_definition: ModelDefinition,
+):
+    vertex = get_decay_chains(model_definition)[2]["vertices"][0]
+    form_factor = formulate_form_factor(vertex, model_definition)
+    assert sp.sqrt(2) * form_factor.expression == FormFactor(
+        s=sp.Symbol("m0", nonnegative=True) ** 2,  # ty: ignore[unknown-argument]
+        m1=sp.sqrt(sp.Symbol("sigma2", nonnegative=True)),  # ty: ignore[unknown-argument]
+        m2=sp.Symbol("m2", nonnegative=True),  # ty: ignore[unknown-argument]
+        angular_momentum=1,  # ty: ignore[unknown-argument]
+        meson_radius=sp.Symbol("R_{Lc}", nonnegative=True),  # ty: ignore[unknown-argument]
+    )
