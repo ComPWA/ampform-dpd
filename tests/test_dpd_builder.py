@@ -3,12 +3,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import attrs
 import pytest
 import qrules
 import sympy as sp
 
 from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
+from ampform_dpd.decay import ThreeBodyDecay
 from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
 
 if TYPE_CHECKING:
@@ -177,6 +179,58 @@ class TestDalitzPlotDecompositionBuilder:
         n_coefficients = len(coefficients)
         assert n_coefficients == n_coupling_products
         assert n_coefficients == n_decay_couplings * n_production_couplings
+
+    def test_ls_amplitude_does_not_depend_on_child_order(
+        self, jpsi2pksigma_reaction: ReactionInfo
+    ):
+        """The subsystem amplitude may not depend on how a decay node is stored.
+
+        Which of the two children of an `.IsobarNode` is :attr:`~.IsobarNode.child1` is
+        an implementation detail of whoever constructed the `.ThreeBodyDecay`, but the
+        Clebsch-Gordan factors of the :math:`LS` basis and the isobar Wigner-:math:`d`
+        function both depend on the ordering of the decay products, so the two have to be
+        brought into the same ordering first.
+        """
+        if jpsi2pksigma_reaction.formalism == "helicity":
+            pytest.skip("Helicity formalism does not have LS couplings")
+        transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=True)
+        builders = [
+            DalitzPlotDecompositionBuilder(d, min_ls=False)
+            for d in (decay, _swap_decay_products(decay))
+        ]
+        helicities = (
+            sp.Integer(1),
+            sp.Integer(0),
+            sp.Rational(1, 2),
+            sp.Rational(-1, 2),
+        )
+        for subsystem_id in sorted({c.spectator.index for c in decay.chains}):
+            expressions = [
+                next(
+                    iter(
+                        b.formulate_subsystem_amplitude(
+                            *helicities,
+                            subsystem_id,
+                        ).amplitudes.values()
+                    )
+                ).doit()
+                for b in builders
+            ]
+            assert sp.simplify(expressions[0] - expressions[1]) == 0, subsystem_id
+
+
+def _swap_decay_products(decay: ThreeBodyDecay) -> ThreeBodyDecay:
+    """Reverse the order in which every decay node stores its two children."""
+    chains = []
+    for chain in decay.chains:
+        node = attrs.evolve(
+            chain.decay_node,
+            child1=chain.decay_node.child2,
+            child2=chain.decay_node.child1,
+        )
+        chains.append(attrs.evolve(chain, decay=attrs.evolve(chain.decay, child1=node)))
+    return ThreeBodyDecay(decay.states, chains)
 
 
 def _collect_indexed_symbols(amplitudes: list[sp.Expr]) -> set[sp.Indexed]:
