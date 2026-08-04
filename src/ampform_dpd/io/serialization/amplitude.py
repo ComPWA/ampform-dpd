@@ -48,8 +48,18 @@ from ampform_dpd.spin import create_spin_range
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from ampform_dpd.decay import FinalStateID
+    from ampform_dpd.decay import FinalStateID, State, StateID
     from ampform_dpd.io.serialization.format import ModelDefinition
+
+_REFERENCE_SUBSYSTEMS: dict[StateID, FinalStateID] = {0: 1, 1: 1, 2: 2, 3: 3}
+"""Reference subsystem to use for the alignment rotation of each state.
+
+Each final state is aligned with respect to its own subsystem and the initial state with
+respect to subsystem 1. This is the convention of `ThreeBodyDecays.jl
+<https://github.com/mmikhasenko/ThreeBodyDecays.jl>`_, which the serialization format
+follows, and it is used instead of the single reference topology that the serialized
+model declares.
+"""
 
 
 def formulate(  # ruff: ignore[too-many-locals]
@@ -123,51 +133,80 @@ def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positio
     to_latex: Callable[[str], str] = identity_function,
     additional_builders: dict[str, PropagatorDynamicsBuilder] | None = None,
 ) -> dict[sp.Basic, complex | float | sp.Expr]:
+    r"""Formulate the amplitude for one decay chain of a serialized model.
+
+    This is the serialization counterpart of
+    `.DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude`: the couplings and
+    dynamics are read from the model definition instead of being generated, but the
+    phase conventions, the Kronecker delta over the production helicities, and the sum
+    over the resonance helicity :math:`\lambda_R` are the same. The two implementations
+    have to be kept in sync.
+    """
     chain_defs = get_decay_chains(model)
     chain_definition = chain_defs[chain_idx]
-    # -----------------------
     dynamics = formulate_dynamics(
         chain_definition, model, to_latex, additional_builders
     )
     for vertex in chain_definition["vertices"]:
         dynamics *= formulate_form_factor(vertex, model)
-    # -----------------------
     weight, weight_val = _get_weight(chain_definition, to_latex)
-    # -----------------------
-    (i, _), (j, _) = _get_decay_product_helicities(chain_definition)
+    i, j = _get_decay_product_ids(chain_definition)
     θij, θij_expr = formulate_scattering_angle(i, j)
     jR = sp.Rational(chain_definition["propagators"][0]["spin"])  # ruff: ignore[non-lowercase-variable-in-function]
-    R_node, _ = _get_resonance_helicity(chain_definition)  # ruff: ignore[non-lowercase-variable-in-function]
-    λR = _get_helicity_symbol(R_node)
-    # -----------------------
+    λR = _get_helicity_symbol(_get_resonance_node(chain_definition))
     A = _generate_amplitude_index_bases()
-    subsystem_id = get_spectator_id(chain_definition["topology"])
+    spectator_id = get_spectator_id(chain_definition["topology"])
     states = get_states(model)
     helicities = (λ0, λ1, λ2, λ3)
     h_prod = formulate_recoupling(model, chain_idx, vertex_idx=0)
     h_dec = formulate_recoupling(model, chain_idx, vertex_idx=1)
-    amplitude_expression = (
+    chain_amplitude = (
         weight
         * sp.sqrt(2 * jR + 1)
-        * (-1) ** (states[subsystem_id].spin - helicities[subsystem_id])
-        * (-1) ** (states[cast("FinalStateID", j)].spin - helicities[j])
-        * δ(λ0, λR - helicities[subsystem_id])
+        * _formulate_phase_factor(states[spectator_id], helicities[spectator_id])
+        * _formulate_phase_factor(states[j], helicities[j])
+        * δ(λ0, λR - helicities[spectator_id])
         * h_prod
         * h_dec
         * Wigner.d(jR, λR, helicities[i] - helicities[j], θij)
         * dynamics.expression
     )
-    amplitude_expression = PoolSum(
-        amplitude_expression,
-        (λR, create_spin_range(jR)),
-    )
-    amplitude_symbol = A[subsystem_id][λ0, λ1, λ2, λ3]
+    amplitude_expression = PoolSum(chain_amplitude, (λR, create_spin_range(jR)))
+    amplitude_symbol = A[spectator_id][λ0, λ1, λ2, λ3]
     return {
         amplitude_symbol: amplitude_expression,
         weight: weight_val,
         **dynamics.parameters,
         θij: θij_expr,
     }
+
+
+def _formulate_phase_factor(state: State, helicity: sp.Rational | sp.Symbol) -> sp.Expr:
+    r"""Formulate the :math:`(-1)^{j-\lambda}` phase factor of a state."""
+    return (-1) ** (state.spin - helicity)
+
+
+def _get_decay_product_ids(
+    chain_definition: DecayChain,
+) -> tuple[FinalStateID, FinalStateID]:
+    """Get the IDs of the two decay products, ignoring their serialized helicities.
+
+    The helicity values from `._get_decay_product_helicities` are not substituted into
+    the chain amplitude: it is summed over all allowed helicities instead.
+    """
+    (i, _), (j, _) = _get_decay_product_helicities(chain_definition)
+    return cast("FinalStateID", i), cast("FinalStateID", j)
+
+
+def _get_resonance_node(
+    chain_definition: DecayChain,
+) -> tuple[FinalStateID, FinalStateID]:
+    """Get the node of the resonance, ignoring its serialized helicity.
+
+    See `._get_decay_product_ids` for why the helicity value is discarded.
+    """
+    node, _ = _get_resonance_helicity(chain_definition)
+    return node
 
 
 def _get_decay_product_helicities(
@@ -195,11 +234,13 @@ def formulate_aligned_amplitude(
     λ2: sp.Rational | sp.Symbol,
     λ3: sp.Rational | sp.Symbol,
 ) -> tuple[PoolSum, dict[sp.Symbol, sp.Expr]]:
+    generators = {
+        subsystem_id: _AlignmentWignerGenerator(subsystem_id)
+        for subsystem_id in sorted(set(_REFERENCE_SUBSYSTEMS.values()))
+    }
     wigner_generators = {
-        0: _AlignmentWignerGenerator(reference_subsystem=1),
-        1: _AlignmentWignerGenerator(reference_subsystem=1),
-        2: _AlignmentWignerGenerator(reference_subsystem=2),
-        3: _AlignmentWignerGenerator(reference_subsystem=3),
+        rotated_state: generators[subsystem_id]
+        for rotated_state, subsystem_id in _REFERENCE_SUBSYSTEMS.items()
     }
     _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(:4)^{\prime}", rational=True)
     states = get_states(model)
@@ -221,7 +262,7 @@ def formulate_aligned_amplitude(
     )
     angle_definitions = {
         symbol: expression
-        for generator in wigner_generators.values()
+        for generator in generators.values()
         for symbol, expression in generator.angle_definitions.items()
     }
     return amp_expr, angle_definitions
