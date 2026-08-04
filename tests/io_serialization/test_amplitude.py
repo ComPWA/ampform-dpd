@@ -6,6 +6,7 @@ import pytest
 import sympy as sp
 
 from ampform_dpd.io.serialization.amplitude import (
+    ParityRecoupling,
     _get_decay_product_helicities,
     _get_final_state_helicities,
     _get_resonance_helicity,
@@ -60,3 +61,8 @@ def test_get_weight(model_definition: ModelDefinition):
     symbol, value = _get_weight(chain_defs[0])
     assert symbol.name == R"c^{L1405[1/2]}_{\frac{1}{2}, 0, 0}"
     assert value == pytest.approx(7.38649400481717 + 1.971018433257411j)
+
+
+def test_parity_recoupling_does_not_duplicate_zero_helicities():
+    recoupling = ParityRecoupling(λa=0, λb=0, λa0=0, λb0=0, f=1)  # ty: ignore[unknown-argument]
+    assert recoupling.doit() == 1

@@ -42,7 +42,6 @@ from ampform_dpd.io.serialization.format import (
     ParityVertex,
     get_decay_chains,
     get_distribution_def,
-    get_reference_topology,
 )
 from ampform_dpd.spin import create_spin_range
 
@@ -135,24 +134,33 @@ def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positio
     # -----------------------
     weight, weight_val = _get_weight(chain_definition, to_latex)
     # -----------------------
-    (i, λi_val), (j, λj_val) = _get_decay_product_helicities(chain_definition)
+    (i, _), (j, _) = _get_decay_product_helicities(chain_definition)
     θij, θij_expr = formulate_scattering_angle(i, j)
     jR = sp.Rational(chain_definition["propagators"][0]["spin"])  # ruff: ignore[non-lowercase-variable-in-function]
-    R_node, λR_val = _get_resonance_helicity(chain_definition)  # ruff: ignore[non-lowercase-variable-in-function]
+    R_node, _ = _get_resonance_helicity(chain_definition)  # ruff: ignore[non-lowercase-variable-in-function]
     λR = _get_helicity_symbol(R_node)
     # -----------------------
     A = _generate_amplitude_index_bases()
     subsystem_id = get_spectator_id(chain_definition["topology"])
+    states = get_states(model)
+    helicities = (λ0, λ1, λ2, λ3)
     h_prod = formulate_recoupling(model, chain_idx, vertex_idx=0)
     h_dec = formulate_recoupling(model, chain_idx, vertex_idx=1)
     amplitude_expression = (
         weight
+        * sp.sqrt(2 * jR + 1)
+        * (-1) ** (states[subsystem_id].spin - helicities[subsystem_id])
+        * (-1) ** (states[cast("FinalStateID", j)].spin - helicities[j])
+        * δ(λ0, λR - helicities[subsystem_id])
         * h_prod
         * h_dec
-        * Wigner.d(jR, λR, λi_val - λj_val, θij)
+        * Wigner.d(jR, λR, helicities[i] - helicities[j], θij)
         * dynamics.expression
     )
-    amplitude_expression = amplitude_expression.subs({λR: λR_val})
+    amplitude_expression = PoolSum(
+        amplitude_expression,
+        (λR, create_spin_range(jR)),
+    )
     amplitude_symbol = A[subsystem_id][λ0, λ1, λ2, λ3]
     return {
         amplitude_symbol: amplitude_expression,
@@ -187,9 +195,12 @@ def formulate_aligned_amplitude(
     λ2: sp.Rational | sp.Symbol,
     λ3: sp.Rational | sp.Symbol,
 ) -> tuple[PoolSum, dict[sp.Symbol, sp.Expr]]:
-    reference_topology = get_reference_topology(model)
-    reference_subsystem = get_spectator_id(reference_topology)
-    wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
+    wigner_generators = {
+        0: _AlignmentWignerGenerator(reference_subsystem=1),
+        1: _AlignmentWignerGenerator(reference_subsystem=1),
+        2: _AlignmentWignerGenerator(reference_subsystem=2),
+        3: _AlignmentWignerGenerator(reference_subsystem=3),
+    }
     _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(:4)^{\prime}", rational=True)
     states = get_states(model)
     j0, j1, j2, j3 = (states[i].spin for i in sorted(states))
@@ -197,10 +208,10 @@ def formulate_aligned_amplitude(
     amp_expr = PoolSum(
         sum(
             A[k][_λ0, _λ1, _λ2, _λ3]
-            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=k)
-            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=k)
-            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=k)
-            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=k)
+            * wigner_generators[0](j0, λ0, _λ0, rotated_state=0, aligned_subsystem=k)
+            * wigner_generators[1](j1, _λ1, λ1, rotated_state=1, aligned_subsystem=k)
+            * wigner_generators[2](j2, _λ2, λ2, rotated_state=2, aligned_subsystem=k)
+            * wigner_generators[3](j3, _λ3, λ3, rotated_state=3, aligned_subsystem=k)
             for k in get_existing_subsystem_ids(model)
         ),
         (_λ0, create_spin_range(j0)),
@@ -208,7 +219,12 @@ def formulate_aligned_amplitude(
         (_λ2, create_spin_range(j2)),
         (_λ3, create_spin_range(j3)),
     )
-    return amp_expr, wigner_generator.angle_definitions
+    angle_definitions = {
+        symbol: expression
+        for generator in wigner_generators.values()
+        for symbol, expression in generator.angle_definitions.items()
+    }
+    return amp_expr, angle_definitions
 
 
 def _get_weight(
@@ -386,6 +402,8 @@ class ParityRecoupling(sp.Expr):
 
     def evaluate(self) -> sp.Expr:
         λa, λb, λa0, λb0, f = self.args
+        if λa0 == 0 and λb0 == 0:
+            return δ(λa, λa0) * δ(λb, λb0)
         return δ(λa, λa0) * δ(λb, λb0) + f * δ(λa, -λa0) * δ(λb, -λb0)  # ty: ignore[unsupported-operator]
 
 

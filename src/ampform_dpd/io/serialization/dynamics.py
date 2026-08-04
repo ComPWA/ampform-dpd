@@ -4,7 +4,7 @@ from collections import abc
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
-from ampform.dynamics.form_factor import FormFactor
+from ampform.dynamics.form_factor import FormFactor, SphericalHankel1
 from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
@@ -87,11 +87,17 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
         if all(isinstance(i, int) for i in node):
             meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
         else:
+            s **= 2
+            m1 = sp.sqrt(m1)
             initial_state = get_initial_state(model)
             meson_radius = sp.Symbol(f"R_{{{initial_state.latex}}}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
+        normalization = sp.Abs(
+            SphericalHankel1(sp.Integer(angular_momentum), sp.Integer(1)).doit()
+        )
         return DefinedExpression(
-            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius),  # ty: ignore[invalid-argument-type]
+            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius)  # ty: ignore[invalid-argument-type]
+            / normalization,
             parameters={
                 meson_radius: function_definition["radius"],
             },
