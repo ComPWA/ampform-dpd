@@ -62,13 +62,11 @@ def test_formulate_form_factor_uses_serialized_normalization(
     model_definition: ModelDefinition,
 ):
     vertex = get_decay_chains(model_definition)[2]["vertices"][0]
-
     form_factor = formulate_form_factor(vertex, model_definition)
-
     assert sp.sqrt(2) * form_factor.expression == FormFactor(
-        sp.Symbol("m0", nonnegative=True) ** 2,
-        sp.sqrt(sp.Symbol("sigma2", nonnegative=True)),
-        sp.Symbol("m2", nonnegative=True),
-        sp.Integer(1),
-        sp.Symbol("R_{Lc}", nonnegative=True),
+        s=sp.Symbol("m0", nonnegative=True) ** 2,  # ty: ignore[unknown-argument]
+        m1=sp.sqrt(sp.Symbol("sigma2", nonnegative=True)),  # ty: ignore[unknown-argument]
+        m2=sp.Symbol("m2", nonnegative=True),  # ty: ignore[unknown-argument]
+        angular_momentum=1,  # ty: ignore[unknown-argument]
+        meson_radius=sp.Symbol("R_{Lc}", nonnegative=True),  # ty: ignore[unknown-argument]
     )
