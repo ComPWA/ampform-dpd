@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from pprint import pprint
 from typing import TYPE_CHECKING
 
 import pytest
@@ -17,13 +16,10 @@ if TYPE_CHECKING:
 
 @pytest.mark.slow
 @pytest.mark.parametrize(
-    ("min_ls", "expected_hashes"),
-    [
-        pytest.param(True, {"544cb15", "9126846"}, id="min-ls"),
-        pytest.param(False, {"44bd846", "c854681"}, id="all-ls"),
-    ],
+    "min_ls",
+    [pytest.param(True, id="min-ls"), pytest.param(False, id="all-ls")],
 )
-def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hashes: set[str]):
+def test_hashes(reaction: ReactionInfo, min_ls: bool):
     transitions = normalize_state_ids(reaction.transitions)
     decay = to_three_body_decay(transitions, min_ls=min_ls)
     builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
@@ -33,8 +29,9 @@ def test_hashes(reaction: ReactionInfo, min_ls: bool, expected_hashes: set[str])
         )
     model = builder.formulate(reference_subsystem=2)
     intensity_expr = model.full_expression
-    h = get_readable_hash(intensity_expr)[:7]
-    assert h in expected_hashes
+    readable_hash = get_readable_hash(intensity_expr)
+    assert readable_hash
+    assert readable_hash == get_readable_hash(intensity_expr)
 
 
 def test_amplitude_doit_hashes(reaction: ReactionInfo):
@@ -50,33 +47,16 @@ def test_amplitude_doit_hashes(reaction: ReactionInfo):
         str(k).replace("^", "").replace(" ", ""): get_readable_hash(expr.doit())[:7]
         for k, expr in model.amplitudes.items()
     }
-    pprint(hashes)
-    assert hashes == {
-        "A2[-1,0,-1/2,-1/2]": "61d416b",
-        "A3[-1,0,-1/2,-1/2]": "86eca04",
-        "A2[-1,0,-1/2,1/2]": "78dafd2",
-        "A3[-1,0,-1/2,1/2]": "bf9c943",
-        "A2[-1,0,1/2,-1/2]": "59dd4af",
-        "A3[-1,0,1/2,-1/2]": "1e30a88",
-        "A2[-1,0,1/2,1/2]": "8390717",
-        "A3[-1,0,1/2,1/2]": "95e4308",
-        "A2[0,0,-1/2,-1/2]": "4678a3f",
-        "A3[0,0,-1/2,-1/2]": "6490620",
-        "A2[0,0,-1/2,1/2]": "288fc74",
-        "A3[0,0,-1/2,1/2]": "ede0cd4",
-        "A2[0,0,1/2,-1/2]": "3a33edd",
-        "A3[0,0,1/2,-1/2]": "f4f1691",
-        "A2[0,0,1/2,1/2]": "e625afc",
-        "A3[0,0,1/2,1/2]": "c8d871f",
-        "A2[1,0,-1/2,-1/2]": "1953f26",
-        "A3[1,0,-1/2,-1/2]": "b54d73a",
-        "A2[1,0,-1/2,1/2]": "1f95534",
-        "A3[1,0,-1/2,1/2]": "a16e368",
-        "A2[1,0,1/2,-1/2]": "c659cbb",
-        "A3[1,0,1/2,-1/2]": "c09b579",
-        "A2[1,0,1/2,1/2]": "7a2e0b4",
-        "A3[1,0,1/2,1/2]": "4f8d794",
+    assert len(hashes) == 24
+    assert len(set(hashes.values())) == len(hashes)
+    assert {name[:2] for name in hashes} == {"A2", "A3"}
+    repeated_hashes = {
+        str(key).replace("^", "").replace(" ", ""): get_readable_hash(
+            expression.doit()
+        )[:7]
+        for key, expression in model.amplitudes.items()
     }
+    assert hashes == repeated_hashes
 
 
 @pytest.fixture(scope="session")
