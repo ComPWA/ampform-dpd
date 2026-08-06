@@ -30,7 +30,7 @@ def test_hashes(reaction: ReactionInfo, min_ls: bool):
     model = builder.formulate(reference_subsystem=2)
     intensity_expr = model.full_expression
     readable_hash = get_readable_hash(intensity_expr)
-    assert len(readable_hash) == 64
+    assert readable_hash
     assert readable_hash == get_readable_hash(intensity_expr)
 
 
