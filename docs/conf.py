@@ -72,6 +72,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "StateID": ("obj", "ampform_dpd.decay.StateID"),
     "StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "Topology": ("obj", "ampform_dpd.io.serialization.format.Topology"),
+    "Workspace": ("obj", "ampform_dpd.io.serialization.workspace.Workspace"),
     "typing_extensions.Required": ("obj", "typing.Required"),
 }
 api_target_types: dict[str, str] = {}
