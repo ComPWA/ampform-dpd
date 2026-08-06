@@ -16,8 +16,6 @@ from ampform_dpd.io.serialization.dynamics import (
 )
 
 if TYPE_CHECKING:
-    from os import PathLike
-
     from ampform_dpd import AmplitudeModel, DefinedExpression
     from ampform_dpd.io.serialization.format import ModelDefinition
 
@@ -35,7 +33,7 @@ class Workspace:
 
 
 def load_workspace(
-    source: str | PathLike[str] | Mapping[str, Any],
+    source: str | Path | Mapping[str, Any],
     *,
     builders: Mapping[str, PropagatorDynamicsBuilder] | None = None,
 ) -> Workspace:
@@ -68,7 +66,7 @@ def load_workspace(
 
 
 def _load_definition(
-    source: str | PathLike[str] | Mapping[str, Any],
+    source: str | Path | Mapping[str, Any],
 ) -> ModelDefinition:
     if isinstance(source, Mapping):
         return cast("ModelDefinition", dict(source))
