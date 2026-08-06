@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+import ampform_dpd.io.serialization.validation as validation_module
 from ampform_dpd.io.serialization import (
     CompiledWorkspace,
     compile_workspace,
@@ -26,6 +27,7 @@ def test_validate_complex_checksum(model_definition: ModelDefinition, backend: s
     workspace = replace(workspace, checksums=(checksum,))
     (result,) = validate_checksums(workspace, backend=backend)
     assert result.passed
+    assert result.point_name == checksum["point"]
     assert isinstance(result.reference, complex)
     assert result.difference == pytest.approx(0, abs=1e-14)
 
@@ -46,6 +48,30 @@ def test_tolerance_boundary(model_definition: ModelDefinition):
     assert passed.passed
 
 
+def test_named_function_uses_its_symbolic_variable(
+    model_definition: ModelDefinition,
+):
+    workspace = load_workspace(model_definition)
+    checksum = next(
+        item for item in workspace.checksums if item["distribution"] == "L1600_BW"
+    )
+    point_name = checksum["point"]
+    point = next(
+        item for item in workspace.reference_points if item["name"] == point_name
+    )
+    renamed_point = {
+        **point,
+        "parameters": ({**point["parameters"][0], "name": "m_12_sq"},),
+    }
+    workspace = replace(
+        workspace,
+        checksums=(checksum,),
+        reference_points=(MappingProxyType(renamed_point),),
+    )
+    (result,) = validate_checksums(workspace, backend="jax")
+    assert result.passed
+
+
 def test_missing_target_returns_diagnostic(model_definition: ModelDefinition):
     workspace = load_workspace(model_definition)
     checksum = next(
@@ -57,6 +83,7 @@ def test_missing_target_returns_diagnostic(model_definition: ModelDefinition):
         backend="numpy",
         functions=MappingProxyType({}),
         coordinate_maps=MappingProxyType({}),
+        coordinates=MappingProxyType({}),
     )
     (result,) = validate_checksums(compiled)
     assert not result.passed
@@ -79,3 +106,45 @@ def test_non_finite_output_returns_diagnostic(model_definition: ModelDefinition)
     assert not result.passed
     assert result.diagnostic is not None
     assert "non-finite" in result.diagnostic
+
+
+def test_compilation_failure_does_not_abort_other_targets(
+    model_definition: ModelDefinition,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    workspace = load_workspace(model_definition)
+    failed_checksum = next(
+        item for item in workspace.checksums if item["distribution"] == "L1600_BW"
+    )
+    passing_checksum = next(
+        item
+        for item in workspace.checksums
+        if item["distribution"] in workspace.functions
+        and item["distribution"] != "L1600_BW"
+    )
+    workspace = replace(
+        workspace,
+        checksums=(failed_checksum, passing_checksum),
+    )
+    original_compile_workspace = compile_workspace
+
+    def compile_with_failure(workspace, *, backend, targets):
+        if tuple(targets) == ("L1600_BW",):
+            message = "expression is too deeply nested"
+            raise RecursionError(message)
+        return original_compile_workspace(
+            workspace,
+            backend=backend,
+            targets=targets,
+        )
+
+    monkeypatch.setattr(
+        validation_module,
+        "compile_workspace",
+        compile_with_failure,
+    )
+    failed, passed = validate_checksums(workspace, backend="jax")
+    assert not failed.passed
+    assert failed.diagnostic is not None
+    assert "Compilation failed: RecursionError" in failed.diagnostic
+    assert passed.passed
