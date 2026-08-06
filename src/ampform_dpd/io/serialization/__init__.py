@@ -10,4 +10,7 @@ https://rub-ep1.github.io/amplitude-serialization for more information.
 
 from ampform_dpd.io.serialization.workspace import Workspace, load_workspace
 
-__all__ = ["Workspace", "load_workspace"]
+__all__ = [
+    "Workspace",
+    "load_workspace",
+]

@@ -1,22 +1,27 @@
 from __future__ import annotations
 
 import json
+import pathlib
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass
-from pathlib import Path
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, cast
 
 from ampform_dpd.io.serialization.amplitude import formulate
+from ampform_dpd.io.serialization.decay import to_decay
 from ampform_dpd.io.serialization.dynamics import (
     PropagatorDynamicsBuilder,
     formulate_dynamics,
     formulate_form_factor,
+    identity_function,
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from ampform_dpd import AmplitudeModel, DefinedExpression
+    from ampform_dpd.decay import ThreeBodyDecay
     from ampform_dpd.io.serialization.format import ModelDefinition
 
 
@@ -25,6 +30,7 @@ class Workspace:
     """Backend-independent formulation of a serialized amplitude model."""
 
     definition: Mapping[str, Any]
+    decays: Mapping[str, ThreeBodyDecay]
     distributions: Mapping[str, AmplitudeModel]
     functions: Mapping[str, DefinedExpression]
     kinematics: Mapping[str, Any]
@@ -33,21 +39,32 @@ class Workspace:
 
 
 def load_workspace(
-    source: str | Path | Mapping[str, Any],
+    source: str | pathlib.Path | Mapping[str, Any],
     *,
     builders: Mapping[str, PropagatorDynamicsBuilder] | None = None,
+    to_latex: Callable[[str], str] | None = None,
 ) -> Workspace:
     """Load and formulate every distribution in a serialized model."""
     definition = _load_definition(source)
     _raise_on_duplicate_names(definition)
-    distributions = {
-        distribution["name"]: formulate(
-            _select_distribution(definition, distribution),
-            additional_builders=dict(builders) if builders is not None else None,
-        )
+    render_name = to_latex if to_latex is not None else identity_function
+    selected_definitions = {
+        distribution["name"]: _select_distribution(definition, distribution)
         for distribution in definition["distributions"]
     }
-    functions = _formulate_functions(definition, builders)
+    decays = {
+        name: to_decay(selected, to_latex=render_name)
+        for name, selected in selected_definitions.items()
+    }
+    distributions = {
+        name: formulate(
+            selected,
+            additional_builders=dict(builders) if builders is not None else None,
+            to_latex=render_name,
+        )
+        for name, selected in selected_definitions.items()
+    }
+    functions = _formulate_functions(definition, builders, render_name)
     kinematics = {
         distribution["name"]: distribution["decay_description"]["kinematics"]
         for distribution in definition["distributions"]
@@ -55,6 +72,7 @@ def load_workspace(
     checksums = definition.get("misc", {}).get("amplitude_model_checksums", [])
     return Workspace(
         definition=_freeze(definition),
+        decays=MappingProxyType(decays),
         distributions=MappingProxyType(distributions),
         functions=MappingProxyType(functions),
         kinematics=_freeze(kinematics),
@@ -66,11 +84,11 @@ def load_workspace(
 
 
 def _load_definition(
-    source: str | Path | Mapping[str, Any],
+    source: str | pathlib.Path | Mapping[str, Any],
 ) -> ModelDefinition:
     if isinstance(source, Mapping):
         return cast("ModelDefinition", dict(source))
-    with Path(source).open() as stream:
+    with pathlib.Path(source).open() as stream:
         return cast("ModelDefinition", json.load(stream))
 
 
@@ -94,11 +112,12 @@ def _select_distribution(
 def _formulate_functions(
     definition: ModelDefinition,
     builders: Mapping[str, PropagatorDynamicsBuilder] | None,
+    to_latex: Callable[[str], str],
 ) -> dict[str, DefinedExpression]:
     formulated = {}
     for function in definition["functions"]:
         name = function["name"]
-        formulated[name] = _formulate_function(name, definition, builders)
+        formulated[name] = _formulate_function(name, definition, builders, to_latex)
     return formulated
 
 
@@ -106,6 +125,7 @@ def _formulate_function(
     name: str,
     definition: ModelDefinition,
     builders: Mapping[str, PropagatorDynamicsBuilder] | None,
+    to_latex: Callable[[str], str],
 ) -> DefinedExpression:
     for distribution in definition["distributions"]:
         model = _select_distribution(definition, distribution)
@@ -117,6 +137,7 @@ def _formulate_function(
                     return formulate_dynamics(
                         cast("Any", single_propagator_chain),
                         model,
+                        to_latex=to_latex,
                         additional_definitions=(
                             dict(builders) if builders is not None else None
                         ),
@@ -136,7 +157,7 @@ def _formulate_function(
     raise NotImplementedError(msg)
 
 
-def _freeze(value: Any) -> Any:
+def _freeze(value: Any, /) -> Any:
     if isinstance(value, Mapping):
         return MappingProxyType({key: _freeze(item) for key, item in value.items()})
     if isinstance(value, list):

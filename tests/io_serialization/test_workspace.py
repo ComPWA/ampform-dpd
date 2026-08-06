@@ -24,6 +24,7 @@ def test_load_workspace(
         source = tmp_path / "model.json"
         source.write_text(json.dumps(model_definition))
     workspace = load_workspace(source)
+    assert tuple(workspace.decays) == ("default_model",)
     assert tuple(workspace.distributions) == ("default_model",)
     assert set(workspace.functions) == {
         item["name"] for item in model_definition["functions"]
@@ -31,6 +32,17 @@ def test_load_workspace(
     assert isinstance(workspace.definition, MappingProxyType)
     with pytest.raises(TypeError):
         workspace.distributions["new"] = workspace.distributions["default_model"]  # ty: ignore[invalid-assignment]
+
+
+def test_load_workspace_with_latex_renderer(model_definition: ModelDefinition):
+    workspace = load_workspace(model_definition, to_latex=lambda name: f"latex({name})")
+    decay = workspace.decays["default_model"]
+    assert decay.initial_state.latex == "latex(Lc)"
+    assert all(state.latex.startswith("latex(") for state in decay.final_state.values())
+    assert any(
+        "latex(" in str(symbol)
+        for symbol in workspace.distributions["default_model"].parameter_defaults
+    )
 
 
 def test_loads_multiple_distributions(model_definition: ModelDefinition):
