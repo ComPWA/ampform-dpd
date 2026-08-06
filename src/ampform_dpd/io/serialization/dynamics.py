@@ -4,11 +4,16 @@ from collections import abc
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
-from ampform.dynamics.form_factor import FormFactor, SphericalHankel1
+from ampform.dynamics.form_factor import (
+    BreakupMomentumSquared,
+    FormFactor,
+    SphericalHankel1,
+)
+from ampform.dynamics.phasespace import PhaseSpaceFactorComplex
 from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import BreitWigner, ChannelArguments, MultichannelBreitWigner
+from ampform_dpd.dynamics import BreitWigner, ChannelArguments
 from ampform_dpd.io.serialization.decay import get_initial_state
 from ampform_dpd.io.serialization.format import (
     BlattWeisskopfDefinition,
@@ -16,7 +21,9 @@ from ampform_dpd.io.serialization.format import (
     DecayChain,
     GenericFunctionDefinition,
     ModelDefinition,
+    MomentumPowerDefinition,
     MultichannelBreitWignerDefinition,
+    PolynomialDefinition,
     Propagator,
     Vertex,
     get_function_definition,
@@ -53,6 +60,7 @@ def formulate_dynamics(
         "BreitWigner": formulate_breit_wigner,
         "generic_function": formulate_generic_function,
         "MultichannelBreitWigner": formulate_multichannel_breit_wigner,
+        "Polynomial": formulate_polynomial,
     }
     if additional_definitions is not None:
         definitions.update(additional_definitions)
@@ -80,6 +88,18 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
     function_definition = get_function_definition(function_name, model)
     function_definition = cast("BlattWeisskopfDefinition", function_definition)
     function_type = function_definition["type"]
+    if function_type == "MomentumPower":
+        function_definition = cast("MomentumPowerDefinition", function_definition)
+        node = vertex["node"]
+        if all(isinstance(i, int) for i in node):
+            s = to_mandelstam_symbol(node)
+            m1, m2 = (to_mass_symbol(i) for i in node)
+        else:
+            s = to_mandelstam_symbol(node) ** 2
+            m1, m2 = (to_mass_symbol(i) for i in node)
+            m1 = sp.sqrt(m1)
+        power = sp.Rational(function_definition["l"], 2)
+        return DefinedExpression(expression=BreakupMomentumSquared(s, m1, m2) ** power)
     if function_type == "BlattWeisskopf":
         node = vertex["node"]
         if all(isinstance(i, int) for i in node):
@@ -128,14 +148,29 @@ def formulate_generic_function(
 ) -> DefinedExpression:
     function_definition = get_function_definition(propagator["parametrization"], model)
     function_definition = cast("GenericFunctionDefinition", function_definition)
-    expression = function_definition["expression"].replace("^", "**")
+    expression = function_definition["expression"]
+    expression = expression.replace("^", "**").replace("1im", "I")
+    expression = expression.replace("m_12_sq", "sigma")
     mandelstam = to_mandelstam_symbol(propagator["node"])
     return DefinedExpression(
         expression=parse_expr(
             expression,
-            local_dict={"i": sp.I, "σ": mandelstam},
+            local_dict={"i": sp.I, "I": sp.I, "sigma": mandelstam, "σ": mandelstam},
         )
     )
+
+
+def formulate_polynomial(
+    propagator: Propagator, resonance: str, model: ModelDefinition
+) -> DefinedExpression:
+    function_definition = get_function_definition(propagator["parametrization"], model)
+    function_definition = cast("PolynomialDefinition", function_definition)
+    variable = to_mandelstam_symbol(propagator["node"])
+    expression = sum(
+        coefficient * variable**power
+        for power, coefficient in enumerate(function_definition["coefficients"])
+    )
+    return DefinedExpression(expression=expression)
 
 
 def formulate_breit_wigner(
@@ -214,10 +249,21 @@ def formulate_multichannel_breit_wigner(  # ruff: ignore[too-many-locals]
             mi2: channel_definition["mb"],
             g_squared_i: channel_definition["gsq"],
         })
-    return DefinedExpression(
-        expression=MultichannelBreitWigner(s, mass, tuple(channels)),  # ty: ignore[invalid-argument-type]
-        parameters=parameter_defaults,
+    channel_terms = (
+        channel.coupling_squared
+        * PhaseSpaceFactorComplex(channel.s, channel.m1, channel.m2)
+        * FormFactor(
+            channel.s,
+            channel.m1,
+            channel.m2,
+            channel.angular_momentum,
+            channel.meson_radius,
+        )
+        ** 2
+        for channel in channels
     )
+    expression = 1 / (mass**2 - s - sp.I * sum(channel_terms))
+    return DefinedExpression(expression, parameter_defaults)
 
 
 def to_mandelstam_symbol(node: Node) -> sp.Symbol:

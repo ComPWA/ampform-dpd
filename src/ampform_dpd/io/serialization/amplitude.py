@@ -189,24 +189,23 @@ def _formulate_phase_factor(state: State, helicity: sp.Rational | sp.Symbol) -> 
 def _get_decay_product_ids(
     chain_definition: DecayChain,
 ) -> tuple[FinalStateID, FinalStateID]:
-    """Get the IDs of the two decay products, ignoring their serialized helicities.
-
-    The helicity values from `._get_decay_product_helicities` are not substituted into
-    the chain amplitude: it is summed over all allowed helicities instead.
-    """
-    (i, _), (j, _) = _get_decay_product_helicities(chain_definition)
-    return cast("FinalStateID", i), cast("FinalStateID", j)
+    for vertex in chain_definition["vertices"]:
+        i, j = vertex["node"]
+        if isinstance(i, int) and isinstance(j, int):
+            return i, j
+    msg = "Could not find a final-state decay vertex"
+    raise ValueError(msg)
 
 
 def _get_resonance_node(
     chain_definition: DecayChain,
 ) -> tuple[FinalStateID, FinalStateID]:
-    """Get the node of the resonance, ignoring its serialized helicity.
-
-    See `._get_decay_product_ids` for why the helicity value is discarded.
-    """
-    node, _ = _get_resonance_helicity(chain_definition)
-    return node
+    for vertex in chain_definition["vertices"]:
+        for node_item in vertex["node"]:
+            if isinstance(node_item, abc.Sequence):
+                return cast("tuple[FinalStateID, FinalStateID]", tuple(node_item))
+    msg = "Could not find a resonance node"
+    raise ValueError(msg)
 
 
 def _get_decay_product_helicities(
@@ -276,10 +275,20 @@ def _get_weight(
     if not value.imag:
         value = value.real
     resonance_latex = to_latex(chain_definition["name"])
-    _, resonance_helicity = _get_resonance_helicity(chain_definition)
-    helicities = _get_final_state_helicities(chain_definition).values()
-    subscript = ", ".join(sp.latex(λ) for λ in helicities)
-    symbol = sp.Symbol(f"c^{{{resonance_latex}[{resonance_helicity}]}}_{{{subscript}}}")
+    if all(vertex["type"] == "ls" for vertex in chain_definition["vertices"]):
+        couplings = ", ".join(
+            f"{ls_vertex['l']}, {ls_vertex['s']}"
+            for vertex in chain_definition["vertices"]
+            for ls_vertex in [cast("LSVertex", vertex)]
+        )
+        symbol = sp.Symbol(f"c^{{{resonance_latex}}}_{{{couplings}}}")
+    else:
+        _, resonance_helicity = _get_resonance_helicity(chain_definition)
+        helicities = _get_final_state_helicities(chain_definition).values()
+        subscript = ", ".join(sp.latex(λ) for λ in helicities)
+        symbol = sp.Symbol(
+            f"c^{{{resonance_latex}[{resonance_helicity}]}}_{{{subscript}}}"
+        )
     return symbol, value
 
 
@@ -388,7 +397,7 @@ def _get_child_spins(
     spins = []
     for node_item in node:
         if isinstance(node_item, int):
-            spins.append(sp.Rational(final_state[node_item]))
+            spins.append(final_state[node_item].spin)
         else:
             spins.append(__get_propagator_spin(chain_definition))
     return tuple(spins)  # ty: ignore[invalid-return-type]

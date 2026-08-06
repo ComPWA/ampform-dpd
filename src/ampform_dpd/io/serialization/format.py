@@ -117,6 +117,15 @@ class GenericFunctionDefinition(FunctionDefinition):
     expression: str
 
 
+class PolynomialDefinition(FunctionDefinition):
+    coefficients: list[float]
+    x: str
+
+
+class MomentumPowerDefinition(FunctionDefinition):
+    l: int
+
+
 class MultichannelBreitWignerDefinition(FunctionDefinition):
     mass: float
     channels: list[ChannelParameters]
