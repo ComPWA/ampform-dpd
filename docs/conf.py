@@ -105,6 +105,8 @@ exclude_patterns = [
     "**.ipynb_checkpoints",
     "**.virtual_documents",
     ".DS_Store",
+    "AGENTS.md",
+    "CLAUDE.md",
     "Thumbs.db",
     "_build",
 ]
