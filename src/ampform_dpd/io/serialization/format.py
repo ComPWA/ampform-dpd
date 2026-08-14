@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import difflib
 import sys
-from typing import TYPE_CHECKING, Literal, TypedDict, Union
+from collections import abc
+from typing import TYPE_CHECKING, Literal, TypedDict, TypeGuard, Union
 from warnings import warn
 
 from ampform_dpd.decay import FinalStateID
@@ -139,12 +140,12 @@ class ChannelParameters(TypedDict):
     d: float
 
 
-def get_decay_chains(model: ModelDefinition) -> list[DecayChain]:
+def get_decay_chains(model: ModelDefinition, /) -> list[DecayChain]:
     distribution_def = get_distribution_def(model)
     return distribution_def["decay_description"]["chains"]
 
 
-def get_distribution_def(model: ModelDefinition) -> Distribution:
+def get_distribution_def(model: ModelDefinition, /) -> Distribution:
     distribution_defs = model["distributions"]
     n_distributions = len(distribution_defs)
     if n_distributions == 0:
@@ -171,6 +172,39 @@ def get_function_definition(
     raise KeyError(msg)
 
 
-def get_reference_topology(model: ModelDefinition) -> Topology:
+def get_reference_topology(model: ModelDefinition, /) -> Topology:
     distribution_def = get_distribution_def(model)
     return distribution_def["decay_description"]["reference_topology"]
+
+
+def is_decay_node(node: Node, /) -> bool:
+    """Whether the node is an isobar decaying into two final-state particles.
+
+    >>> is_decay_node((2, 3))
+    True
+    >>> is_decay_node((1, (2, 3)))
+    False
+    """
+    return all(isinstance(i, int) for i in node)
+
+
+def is_production_node(node: Node, /) -> bool:
+    """Whether the node is the initial state decaying into an isobar and a spectator.
+
+    >>> is_production_node((1, (2, 3)))
+    True
+    >>> is_production_node((2, 3))
+    False
+    """
+    return not is_decay_node(node)
+
+
+def is_isobar(node_item: FinalStateID | Node, /) -> TypeGuard[Node]:
+    """Whether an item within a node is a sub-node, not a final-state ID.
+
+    >>> is_isobar((2, 3))
+    True
+    >>> is_isobar(1)
+    False
+    """
+    return isinstance(node_item, abc.Sequence)

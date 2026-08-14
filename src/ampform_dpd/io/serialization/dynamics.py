@@ -28,6 +28,8 @@ from ampform_dpd.io.serialization.format import (
     Propagator,
     Vertex,
     get_function_definition,
+    is_decay_node,
+    is_production_node,
 )
 
 if TYPE_CHECKING:
@@ -93,7 +95,7 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
         function_definition = cast("MomentumPowerDefinition", function_definition)
         node = vertex["node"]
         m1, m2 = (to_mass_symbol(i) for i in node)
-        if _is_initial_state_node(node):
+        if is_production_node(node):
             s = to_mandelstam_symbol(node) ** 2
             m1 = sp.sqrt(m1)
         else:
@@ -102,7 +104,7 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
         return DefinedExpression(expression=BreakupMomentumSquared(s, m1, m2) ** power)
     if function_type == "BlattWeisskopf":
         node = vertex["node"]
-        if _is_initial_state_node(node):
+        if is_production_node(node):
             parent_mass = to_mandelstam_symbol(node)
             isobar_invariant, m2 = (to_mass_symbol(i) for i in node)
             s = parent_mass**2
@@ -311,24 +313,9 @@ def to_mandelstam_symbol(node: Node) -> sp.Symbol:
     >>> to_mandelstam_symbol([1, [2, 3]])
     m0
     """
-    if _is_initial_state_node(node):
+    if is_production_node(node):
         return to_mass_symbol(0)
     return to_mass_symbol(node)
-
-
-def _is_initial_state_node(node: Node) -> bool:
-    """Whether the decaying particle in this node is the initial state.
-
-    A node that decays into two final-state particles is an isobar, so its invariant mass
-    is a Mandelstam variable. If one of the decay products is itself an isobar (a nested
-    node), the decaying particle is the initial state.
-
-    >>> _is_initial_state_node([3, 2])
-    False
-    >>> _is_initial_state_node([1, [2, 3]])
-    True
-    """
-    return not all(isinstance(i, int) for i in node)
 
 
 def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
@@ -343,8 +330,8 @@ def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
         return sp.Symbol(f"m{node_item}", nonnegative=True)
     if (
         isinstance(node_item, abc.Sequence)
-        and all(isinstance(i, int) for i in node_item)
         and len(node_item) == 2  # ruff: ignore[magic-value-comparison]
+        and is_decay_node(node_item)
     ):
         k, *_ = {1, 2, 3} - set(node_item)
         return sp.Symbol(f"sigma{k}", nonnegative=True)

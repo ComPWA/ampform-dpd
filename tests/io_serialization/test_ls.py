@@ -25,6 +25,6 @@ def test_ls_vertices_need_no_fake_helicities(model_definition: ModelDefinition):
     ]
     assert _get_decay_product_ids(chain) == (3, 1)
     assert _get_resonance_node(chain) == (3, 1)
-    assert _get_child_spins(model, 0, 1) == (0, sp.Rational(1, 2))
+    assert _get_child_spins(model, chain_idx=0, vertex_idx=1) == (0, sp.Rational(1, 2))
     coupling, _ = _get_weight(chain)
     assert coupling.name.endswith("_{1, 1/2, 0, 1/2}")

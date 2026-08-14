@@ -17,6 +17,9 @@ from ampform_dpd.io.serialization.format import (
     Topology,
     get_decay_chains,
     get_distribution_def,
+    is_decay_node,
+    is_isobar,
+    is_production_node,
 )
 
 if TYPE_CHECKING:
@@ -79,10 +82,10 @@ def to_decay_chain(
 def __find_spectator_id(vertices: Iterable[Vertex]) -> FinalStateID:
     for vertex in vertices:
         node = vertex["node"]
-        if any(not isinstance(i, int) for i in node):
-            for state_id in node:
-                if isinstance(state_id, int):
-                    return state_id
+        if is_production_node(node):
+            for node_item in node:
+                if not is_isobar(node_item):
+                    return node_item
     msg = "Could not find a production node with a spectator"
     raise ValueError(msg)
 
@@ -92,7 +95,7 @@ def __find_decay_product_ids(
 ) -> tuple[FinalStateID, FinalStateID]:
     for vertex in vertices:
         node = vertex["node"]
-        if all(isinstance(i, int) for i in node) and len(node) == 2:  # ruff: ignore[magic-value-comparison]
+        if is_decay_node(node) and len(node) == 2:  # ruff: ignore[magic-value-comparison]
             return tuple(node)
     msg = "Could not find a node that has two final state items (decay node)"
     raise ValueError(msg)
