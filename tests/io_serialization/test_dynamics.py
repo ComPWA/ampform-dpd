@@ -86,23 +86,43 @@ def test_formulate_generic_function_accepts_published_notation():
 
 
 def test_formulate_polynomial():
-    model = ModelDefinition(
+    model = _create_polynomial_model(x="m_23_sq")
+    propagator = Propagator(spin="0", node=(2, 3), parametrization="polynomial")
+
+    dynamics = formulate_polynomial(propagator, "R", model)
+
+    c0 = sp.Symbol("c_{R,0}", real=True)
+    c1 = sp.Symbol("c_{R,1}", real=True)
+    sigma1 = sp.Symbol("sigma1", nonnegative=True)
+    assert dynamics.expression == c1 * sigma1 + c0
+    assert dynamics.parameters == {c0: 1, c1: 2}
+
+
+def test_formulate_polynomial_variable_mismatch():
+    model = _create_polynomial_model(x="m_12_sq")
+    propagator = Propagator(spin="0", node=(2, 3), parametrization="polynomial")
+
+    with pytest.raises(
+        ValueError, match=r"is sigma3, but node \(2, 3\) implies sigma1"
+    ):
+        formulate_polynomial(propagator, "R", model)
+
+
+def _create_polynomial_model(x: str) -> ModelDefinition:
+    return ModelDefinition(
         distributions=[],
         functions=[
             PolynomialDefinition(
                 name="polynomial",
                 type="Polynomial",
                 coefficients=[1, 2],
-                x="m_12_sq",
+                x=x,
             )
         ],
         domains=[],
         misc={},
         parameter_points=[],
     )
-    propagator = Propagator(spin="0", node=(2, 3), parametrization="polynomial")
-    expression = formulate_polynomial(propagator, "R", model).expression
-    assert expression == 2 * sp.Symbol("sigma1", nonnegative=True) + 1
 
 
 def test_formulate_momentum_power():

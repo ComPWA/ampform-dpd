@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from collections import abc
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
@@ -165,11 +166,48 @@ def formulate_polynomial(
     function_definition = get_function_definition(propagator["parametrization"], model)
     function_definition = cast("PolynomialDefinition", function_definition)
     variable = to_mandelstam_symbol(propagator["node"])
-    expression = sum(
-        coefficient * variable**power
-        for power, coefficient in enumerate(function_definition["coefficients"])
+    _assert_variable_matches_node(function_definition["x"], propagator["node"])
+    coefficients: dict[sp.Basic, complex | float] = {
+        sp.Symbol(Rf"c_{{{resonance},{power}}}", real=True): value
+        for power, value in enumerate(function_definition["coefficients"])
+    }
+    return DefinedExpression(
+        expression=sum(
+            coefficient * variable**power
+            for power, coefficient in enumerate(coefficients)
+        ),
+        parameters=coefficients,
     )
-    return DefinedExpression(expression=expression)
+
+
+def _assert_variable_matches_node(variable_name: str, node: Node) -> None:
+    """Check that the serialized variable name is the invariant mass of the node.
+
+    >>> _assert_variable_matches_node("m_23_sq", (2, 3))
+    >>> _assert_variable_matches_node("m_12_sq", (2, 3))
+    Traceback (most recent call last):
+        ...
+    ValueError: Variable 'm_12_sq' is sigma3, but node (2, 3) implies sigma1
+    """
+    expected = to_mandelstam_symbol(node)
+    variable = _to_mandelstam_symbol_from_name(variable_name)
+    if variable != expected:
+        msg = f"Variable {variable_name!r} is {variable}, but node {node} implies {expected}"
+        raise ValueError(msg)
+
+
+def _to_mandelstam_symbol_from_name(variable_name: str) -> sp.Symbol:
+    """Convert a serialized variable name to a Mandelstam symbol.
+
+    >>> _to_mandelstam_symbol_from_name("m_12_sq")
+    sigma3
+    """
+    matches = re.fullmatch(r"m_([1-3])([1-3])_sq", variable_name)
+    if matches is None:
+        msg = f"Cannot convert variable name {variable_name!r} to a Mandelstam symbol"
+        raise NotImplementedError(msg)
+    i, j = (int(index) for index in matches.groups())
+    return to_mass_symbol((i, j))
 
 
 def formulate_breit_wigner(
