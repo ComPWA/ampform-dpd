@@ -157,7 +157,7 @@ def get_distribution_def(model: ModelDefinition) -> Distribution:
 
 
 def get_function_definition(
-    function_name: str, model: ModelDefinition
+    function_name: str, /, model: ModelDefinition
 ) -> FunctionDefinition:
     function_definitions = model["functions"]
     for function_def in function_definitions:
