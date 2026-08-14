@@ -199,6 +199,26 @@ def is_production_node(node: Node, /) -> bool:
     return not is_decay_node(node)
 
 
+def as_final_state_pair(
+    node_item: FinalStateID | Node, /
+) -> tuple[FinalStateID, FinalStateID] | None:
+    """Convert a node item to a pair of final-state IDs, or `None` if it is not one.
+
+    Serialized nodes are lists, so this also normalizes them to tuples. It returns `None`
+    for a final-state ID and for a node that contains sub-nodes.
+
+    >>> as_final_state_pair([2, 3])
+    (2, 3)
+    >>> as_final_state_pair(1)
+    >>> as_final_state_pair((1, (2, 3)))
+    """
+    if not is_isobar(node_item):
+        return None
+    if len(node_item) == 2 and is_decay_node(node_item):  # ruff: ignore[magic-value-comparison]
+        return tuple(node_item)
+    return None
+
+
 def is_isobar(node_item: FinalStateID | Node, /) -> TypeGuard[Node]:
     """Whether an item within a node is a sub-node, not a final-state ID.
 

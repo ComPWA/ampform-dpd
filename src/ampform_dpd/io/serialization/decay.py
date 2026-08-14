@@ -15,9 +15,9 @@ from ampform_dpd.decay import (
 )
 from ampform_dpd.io.serialization.format import (
     Topology,
+    as_final_state_pair,
     get_decay_chains,
     get_distribution_def,
-    is_decay_node,
     is_isobar,
     is_production_node,
 )
@@ -94,9 +94,9 @@ def __find_decay_product_ids(
     vertices: Iterable[Vertex],
 ) -> tuple[FinalStateID, FinalStateID]:
     for vertex in vertices:
-        node = vertex["node"]
-        if is_decay_node(node) and len(node) == 2:  # ruff: ignore[magic-value-comparison]
-            return tuple(node)
+        decay_products = as_final_state_pair(vertex["node"])
+        if decay_products is not None:
+            return decay_products
     msg = "Could not find a node that has two final state items (decay node)"
     raise ValueError(msg)
 

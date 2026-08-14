@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-from collections import abc
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
@@ -27,8 +26,8 @@ from ampform_dpd.io.serialization.format import (
     PolynomialDefinition,
     Propagator,
     Vertex,
+    as_final_state_pair,
     get_function_definition,
-    is_decay_node,
     is_production_node,
 )
 
@@ -328,12 +327,9 @@ def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
     """
     if isinstance(node_item, int):
         return sp.Symbol(f"m{node_item}", nonnegative=True)
-    if (
-        isinstance(node_item, abc.Sequence)
-        and len(node_item) == 2  # ruff: ignore[magic-value-comparison]
-        and is_decay_node(node_item)
-    ):
-        k, *_ = {1, 2, 3} - set(node_item)
+    final_state_pair = as_final_state_pair(node_item)
+    if final_state_pair is not None:
+        k, *_ = {1, 2, 3} - set(final_state_pair)
         return sp.Symbol(f"sigma{k}", nonnegative=True)
     msg = f"Cannot create mass symbol for node {node_item}"
     raise NotImplementedError(msg)

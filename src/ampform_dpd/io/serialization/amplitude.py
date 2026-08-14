@@ -40,6 +40,7 @@ from ampform_dpd.io.serialization.format import (
     ParityFactor,
     ParityVertex,
     Vertex,
+    as_final_state_pair,
     get_decay_chains,
     get_distribution_def,
     is_decay_node,
@@ -192,10 +193,9 @@ def _get_decay_product_ids(
     chain_definition: DecayChain,
 ) -> tuple[FinalStateID, FinalStateID]:
     for vertex in chain_definition["vertices"]:
-        node = vertex["node"]
-        if is_decay_node(node):
-            i, j = node
-            return i, j
+        decay_products = as_final_state_pair(vertex["node"])
+        if decay_products is not None:
+            return decay_products
     msg = "Could not find a final-state decay vertex"
     raise ValueError(msg)
 
@@ -205,8 +205,9 @@ def _get_resonance_node(
 ) -> tuple[FinalStateID, FinalStateID]:
     for vertex in chain_definition["vertices"]:
         for node_item in vertex["node"]:
-            if is_isobar(node_item):
-                return cast("tuple[FinalStateID, FinalStateID]", tuple(node_item))
+            resonance_node = as_final_state_pair(node_item)
+            if resonance_node is not None:
+                return resonance_node
     msg = "Could not find a resonance node"
     raise ValueError(msg)
 
@@ -302,8 +303,9 @@ def _get_resonance_helicity(
             continue
         helicities = _get_helicities(vertex)
         for helicity, sub_node in zip(helicities, node, strict=True):
-            if is_isobar(sub_node) and len(sub_node) == 2:  # ruff: ignore[magic-value-comparison]
-                return tuple(sub_node), sp.Rational(helicity)
+            resonance_node = as_final_state_pair(sub_node)
+            if resonance_node is not None:
+                return resonance_node, sp.Rational(helicity)
     msg = "Could not find a resonance node"
     raise ValueError(msg)
 
