@@ -91,28 +91,27 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
     if function_type == "MomentumPower":
         function_definition = cast("MomentumPowerDefinition", function_definition)
         node = vertex["node"]
-        if all(isinstance(i, int) for i in node):
-            s = to_mandelstam_symbol(node)
-            m1, m2 = (to_mass_symbol(i) for i in node)
-        else:
+        m1, m2 = (to_mass_symbol(i) for i in node)
+        if _is_initial_state_node(node):
             s = to_mandelstam_symbol(node) ** 2
-            m1, m2 = (to_mass_symbol(i) for i in node)
             m1 = sp.sqrt(m1)
+        else:
+            s = to_mandelstam_symbol(node)
         power = sp.Rational(function_definition["l"], 2)
         return DefinedExpression(expression=BreakupMomentumSquared(s, m1, m2) ** power)
     if function_type == "BlattWeisskopf":
         node = vertex["node"]
-        if all(isinstance(i, int) for i in node):
-            s = to_mandelstam_symbol(node)
-            m1, m2 = (to_mass_symbol(i) for i in node)
-            meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
-        else:
+        if _is_initial_state_node(node):
             parent_mass = to_mandelstam_symbol(node)
             isobar_invariant, m2 = (to_mass_symbol(i) for i in node)
             s = parent_mass**2
             m1 = sp.sqrt(isobar_invariant)
             initial_state = get_initial_state(model)
             meson_radius = sp.Symbol(f"R_{{{initial_state.latex}}}", nonnegative=True)
+        else:
+            s = to_mandelstam_symbol(node)
+            m1, m2 = (to_mass_symbol(i) for i in node)
+            meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
             expression=FormFactor(s, m1, m2, angular_momentum, meson_radius)  # ty: ignore[invalid-argument-type]
@@ -274,9 +273,24 @@ def to_mandelstam_symbol(node: Node) -> sp.Symbol:
     >>> to_mandelstam_symbol([1, [2, 3]])
     m0
     """
-    if all(isinstance(i, int) for i in node):
-        return to_mass_symbol(node)
-    return to_mass_symbol(0)
+    if _is_initial_state_node(node):
+        return to_mass_symbol(0)
+    return to_mass_symbol(node)
+
+
+def _is_initial_state_node(node: Node) -> bool:
+    """Whether the decaying particle in this node is the initial state.
+
+    A node that decays into two final-state particles is an isobar, so its invariant mass
+    is a Mandelstam variable. If one of the decay products is itself an isobar (a nested
+    node), the decaying particle is the initial state.
+
+    >>> _is_initial_state_node([3, 2])
+    False
+    >>> _is_initial_state_node([1, [2, 3]])
+    True
+    """
+    return not all(isinstance(i, int) for i in node)
 
 
 def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
