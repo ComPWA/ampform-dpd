@@ -226,6 +226,8 @@ nb_output_stderr = "show"
 nb_render_markdown_format = "myst"
 nitpick_ignore = [
     ("py:class", "ampform.sympy.cached.Model"),
+    ("py:class", "ampform_dpd.io.serialization.format._HelicityVertexBase"),
+    ("py:class", "ampform_dpd.io.serialization.format._VertexBase"),
 ]
 nitpicky = True
 primary_domain = "py"
