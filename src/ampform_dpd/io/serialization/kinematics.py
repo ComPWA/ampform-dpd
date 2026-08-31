@@ -17,9 +17,9 @@ def formulate_kinematic_map(  # ruff: ignore[too-many-locals]
 ) -> Mapping[sp.Symbol, sp.Expr]:
     r"""Map a serialized isobar mass and helicity angle to all invariants.
 
-    The serialized angle :math:`\theta_{ij}` is measured between particle :math:`i`
-    and spectator :math:`k` in the rest frame of the :math:`(ij)` isobar. Its ordered
-    pair must follow the cyclic convention ``(1, 2)``, ``(2, 3)``, or ``(3, 1)``.
+    The serialized angle :math:`\theta_{ij}` is measured between particle :math:`i` and
+    spectator :math:`k` in the rest frame of the :math:`(ij)` isobar. Its ordered pair
+    must follow the cyclic convention ``(1, 2)``, ``(2, 3)``, or ``(3, 1)``.
     """
     distribution_name = _select_distribution(workspace, distribution)
     definition = _find_distribution(workspace, distribution_name)
