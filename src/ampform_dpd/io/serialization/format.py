@@ -3,7 +3,7 @@ from __future__ import annotations
 import difflib
 import sys
 from collections import abc
-from typing import TYPE_CHECKING, Literal, TypedDict, TypeGuard, Union
+from typing import TYPE_CHECKING, Literal, TypedDict, Union
 from warnings import warn
 
 from ampform_dpd.decay import FinalStateID
@@ -15,6 +15,11 @@ if sys.version_info >= (3, 11):
     from typing import Required
 else:
     from typing_extensions import Required
+
+if sys.version_info >= (3, 13):
+    from typing import TypeIs
+else:
+    from typing_extensions import TypeIs
 
 
 class ModelDefinition(TypedDict):
@@ -219,7 +224,7 @@ def as_final_state_pair(
     return None
 
 
-def is_isobar(node_item: FinalStateID | Node, /) -> TypeGuard[Node]:
+def is_isobar(node_item: FinalStateID | Node, /) -> TypeIs[Node]:
     """Whether an item within a node is a sub-node, not a final-state ID.
 
     >>> is_isobar((2, 3))
