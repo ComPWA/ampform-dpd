@@ -13,11 +13,11 @@ from ampform_dpd.io.serialization.dynamics import (
 from ampform_dpd.io.serialization.format import (
     DecayChain,
     GenericFunctionDefinition,
+    LSVertex,
     ModelDefinition,
     MomentumPowerDefinition,
     PolynomialDefinition,
     Propagator,
-    Vertex,
     get_decay_chains,
 )
 
@@ -133,7 +133,7 @@ def test_formulate_momentum_power():
         misc={},
         parameter_points=[],
     )
-    vertex = Vertex(type="ls", node=(2, 3), formfactor="momentum")
+    vertex = LSVertex(type="ls", node=(2, 3), formfactor="momentum", l="0", s="0")
     expression = formulate_form_factor(vertex, model).expression
     sigma1 = sp.Symbol("sigma1", nonnegative=True)
     m2, m3 = sp.symbols("m2 m3", nonnegative=True)

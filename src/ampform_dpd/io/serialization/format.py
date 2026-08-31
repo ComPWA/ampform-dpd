@@ -64,23 +64,32 @@ class Propagator(TypedDict):
     parametrization: str
 
 
-class Vertex(TypedDict):
-    type: Required[Literal["helicity", "ls", "parity"]]
+class _VertexBase(TypedDict):
     node: Required[Node]
     formfactor: str
 
 
-class HelicityVertex(Vertex):
+class _HelicityVertexBase(_VertexBase):
     helicities: Required[tuple[str, str]]
 
 
-class ParityVertex(HelicityVertex):
+class HelicityVertex(_HelicityVertexBase):
+    type: Required[Literal["helicity"]]
+
+
+class ParityVertex(_HelicityVertexBase):
+    type: Required[Literal["parity"]]
     parity_factor: ParityFactor
 
 
-class LSVertex(Vertex):
+class LSVertex(_VertexBase):
+    type: Required[Literal["ls"]]
     l: str
     s: str
+
+
+Vertex = HelicityVertex | ParityVertex | LSVertex
+"""Tagged union of vertex definitions, discriminated by their ``"type"`` key."""
 
 
 Node = tuple[Union[FinalStateID, "Node"], Union[FinalStateID, "Node"]]

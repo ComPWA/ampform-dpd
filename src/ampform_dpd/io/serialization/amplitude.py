@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from itertools import product
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal
 
 import sympy as sp
 from ampform.sympy import PoolSum, unevaluated
@@ -34,11 +34,8 @@ from ampform_dpd.io.serialization.dynamics import (
 )
 from ampform_dpd.io.serialization.format import (
     DecayChain,
-    HelicityVertex,
-    LSVertex,
     Node,
     ParityFactor,
-    ParityVertex,
     Vertex,
     as_final_state_pair,
     get_decay_chains,
@@ -276,12 +273,10 @@ def _get_weight(
     if not value.imag:
         value = value.real
     resonance_latex = to_latex(chain_definition["name"])
-    if all(vertex["type"] == "ls" for vertex in chain_definition["vertices"]):
-        couplings = ", ".join(
-            f"{ls_vertex['l']}, {ls_vertex['s']}"
-            for vertex in chain_definition["vertices"]
-            for ls_vertex in [cast("LSVertex", vertex)]
-        )
+    vertices = chain_definition["vertices"]
+    ls_vertices = [vertex for vertex in vertices if vertex["type"] == "ls"]
+    if len(ls_vertices) == len(vertices):
+        couplings = ", ".join(f"{vertex['l']}, {vertex['s']}" for vertex in ls_vertices)
         symbol = sp.Symbol(f"c^{{{resonance_latex}}}_{{{couplings}}}")
     else:
         _, resonance_helicity = _get_resonance_helicity(chain_definition)
@@ -326,11 +321,12 @@ def _get_final_state_helicities(
 
 def _get_helicities(vertex: Vertex) -> tuple[str, str]:
     """Get the helicities of a vertex, which an LS vertex does not have."""
-    helicities = cast("HelicityVertex", vertex).get("helicities")
-    if helicities is None:
-        msg = "Vertex does not contain helicities. Is it an LS vertex?"
-        raise ValueError(msg, vertex)
-    return helicities
+    if vertex["type"] != "ls":
+        helicities = vertex.get("helicities")
+        if helicities is not None:
+            return helicities
+    msg = "Vertex does not contain helicities. Is it an LS vertex?"
+    raise ValueError(msg, vertex)
 
 
 def formulate_recoupling(  # ruff: ignore[too-many-locals]
@@ -346,25 +342,22 @@ def formulate_recoupling(  # ruff: ignore[too-many-locals]
         raise ValueError(msg)
     vertex = chain_definition["vertices"][vertex_idx]
     vertex_type = vertex["type"]
+    if vertex_type not in {"helicity", "parity", "ls"}:
+        msg = f"No implementation for vertex of type {vertex_type!r}"
+        raise NotImplementedError(msg)
     node = vertex["node"]
     λa, λb = map(_get_helicity_symbol, node)
-    if vertex_type in {"helicity", "parity"}:
-        vertex = cast("HelicityVertex", vertex)
+    if vertex["type"] != "ls":
         λa0, λb0 = (sp.Rational(v) for v in vertex["helicities"])
-        if vertex_type == "parity":
-            vertex = cast("ParityVertex", vertex)
+        if vertex["type"] == "parity":
             f = _sign_to_value(vertex.get("parity_factor", "+"))
             return ParityRecoupling(λa, λb, λa0, λb0, f)  # ty: ignore[invalid-argument-type]
         return HelicityRecoupling(λa, λb, λa0, λb0)
-    if vertex_type == "ls":
-        vertex = cast("LSVertex", vertex)
-        l = int(vertex["l"])
-        s = sp.Rational(vertex["s"])
-        ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
-        j = _get_parent_spin(model, chain_idx, vertex_idx)
-        return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty: ignore[invalid-argument-type]
-    msg = f"No implementation for vertex of type {vertex_type!r}"
-    raise NotImplementedError(msg)
+    l = int(vertex["l"])
+    s = sp.Rational(vertex["s"])
+    ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
+    j = _get_parent_spin(model, chain_idx, vertex_idx)
+    return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty: ignore[invalid-argument-type]
 
 
 def _sign_to_value(sign: ParityFactor) -> Literal[0, -1, 1]:
