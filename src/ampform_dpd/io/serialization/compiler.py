@@ -55,8 +55,11 @@ def compile_workspace(
     distribution_names = {
         target for target in selected_targets if target in workspace.distributions
     }
+    symbolic_maps = {
+        name: formulate_kinematic_map(workspace, name) for name in distribution_names
+    }
     selected_coordinates = {
-        name: _select_coordinates(workspace, name, coordinates)
+        name: _select_coordinates(workspace, name, symbolic_maps[name], coordinates)
         for name in distribution_names
     }
     compiled = {
@@ -70,7 +73,7 @@ def compile_workspace(
         for target in selected_targets
     }
     coordinate_maps = {
-        name: _compile_coordinate_map(workspace, name, backend)
+        name: _compile_coordinate_map(workspace, name, symbolic_maps[name], backend)
         for name in distribution_names
     }
     return CompiledWorkspace(
@@ -162,12 +165,12 @@ def _prepare_distribution(
 def _select_coordinates(
     workspace: Workspace,
     distribution: str,
+    symbolic_map: Mapping[sp.Symbol, sp.Expr],
     coordinates: Iterable[str] | None,
 ) -> tuple[str, str]:
     model = workspace.distributions[distribution]
     invariant_names = {str(symbol) for symbol in model.invariants}
     if coordinates is None:
-        symbolic_map = formulate_kinematic_map(workspace, distribution)
         dependent = str(next(iter(symbolic_map)))
         selected = tuple(sorted(invariant_names - {dependent}))
         if _is_coordinate_pair(selected):
@@ -202,9 +205,11 @@ def _apply_parameter_overrides(
 
 
 def _compile_coordinate_map(
-    workspace: Workspace, distribution: str, backend: str
+    workspace: Workspace,
+    distribution: str,
+    symbolic_map: Mapping[sp.Symbol, sp.Expr],
+    backend: str,
 ) -> Mapping[str, Function]:
-    symbolic_map = formulate_kinematic_map(workspace, distribution)
     masses = workspace.distributions[distribution].masses
     return MappingProxyType({
         str(symbol): lambdify(expression.doit().xreplace(masses), backend=backend)
