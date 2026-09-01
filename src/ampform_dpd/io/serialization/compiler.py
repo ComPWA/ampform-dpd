@@ -5,12 +5,14 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, cast
 
+from ampform_dpd.io.cached import lambdify
 from ampform_dpd.io.serialization.kinematics import formulate_kinematic_map
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Iterable, Mapping
 
     import sympy as sp
+    from tensorwaves.interface import Function
 
     from ampform_dpd import AmplitudeModel, DefinedExpression
     from ampform_dpd.io.serialization.workspace import Workspace
@@ -22,8 +24,8 @@ class CompiledWorkspace:
 
     workspace: Workspace
     backend: str
-    functions: Mapping[str, Callable[[Mapping[str, Any]], Any]]
-    coordinate_maps: Mapping[str, Mapping[str, Callable[[Mapping[str, Any]], Any]]]
+    functions: Mapping[str, Function]
+    coordinate_maps: Mapping[str, Mapping[str, Function]]
     coordinates: Mapping[str, tuple[str, ...]]
 
 
@@ -108,7 +110,7 @@ def _compile_target(
     backend: str,
     coordinates: tuple[str, ...] | None,
     parameter_overrides: Mapping[sp.Basic, Any] | None,
-) -> Callable[[Mapping[str, Any]], Any]:
+) -> Function:
     if target in workspace.functions:
         expression = _prepare_function(workspace.functions[target], parameter_overrides)
     else:
@@ -118,7 +120,7 @@ def _compile_target(
         expression = _prepare_distribution(
             workspace.distributions[target], coordinates, parameter_overrides
         )
-    return _lambdify(expression, backend)
+    return lambdify(expression, backend=backend)
 
 
 def _prepare_function(
@@ -188,16 +190,10 @@ def _apply_parameter_overrides(
 
 def _compile_coordinate_map(
     workspace: Workspace, distribution: str, backend: str
-) -> Mapping[str, Callable[[Mapping[str, Any]], Any]]:
+) -> Mapping[str, Function]:
     symbolic_map = formulate_kinematic_map(workspace, distribution)
     masses = workspace.distributions[distribution].masses
     return MappingProxyType({
-        str(symbol): _lambdify(expression.doit().xreplace(masses), backend)
+        str(symbol): lambdify(expression.doit().xreplace(masses), backend=backend)
         for symbol, expression in symbolic_map.items()
     })
-
-
-def _lambdify(expression: sp.Expr, backend: str) -> Callable[[Mapping[str, Any]], Any]:
-    from ampform_dpd.io.cached import lambdify  # ruff: ignore[import-outside-top-level]
-
-    return lambdify(expression, backend=backend)  # ty: ignore[invalid-return-type]
