@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pytest
 import sympy as sp
@@ -117,4 +117,34 @@ def test_rejects_unsupported_orientation(model_definition: ModelDefinition):
     definition["distributions"][0]["variables"][0]["node"] = [1, 3]
     workspace = load_workspace(definition)
     with pytest.raises(ValueError, match=r"orientation \(1, 3\)"):
+        formulate_kinematic_map(workspace)
+
+
+def test_rejects_invalid_coordinate_metadata(model_definition: ModelDefinition):
+    definition = deepcopy(model_definition)
+    distribution: Any = definition["distributions"][0]
+    distribution["variables"] = [None]
+    workspace = load_workspace(definition)
+    with pytest.raises(TypeError, match=r"variables\[0\] must be a mapping"):
+        formulate_kinematic_map(workspace)
+
+
+def test_rejects_invalid_coordinate_names(model_definition: ModelDefinition):
+    definition = deepcopy(model_definition)
+    definition["distributions"][0]["variables"][0]["mass_phi_costheta"] = [
+        "m_31",
+        "phi_31",
+    ]
+    workspace = load_workspace(definition)
+    with pytest.raises(ValueError, match=r"variables\[0\].mass_phi_costheta"):
+        formulate_kinematic_map(workspace)
+
+
+def test_rejects_ambiguous_coordinate_metadata(model_definition: ModelDefinition):
+    definition = deepcopy(model_definition)
+    coordinate = deepcopy(definition["distributions"][0]["variables"][0])
+    coordinate["node"] = [1, 2]
+    definition["distributions"][0]["variables"].append(coordinate)
+    workspace = load_workspace(definition)
+    with pytest.raises(ValueError, match="coordinate, found 2"):
         formulate_kinematic_map(workspace)

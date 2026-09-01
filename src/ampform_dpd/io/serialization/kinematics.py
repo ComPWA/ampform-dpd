@@ -1,14 +1,13 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, cast
 
 import sympy as sp
 from ampform.kinematics.phasespace import Kallen
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
-
     from ampform_dpd.io.serialization.workspace import Workspace
 
 
@@ -24,10 +23,10 @@ def formulate_kinematic_map(  # ruff: ignore[too-many-locals]
     distribution_name = _select_distribution(workspace, distribution)
     definition = _find_distribution(workspace, distribution_name)
     variables = definition.get("variables", [])
-    coordinate = _select_isobar_coordinate(variables)
-    i, j = coordinate["node"]
+    (i, j), (mass_name, _, cosine_name) = _select_mass_phi_costheta_coordinate(
+        variables
+    )
     k, *_ = {1, 2, 3} - {i, j}
-    mass_name, _, cosine_name = coordinate["mass_phi_costheta"]
     mass = sp.Symbol(mass_name, nonnegative=True)
     cosine = sp.Symbol(cosine_name, real=True)
     m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
@@ -67,33 +66,50 @@ def _select_distribution(workspace: Workspace, distribution: str | None) -> str:
     return names[0]
 
 
-def _find_distribution(workspace: Workspace, name: str) -> Mapping[str, Any]:
+def _find_distribution(workspace: Workspace, name: str) -> Mapping[str, object]:
     for definition in workspace.definition["distributions"]:
         if definition["name"] == name:
-            return definition
+            return cast("Mapping[str, object]", definition)
     msg = f"Missing definition for distribution {name!r}"
     raise KeyError(msg)
 
 
-def _select_isobar_coordinate(variables: Any) -> Mapping[str, Any]:
+def _select_mass_phi_costheta_coordinate(
+    variables: object,
+) -> tuple[tuple[int, int], tuple[str, str, str]]:
     node_size = 2
     coordinate_size = 3
-    candidates = []
-    for variable in variables:
+    if not isinstance(variables, (tuple, list)):
+        msg = "Coordinate metadata 'variables' must be a list"
+        raise TypeError(msg)
+    candidates: list[tuple[tuple[int, int], tuple[str, str, str]]] = []
+    for index, variable in enumerate(variables):
+        if not isinstance(variable, Mapping):
+            msg = f"Coordinate metadata variables[{index}] must be a mapping"
+            raise TypeError(msg)
         node = variable.get("node")
         names = variable.get("mass_phi_costheta")
-        if (
+        if not (
             isinstance(node, (tuple, list))
             and len(node) == node_size
             and all(isinstance(item, int) for item in node)
-            and isinstance(names, (tuple, list))
-            and len(names) == coordinate_size
         ):
-            candidates.append(variable)
+            continue
+        if not (
+            isinstance(names, (tuple, list))
+            and len(names) == coordinate_size
+            and all(isinstance(name, str) and name.strip() for name in names)
+        ):
+            msg = f"Invalid coordinate metadata at variables[{index}].mass_phi_costheta"
+            raise ValueError(msg)
+        candidates.append((
+            cast("tuple[int, int]", tuple(node)),
+            cast("tuple[str, str, str]", tuple(names)),
+        ))
     if len(candidates) != 1:
         msg = f"Expected one invariant-mass/helicity-angle coordinate, found {len(candidates)}"
         raise ValueError(msg)
-    i, j = candidates[0]["node"]
+    (i, j), _ = candidates[0]
     if (i, j) not in {(1, 2), (2, 3), (3, 1)}:
         msg = f"Unsupported helicity-angle orientation ({i}, {j})"
         raise ValueError(msg)
