@@ -10,36 +10,95 @@ from ampform_dpd.angles import formulate_scattering_angle
 from ampform_dpd.io.serialization import formulate_kinematic_map, load_workspace
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from ampform.helicity import ParameterValue
+
+    from ampform_dpd.decay import FinalStateID
     from ampform_dpd.io.serialization.format import ModelDefinition
 
 
-def test_formulate_kinematic_map_round_trip(model_definition: ModelDefinition):
-    workspace = load_workspace(model_definition)
+@pytest.mark.parametrize("node", [(1, 2), (2, 3), (3, 1)])
+def test_formulate_kinematic_map_round_trip(
+    model_definition: ModelDefinition, node: tuple[FinalStateID, FinalStateID]
+):
+    definition = deepcopy(model_definition)
+    i, j = node
+    mass_name = f"m_{i}{j}"
+    cosine_name = f"cos_theta_{i}{j}"
+    definition["distributions"][0]["variables"][0] = {
+        "node": list(node),
+        "mass_phi_costheta": [mass_name, f"phi_{i}{j}", cosine_name],
+    }
+    workspace = load_workspace(definition)
     mapping = formulate_kinematic_map(workspace)
     model = workspace.distributions["default_model"]
-    point = {
-        parameter["name"]: parameter["value"]
-        for parameter in model_definition["parameter_points"][0]["parameters"]
-    }
+    phase_space_points = (
+        (0.4, 0.23),
+        (1e-6, 0.999),
+        (1 - 1e-6, -0.999),
+    )
+    for mass_fraction, expected_cosine in phase_space_points:
+        _assert_round_trip(
+            mapping,
+            model.parameter_defaults,
+            node,
+            mass_fraction,
+            expected_cosine,
+        )
+
+
+def _assert_round_trip(
+    mapping: Mapping[sp.Symbol, sp.Expr],
+    parameter_defaults: Mapping[sp.Basic, ParameterValue],
+    node: tuple[int, int],
+    mass_fraction: float,
+    expected_cosine: float,
+) -> None:
+    i, j = node
+    expected_mass = _compute_isobar_mass(parameter_defaults, node, mass_fraction)
     substitutions = {
-        **model.parameter_defaults,
-        sp.Symbol("m_31", nonnegative=True): point["m_31"],
-        sp.Symbol("cos_theta_31", real=True): point["cos_theta_31"],
+        **parameter_defaults,
+        sp.Symbol(f"m_{i}{j}", nonnegative=True): expected_mass,
+        sp.Symbol(f"cos_theta_{i}{j}", real=True): expected_cosine,
     }
     invariants: dict[sp.Basic, sp.Expr] = {
         symbol: expression.doit().evalf(subs=substitutions)
         for symbol, expression in mapping.items()
     }
-    _, angle = formulate_scattering_angle(3, 1)
+    _, angle = formulate_scattering_angle(i, j)
     cosine = (
-        sp
-        .cos(angle)
-        .xreplace(invariants)
-        .doit()
-        .evalf(subs=dict(model.parameter_defaults))
+        sp.cos(angle).xreplace(invariants).doit().evalf(subs=dict(parameter_defaults))
     )
-    assert float(cosine) == pytest.approx(point["cos_theta_31"])
+    assert float(cosine) == pytest.approx(expected_cosine, abs=1e-8)
+    spectator_id = next(iter({1, 2, 3} - set(node)))
+    assert float(
+        sp.sqrt(invariants[sp.Symbol(f"sigma{spectator_id}", nonnegative=True)])
+    ) == pytest.approx(expected_mass)
     assert len(invariants) == 3
+
+
+def _compute_isobar_mass(
+    parameter_defaults: Mapping[sp.Basic, ParameterValue],
+    node: tuple[int, int],
+    mass_fraction: float,
+) -> float:
+    i, j = node
+    k = next(iter({1, 2, 3} - set(node)))
+    masses = {
+        index: _to_real(parameter_defaults[sp.Symbol(f"m{index}", nonnegative=True)])
+        for index in range(4)
+    }
+    lower_mass = masses[i] + masses[j]
+    upper_mass = masses[0] - masses[k]
+    return lower_mass + mass_fraction * (upper_mass - lower_mass)
+
+
+def _to_real(value: ParameterValue) -> float:
+    if isinstance(value, complex):
+        assert value.imag == 0
+        return float(value.real)
+    return float(value)
 
 
 def test_requires_distribution_for_multiple_models(model_definition: ModelDefinition):
