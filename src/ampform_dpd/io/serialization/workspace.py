@@ -87,9 +87,9 @@ def _load_definition(
     source: str | pathlib.Path | Mapping[str, Any],
 ) -> ModelDefinition:
     if isinstance(source, Mapping):
-        return cast("ModelDefinition", dict(source))
+        return dict(source)  # ty: ignore[invalid-return-type]
     with pathlib.Path(source).open() as stream:
-        return cast("ModelDefinition", json.load(stream))
+        return json.load(stream)
 
 
 def _raise_on_duplicate_names(definition: ModelDefinition) -> None:
@@ -106,7 +106,7 @@ def _select_distribution(
 ) -> ModelDefinition:
     selected = dict(definition)
     selected["distributions"] = [dict(distribution)]
-    return cast("ModelDefinition", selected)
+    return selected  # ty: ignore[invalid-return-type]
 
 
 def _formulate_functions(
