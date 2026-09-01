@@ -69,7 +69,7 @@ def _select_distribution(workspace: Workspace, distribution: str | None) -> str:
 def _find_distribution(workspace: Workspace, name: str) -> Mapping[str, object]:
     for definition in workspace.definition["distributions"]:
         if definition["name"] == name:
-            return cast("Mapping[str, object]", definition)
+            return definition
     msg = f"Missing definition for distribution {name!r}"
     raise KeyError(msg)
 
