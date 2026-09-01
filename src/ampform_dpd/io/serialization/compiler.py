@@ -200,6 +200,4 @@ def _compile_coordinate_map(
 def _lambdify(expression: sp.Expr, backend: str) -> Callable[[Mapping[str, Any]], Any]:
     from ampform_dpd.io.cached import lambdify  # ruff: ignore[import-outside-top-level]
 
-    return cast(
-        "Callable[[Mapping[str, Any]], Any]", lambdify(expression, backend=backend)
-    )
+    return lambdify(expression, backend=backend)  # ty: ignore[invalid-return-type]
