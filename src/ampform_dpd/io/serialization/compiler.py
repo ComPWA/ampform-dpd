@@ -1,9 +1,15 @@
 from __future__ import annotations
 
 import importlib.util
+import sys
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
+
+if sys.version_info >= (3, 13):
+    from typing import TypeIs
+else:
+    from typing_extensions import TypeIs
 
 from ampform_dpd.io.cached import lambdify
 from ampform_dpd.io.serialization.kinematics import formulate_kinematic_map
@@ -26,7 +32,7 @@ class CompiledWorkspace:
     backend: str
     functions: Mapping[str, Function]
     coordinate_maps: Mapping[str, Mapping[str, Function]]
-    coordinates: Mapping[str, tuple[str, ...]]
+    coordinates: Mapping[str, tuple[str, str]]
 
 
 def compile_workspace(
@@ -108,7 +114,7 @@ def _compile_target(
     workspace: Workspace,
     target: str,
     backend: str,
-    coordinates: tuple[str, ...] | None,
+    coordinates: tuple[str, str] | None,
     parameter_overrides: Mapping[sp.Basic, Any] | None,
 ) -> Function:
     if target in workspace.functions:
@@ -134,12 +140,12 @@ def _prepare_function(
 
 def _prepare_distribution(
     model: AmplitudeModel,
-    coordinates: tuple[str, ...],
+    coordinates: tuple[str, str],
     parameter_overrides: Mapping[sp.Basic, Any] | None,
 ) -> sp.Expr:
     from ampform_dpd.io import cached  # ruff: ignore[import-outside-top-level]
 
-    expression = cached.unfold(cast("Any", model))
+    expression = cached.unfold(model)  # ty: ignore[invalid-argument-type]
     expression = cached.xreplace(expression, model.variables)
     invariants = {str(symbol): symbol for symbol in model.invariants}
     dependent_name, *_ = set(invariants) - set(coordinates)
@@ -157,16 +163,19 @@ def _select_coordinates(
     workspace: Workspace,
     distribution: str,
     coordinates: Iterable[str] | None,
-) -> tuple[str, ...]:
+) -> tuple[str, str]:
     model = workspace.distributions[distribution]
     invariant_names = {str(symbol) for symbol in model.invariants}
     if coordinates is None:
         symbolic_map = formulate_kinematic_map(workspace, distribution)
         dependent = str(next(iter(symbolic_map)))
-        return tuple(sorted(invariant_names - {dependent}))
+        selected = tuple(sorted(invariant_names - {dependent}))
+        if _is_coordinate_pair(selected):
+            return selected
+        msg = f"Expected three distribution invariants; found {sorted(invariant_names)}"
+        raise ValueError(msg)
     selected = tuple(dict.fromkeys(map(str, coordinates)))
-    n_coordinates = 2
-    if len(selected) != n_coordinates or not set(selected) < invariant_names:
+    if not _is_coordinate_pair(selected) or not set(selected) < invariant_names:
         expected = ", ".join(sorted(invariant_names))
         msg = (
             "Distribution coordinates require two distinct invariants from "
@@ -174,6 +183,10 @@ def _select_coordinates(
         )
         raise ValueError(msg)
     return selected
+
+
+def _is_coordinate_pair(value: tuple[str, ...], /) -> TypeIs[tuple[str, str]]:
+    return len(value) == 2  # ruff: ignore[magic-value-comparison]
 
 
 def _apply_parameter_overrides(
