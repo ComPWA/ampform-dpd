@@ -54,6 +54,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FrozenTransition": "qrules.topology.FrozenTransition",
+    "Function": ("obj", "tensorwaves.interface.Function"),
     "InitialStateID": ("obj", "ampform_dpd.decay.InitialStateID"),
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
