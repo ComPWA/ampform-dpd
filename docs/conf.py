@@ -1,6 +1,3 @@
-import warnings
-
-from sphinx.deprecation import RemovedInSphinx10Warning
 from sphinx_api_relink.helpers import (
     get_branch_name,
     get_execution_mode,
@@ -27,7 +24,6 @@ set_intersphinx_version_remapping({
     "matplotlib": {"3.9.1.post1": "3.9.1"},
     "mpl-interactions": {"0.24.1": "0.24.0"},
 })
-warnings.filterwarnings("ignore", category=RemovedInSphinx10Warning)
 
 BRANCH = get_branch_name()
 ORGANIZATION = "ComPWA"
