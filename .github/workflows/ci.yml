@@ -25,7 +25,6 @@ jobs:
       pages: write
       id-token: write
     with:
-      apt-packages: graphviz
       gh-pages: true
   style:
     secrets:
