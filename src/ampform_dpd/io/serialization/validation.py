@@ -1,27 +1,35 @@
 from __future__ import annotations
 
+# cspell:ignore errstate
 import math
 import re
 from dataclasses import dataclass
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
+
 from ampform_dpd.io.serialization.compiler import CompiledWorkspace, compile_workspace
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Iterable, Mapping
 
     from ampform_dpd.io.serialization.workspace import Workspace
 
 
 @dataclass(frozen=True)
 class ChecksumResult:
-    """Structured result of evaluating one serialized checksum."""
+    """Structured result of evaluating one serialized checksum.
+
+    A failed result has a diagnostic explaining the failure. Its ``value`` is ``None``
+    if evaluation did not complete, and its ``reference`` is ``None`` if the serialized
+    reference could not be converted to a number.
+    """
 
     target: str
     point_name: str
     point: Mapping[str, float | complex]
-    reference: float | complex
+    reference: float | complex | None
     value: float | complex | None
     difference: float
     passed: bool
@@ -35,7 +43,22 @@ def validate_checksums(
     atol: float = 1e-10,
     rtol: float = 1e-7,
 ) -> tuple[ChecksumResult, ...]:
-    """Evaluate serialized checksums with absolute and relative tolerances."""
+    """Evaluate serialized checksums without aborting on individual failures.
+
+    A checksum passes when ``abs(value - reference) <= atol + rtol * abs(reference)``.
+    Compilation, point conversion, evaluation, and non-finite output failures are
+    returned as failed records with diagnostics.
+
+    Args:
+        workspace_or_compiled: Symbolic workspace to compile on demand, or a
+            previously compiled workspace.
+        backend: Numerical backend used when compiling a symbolic workspace.
+        atol: Absolute tolerance for the checksum comparison.
+        rtol: Relative tolerance, scaled by the absolute reference value.
+
+    Returns:
+        An immutable result tuple in serialized checksum order.
+    """
     if isinstance(workspace_or_compiled, CompiledWorkspace):
         compiled = workspace_or_compiled
         workspace = compiled.workspace
@@ -49,11 +72,7 @@ def validate_checksums(
             workspace, backend, targets
         )
     points = {
-        point["name"]: {
-            parameter["name"]: _to_number(parameter["value"])
-            for parameter in point["parameters"]
-        }
-        for point in workspace.reference_points
+        point["name"]: point["parameters"] for point in workspace.reference_points
     }
     return tuple(
         _validate_checksum(
@@ -102,7 +121,7 @@ def _compile_targets(
 
 def _validate_checksum(
     checksum: Mapping[str, Any],
-    points: Mapping[str, Mapping[str, float | complex]],
+    points: Mapping[str, Iterable[Mapping[str, Any]]],
     compiled: CompiledWorkspace,
     compilation_diagnostics: Mapping[str, str],
     *,
@@ -111,17 +130,48 @@ def _validate_checksum(
 ) -> ChecksumResult:
     target = checksum["distribution"]
     point_name = checksum["point"]
-    reference = _to_number(checksum["value"])
-    point = points.get(point_name, {})
+    parameters = points.get(point_name)
+    if parameters is None:
+        point = {}
+        point_diagnostic = f"Reference point {point_name!r} was not found"
+    else:
+        try:
+            point = {
+                parameter["name"]: _to_number(parameter["value"])
+                for parameter in parameters
+            }
+        except Exception as exception:  # ruff: ignore[blind-except]
+            point = {}
+            point_diagnostic = (
+                f"Invalid reference point {point_name!r}: "
+                f"{type(exception).__name__}: {exception}"
+            )
+        else:
+            point_diagnostic = None
     immutable_point = MappingProxyType(dict(point))
+    try:
+        reference = _to_number(checksum["value"])
+    except Exception as exception:  # ruff: ignore[blind-except]
+        return _failed_result(
+            target,
+            point_name=point_name,
+            point=immutable_point,
+            reference=None,
+            diagnostic=(
+                f"Invalid checksum reference: {type(exception).__name__}: {exception}"
+            ),
+        )
+    failure_diagnostic = point_diagnostic
     compilation_diagnostic = compilation_diagnostics.get(target)
-    if compilation_diagnostic is not None:
+    if failure_diagnostic is None and compilation_diagnostic is not None:
+        failure_diagnostic = f"Compilation failed: {compilation_diagnostic}"
+    if failure_diagnostic is not None:
         return _failed_result(
             target,
             point_name=point_name,
             point=immutable_point,
             reference=reference,
-            diagnostic=f"Compilation failed: {compilation_diagnostic}",
+            diagnostic=failure_diagnostic,
         )
     function = compiled.functions.get(target)
     if function is None:
@@ -133,8 +183,9 @@ def _validate_checksum(
             diagnostic=f"Target {target!r} was not compiled",
         )
     try:
-        inputs = _transform_point(target, point, compiled)
-        value = _to_number(function(inputs))
+        with np.errstate(invalid="ignore"):
+            inputs = _transform_point(target, point, compiled)
+            value = _to_number(function(inputs))
     except Exception as exception:  # ruff: ignore[blind-except]
         diagnostic = f"{type(exception).__name__}: {exception}"
         return _failed_result(
@@ -220,11 +271,13 @@ def _failed_result(
     *,
     point_name: str,
     point: Mapping[str, float | complex],
-    reference: complex,
+    reference: complex | None,
     diagnostic: str,
     value: complex | None = None,
 ) -> ChecksumResult:
-    difference = math.inf if value is None else abs(value - reference)
+    difference = (
+        math.inf if value is None or reference is None else abs(value - reference)
+    )
     return ChecksumResult(
         target=target,
         point_name=point_name,
