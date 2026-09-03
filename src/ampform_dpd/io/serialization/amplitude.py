@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from collections import abc
 from itertools import product
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal
 
 import sympy as sp
 from ampform.sympy import PoolSum, unevaluated
@@ -35,13 +34,14 @@ from ampform_dpd.io.serialization.dynamics import (
 )
 from ampform_dpd.io.serialization.format import (
     DecayChain,
-    HelicityVertex,
-    LSVertex,
     Node,
     ParityFactor,
-    ParityVertex,
+    Vertex,
+    as_final_state_pair,
     get_decay_chains,
     get_distribution_def,
+    is_decay_node,
+    is_isobar,
 )
 from ampform_dpd.spin import create_spin_range
 
@@ -189,24 +189,24 @@ def _formulate_phase_factor(state: State, helicity: sp.Rational | sp.Symbol) -> 
 def _get_decay_product_ids(
     chain_definition: DecayChain,
 ) -> tuple[FinalStateID, FinalStateID]:
-    """Get the IDs of the two decay products, ignoring their serialized helicities.
-
-    The helicity values from `._get_decay_product_helicities` are not substituted into
-    the chain amplitude: it is summed over all allowed helicities instead.
-    """
-    (i, _), (j, _) = _get_decay_product_helicities(chain_definition)
-    return cast("FinalStateID", i), cast("FinalStateID", j)
+    for vertex in chain_definition["vertices"]:
+        decay_products = as_final_state_pair(vertex["node"])
+        if decay_products is not None:
+            return decay_products
+    msg = "Could not find a final-state decay vertex"
+    raise ValueError(msg)
 
 
 def _get_resonance_node(
     chain_definition: DecayChain,
 ) -> tuple[FinalStateID, FinalStateID]:
-    """Get the node of the resonance, ignoring its serialized helicity.
-
-    See `._get_decay_product_ids` for why the helicity value is discarded.
-    """
-    node, _ = _get_resonance_helicity(chain_definition)
-    return node
+    for vertex in chain_definition["vertices"]:
+        for node_item in vertex["node"]:
+            resonance_node = as_final_state_pair(node_item)
+            if resonance_node is not None:
+                return resonance_node
+    msg = "Could not find a resonance node"
+    raise ValueError(msg)
 
 
 def _get_decay_product_helicities(
@@ -215,11 +215,8 @@ def _get_decay_product_helicities(
     vertices = chain_definition["vertices"]
     for vertex in vertices:
         node = vertex["node"]
-        if all(isinstance(i, int) for i in node):
-            helicities = vertex.get("helicities")
-            if helicities is None:
-                msg = "Vertex does not contain helicities. Is it an LS vertex?"
-                raise ValueError(msg, vertex)
+        if is_decay_node(node):
+            helicities = _get_helicities(vertex)
             return tuple(
                 (i, sp.Rational(λ)) for i, λ in zip(node, helicities, strict=True)
             )  # ty: ignore[invalid-return-type]
@@ -269,17 +266,25 @@ def formulate_aligned_amplitude(
 
 
 def _get_weight(
-    chain_definition: DecayChain, to_latex: Callable[[str], str] = identity_function
+    chain_definition: DecayChain, /, to_latex: Callable[[str], str] = identity_function
 ) -> tuple[sp.Symbol, complex | float]:
     value: complex | float
     value = complex(str(chain_definition["weight"]).replace(" ", "").replace("i", "j"))
     if not value.imag:
         value = value.real
     resonance_latex = to_latex(chain_definition["name"])
-    _, resonance_helicity = _get_resonance_helicity(chain_definition)
-    helicities = _get_final_state_helicities(chain_definition).values()
-    subscript = ", ".join(sp.latex(λ) for λ in helicities)
-    symbol = sp.Symbol(f"c^{{{resonance_latex}[{resonance_helicity}]}}_{{{subscript}}}")
+    vertices = chain_definition["vertices"]
+    ls_vertices = [vertex for vertex in vertices if vertex["type"] == "ls"]
+    if len(ls_vertices) == len(vertices):
+        couplings = ", ".join(f"{vertex['l']}, {vertex['s']}" for vertex in ls_vertices)
+        symbol = sp.Symbol(f"c^{{{resonance_latex}}}_{{{couplings}}}")
+    else:
+        _, resonance_helicity = _get_resonance_helicity(chain_definition)
+        helicities = _get_final_state_helicities(chain_definition).values()
+        subscript = ", ".join(sp.latex(λ) for λ in helicities)
+        symbol = sp.Symbol(
+            f"c^{{{resonance_latex}[{resonance_helicity}]}}_{{{subscript}}}"
+        )
     return symbol, value
 
 
@@ -289,16 +294,13 @@ def _get_resonance_helicity(
     vertices = chain_definition["vertices"]
     for vertex in vertices:
         node = vertex["node"]
-        if all(isinstance(i, int) for i in node):
+        if is_decay_node(node):
             continue
-        vertex = cast("HelicityVertex", vertex)
-        helicities = vertex.get("helicities")
-        if helicities is None:
-            msg = "Vertex does not contain helicities. Is it an LS vertex?"
-            raise ValueError(msg, vertex)
+        helicities = _get_helicities(vertex)
         for helicity, sub_node in zip(helicities, node, strict=True):
-            if isinstance(sub_node, abc.Sequence) and len(sub_node) == 2:  # ruff: ignore[magic-value-comparison]
-                return tuple(sub_node), sp.Rational(helicity)
+            resonance_node = as_final_state_pair(sub_node)
+            if resonance_node is not None:
+                return resonance_node, sp.Rational(helicity)
     msg = "Could not find a resonance node"
     raise ValueError(msg)
 
@@ -309,16 +311,22 @@ def _get_final_state_helicities(
     vertices = chain_definition["vertices"]
     collected_helicities: dict[FinalStateID, sp.Rational] = {}
     for vertex in vertices:
-        vertex = cast("HelicityVertex", vertex)
-        helicities = vertex.get("helicities")
-        if helicities is None:
-            msg = "Vertex does not contain helicities. Is it an LS vertex?"
-            raise ValueError(msg, vertex)
-        for helicity, node in zip(helicities, vertex["node"], strict=True):
-            if not isinstance(node, int):
+        helicities = _get_helicities(vertex)
+        for helicity, node_item in zip(helicities, vertex["node"], strict=True):
+            if is_isobar(node_item):
                 continue
-            collected_helicities[node] = sp.Rational(helicity)
+            collected_helicities[node_item] = sp.Rational(helicity)
     return {i: collected_helicities[i] for i in sorted(collected_helicities)}
+
+
+def _get_helicities(vertex: Vertex) -> tuple[str, str]:
+    """Get the helicities of a vertex, which an LS vertex does not have."""
+    if vertex["type"] != "ls":
+        helicities = vertex.get("helicities")
+        if helicities is not None:
+            return helicities
+    msg = "Vertex does not contain helicities. Is it an LS vertex?"
+    raise ValueError(msg, vertex)
 
 
 def formulate_recoupling(  # ruff: ignore[too-many-locals]
@@ -334,25 +342,22 @@ def formulate_recoupling(  # ruff: ignore[too-many-locals]
         raise ValueError(msg)
     vertex = chain_definition["vertices"][vertex_idx]
     vertex_type = vertex["type"]
+    if vertex_type not in {"helicity", "parity", "ls"}:
+        msg = f"No implementation for vertex of type {vertex_type!r}"
+        raise NotImplementedError(msg)
     node = vertex["node"]
     λa, λb = map(_get_helicity_symbol, node)
-    if vertex_type in {"helicity", "parity"}:
-        vertex = cast("HelicityVertex", vertex)
+    if vertex["type"] != "ls":
         λa0, λb0 = (sp.Rational(v) for v in vertex["helicities"])
-        if vertex_type == "parity":
-            vertex = cast("ParityVertex", vertex)
+        if vertex["type"] == "parity":
             f = _sign_to_value(vertex.get("parity_factor", "+"))
             return ParityRecoupling(λa, λb, λa0, λb0, f)  # ty: ignore[invalid-argument-type]
         return HelicityRecoupling(λa, λb, λa0, λb0)
-    if vertex_type == "ls":
-        vertex = cast("LSVertex", vertex)
-        l = int(vertex["l"])
-        s = sp.Rational(vertex["s"])
-        ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
-        j = _get_parent_spin(model, chain_idx, vertex_idx)
-        return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty: ignore[invalid-argument-type]
-    msg = f"No implementation for vertex of type {vertex_type!r}"
-    raise NotImplementedError(msg)
+    l = int(vertex["l"])
+    s = sp.Rational(vertex["s"])
+    ja, jb = _get_child_spins(model, chain_idx, vertex_idx)
+    j = _get_parent_spin(model, chain_idx, vertex_idx)
+    return LSRecoupling(λa, λb, l, s, ja, jb, j)  # ty: ignore[invalid-argument-type]
 
 
 def _sign_to_value(sign: ParityFactor) -> Literal[0, -1, 1]:
@@ -372,7 +377,7 @@ def _get_parent_spin(
 ) -> sp.Rational:
     chain_definition = get_decay_chains(model)[chain_idx]
     vertex = chain_definition["vertices"][vertex_idx]
-    if all(isinstance(i, int) for i in vertex["node"]):
+    if is_decay_node(vertex["node"]):
         return __get_propagator_spin(chain_definition)
     initial_state = get_initial_state(model)
     return initial_state.spin
@@ -387,10 +392,10 @@ def _get_child_spins(
     final_state = get_final_state(model)
     spins = []
     for node_item in node:
-        if isinstance(node_item, int):
-            spins.append(sp.Rational(final_state[node_item]))
-        else:
+        if is_isobar(node_item):
             spins.append(__get_propagator_spin(chain_definition))
+        else:
+            spins.append(final_state[node_item].spin)
     return tuple(spins)  # ty: ignore[invalid-return-type]
 
 
@@ -402,10 +407,10 @@ def __get_propagator_spin(chain_definition: DecayChain) -> sp.Rational:
     return sp.Rational(propagators[0]["spin"])
 
 
-def _get_helicity_symbol(node: int | Node) -> sp.Symbol:
-    if isinstance(node, int):
-        return sp.Symbol(f"lambda{node}", rational=True)
-    return sp.Symbol(R"\lambda_R", rational=True)
+def _get_helicity_symbol(node_item: FinalStateID | Node) -> sp.Symbol:
+    if is_isobar(node_item):
+        return sp.Symbol(R"\lambda_R", rational=True)
+    return sp.Symbol(f"lambda{node_item}", rational=True)
 
 
 def get_existing_subsystem_ids(model: ModelDefinition) -> list[FinalStateID]:

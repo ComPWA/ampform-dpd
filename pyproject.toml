@@ -31,7 +31,7 @@ dependencies = [
     "qrules>=0.10.0",
     "sympy>=1.10",  # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
-    'typing-extensions; python_version <"3.11.0"',
+    'typing-extensions; python_version <"3.13.0"',
 ]
 dynamic = ["version"]
 

@@ -1,14 +1,19 @@
 from __future__ import annotations
 
-from collections import abc
+import re
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
-from ampform.dynamics.form_factor import FormFactor, SphericalHankel1
+from ampform.dynamics.form_factor import (
+    BreakupMomentumSquared,
+    FormFactor,
+    SphericalHankel1,
+)
+from ampform.dynamics.phasespace import PhaseSpaceFactorComplex
 from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import BreitWigner, ChannelArguments, MultichannelBreitWigner
+from ampform_dpd.dynamics import BreitWigner, ChannelArguments
 from ampform_dpd.io.serialization.decay import get_initial_state
 from ampform_dpd.io.serialization.format import (
     BlattWeisskopfDefinition,
@@ -16,10 +21,14 @@ from ampform_dpd.io.serialization.format import (
     DecayChain,
     GenericFunctionDefinition,
     ModelDefinition,
+    MomentumPowerDefinition,
     MultichannelBreitWignerDefinition,
+    PolynomialDefinition,
     Propagator,
     Vertex,
+    as_final_state_pair,
     get_function_definition,
+    is_production_node,
 )
 
 if TYPE_CHECKING:
@@ -53,6 +62,7 @@ def formulate_dynamics(
         "BreitWigner": formulate_breit_wigner,
         "generic_function": formulate_generic_function,
         "MultichannelBreitWigner": formulate_multichannel_breit_wigner,
+        "Polynomial": formulate_polynomial,
     }
     if additional_definitions is not None:
         definitions.update(additional_definitions)
@@ -80,19 +90,30 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
     function_definition = get_function_definition(function_name, model)
     function_definition = cast("BlattWeisskopfDefinition", function_definition)
     function_type = function_definition["type"]
+    if function_type == "MomentumPower":
+        function_definition = cast("MomentumPowerDefinition", function_definition)
+        node = vertex["node"]
+        m1, m2 = (to_mass_symbol(i) for i in node)
+        if is_production_node(node):
+            s = to_mandelstam_symbol(node) ** 2
+            m1 = sp.sqrt(m1)
+        else:
+            s = to_mandelstam_symbol(node)
+        power = sp.Rational(function_definition["l"], 2)
+        return DefinedExpression(expression=BreakupMomentumSquared(s, m1, m2) ** power)
     if function_type == "BlattWeisskopf":
         node = vertex["node"]
-        if all(isinstance(i, int) for i in node):
-            s = to_mandelstam_symbol(node)
-            m1, m2 = (to_mass_symbol(i) for i in node)
-            meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
-        else:
+        if is_production_node(node):
             parent_mass = to_mandelstam_symbol(node)
             isobar_invariant, m2 = (to_mass_symbol(i) for i in node)
             s = parent_mass**2
             m1 = sp.sqrt(isobar_invariant)
             initial_state = get_initial_state(model)
             meson_radius = sp.Symbol(f"R_{{{initial_state.latex}}}", nonnegative=True)
+        else:
+            s = to_mandelstam_symbol(node)
+            m1, m2 = (to_mass_symbol(i) for i in node)
+            meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
             expression=FormFactor(s, m1, m2, angular_momentum, meson_radius)  # ty: ignore[invalid-argument-type]
@@ -128,14 +149,66 @@ def formulate_generic_function(
 ) -> DefinedExpression:
     function_definition = get_function_definition(propagator["parametrization"], model)
     function_definition = cast("GenericFunctionDefinition", function_definition)
-    expression = function_definition["expression"].replace("^", "**")
+    expression = function_definition["expression"]
+    expression = expression.replace("^", "**").replace("1im", "I")
+    expression = expression.replace("m_12_sq", "sigma")
     mandelstam = to_mandelstam_symbol(propagator["node"])
     return DefinedExpression(
         expression=parse_expr(
             expression,
-            local_dict={"i": sp.I, "σ": mandelstam},
+            local_dict={"i": sp.I, "I": sp.I, "sigma": mandelstam, "σ": mandelstam},
         )
     )
+
+
+def formulate_polynomial(
+    propagator: Propagator, resonance: str, model: ModelDefinition
+) -> DefinedExpression:
+    function_definition = get_function_definition(propagator["parametrization"], model)
+    function_definition = cast("PolynomialDefinition", function_definition)
+    variable = to_mandelstam_symbol(propagator["node"])
+    _assert_variable_matches_node(function_definition["x"], propagator["node"])
+    coefficients: dict[sp.Basic, complex | float] = {
+        sp.Symbol(Rf"c_{{{resonance},{power}}}", real=True): value
+        for power, value in enumerate(function_definition["coefficients"])
+    }
+    return DefinedExpression(
+        expression=sum(
+            coefficient * variable**power
+            for power, coefficient in enumerate(coefficients)
+        ),
+        parameters=coefficients,
+    )
+
+
+def _assert_variable_matches_node(variable_name: str, node: Node) -> None:
+    """Check that the serialized variable name is the invariant mass of the node.
+
+    >>> _assert_variable_matches_node("m_23_sq", (2, 3))
+    >>> _assert_variable_matches_node("m_12_sq", (2, 3))
+    Traceback (most recent call last):
+        ...
+    ValueError: Variable 'm_12_sq' is sigma3, but node (2, 3) implies sigma1
+    """
+    expected = to_mandelstam_symbol(node)
+    variable = _to_mandelstam_symbol_from_name(variable_name)
+    if variable != expected:
+        msg = f"Variable {variable_name!r} is {variable}, but node {node} implies {expected}"
+        raise ValueError(msg)
+
+
+def _to_mandelstam_symbol_from_name(variable_name: str) -> sp.Symbol:
+    """Convert a serialized variable name to a Mandelstam symbol.
+
+    >>> _to_mandelstam_symbol_from_name("m_12_sq")
+    sigma3
+    """
+    matches = re.fullmatch(r"m_([1-3])([1-3])_sq", variable_name)
+    if matches is None:
+        msg = f"Cannot convert variable name {variable_name!r} to a Mandelstam symbol"
+        raise NotImplementedError(msg)
+    i, j = (int(index) for index in matches.groups())
+    return to_mass_symbol((i, j))
 
 
 def formulate_breit_wigner(
@@ -214,10 +287,21 @@ def formulate_multichannel_breit_wigner(  # ruff: ignore[too-many-locals]
             mi2: channel_definition["mb"],
             g_squared_i: channel_definition["gsq"],
         })
-    return DefinedExpression(
-        expression=MultichannelBreitWigner(s, mass, tuple(channels)),  # ty: ignore[invalid-argument-type]
-        parameters=parameter_defaults,
+    channel_terms = (
+        channel.coupling_squared
+        * PhaseSpaceFactorComplex(channel.s, channel.m1, channel.m2)
+        * FormFactor(
+            channel.s,
+            channel.m1,
+            channel.m2,
+            channel.angular_momentum,
+            channel.meson_radius,
+        )
+        ** 2
+        for channel in channels
     )
+    expression = 1 / (mass**2 - s - sp.I * sum(channel_terms))
+    return DefinedExpression(expression, parameter_defaults)
 
 
 def to_mandelstam_symbol(node: Node) -> sp.Symbol:
@@ -228,9 +312,9 @@ def to_mandelstam_symbol(node: Node) -> sp.Symbol:
     >>> to_mandelstam_symbol([1, [2, 3]])
     m0
     """
-    if all(isinstance(i, int) for i in node):
-        return to_mass_symbol(node)
-    return to_mass_symbol(0)
+    if is_production_node(node):
+        return to_mass_symbol(0)
+    return to_mass_symbol(node)
 
 
 def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
@@ -243,12 +327,9 @@ def to_mass_symbol(node_item: int | Node) -> sp.Symbol:
     """
     if isinstance(node_item, int):
         return sp.Symbol(f"m{node_item}", nonnegative=True)
-    if (
-        isinstance(node_item, abc.Sequence)
-        and all(isinstance(i, int) for i in node_item)
-        and len(node_item) == 2  # ruff: ignore[magic-value-comparison]
-    ):
-        k, *_ = {1, 2, 3} - set(node_item)
+    final_state_pair = as_final_state_pair(node_item)
+    if final_state_pair is not None:
+        k, *_ = {1, 2, 3} - set(final_state_pair)
         return sp.Symbol(f"sigma{k}", nonnegative=True)
     msg = f"Cannot create mass symbol for node {node_item}"
     raise NotImplementedError(msg)
