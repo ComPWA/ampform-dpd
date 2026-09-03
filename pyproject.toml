@@ -67,6 +67,7 @@ doc = [
     "sphinx-pybtex-etal-style",
     "sphinx-togglebutton",
     "sphinxcontrib-bibtex",
+    "sphinxcontrib-mermaid",
     { include-group = "notebooks" },
 ]
 jupyter = [
@@ -85,7 +86,7 @@ notebooks = [
     "ipywidgets",
     "matplotlib",
     "pandas",
-    "qrules[viz]",
+    "qrules>=0.10.11",  # qrules.io.asmermaid
     "tensorwaves[phsp]",
     "tqdm",
 ]
@@ -112,7 +113,6 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.compwa.policy]
-doc-apt-packages = "graphviz"
 repo-name = "ampform-dpd"
 repo-title = "AmpForm-DPD"
 
