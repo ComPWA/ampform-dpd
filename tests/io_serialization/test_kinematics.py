@@ -18,34 +18,81 @@ if TYPE_CHECKING:
     from ampform_dpd.io.serialization.format import ModelDefinition
 
 
-@pytest.mark.parametrize("node", [(1, 2), (2, 3), (3, 1)])
-def test_formulate_kinematic_map_round_trip(
-    model_definition: ModelDefinition, node: tuple[FinalStateID, FinalStateID]
-):
-    definition = deepcopy(model_definition)
-    i, j = node
-    mass_name = f"m_{i}{j}"
-    cosine_name = f"cos_theta_{i}{j}"
-    definition["distributions"][0]["variables"][0] = {
-        "node": list(node),
-        "mass_phi_costheta": [mass_name, f"phi_{i}{j}", cosine_name],
-    }
-    workspace = load_workspace(definition)
-    mapping = formulate_kinematic_map(workspace)
-    model = workspace.distributions["default_model"]
-    phase_space_points = (
-        (0.4, 0.23),
-        (1e-6, 0.999),
-        (1 - 1e-6, -0.999),
-    )
-    for mass_fraction, expected_cosine in phase_space_points:
-        _assert_round_trip(
-            mapping,
-            model.parameter_defaults,
-            node,
-            mass_fraction,
-            expected_cosine,
+def describe_formulate_kinematic_map():
+    @pytest.mark.parametrize("node", [(1, 2), (2, 3), (3, 1)])
+    def it_round_trips_phase_space_coordinates(
+        model_definition: ModelDefinition, node: tuple[FinalStateID, FinalStateID]
+    ):
+        definition = deepcopy(model_definition)
+        i, j = node
+        mass_name = f"m_{i}{j}"
+        cosine_name = f"cos_theta_{i}{j}"
+        definition["distributions"][0]["variables"][0] = {
+            "node": list(node),
+            "mass_phi_costheta": [mass_name, f"phi_{i}{j}", cosine_name],
+        }
+        workspace = load_workspace(definition)
+        mapping = formulate_kinematic_map(workspace)
+        model = workspace.distributions["default_model"]
+        phase_space_points = (
+            (0.4, 0.23),
+            (1e-6, 0.999),
+            (1 - 1e-6, -0.999),
         )
+        for mass_fraction, expected_cosine in phase_space_points:
+            _assert_round_trip(
+                mapping,
+                model.parameter_defaults,
+                node,
+                mass_fraction,
+                expected_cosine,
+            )
+
+    def it_requires_a_distribution_for_multiple_models(
+        model_definition: ModelDefinition,
+    ):
+        definition = deepcopy(model_definition)
+        second = deepcopy(definition["distributions"][0])
+        second["name"] = "second"
+        definition["distributions"].append(second)
+        workspace = load_workspace(definition)
+        with pytest.raises(ValueError, match="Select a distribution"):
+            formulate_kinematic_map(workspace)
+        assert formulate_kinematic_map(workspace, "second")
+
+    def it_rejects_an_unsupported_orientation(model_definition: ModelDefinition):
+        definition = deepcopy(model_definition)
+        definition["distributions"][0]["variables"][0]["node"] = [1, 3]
+        workspace = load_workspace(definition)
+        with pytest.raises(ValueError, match=r"orientation \(1, 3\)"):
+            formulate_kinematic_map(workspace)
+
+    def it_rejects_invalid_coordinate_metadata(model_definition: ModelDefinition):
+        definition = deepcopy(model_definition)
+        distribution: Any = definition["distributions"][0]
+        distribution["variables"] = [None]
+        workspace = load_workspace(definition)
+        with pytest.raises(TypeError, match=r"variables\[0\] must be a mapping"):
+            formulate_kinematic_map(workspace)
+
+    def it_rejects_invalid_coordinate_names(model_definition: ModelDefinition):
+        definition = deepcopy(model_definition)
+        definition["distributions"][0]["variables"][0]["mass_phi_costheta"] = [
+            "m_31",
+            "phi_31",
+        ]
+        workspace = load_workspace(definition)
+        with pytest.raises(ValueError, match=r"variables\[0\].mass_phi_costheta"):
+            formulate_kinematic_map(workspace)
+
+    def it_rejects_ambiguous_coordinate_metadata(model_definition: ModelDefinition):
+        definition = deepcopy(model_definition)
+        coordinate = deepcopy(definition["distributions"][0]["variables"][0])
+        coordinate["node"] = [1, 2]
+        definition["distributions"][0]["variables"].append(coordinate)
+        workspace = load_workspace(definition)
+        with pytest.raises(ValueError, match="coordinate, found 2"):
+            formulate_kinematic_map(workspace)
 
 
 def _assert_round_trip(
@@ -99,52 +146,3 @@ def _to_real(value: ParameterValue) -> float:
         assert value.imag == 0
         return float(value.real)
     return float(value)
-
-
-def test_requires_distribution_for_multiple_models(model_definition: ModelDefinition):
-    definition = deepcopy(model_definition)
-    second = deepcopy(definition["distributions"][0])
-    second["name"] = "second"
-    definition["distributions"].append(second)
-    workspace = load_workspace(definition)
-    with pytest.raises(ValueError, match="Select a distribution"):
-        formulate_kinematic_map(workspace)
-    assert formulate_kinematic_map(workspace, "second")
-
-
-def test_rejects_unsupported_orientation(model_definition: ModelDefinition):
-    definition = deepcopy(model_definition)
-    definition["distributions"][0]["variables"][0]["node"] = [1, 3]
-    workspace = load_workspace(definition)
-    with pytest.raises(ValueError, match=r"orientation \(1, 3\)"):
-        formulate_kinematic_map(workspace)
-
-
-def test_rejects_invalid_coordinate_metadata(model_definition: ModelDefinition):
-    definition = deepcopy(model_definition)
-    distribution: Any = definition["distributions"][0]
-    distribution["variables"] = [None]
-    workspace = load_workspace(definition)
-    with pytest.raises(TypeError, match=r"variables\[0\] must be a mapping"):
-        formulate_kinematic_map(workspace)
-
-
-def test_rejects_invalid_coordinate_names(model_definition: ModelDefinition):
-    definition = deepcopy(model_definition)
-    definition["distributions"][0]["variables"][0]["mass_phi_costheta"] = [
-        "m_31",
-        "phi_31",
-    ]
-    workspace = load_workspace(definition)
-    with pytest.raises(ValueError, match=r"variables\[0\].mass_phi_costheta"):
-        formulate_kinematic_map(workspace)
-
-
-def test_rejects_ambiguous_coordinate_metadata(model_definition: ModelDefinition):
-    definition = deepcopy(model_definition)
-    coordinate = deepcopy(definition["distributions"][0]["variables"][0])
-    coordinate["node"] = [1, 2]
-    definition["distributions"][0]["variables"].append(coordinate)
-    workspace = load_workspace(definition)
-    with pytest.raises(ValueError, match="coordinate, found 2"):
-        formulate_kinematic_map(workspace)
