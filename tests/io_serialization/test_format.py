@@ -5,30 +5,26 @@ import pytest
 from ampform_dpd.io.serialization.format import ModelDefinition, get_function_definition
 
 
-def test_get_function_definition_blatt_weisskopf(model_definition: ModelDefinition):
-    func_def = get_function_definition("BlattWeisskopf_resonance_l1", model_definition)
-    assert func_def == {
-        "name": "BlattWeisskopf_resonance_l1",
-        "type": "BlattWeisskopf",
-        "radius": 1.5,
-        "l": 1,
-    }
-    func_def = get_function_definition("BlattWeisskopf_resonance_l2", model_definition)
-    assert func_def == {
-        "name": "BlattWeisskopf_resonance_l2",
-        "type": "BlattWeisskopf",
-        "radius": 1.5,
-        "l": 2,
-    }
-
-
-def test_get_function_definition_missing(model_definition: ModelDefinition):
-    # cspell:ignore Weiskopf
-    with pytest.raises(
-        KeyError,
-        match=(
-            r" Did you mean any of these\?"
-            " BlattWeisskopf_b_decay_l1, BlattWeisskopf_resonance_l1, BlattWeisskopf_resonance_l2"
-        ),
+def describe_get_function_definition():
+    @pytest.mark.parametrize("angular_momentum", [1, 2])
+    def it_returns_a_blatt_weisskopf_definition(
+        model_definition: ModelDefinition, angular_momentum: int
     ):
-        get_function_definition("BlattWeiskopf", model_definition)
+        name = f"BlattWeisskopf_resonance_l{angular_momentum}"
+        assert get_function_definition(name, model_definition) == {
+            "name": name,
+            "type": "BlattWeisskopf",
+            "radius": 1.5,
+            "l": angular_momentum,
+        }
+
+    def it_suggests_similar_names_when_missing(model_definition: ModelDefinition):
+        # cspell:ignore Weiskopf
+        with pytest.raises(
+            KeyError,
+            match=(
+                r" Did you mean any of these\?"
+                " BlattWeisskopf_b_decay_l1, BlattWeisskopf_resonance_l1, BlattWeisskopf_resonance_l2"
+            ),
+        ):
+            get_function_definition("BlattWeiskopf", model_definition)
