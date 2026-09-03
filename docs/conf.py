@@ -130,6 +130,7 @@ extensions = [
     "sphinxcontrib.mermaid",
 ]
 generate_apidoc_package_path = f"../src/{PACKAGE}"
+html_css_files = ["mermaid.css"]
 html_favicon = "_static/favicon.ico"
 html_last_updated_fmt = "%-d %B %Y"
 html_logo = (
@@ -138,6 +139,7 @@ html_logo = (
 html_show_copyright = False
 html_show_sphinx = False
 html_sourcelink_suffix = ""
+html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "icon_links": [
@@ -209,6 +211,16 @@ linkcheck_ignore = [
     "https://doi.org/10.1103",
     "https://journals.aps.org/prd",
 ]
+mermaid_height = "auto"  # do not stretch diagrams to the default 500px
+mermaid_init_config = {
+    "flowchart": {
+        "nodeSpacing": 30,
+        "rankSpacing": 40,
+        "useMaxWidth": False,
+    },
+    "startOnLoad": False,
+    "themeVariables": {"fontSize": "12px"},
+}
 myst_enable_extensions = [
     "amsmath",
     "colon_fence",

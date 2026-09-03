@@ -121,6 +121,7 @@
     "setuptools",
     "sharey",
     "simplefilter",
+    "sphinxcontrib",
     "startswith",
     "suptitle",
     "textwrap",
