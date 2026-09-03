@@ -10,12 +10,15 @@ https://rub-ep1.github.io/amplitude-serialization for more information.
 
 from ampform_dpd.io.serialization.compiler import CompiledWorkspace, compile_workspace
 from ampform_dpd.io.serialization.kinematics import formulate_kinematic_map
+from ampform_dpd.io.serialization.validation import ChecksumResult, validate_checksums
 from ampform_dpd.io.serialization.workspace import Workspace, load_workspace
 
 __all__ = [
+    "ChecksumResult",
     "CompiledWorkspace",
     "Workspace",
     "compile_workspace",
     "formulate_kinematic_map",
     "load_workspace",
+    "validate_checksums",
 ]
