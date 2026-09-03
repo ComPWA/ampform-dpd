@@ -43,6 +43,10 @@ EXECUTE_NB = get_execution_mode() != "off"
 add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions: dict[str, str | tuple[str, str]] = {
+    "CompiledWorkspace": (
+        "obj",
+        "ampform_dpd.io.serialization.compiler.CompiledWorkspace",
+    ),
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "ampform_dpd.io.serialization.dynamics.T": "typing.TypeVar",
     "DecayNode": ("obj", "ampform_dpd.decay.DecayNode"),
@@ -50,6 +54,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FrozenTransition": "qrules.topology.FrozenTransition",
+    "Function": ("obj", "tensorwaves.interface.Function"),
     "InitialStateID": ("obj", "ampform_dpd.decay.InitialStateID"),
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
