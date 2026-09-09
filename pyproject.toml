@@ -97,6 +97,7 @@ style = [
 test = [
     "pytest",
     "pytest-cov",
+    "pytest-describe",
     "pytest-xdist",
 ]
 types = [
@@ -419,7 +420,7 @@ known-first-party = ["ampform_dpd"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.pep8-naming]
-ignore-names = [
+extend-ignore-names = [
     "A",
     "H",
     "L",
@@ -427,6 +428,8 @@ ignore-names = [
     "R_dec",
     "R_prod",
     "S",
+    "describe_*",
+    "test_*",
     "Γ*",
     "λ*",
 ]
@@ -480,12 +483,14 @@ ignore-names = [
     "T20",
     "assert",
     "boolean-type-hint-positional-argument",
+    "complex-structure",
     "float-equality-comparison",
     "implicit-namespace-package",
     "import-private-name",
     "magic-value-comparison",
     "no-self-use",
     "private-member-access",
+    "too-many-statements",
 ]
 
 [tool.ruff.lint.pydocstyle]

@@ -5,9 +5,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import sympy as sp
 from ampform.sympy import PoolSum, unevaluated
-from sympy.functions.special.tensor_functions import (
-    KroneckerDelta as δ,  # ruff: ignore[camelcase-imported-as-lowercase, non-ascii-import-name]
-)
+from sympy.functions.special.tensor_functions import KroneckerDelta as δ  # ruff: ignore[camelcase-imported-as-lowercase, non-ascii-import-name]
 from sympy.physics.quantum.cg import CG
 from sympy.physics.quantum.spin import Rotation as Wigner
 

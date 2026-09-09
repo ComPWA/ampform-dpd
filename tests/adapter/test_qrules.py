@@ -117,42 +117,42 @@ def test_get_equal_final_state_ids(
         assert equal_ids == expected
 
 
-def test_normalize_state_ids_reaction(jpsi2pksigma_reaction: ReactionInfo):
-    reaction012 = jpsi2pksigma_reaction
-    reaction123 = normalize_state_ids(reaction012)
-    assert set(reaction123.initial_state) == {0}
-    assert set(reaction123.final_state) == {1, 2, 3}
+def describe_normalize_state_ids():
+    def it_normalizes_a_reaction(jpsi2pksigma_reaction: ReactionInfo):
+        reaction012 = jpsi2pksigma_reaction
+        reaction123 = normalize_state_ids(reaction012)
+        assert set(reaction123.initial_state) == {0}
+        assert set(reaction123.final_state) == {1, 2, 3}
 
-    transitions123 = normalize_state_ids(reaction012.transitions)
-    for transition012, transition123 in zip(
-        reaction012.transitions, transitions123, strict=True
-    ):
-        assert set(transition123.initial_states) == {0}
-        assert set(transition123.final_states) == {1, 2, 3}
-        assert set(transition123.intermediate_states) == {4}
+        transitions123 = normalize_state_ids(reaction012.transitions)
+        for transition012, transition123 in zip(
+            reaction012.transitions, transitions123, strict=True
+        ):
+            assert set(transition123.initial_states) == {0}
+            assert set(transition123.final_states) == {1, 2, 3}
+            assert set(transition123.intermediate_states) == {4}
 
-        topology123 = normalize_state_ids(transition123.topology)
-        assert topology123.incoming_edge_ids == {0}
-        assert topology123.outgoing_edge_ids == {1, 2, 3}
-        assert topology123.intermediate_edge_ids == {4}
+            topology123 = normalize_state_ids(transition123.topology)
+            assert topology123.incoming_edge_ids == {0}
+            assert topology123.outgoing_edge_ids == {1, 2, 3}
+            assert topology123.intermediate_edge_ids == {4}
 
-        for i in transition012.states:
-            assert transition012.states[i] == transition123.states[i + 1]
+            for i in transition012.states:
+                assert transition012.states[i] == transition123.states[i + 1]
 
-
-def test_normalize_state_ids_problem_set():
-    stm = StateTransitionManager(
-        initial_state=[("J/psi(1S)", [-1, +1])],
-        final_state=["K0", "Sigma+", "p~"],
-        allowed_intermediate_particles=["N(1700)", "Sigma(1750)"],
-        formalism="helicity",
-        mass_conservation_factor=0,
-    )
-    stm.set_allowed_interaction_types([InteractionType.STRONG, InteractionType.EM])
-    problem_sets = stm.create_problem_sets()
-    some_problem_set = normalize_state_ids(problem_sets[3600.0][0])
-    assert set(some_problem_set.initial_facts.initial_states) == {0}
-    assert set(some_problem_set.initial_facts.final_states) == {1, 2, 3}
+    def it_normalizes_a_problem_set():
+        stm = StateTransitionManager(
+            initial_state=[("J/psi(1S)", [-1, +1])],
+            final_state=["K0", "Sigma+", "p~"],
+            allowed_intermediate_particles=["N(1700)", "Sigma(1750)"],
+            formalism="helicity",
+            mass_conservation_factor=0,
+        )
+        stm.set_allowed_interaction_types([InteractionType.STRONG, InteractionType.EM])
+        problem_sets = stm.create_problem_sets()
+        some_problem_set = normalize_state_ids(problem_sets[3600.0][0])
+        assert set(some_problem_set.initial_facts.initial_states) == {0}
+        assert set(some_problem_set.initial_facts.final_states) == {1, 2, 3}
 
 
 def test_permute_equal_final_states(

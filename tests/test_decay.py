@@ -18,12 +18,12 @@ K = Particle("K-", latex="K^-", spin=0, parity=-1, **dummy_args)
 Λ1520 = Particle("Λ(1520)", latex=R"\Lambda(1520)", spin=1.5, parity=-1, **dummy_args)
 
 
-class TestIsobarNode:
-    def test_children(self):
+def describe_IsobarNode():
+    def it_exposes_children():
         decay = IsobarNode(Λ1520, p, K)  # ty: ignore[invalid-argument-type]
         assert decay.children == (p, K)
 
-    def test_ls(self):
+    def it_stores_ls_interaction():
         L, S = 2, 1
         node = IsobarNode(Λ1520, p, K, interaction=(L, S))  # ty: ignore[invalid-argument-type]
         assert node.interaction is not None
