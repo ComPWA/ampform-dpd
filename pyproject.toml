@@ -31,7 +31,7 @@ dependencies = [
     "qrules>=0.10.0",
     "sympy>=1.10",  # module sympy.printing.numpy and array expressions with shape kwarg
     "tensorwaves[jax]",
-    'typing-extensions; python_version <"3.11.0"',
+    'typing-extensions; python_version <"3.13.0"',
 ]
 dynamic = ["version"]
 
@@ -67,6 +67,7 @@ doc = [
     "sphinx-pybtex-etal-style",
     "sphinx-togglebutton",
     "sphinxcontrib-bibtex",
+    "sphinxcontrib-mermaid",
     { include-group = "notebooks" },
 ]
 jupyter = [
@@ -85,7 +86,7 @@ notebooks = [
     "ipywidgets",
     "matplotlib",
     "pandas",
-    "qrules[viz]",
+    "qrules>=0.10.12",  # qrules.io.asmermaid
     "tensorwaves[phsp]",
     "tqdm",
 ]
@@ -96,6 +97,7 @@ style = [
 test = [
     "pytest",
     "pytest-cov",
+    "pytest-describe",
     "pytest-xdist",
 ]
 types = [
@@ -112,7 +114,6 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.compwa.policy]
-doc-apt-packages = "graphviz"
 repo-name = "ampform-dpd"
 repo-title = "AmpForm-DPD"
 
@@ -419,7 +420,7 @@ known-first-party = ["ampform_dpd"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.pep8-naming]
-ignore-names = [
+extend-ignore-names = [
     "A",
     "H",
     "L",
@@ -427,6 +428,8 @@ ignore-names = [
     "R_dec",
     "R_prod",
     "S",
+    "describe_*",
+    "test_*",
     "Γ*",
     "λ*",
 ]
@@ -480,12 +483,14 @@ ignore-names = [
     "T20",
     "assert",
     "boolean-type-hint-positional-argument",
+    "complex-structure",
     "float-equality-comparison",
     "implicit-namespace-package",
     "import-private-name",
     "magic-value-comparison",
     "no-self-use",
     "private-member-access",
+    "too-many-statements",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -520,7 +525,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.3/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.7/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]

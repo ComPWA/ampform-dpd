@@ -1,6 +1,3 @@
-import warnings
-
-from sphinx.deprecation import RemovedInSphinx10Warning
 from sphinx_api_relink.helpers import (
     get_branch_name,
     get_execution_mode,
@@ -22,11 +19,11 @@ set_intersphinx_version_remapping({
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
         "8.1.8": "8.1.5",
+        "8.1.9": "8.1.5",
     },
     "matplotlib": {"3.9.1.post1": "3.9.1"},
     "mpl-interactions": {"0.24.1": "0.24.0"},
 })
-warnings.filterwarnings("ignore", category=RemovedInSphinx10Warning)
 
 BRANCH = get_branch_name()
 ORGANIZATION = "ComPWA"
@@ -43,6 +40,10 @@ EXECUTE_NB = get_execution_mode() != "off"
 add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions: dict[str, str | tuple[str, str]] = {
+    "CompiledWorkspace": (
+        "obj",
+        "ampform_dpd.io.serialization.compiler.CompiledWorkspace",
+    ),
     "ampform_dpd.cparity.CouplingBasis": ("obj", "ampform_dpd.cparity.CouplingBasis"),
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "CouplingBasis": ("obj", "ampform_dpd.cparity.CouplingBasis"),
@@ -52,6 +53,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FrozenTransition": "qrules.topology.FrozenTransition",
+    "Function": ("obj", "tensorwaves.interface.Function"),
     "InitialStateID": ("obj", "ampform_dpd.decay.InitialStateID"),
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
@@ -75,6 +77,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "StateID": ("obj", "ampform_dpd.decay.StateID"),
     "StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "Topology": ("obj", "ampform_dpd.io.serialization.format.Topology"),
+    "Workspace": ("obj", "ampform_dpd.io.serialization.workspace.Workspace"),
     "typing_extensions.Required": ("obj", "typing.Required"),
 }
 api_target_types: dict[str, str] = {}
@@ -107,6 +110,8 @@ exclude_patterns = [
     "**.ipynb_checkpoints",
     "**.virtual_documents",
     ".DS_Store",
+    "AGENTS.md",
+    "CLAUDE.md",
     "Thumbs.db",
     "_build",
 ]
@@ -125,8 +130,10 @@ extensions = [
     "sphinx_pybtex_etal_style",
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
+    "sphinxcontrib.mermaid",
 ]
 generate_apidoc_package_path = f"../src/{PACKAGE}"
+html_css_files = ["mermaid.css"]
 html_favicon = "_static/favicon.ico"
 html_last_updated_fmt = "%-d %B %Y"
 html_logo = (
@@ -135,6 +142,7 @@ html_logo = (
 html_show_copyright = False
 html_show_sphinx = False
 html_sourcelink_suffix = ""
+html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "icon_links": [
@@ -192,7 +200,6 @@ intersphinx_mapping = {
     "ampform": (f"https://ampform.readthedocs.io/{pin('ampform')}", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "compwa": ("https://compwa.github.io", None),
-    "graphviz": ("https://graphviz.readthedocs.io/en/stable", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
     "jax": ("https://docs.jax.dev/en/latest", None),
     "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
@@ -208,6 +215,16 @@ linkcheck_ignore = [
     "https://github.com/ComPWA/jpsi-nstar",  # private repository
     "https://journals.aps.org/prd",
 ]
+mermaid_height = "auto"  # do not stretch diagrams to the default 500px
+mermaid_init_config = {
+    "flowchart": {
+        "nodeSpacing": 30,
+        "rankSpacing": 40,
+        "useMaxWidth": False,
+    },
+    "startOnLoad": False,
+    "themeVariables": {"fontSize": "12px"},
+}
 myst_enable_extensions = [
     "amsmath",
     "colon_fence",
@@ -216,6 +233,7 @@ myst_enable_extensions = [
     "smartquotes",
     "substitution",
 ]
+myst_fence_as_directive = ["mermaid"]
 myst_heading_anchors = 3
 myst_render_markdown_format = "myst"
 myst_update_mathjax = False
@@ -225,9 +243,8 @@ nb_execution_show_tb = True
 nb_execution_timeout = -1
 nb_output_stderr = "show"
 nb_render_markdown_format = "myst"
-nitpick_ignore = [
-    ("py:class", "ampform.sympy.cached.Model"),
-]
+nitpick_ignore = [("py:class", "ampform.sympy.cached.Model")]
+nitpick_ignore_regex = [(r"py:.*", r"ampform_dpd(?:\.[^.]+)*\._.*")]
 nitpicky = True
 primary_domain = "py"
 project = REPO_TITLE

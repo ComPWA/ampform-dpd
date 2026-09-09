@@ -560,8 +560,6 @@ def _get_particle_db(particle_db: ParticleCollection | None) -> ParticleCollecti
 
 @lru_cache(maxsize=1)
 def _load_default_particles() -> ParticleCollection:
-    from ampform_dpd.adapter.qrules import (  # ruff: ignore[import-outside-top-level]
-        load_particles,
-    )
+    from ampform_dpd.adapter.qrules import load_particles  # ruff: ignore[import-outside-top-level]
 
     return load_particles()

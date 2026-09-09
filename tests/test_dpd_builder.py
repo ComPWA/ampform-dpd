@@ -17,11 +17,11 @@ if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
 
 
-class TestDalitzPlotDecompositionBuilder:
+def describe_DalitzPlotDecompositionBuilder():
     @pytest.mark.parametrize("all_subsystems", [False, True])
     @pytest.mark.parametrize("min_ls", [False, True])
-    def test_all_subsystems(
-        self, jpsi2pksigma_reaction: ReactionInfo, all_subsystems: bool, min_ls: bool
+    def it_can_include_all_subsystems(
+        jpsi2pksigma_reaction: ReactionInfo, all_subsystems: bool, min_ls: bool
     ):
         if jpsi2pksigma_reaction.formalism == "helicity" and not min_ls:
             pytest.skip("Helicity formalism with all LS not supported")
@@ -60,8 +60,8 @@ class TestDalitzPlotDecompositionBuilder:
 
     @pytest.mark.parametrize("min_ls", [False, True])
     @pytest.mark.parametrize("use_coefficients", [False, True])
-    def test_use_coefficients(
-        self, jpsi2pksigma_reaction: ReactionInfo, min_ls: bool, use_coefficients: bool
+    def it_can_use_coefficients(
+        jpsi2pksigma_reaction: ReactionInfo, min_ls: bool, use_coefficients: bool
     ):
         if jpsi2pksigma_reaction.formalism == "helicity" and not min_ls:
             pytest.skip("Helicity formalism with all LS not supported")
@@ -147,7 +147,7 @@ class TestDalitzPlotDecompositionBuilder:
 
     @pytest.mark.parametrize("basis", ["canonical", "helicity"])
     @pytest.mark.parametrize("resonance", ["N(1675)", "Sigma(1775)"])
-    def test_use_coefficients_combinations(self, basis: str, resonance: str):  # ruff: ignore[too-many-locals]
+    def it_supports_coefficient_combinations(basis: str, resonance: str):  # ruff: ignore[too-many-locals]
         reaction = qrules.generate_transitions(
             initial_state=[("J/psi(1S)", [+1])],
             final_state=[("Sigma+", [+0.5]), "K0", ("p~", [+0.5])],
@@ -180,8 +180,8 @@ class TestDalitzPlotDecompositionBuilder:
         assert n_coefficients == n_coupling_products
         assert n_coefficients == n_decay_couplings * n_production_couplings
 
-    def test_ls_amplitude_does_not_depend_on_child_order(
-        self, jpsi2pksigma_reaction: ReactionInfo
+    def it_makes_ls_amplitudes_independent_of_child_order(
+        jpsi2pksigma_reaction: ReactionInfo,
     ):
         """The subsystem amplitude may not depend on how a decay node is stored.
 
