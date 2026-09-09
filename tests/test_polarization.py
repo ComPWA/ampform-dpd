@@ -12,43 +12,44 @@ if TYPE_CHECKING:
     from ampform_dpd.decay import FinalStateID
 
 
-@pytest.mark.parametrize(
-    ("state_id", "expected_momenta"),
-    [
-        (2, {"p2", "q2"}),
-        (1, {"p1", "p3", "q1"}),
-        (3, {"p1", "p3", "q3"}),
-    ],
-    ids=["spectator", "isobar-product-1", "isobar-product-3"],
-)
-def test_formulate_final_state_decay_angles(
-    state_id: FinalStateID, expected_momenta: set[str]
-):
-    """The expressions must reproduce angles used to construct the daughter momentum."""
-    angles = formulate_final_state_decay_angles(state_id, reference_subsystem=2)
-    assert [str(s) for s in angles] == [f"phi_{state_id}", f"theta_{state_id}"]
-
-    momenta = _generate_three_body_event()
-    expected_φ, expected_θ = 1.234, 0.789
-    chain = _compute_boost_chain(momenta, state_id)
-    daughter_direction = np.array([
-        0.5,
-        0.3 * np.sin(expected_θ) * np.cos(expected_φ),
-        0.3 * np.sin(expected_θ) * np.sin(expected_φ),
-        0.3 * np.cos(expected_θ),
-    ])
-    momenta[f"q{state_id}"] = np.linalg.inv(chain) @ daughter_direction
-
-    symbols = sorted(
-        {s for expr in angles.values() for s in expr.free_symbols}, key=str
+def describe_formulate_final_state_decay_angles():
+    @pytest.mark.parametrize(
+        ("state_id", "expected_momenta"),
+        [
+            (2, {"p2", "q2"}),
+            (1, {"p1", "p3", "q1"}),
+            (3, {"p1", "p3", "q3"}),
+        ],
+        ids=["spectator", "isobar-product-1", "isobar-product-3"],
     )
-    assert {str(s) for s in symbols} >= expected_momenta
-    arrays = [momenta[str(s)][None, :] for s in symbols]
-    φ_expr, θ_expr = angles.values()
-    computed_φ = sp.lambdify(symbols, φ_expr.doit(), "numpy")(*arrays)
-    computed_θ = sp.lambdify(symbols, θ_expr.doit(), "numpy")(*arrays)
-    assert computed_φ[0] == pytest.approx(expected_φ)
-    assert computed_θ[0] == pytest.approx(expected_θ)
+    def it_reproduces_the_daughter_momentum_direction(
+        state_id: FinalStateID, expected_momenta: set[str]
+    ):
+        """The expressions must reproduce angles used to construct the daughter momentum."""
+        angles = formulate_final_state_decay_angles(state_id, reference_subsystem=2)
+        assert [str(s) for s in angles] == [f"phi_{state_id}", f"theta_{state_id}"]
+
+        momenta = _generate_three_body_event()
+        expected_φ, expected_θ = 1.234, 0.789
+        chain = _compute_boost_chain(momenta, state_id)
+        daughter_direction = np.array([
+            0.5,
+            0.3 * np.sin(expected_θ) * np.cos(expected_φ),
+            0.3 * np.sin(expected_θ) * np.sin(expected_φ),
+            0.3 * np.cos(expected_θ),
+        ])
+        momenta[f"q{state_id}"] = np.linalg.inv(chain) @ daughter_direction
+
+        symbols = sorted(
+            {s for expr in angles.values() for s in expr.free_symbols}, key=str
+        )
+        assert {str(s) for s in symbols} >= expected_momenta
+        arrays = [momenta[str(s)][None, :] for s in symbols]
+        φ_expr, θ_expr = angles.values()
+        computed_φ = sp.lambdify(symbols, φ_expr.doit(), "numpy")(*arrays)
+        computed_θ = sp.lambdify(symbols, θ_expr.doit(), "numpy")(*arrays)
+        assert computed_φ[0] == pytest.approx(expected_φ)
+        assert computed_θ[0] == pytest.approx(expected_θ)
 
 
 def _generate_three_body_event() -> dict[str, np.ndarray]:

@@ -17,9 +17,7 @@ from ampform.helicity.decay import is_opposite_helicity_state
 from ampform.helicity.naming import get_helicity_angle_symbols
 from ampform.kinematics.angles import compute_helicity_angles
 from ampform.kinematics.lorentz import FourMomentumSymbol
-from ampform.sympy._array_expressions import (  # ruff: ignore[import-private-name]
-    ArraySum,
-)
+from ampform.sympy._array_expressions import ArraySum  # ruff: ignore[import-private-name]
 from qrules.topology import create_isobar_topologies
 from sympy.core.symbol import Str
 

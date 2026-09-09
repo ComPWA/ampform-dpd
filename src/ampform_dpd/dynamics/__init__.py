@@ -130,6 +130,28 @@ class FlattéSWave(sp.Expr):
 
 @unevaluated
 class MultichannelBreitWigner(sp.Expr):
+    r"""Breit--Wigner with a running width summed over several decay channels.
+
+    Each channel is a `ChannelArguments` term :math:`\Gamma_i(s)`, giving the lineshape
+
+    .. math::
+
+        \frac{1}{m_0^2 - s - i \sum_i g_i^2 \rho_i(s) F_{L_i}^2(s)},
+
+    with :math:`g_i^2` the coupling squared of each channel, :math:`\rho_i` the
+    `~ampform.dynamics.phasespace.PhaseSpaceFactor`, and :math:`F_{L_i}` the form
+    factor. This is the convention used by the `amplitude-serialization
+    <https://rub-ep1.github.io/amplitude-serialization>`_ models and by
+    `HadronicLineshapes.jl
+    <https://mmikhasenko.github.io/HadronicLineshapes.jl/dev/10-breitwigner/#Multichannel-Breit-Wigner-Function>`_.
+
+    .. seealso:: `ComPWA/ampform-dpd#198
+        <https://github.com/ComPWA/ampform-dpd/issues/198>`_,
+        `RUB-EP1/amplitude-serialization#87
+        <https://github.com/RUB-EP1/amplitude-serialization/pull/87>`_, and `#90
+        <https://github.com/RUB-EP1/amplitude-serialization/pull/90>`_.
+    """
+
     s: Any
     mass: Any
     channels: tuple[ChannelArguments, ...]
@@ -137,32 +159,40 @@ class MultichannelBreitWigner(sp.Expr):
     def evaluate(self):
         s = self.s
         m0 = self.mass
-        width = sum(channel.evaluate() for channel in self.channels)
-        return BreitWigner(s, m0, width)  # ty: ignore[invalid-argument-type]
+        width = sp.Add(*self.channels)
+        return BreitWigner(s, m0, width)
 
     def _latex_repr_(self, printer: LatexPrinter, *args) -> str:
         latex = R"\mathcal{R}^\mathrm{BW}_\mathrm{multi}\left("
         latex += printer._print(self.s) + "; "
-        latex += ", ".join(printer._print(channel.width) for channel in self.channels)
+        latex += ", ".join(printer._print(c.coupling_squared) for c in self.channels)
         latex += R"\right)"
         return latex
 
 
 @unevaluated
 class ChannelArguments(sp.Expr):
+    r"""One channel term :math:`\Gamma_i(s)` of a `MultichannelBreitWigner`.
+
+    .. math::
+
+        \Gamma_i(s) = \frac{g_i^2}{m_0} \rho_i(s) F_{L_i}^2(s)
+    """
+
     s: Any
     m0: Any
-    width: Any
+    coupling_squared: Any
     m1: Any = 0
     m2: Any = 0
     angular_momentum: Any = 0
     meson_radius: Any = 1
-    _latex_repr_ = R"\Gamma^\text{channel}\left({{s}}, {{m0}}, {{width}}\right)"
+    _latex_repr_ = R"\Gamma^\text{{ch}}\left({s}; {m0}, {coupling_squared}\right)"
 
     def evaluate(self) -> sp.Expr:
-        s, m0, Γ0, m1, m2, L, R = self.args
-        ff = FormFactor(s, m1, m2, L, R) ** 2
-        return Γ0 * m0 / sp.sqrt(s) * ff  # ty: ignore[unsupported-operator]
+        s, m0, g_squared, m1, m2, L, R = self.args
+        rho = PhaseSpaceFactor(s, m1, m2)
+        ff = FormFactor(s, m1, m2, L, R)
+        return g_squared * rho * ff**2 / m0
 
 
 @unevaluated
@@ -212,4 +242,4 @@ class SimpleBreitWigner(sp.Expr):
 
     def evaluate(self):
         s, m0, Γ0 = self.args
-        return 1 / (m0**2 - s - m0 * Γ0 * 1j)  # ty: ignore[unsupported-operator]
+        return 1 / (m0**2 - s - sp.I * m0 * Γ0)  # ty: ignore[unsupported-operator]
