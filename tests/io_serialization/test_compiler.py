@@ -40,38 +40,102 @@ def compiled_workspaces(workspace: Workspace) -> dict[str, CompiledWorkspace]:
     }
 
 
-def test_default_targets_are_checksum_targets(
-    compiled_workspaces: dict[str, CompiledWorkspace],
-):
-    for compiled in compiled_workspaces.values():
-        assert set(compiled.functions) == set(CHECKSUM_IDS)
-        assert set(compiled.coordinate_maps) == {"default_model"}
+def describe_compile_workspace():
+    def it_uses_checksum_targets_by_default(
+        compiled_workspaces: dict[str, CompiledWorkspace],
+    ):
+        for compiled in compiled_workspaces.values():
+            assert set(compiled.functions) == set(CHECKSUM_IDS)
+            assert set(compiled.coordinate_maps) == {"default_model"}
 
+    @pytest.mark.parametrize("backend", BACKENDS)
+    @pytest.mark.parametrize("checksum", CHECKSUMS, ids=CHECKSUM_IDS)
+    def it_reproduces_checksums(
+        compiled_workspaces: dict[str, CompiledWorkspace],
+        model_definition: ModelDefinition,
+        checksum: dict[str, Any],
+        backend: str,
+    ):
+        compiled = compiled_workspaces[backend]
+        value = _evaluate(compiled, model_definition, checksum)
+        assert value == pytest.approx(_parse_checksum(checksum["value"]), rel=1e-9)
 
-@pytest.mark.parametrize("backend", BACKENDS)
-@pytest.mark.parametrize("checksum", CHECKSUMS, ids=CHECKSUM_IDS)
-def test_reproduce_checksums(
-    compiled_workspaces: dict[str, CompiledWorkspace],
-    model_definition: ModelDefinition,
-    checksum: dict[str, Any],
-    backend: str,
-):
-    compiled = compiled_workspaces[backend]
-    value = _evaluate(compiled, model_definition, checksum)
-    assert value == pytest.approx(_parse_checksum(checksum["value"]), rel=1e-9)
+    @pytest.mark.parametrize("checksum", CHECKSUMS, ids=CHECKSUM_IDS)
+    def it_makes_backends_agree(
+        compiled_workspaces: dict[str, CompiledWorkspace],
+        model_definition: ModelDefinition,
+        checksum: dict[str, Any],
+    ):
+        values = {
+            backend: _evaluate(compiled, model_definition, checksum)
+            for backend, compiled in compiled_workspaces.items()
+        }
+        assert values["jax"] == pytest.approx(values["numpy"], rel=1e-12)
 
+    def it_compiles_distribution_coordinates(model_definition: ModelDefinition):
+        workspace = load_workspace(model_definition)
+        compiled = compile_workspace(
+            workspace, backend="numpy", targets=["default_model"]
+        )
+        coordinates = compiled.coordinate_maps["default_model"]
+        point = {"m_31": 1.9101377207489973, "cos_theta_31": -0.2309352648098208}
+        assert set(coordinates) == {"sigma1", "sigma2", "sigma3"}
+        assert all(float(function(point)) > 0 for function in coordinates.values())
 
-@pytest.mark.parametrize("checksum", CHECKSUMS, ids=CHECKSUM_IDS)
-def test_backends_agree(
-    compiled_workspaces: dict[str, CompiledWorkspace],
-    model_definition: ModelDefinition,
-    checksum: dict[str, Any],
-):
-    values = {
-        backend: _evaluate(compiled, model_definition, checksum)
-        for backend, compiled in compiled_workspaces.items()
-    }
-    assert values["jax"] == pytest.approx(values["numpy"], rel=1e-12)
+    def it_compiles_a_named_function(workspace: Workspace):
+        compiled = compile_workspace(workspace, backend="numpy", targets=["L1600_BW"])
+        assert compiled.coordinate_maps == {}
+        assert compiled.coordinates == {}
+
+    def it_selects_distribution_coordinates(workspace: Workspace):
+        compiled = compile_workspace(
+            workspace,
+            backend="numpy",
+            targets=["default_model"],
+            coordinates=["sigma2", "sigma3"],
+        )
+        assert compiled.coordinates["default_model"] == ("sigma2", "sigma3")
+
+    def it_overrides_distribution_parameters(workspace: Workspace):
+        model = workspace.distributions["default_model"]
+        coupling_overrides = {
+            symbol: 0
+            for symbol in model.parameter_defaults
+            if str(symbol).startswith("c^")
+        }
+        compiled = compile_workspace(
+            workspace,
+            backend="numpy",
+            targets=["default_model"],
+            parameter_overrides=coupling_overrides,
+        )
+        point = {"m_31": 1.9101377207489973, "cos_theta_31": -0.2309352648098208}
+        invariants = {
+            name: function(point)
+            for name, function in compiled.coordinate_maps["default_model"].items()
+        }
+        value = compiled.functions["default_model"](invariants)
+        assert float(value) == pytest.approx(0)
+
+    def it_rejects_unknown_backends_targets_and_coordinates(workspace: Workspace):
+        with pytest.raises(ValueError, match="Unsupported numerical backend"):
+            compile_workspace(workspace, backend="unknown")
+        with pytest.raises(KeyError, match="missing"):
+            compile_workspace(workspace, backend="numpy", targets=["missing"])
+        with pytest.raises(ValueError, match="two distinct invariants"):
+            compile_workspace(
+                workspace,
+                backend="numpy",
+                targets=["default_model"],
+                coordinates=["sigma1"],
+            )
+
+    def it_reports_a_missing_backend_package(
+        workspace: Workspace, monkeypatch: pytest.MonkeyPatch
+    ):
+        monkeypatch.setattr("importlib.util.find_spec", lambda _: None)
+        with pytest.raises(ImportError, match="requires the optional 'jax' package"):
+            compile_workspace(workspace, backend="jax", targets=["L1600_BW"])
 
 
 def _evaluate(
@@ -125,70 +189,3 @@ def _parse_checksum(value: complex | str, /) -> complex:
     if isinstance(value, str):
         return complex(value.replace(" ", "").replace("i", "j"))
     return complex(value)
-
-
-def test_compile_distribution_coordinates(model_definition: ModelDefinition):
-    workspace = load_workspace(model_definition)
-    compiled = compile_workspace(workspace, backend="numpy", targets=["default_model"])
-    coordinates = compiled.coordinate_maps["default_model"]
-    point = {"m_31": 1.9101377207489973, "cos_theta_31": -0.2309352648098208}
-    assert set(coordinates) == {"sigma1", "sigma2", "sigma3"}
-    assert all(float(function(point)) > 0 for function in coordinates.values())
-
-
-def test_compile_named_function(workspace: Workspace):
-    compiled = compile_workspace(workspace, backend="numpy", targets=["L1600_BW"])
-    assert compiled.coordinate_maps == {}
-    assert compiled.coordinates == {}
-
-
-def test_select_distribution_coordinates(workspace: Workspace):
-    compiled = compile_workspace(
-        workspace,
-        backend="numpy",
-        targets=["default_model"],
-        coordinates=["sigma2", "sigma3"],
-    )
-    assert compiled.coordinates["default_model"] == ("sigma2", "sigma3")
-
-
-def test_override_distribution_parameters(workspace: Workspace):
-    model = workspace.distributions["default_model"]
-    coupling_overrides = {
-        symbol: 0 for symbol in model.parameter_defaults if str(symbol).startswith("c^")
-    }
-    compiled = compile_workspace(
-        workspace,
-        backend="numpy",
-        targets=["default_model"],
-        parameter_overrides=coupling_overrides,
-    )
-    point = {"m_31": 1.9101377207489973, "cos_theta_31": -0.2309352648098208}
-    invariants = {
-        name: function(point)
-        for name, function in compiled.coordinate_maps["default_model"].items()
-    }
-    value = compiled.functions["default_model"](invariants)
-    assert float(value) == pytest.approx(0)
-
-
-def test_rejects_unknown_backend_and_target(workspace: Workspace):
-    with pytest.raises(ValueError, match="Unsupported numerical backend"):
-        compile_workspace(workspace, backend="unknown")
-    with pytest.raises(KeyError, match="missing"):
-        compile_workspace(workspace, backend="numpy", targets=["missing"])
-    with pytest.raises(ValueError, match="two distinct invariants"):
-        compile_workspace(
-            workspace,
-            backend="numpy",
-            targets=["default_model"],
-            coordinates=["sigma1"],
-        )
-
-
-def test_reports_missing_backend_package(
-    workspace: Workspace, monkeypatch: pytest.MonkeyPatch
-):
-    monkeypatch.setattr("importlib.util.find_spec", lambda _: None)
-    with pytest.raises(ImportError, match="requires the optional 'jax' package"):
-        compile_workspace(workspace, backend="jax", targets=["L1600_BW"])

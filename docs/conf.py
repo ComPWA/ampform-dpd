@@ -22,6 +22,7 @@ set_intersphinx_version_remapping({
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
         "8.1.8": "8.1.5",
+        "8.1.9": "8.1.5",
     },
     "matplotlib": {"3.9.1.post1": "3.9.1"},
     "mpl-interactions": {"0.24.1": "0.24.0"},
