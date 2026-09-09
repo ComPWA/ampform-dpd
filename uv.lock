@@ -52,7 +52,7 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.16.0"
+version = "0.16.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -60,9 +60,9 @@ dependencies = [
     { name = "qrules" },
     { name = "sympy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3b/d2/08eecf35f3a299531ed70d3282597d4c440b5485f74b4b99ad6bb98474cb/ampform-0.16.0.tar.gz", hash = "sha256:c242aea47a53e46fe127f87f79a6038ae533ff3640b6128439b2286a3178c261", size = 413943, upload-time = "2026-02-16T15:42:42.772Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/92/44/d41ae41c51ea936de9244134076c89209213de93f5c04443a69631f51fac/ampform-0.16.1.tar.gz", hash = "sha256:202077e8816adc5716a75df7b7e8db28fcfff1229e02badd19ce12897ee4637f", size = 484457, upload-time = "2026-09-09T17:12:22.673Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/62/3e/c5959630b8fbb520d6b82cd686e6bd775b7e6053c67b3ee4c71b22c95983/ampform-0.16.0-py3-none-any.whl", hash = "sha256:55f78106b872d1884f23a9f64c0ee6e08fddf12218c56f7635f1e20e88647f96", size = 89314, upload-time = "2026-02-16T15:42:41.489Z" },
+    { url = "https://files.pythonhosted.org/packages/77/81/fd3c2c4bacdf14844ad1653f6a5386355feeac6a58c20a9508d7868bc330/ampform-0.16.1-py3-none-any.whl", hash = "sha256:0e9723fe22512b3aeb1e8720d486b5d5282905499dafc77be0006b5512132e56", size = 89187, upload-time = "2026-09-09T17:12:21.098Z" },
 ]
 
 [[package]]
@@ -111,7 +111,7 @@ dev = [
     { name = "pytest-xdist" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server" },
-    { name = "qrules", extra = ["viz"] },
+    { name = "qrules" },
     { name = "ruff" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-book-theme", version = "1.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -123,6 +123,7 @@ dev = [
     { name = "sphinx-pybtex-etal-style" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex" },
+    { name = "sphinxcontrib-mermaid" },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
     { name = "ty" },
@@ -135,7 +136,7 @@ doc = [
     { name = "myst-nb" },
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "qrules", extra = ["viz"] },
+    { name = "qrules" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-book-theme", version = "1.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "sphinx-book-theme", version = "1.4.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -146,6 +147,7 @@ doc = [
     { name = "sphinx-pybtex-etal-style" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex" },
+    { name = "sphinxcontrib-mermaid" },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -164,7 +166,7 @@ jupyter = [
     { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server" },
-    { name = "qrules", extra = ["viz"] },
+    { name = "qrules" },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -175,7 +177,7 @@ notebooks = [
     { name = "matplotlib", version = "3.11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "qrules", extra = ["viz"] },
+    { name = "qrules" },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -187,7 +189,7 @@ style = [
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pytest" },
-    { name = "qrules", extra = ["viz"] },
+    { name = "qrules" },
     { name = "sphinx-api-relink" },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
@@ -207,7 +209,7 @@ types = [
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pytest" },
-    { name = "qrules", extra = ["viz"] },
+    { name = "qrules" },
     { name = "sphinx-api-relink" },
     { name = "tensorwaves", extra = ["phsp"] },
     { name = "tqdm" },
@@ -248,7 +250,7 @@ dev = [
     { name = "pytest-xdist" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server" },
-    { name = "qrules", extras = ["viz"] },
+    { name = "qrules", specifier = ">=0.10.12" },
     { name = "ruff" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-book-theme" },
@@ -258,6 +260,7 @@ dev = [
     { name = "sphinx-pybtex-etal-style" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex" },
+    { name = "sphinxcontrib-mermaid" },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
     { name = "ty" },
@@ -268,7 +271,7 @@ doc = [
     { name = "matplotlib" },
     { name = "myst-nb" },
     { name = "pandas" },
-    { name = "qrules", extras = ["viz"] },
+    { name = "qrules", specifier = ">=0.10.12" },
     { name = "sphinx-api-relink" },
     { name = "sphinx-book-theme" },
     { name = "sphinx-codeautolink", extras = ["ipython"] },
@@ -277,6 +280,7 @@ doc = [
     { name = "sphinx-pybtex-etal-style" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex" },
+    { name = "sphinxcontrib-mermaid" },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -293,7 +297,7 @@ jupyter = [
     { name = "pandas" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server" },
-    { name = "qrules", extras = ["viz"] },
+    { name = "qrules", specifier = ">=0.10.12" },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -302,7 +306,7 @@ notebooks = [
     { name = "ipywidgets" },
     { name = "matplotlib" },
     { name = "pandas" },
-    { name = "qrules", extras = ["viz"] },
+    { name = "qrules", specifier = ">=0.10.12" },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
 ]
@@ -312,7 +316,7 @@ style = [
     { name = "matplotlib" },
     { name = "pandas" },
     { name = "pytest" },
-    { name = "qrules", extras = ["viz"] },
+    { name = "qrules", specifier = ">=0.10.12" },
     { name = "sphinx-api-relink" },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
@@ -330,7 +334,7 @@ types = [
     { name = "matplotlib" },
     { name = "pandas" },
     { name = "pytest" },
-    { name = "qrules", extras = ["viz"] },
+    { name = "qrules", specifier = ">=0.10.12" },
     { name = "sphinx-api-relink" },
     { name = "tensorwaves", extras = ["phsp"] },
     { name = "tqdm" },
@@ -1546,15 +1550,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/35/4a/0bd53b36ff0323d10d5f24ebd67af2de10a1117f5cf4d7add90df92756f1/google-pasta-0.2.0.tar.gz", hash = "sha256:c9f2c8dfc8f96d0d5808299920721be30c9eec37f2389f28904f454565c8a16e", size = 40430, upload-time = "2020-03-13T18:57:50.34Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a3/de/c648ef6835192e6e2cc03f40b19eeda4382c49b5bafb43d88b931c4c74ac/google_pasta-0.2.0-py3-none-any.whl", hash = "sha256:b32482794a366b5366a32c92a9a9201b107821889935a02b3e51f6b432ea84ed", size = 57471, upload-time = "2020-03-13T18:57:48.872Z" },
-]
-
-[[package]]
-name = "graphviz"
-version = "0.21"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f8/b3/3ac91e9be6b761a4b30d66ff165e54439dcd48b83f4e20d644867215f6ca/graphviz-0.21.tar.gz", hash = "sha256:20743e7183be82aaaa8ad6c93f8893c923bd6658a04c32ee115edb3c8a835f78", size = 200434, upload-time = "2025-06-15T09:35:05.824Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/4c/e0ce1ef95d4000ebc1c11801f9b944fa5910ecc15b5e351865763d8657f8/graphviz-0.21-py3-none-any.whl", hash = "sha256:54f33de9f4f911d7e84e4191749cac8cc5653f815b06738c54db9a15ab8b1e42", size = 47300, upload-time = "2025-06-15T09:35:04.433Z" },
 ]
 
 [[package]]
@@ -4861,11 +4856,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5b/dc/2a53d6de38c598e08266a52fa7bdfd213a816c3025190cdbcc0451f3b41c/qrules-0.10.13-py3-none-any.whl", hash = "sha256:8c0206d0e3b8bb2ad5f2cfce69512e22534fc666eff8ca32e51a5bd79ce93d2f", size = 86140, upload-time = "2026-09-09T15:23:50.337Z" },
 ]
 
-[package.optional-dependencies]
-viz = [
-    { name = "graphviz" },
-]
-
 [[package]]
 name = "referencing"
 version = "0.37.0"
@@ -5848,6 +5838,22 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/b2/e8/9ed3830aeed71f17c026a07a5097edcf44b692850ef215b161b8ad875729/sphinxcontrib-jsmath-1.0.1.tar.gz", hash = "sha256:a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8", size = 5787, upload-time = "2019-01-21T16:10:16.347Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c2/42/4c8646762ee83602e3fb3fbe774c2fac12f317deb0b5dbeeedd2d3ba4b77/sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl", hash = "sha256:2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178", size = 5071, upload-time = "2019-01-21T16:10:14.333Z" },
+]
+
+[[package]]
+name = "sphinxcontrib-mermaid"
+version = "2.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jinja2" },
+    { name = "pyyaml" },
+    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8c/87/06537dff20aa57df2d0f2afa87edff4afa85dec6f57f03f7acc24f83ff88/sphinxcontrib_mermaid-2.1.1.tar.gz", hash = "sha256:f8d7f1b2f0ad69b7ebdd5cbf532fb4ee107893b5373bc2d0e9634089c0b2cfee", size = 22353, upload-time = "2026-09-01T16:10:23.671Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/50/6a/5bf2222b8084c7a7bc3ec23d470c91e3e03e82e4ce0bbacaa61f456ce7c1/sphinxcontrib_mermaid-2.1.1-py3-none-any.whl", hash = "sha256:3b9ac1a8e0b5154dec3c0acf9b5c54dd9ba58540e416f20858c300814c25648f", size = 16368, upload-time = "2026-09-01T16:10:22.377Z" },
 ]
 
 [[package]]
