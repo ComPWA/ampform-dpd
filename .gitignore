@@ -15,23 +15,29 @@ dist/
 version.py
 
 # Temporary files
-*.pyc
-*condaenv.*
+__pycache__/
 .coverage
 .coverage.*
 .ipynb_checkpoints/
-.mypy*/
 .pytest_cache/
-__pycache__/
+.virtual_documents/
+*.pyc
 coverage.*
 htmlcov/
 prof/
+typings/
 
 # Virtual environments
 *venv/
-.tox/
 pyvenv*/
 
 # Settings
+.agents/
+.claude/
+.codex/
 .idea/
+AGENTS.md
+CLAUDE.md
 **.code-workspace
+AGENTS.md
+CLAUDE.md

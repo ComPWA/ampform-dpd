@@ -1,0 +1,39 @@
+name: CI
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: |-
+    ${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+on:
+  push:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+  pull_request:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+  workflow_dispatch:
+
+jobs:
+  doc:
+    uses: ComPWA/actions/.github/workflows/ci-docs.yml@13f1a3b0c831615fb49c008bcc48113da8a76477 # 4.0.2
+    permissions:
+      pages: write
+      id-token: write
+    with:
+      gh-pages: true
+  style:
+    secrets:
+      token: ${{ secrets.PAT }}
+    uses: ComPWA/actions/.github/workflows/style.yml@13f1a3b0c831615fb49c008bcc48113da8a76477 # 4.0.2
+  test:
+    uses: ComPWA/actions/.github/workflows/test.yml@13f1a3b0c831615fb49c008bcc48113da8a76477 # 4.0.2
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    with:
+      coverage-python-version: "3.13"
+      macos-python-version: "3.10"

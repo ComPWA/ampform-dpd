@@ -1,10 +1,12 @@
 ci:
-  autoupdate_commit_msg: "MAINT: update pip constraints and pre-commit"
-  autoupdate_schedule: quarterly # already done by requirements-cron.yml
+  autofix_commit_msg: "MAINT: implement pre-commit autofixes"
+  autoupdate_commit_msg: "MAINT: upgrade lock files"
+  autoupdate_schedule: quarterly
   skip:
-    # hooks that don't work on pre-commit.ci
-    - editorconfig-checker
-    - pyright
+    - tombi-format
+    - tombi-lint
+    - ty
+    - uv-lock
 
 repos:
   - repo: meta
@@ -12,77 +14,26 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-      - id: check-ast
-      - id: check-case-conflict
-      - id: check-json
-      - id: check-merge-conflict
-      - id: check-toml
-      - id: check-vcs-permalinks
-      - id: check-yaml
-      - id: debug-statements
-      - id: end-of-file-fixer
-      - id: mixed-line-ending
-      - id: trailing-whitespace
-
-  - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.0.159
+  - repo: https://github.com/ComPWA/policy
+    rev: 0.9.7
     hooks:
       - id: check-dev-files
-        args:
-          - --no-docs
-          - --no-prettierrc
-          - --pin-requirements=bimonthly
-      - id: format-setup-cfg
-
-  - repo: https://github.com/psf/black
-    rev: 22.10.0
-    hooks:
-      - id: black
-
-  - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.14.1
-    hooks:
-      - id: cspell
-
-  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: 2.6.1
-    hooks:
-      - id: editorconfig-checker
-        name: editorconfig
-        exclude: >
-          (?x)^(
-            .*\.py
-          )$
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
-
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.5.3
-    hooks:
-      - id: nbqa-black
-        additional_dependencies:
-          - black>=22.1.0
-      - id: nbqa-flake8
-      - id: nbqa-isort
-      - id: nbqa-pyupgrade
-        args:
-          - --py37-plus
 
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.6.1
+    rev: 0.9.1
     hooks:
       - id: nbstripout
         args:
+          - --drop-empty-cells
           - --extra-keys
           - |
+            cell.attachments
             cell.metadata.code_folding
+            cell.metadata.editable
             cell.metadata.id
+            cell.metadata.pycharm
+            cell.metadata.slideshow
+            cell.metadata.user_expressions
             metadata.celltoolbar
             metadata.colab.name
             metadata.colab.provenance
@@ -96,19 +47,74 @@ repos:
             metadata.varInspector
             metadata.vscode
 
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.4
+  - repo: https://github.com/ComPWA/nbhooks
+    rev: 0.0.2
+    hooks:
+      - id: colab-toc-visible
+      - id: fix-nbformat-version
+      - id: remove-empty-tags
+      - id: set-nb-display-name
+      - id: strip-nb-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.6
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+        types_or: [python, pyi, jupyter]
+      - id: ruff-format
+        types_or: [python, pyi, jupyter]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  - repo: https://github.com/tombi-toml/tombi-pre-commit
+    rev: v1.5.4
+    hooks:
+      - id: tombi-format
+      - id: tombi-lint
+        args: [--error-on-warnings]
+
+  - repo: https://github.com/ComPWA/prettier-pre-commit
+    rev: v3.8.1
     hooks:
       - id: prettier
 
-  - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.281
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v10.2.0
     hooks:
-      - id: pyright
+      - id: cspell
 
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.2
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 3.11.1
     hooks:
-      - id: pyupgrade
-        args:
-          - --py37-plus
+      - id: editorconfig-checker
+        name: editorconfig
+        alias: ec
+        exclude: >-
+          (?x)^(
+            .*\.py
+          )$
+
+  - repo: https://github.com/astral-sh/ty-pre-commit
+    rev: v0.0.79
+    hooks:
+      - id: ty
+        args: [--group=types, --no-default-groups]
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.12.11
+    hooks:
+      - id: uv-lock

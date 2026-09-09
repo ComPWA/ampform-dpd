@@ -1,6 +1,14 @@
 {
+  "[bibtex]": {
+    "editor.formatOnSave": false
+  },
+  "[git-commit]": {
+    "editor.rulers": [72],
+    "rewrap.wrappingColumn": 72
+  },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.wordWrap": "on"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -8,31 +16,64 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.rulers": [],
-    "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 80,
     "editor.wrappingIndent": "same",
     "editor.wrappingStrategy": "advanced"
   },
   "[python]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.rulers": [88]
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tombi-toml.tombi"
   },
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.enabled": true,
+  "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
-  "editor.rulers": [88],
+  "editor.unicodeHighlight.allowedCharacters": {
+    "σ": true
+  },
   "files.eol": "\n",
-  "python.analysis.autoImportCompletions": false,
-  "python.analysis.diagnosticMode": "workspace",
-  "python.analysis.typeCheckingMode": "strict",
-  "python.formatting.provider": "black",
-  "python.linting.enabled": true,
-  "python.testing.pytestArgs": ["--color=no"],
+  "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
+  "gitlens.telemetry.enabled": false,
+  "livePreview.defaultPreviewPath": "docs/_build/html",
+  "multiDiffEditor.experimental.enabled": true,
+  "notebook.codeActionsOnSave": {
+    "notebook.source.organizeImports": "explicit"
+  },
+  "notebook.formatOnSave.enabled": true,
+  "notebook.gotoSymbols.showAllSymbols": true,
+  "python.defaultInterpreterPath": ".venv/bin/python",
+  "python.terminal.activateEnvironment": false,
+  "python.testing.pytestArgs": ["--numprocesses=auto"],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
+  "redhat.telemetry.enabled": false,
   "rewrap.wrappingColumn": 88,
-  "telemetry.telemetryLevel": "off"
+  "ruff.enable": true,
+  "ruff.importStrategy": "fromEnvironment",
+  "ruff.organizeImports": true,
+  "search.exclude": {
+    "**/.ipynb_checkpoints": true,
+    "**/tests/**/__init__.py": true,
+    "**/uv.lock": true,
+    "typings/**": true
+  },
+  "telemetry.telemetryLevel": "off",
+  "testing.coverageToolbarEnabled": true,
+  "testing.showCoverageInExplorer": true,
+  "ty.completions.autoImport": false,
+  "ty.diagnosticMode": "workspace",
+  "ty.importStrategy": "fromEnvironment",
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/ComPWA/qrules/0.10.x/src/qrules/particle-validation.json": [
+      "*particle*.y*ml"
+    ]
+  }
 }

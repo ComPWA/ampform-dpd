@@ -7,7 +7,7 @@ references:
 
 categories:
   - title: ✨ New features
-    label: 💡 Feature
+    label: ✨ Feature
   - title: ⚠️ Enhancements and optimizations
     label: ⚙️ Enhancement
   - title: ⚠️ API changes
@@ -19,7 +19,9 @@ categories:
   - title: 📝 Documentation
     label: 📝 Docs
   - title: 🔨 Maintenance
-    label: 🔨 Maintenance
+    labels:
+      - 🔨 Maintenance
+      - ⬆️ Lock
   - title: 🖱️ Developer Experience
     label: 🖱️ DX
 
@@ -32,6 +34,8 @@ replacers:
 sort-direction: ascending
 
 template: |
-  _See all documentation for the latest version [here](https://compwa.github.io/ampform-dpd)._
+  _See all documentation for this version [here](https://ampform-dpd.rtfd.io/en/$NEXT_PATCH_VERSION)._
 
   $CHANGES
+
+  _The full changelog as commits can be found [here](https://github.com/ComPWA/ampform-dpd/compare/$PREVIOUS_TAG...$NEXT_PATCH_VERSION)._
