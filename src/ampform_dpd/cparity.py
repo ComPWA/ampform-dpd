@@ -201,8 +201,8 @@ def get_exchange_phase(chain: ThreeBodyDecayChain, basis: CouplingBasis = "LS") 
 
     A two-particle state is a constructed object: one of the two particles is listed
     first and defines the direction of the relative momentum, and the spins are coupled
-    in the listed order. Listing the same two particles the other way round describes the
-    same state in a different basis, at the cost of the phase of Equation
+    in the listed order. Listing the same two particles the other way round describes
+    the same state in a different basis, at the cost of the phase of Equation
     :eq:`exchange-phase`.
     """
     child1, child2 = chain.decay_products
@@ -300,13 +300,13 @@ def relate_conjugate_couplings(
 ) -> dict[sp.Indexed, sp.Expr]:
     """Substitutions that express conjugate couplings in terms of their partners.
 
-    The returned mapping sends each coupling of the second chain of a conjugate pair (see
-    :func:`get_conjugate_chain_pairs`) onto :math:`\\pm` the corresponding coupling of the
-    first chain. By convention, the sign of Equation :eq:`conjugate-coupling-sign` is
-    carried entirely by the **production** coupling: only the product of the couplings
-    along a chain is observable, so distributing the sign over the two vertices is a
-    choice, and putting it on the production coupling keeps the decay couplings of a
-    resonance and its charge conjugate identical.
+    The returned mapping sends each coupling of the second chain of a conjugate pair
+    (see :func:`get_conjugate_chain_pairs`) onto :math:`\\pm` the corresponding coupling
+    of the first chain. By convention, the sign of Equation
+    :eq:`conjugate-coupling-sign` is carried entirely by the **production** coupling:
+    only the product of the couplings along a chain is observable, so distributing the
+    sign over the two vertices is a choice, and putting it on the production coupling
+    keeps the decay couplings of a resonance and its charge conjugate identical.
 
     Use :func:`symmetrize_conjugate_couplings` to apply these substitutions to a model.
     """
@@ -326,11 +326,11 @@ def symmetrize_conjugate_couplings(
 ) -> AmplitudeModel:
     """Tie the couplings of charge-conjugate decay chains within an `.AmplitudeModel`.
 
-    Substitutes the couplings of each conjugate chain by :math:`\\pm` the couplings of its
-    partner (see :func:`relate_conjugate_couplings`) and removes them from the parameter
-    defaults, so that the two chains share one set of free parameters. Chains that are
-    forbidden by the selection rule of :func:`get_c_forbidden_chains` are reported as a
-    `UserWarning`, but are left in the model.
+    Substitutes the couplings of each conjugate chain by :math:`\\pm` the couplings of
+    its partner (see :func:`relate_conjugate_couplings`) and removes them from the
+    parameter defaults, so that the two chains share one set of free parameters. Chains
+    that are forbidden by the selection rule of :func:`get_c_forbidden_chains` are
+    reported as a `UserWarning`, but are left in the model.
 
     Raises:
         ValueError: If charge conjugation does not map the final state of the decay onto

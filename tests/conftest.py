@@ -23,8 +23,8 @@ def a2pipipi_reaction() -> ReactionInfo:
 
 @pytest.fixture(scope="session")
 def jpsi2etappbar_reaction() -> ReactionInfo:
-    """:math:`J/\\psi \\to \\eta\\, p\\, \\bar p` with a :math:`\\tfrac12^-` and a
-    :math:`\\tfrac12^+` resonance, so that charge conjugation ties the two :math:`N^*`
+    r""":math:`J/\psi \to \eta\, p\, \bar p` with a :math:`\tfrac12^-` and a
+    :math:`\tfrac12^+` resonance, so that charge conjugation ties the two :math:`N^*`
     subsystems with opposite signs."""
     return qrules.generate_transitions(
         initial_state="J/psi(1S)",
@@ -38,9 +38,9 @@ def jpsi2etappbar_reaction() -> ReactionInfo:
 
 @pytest.fixture(scope="session")
 def jpsi2pipipi_reaction() -> ReactionInfo:
-    """:math:`J/\\psi \\to \\pi^0\\pi^-\\pi^+`, allowing C-violating transitions.
+    r""":math:`J/\psi \to \pi^0\pi^-\pi^+`, allowing C-violating transitions.
 
-    The :math:`\\rho^\\pm` chains form a conjugate pair, while the :math:`\\rho^0` and
+    The :math:`\rho^\pm` chains form a conjugate pair, while the :math:`\rho^0` and
     :math:`f_2(1270)` chains are mapped onto themselves and are therefore subject to a
     selection rule instead.
     """
