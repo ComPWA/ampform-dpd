@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any
 
+import sympy as sp
+
 if sys.version_info >= (3, 13):
     from typing import TypeIs
 else:
@@ -17,7 +19,6 @@ from ampform_dpd.io.serialization.kinematics import formulate_kinematic_map
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping
 
-    import sympy as sp
     from tensorwaves.interface import Function
 
     from ampform_dpd import AmplitudeModel, DefinedExpression
@@ -136,9 +137,10 @@ def _prepare_function(
     function: DefinedExpression,
     parameter_overrides: Mapping[sp.Basic, Any] | None,
 ) -> sp.Expr:
+    """Keep constants symbolic when substitution replaces the entire expression."""
     expression = function.expression.xreplace(function.subexpressions)
     parameters = _apply_parameter_overrides(function.parameters, parameter_overrides)
-    return expression.doit().xreplace(parameters)
+    return sp.sympify(expression.doit().xreplace(parameters))
 
 
 def _prepare_distribution(
