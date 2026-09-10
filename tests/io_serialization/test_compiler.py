@@ -8,7 +8,11 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 import pytest
 
-from ampform_dpd.io.serialization import compile_workspace, load_workspace
+from ampform_dpd.io.serialization import (
+    compile_workspace,
+    load_workspace,
+    validate_checksums,
+)
 
 if TYPE_CHECKING:
     from ampform_dpd.io.serialization.compiler import CompiledWorkspace
@@ -22,6 +26,12 @@ def _get_checksums() -> list[dict[str, Any]]:
         definition = json.load(stream)
     return definition["misc"]["amplitude_model_checksums"]
 
+
+CONSTANT_MODEL = Path(__file__).with_name("constant.json")
+"""Single constant chain from the Lambda-b model in amplitude-serialization.
+
+Source: https://github.com/RUB-EP1/amplitude-serialization/blob/4bf857c9592a558943c32e42782c5f6cb90224b1/models/lb2pkg-lhcb-2765817.json
+"""
 
 BACKENDS = ("numpy", "jax")
 CHECKSUMS = _get_checksums()
@@ -41,6 +51,34 @@ def compiled_workspaces(workspace: Workspace) -> dict[str, CompiledWorkspace]:
 
 
 def describe_compile_workspace():
+    @pytest.mark.parametrize("backend", BACKENDS)
+    @pytest.mark.parametrize(
+        "override",
+        [None, 0, -2.5, 1 + 2j],
+        ids=["default", "zero", "real", "complex"],
+    )
+    def it_compiles_constant_polynomials(backend: str, override: complex | None):
+        workspace = load_workspace(CONSTANT_MODEL)
+        target = "LNR30_NR"
+        coefficient = next(iter(workspace.functions[target].parameters))
+        overrides = None if override is None else {coefficient: override}
+        compiled = compile_workspace(
+            workspace,
+            backend=backend,
+            targets=[target],
+            parameter_overrides=overrides,
+        )
+        expected = 1.0 if override is None else override
+        assert complex(compiled.functions[target]({})) == expected
+        (result,) = validate_checksums(compiled)
+        assert result.value == expected
+        assert result.difference == abs(expected - 1.0)
+        if override is None:
+            assert result.passed
+            assert result.diagnostic is None
+            (direct_result,) = validate_checksums(workspace, backend=backend)
+            assert direct_result == result
+
     def it_uses_checksum_targets_by_default(
         compiled_workspaces: dict[str, CompiledWorkspace],
     ):

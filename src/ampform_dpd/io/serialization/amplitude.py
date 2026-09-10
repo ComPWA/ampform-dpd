@@ -66,6 +66,12 @@ def formulate(  # ruff: ignore[too-many-locals]
     to_latex: Callable[[str], str] = identity_function,
     additional_builders: dict[str, PropagatorDynamicsBuilder] | None = None,
 ) -> AmplitudeModel:
+    """Formulate the serialized chains with their supplied complex weights.
+
+    Coupling symbols include the subsystem when a chain name occurs in multiple
+    subsystems. This preserves distinct serialized weights, including relative
+    signs, without imposing additional symmetry relations between the chains.
+    """
     states = get_states(model)
     helicity_symbols = sp.symbols("lambda(:4)", rational=True)
     allowed_helicities = {
@@ -147,7 +153,14 @@ def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positio
     )
     for vertex in chain_definition["vertices"]:
         dynamics *= formulate_form_factor(vertex, model)
-    weight, weight_val = _get_weight(chain_definition, to_latex)
+    subsystems = {
+        get_spectator_id(chain["topology"])
+        for chain in get_decay_chains(model)
+        if chain["name"] == chain_definition["name"]
+    }
+    weight, weight_val = _get_weight(
+        chain_definition, to_latex, distinguish_topology=len(subsystems) > 1
+    )
     i, j = _get_decay_product_ids(chain_definition)
     θij, θij_expr = formulate_scattering_angle(i, j)
     jR = sp.Rational(chain_definition["propagators"][0]["spin"])  # ruff: ignore[non-lowercase-variable-in-function]
@@ -264,13 +277,20 @@ def formulate_aligned_amplitude(
 
 
 def _get_weight(
-    chain_definition: DecayChain, /, to_latex: Callable[[str], str] = identity_function
+    chain_definition: DecayChain,
+    /,
+    to_latex: Callable[[str], str] = identity_function,
+    *,
+    distinguish_topology: bool = False,
 ) -> tuple[sp.Symbol, complex | float]:
     value: complex | float
     value = complex(str(chain_definition["weight"]).replace(" ", "").replace("i", "j"))
     if not value.imag:
         value = value.real
     resonance_latex = to_latex(chain_definition["name"])
+    if distinguish_topology:
+        subsystem = get_spectator_id(chain_definition["topology"])
+        resonance_latex = f"{resonance_latex},{subsystem}"
     vertices = chain_definition["vertices"]
     ls_vertices = [vertex for vertex in vertices if vertex["type"] == "ls"]
     if len(ls_vertices) == len(vertices):

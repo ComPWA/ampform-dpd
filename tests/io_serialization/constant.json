@@ -1,0 +1,155 @@
+{
+  "distributions": [
+    {
+      "name": "default_model",
+      "type": "HadronicUnpolarizedIntensity",
+      "decay_description": {
+        "kinematics": {
+          "initial_state": {
+            "index": 0,
+            "spin": "1/2",
+            "name": "Lb",
+            "mass": 5.62
+          },
+          "final_state": [
+            {
+              "index": 1,
+              "spin": "1/2",
+              "name": "p",
+              "mass": 0.938
+            },
+            {
+              "index": 2,
+              "spin": "0",
+              "name": "K",
+              "mass": 0.493
+            },
+            {
+              "index": 3,
+              "spin": "1",
+              "name": "g",
+              "mass": 0.0
+            }
+          ]
+        },
+        "reference_topology": [[1, 2], 3],
+        "chains": [
+          {
+            "propagators": [
+              {
+                "spin": "3/2",
+                "node": [1, 2],
+                "parametrization": "LNR30_NR"
+              }
+            ],
+            "weight": "0.2014761778704208 + 0.1373786839543982i",
+            "vertices": [
+              {
+                "type": "ls",
+                "l": "0",
+                "s": "1/2",
+                "node": [[1, 2], 3],
+                "formfactor": ""
+              },
+              {
+                "type": "ls",
+                "l": "2",
+                "s": "1/2",
+                "node": [1, 2],
+                "formfactor": "MomentumPower2"
+              }
+            ],
+            "topology": [[1, 2], 3],
+            "name": "LNR3O"
+          }
+        ]
+      },
+      "variables": [
+        {
+          "mass_phi_costheta": ["m_12", "phi_12", "cos_theta_12"],
+          "node": [1, 2]
+        },
+        {
+          "mass_phi_costheta": ["m_12_3", "phi_12_3", "cos_theta_12_3"],
+          "node": [[1, 2], 3]
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "type": "MomentumPower",
+      "l": 2,
+      "name": "MomentumPower2"
+    },
+    {
+      "type": "Polynomial",
+      "coefficients": [1.0],
+      "x": "m_12_sq",
+      "name": "LNR30_NR"
+    }
+  ],
+  "domains": [
+    {
+      "name": "default",
+      "type": "product_domain",
+      "axes": [
+        {
+          "name": "cos_theta_12",
+          "min": -1.0,
+          "max": 1.0
+        },
+        {
+          "name": "phi_12",
+          "min": -3.14,
+          "max": 3.14
+        },
+        {
+          "name": "m_12",
+          "min": 1.0,
+          "max": 5.5
+        },
+        {
+          "name": "cos_theta_12_3",
+          "min": -1.0,
+          "max": 1.0
+        },
+        {
+          "name": "phi_12_3",
+          "min": -3.14,
+          "max": 3.14
+        },
+        {
+          "name": "m_12_3",
+          "min": 1.0,
+          "max": 5.5
+        },
+        {
+          "name": "L_1520_mass",
+          "min": 3.0,
+          "max": 6.5
+        }
+      ]
+    }
+  ],
+  "misc": {
+    "amplitude_model_checksums": [
+      {
+        "point": "validation_point_m12sq",
+        "distribution": "LNR30_NR",
+        "value": "1.0 + 0.0i"
+      }
+    ]
+  },
+  "parameter_points": [
+    {
+      "name": "validation_point_m12sq",
+      "parameters": [
+        {
+          "name": "m_12_sq",
+          "value": 3.2
+        }
+      ]
+    }
+  ]
+}
