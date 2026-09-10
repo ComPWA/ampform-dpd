@@ -1,0 +1,306 @@
+{
+  "distributions": [
+    {
+      "type": "HadronicUnpolarizedIntensity",
+      "name": "compass_3pi_JP=1-_M=1_1540_1560",
+      "decay_description": {
+        "kinematics": {
+          "initial_state": {
+            "index": 0,
+            "spin": "1",
+            "name": "X_3pi",
+            "mass": 1.55
+          },
+          "final_state": [
+            {
+              "index": 1,
+              "spin": "0",
+              "name": "pi-",
+              "mass": 0.13956755
+            },
+            {
+              "index": 2,
+              "spin": "0",
+              "name": "pi+",
+              "mass": 0.13956755
+            },
+            {
+              "index": 3,
+              "spin": "0",
+              "name": "pi-",
+              "mass": 0.13956755
+            }
+          ]
+        },
+        "reference_topology": [[2, 3], 1],
+        "chains": [
+          {
+            "propagators": [
+              {
+                "spin": "1",
+                "node": [2, 3],
+                "parametrization": "R(768)"
+              }
+            ],
+            "weight": "-0.0036159432575573903 + 0.04180024616911908i",
+            "vertices": [
+              {
+                "type": "ls",
+                "l": "1",
+                "s": "1",
+                "node": [[2, 3], 1],
+                "formfactor": "X_BlattWeisskopf_L1"
+              },
+              {
+                "type": "ls",
+                "l": "1",
+                "s": "0",
+                "node": [2, 3],
+                "formfactor": "subchannel_BlattWeisskopf_R(768)_l1"
+              }
+            ],
+            "topology": [[2, 3], 1],
+            "name": "1-(1-+)1+rhopiP"
+          },
+          {
+            "propagators": [
+              {
+                "spin": "1",
+                "node": [1, 2],
+                "parametrization": "R(768)"
+              }
+            ],
+            "weight": "0.0036159432575573903 - 0.04180024616911908i",
+            "vertices": [
+              {
+                "type": "ls",
+                "l": "1",
+                "s": "1",
+                "node": [[1, 2], 3],
+                "formfactor": "X_BlattWeisskopf_L1"
+              },
+              {
+                "type": "ls",
+                "l": "1",
+                "s": "0",
+                "node": [1, 2],
+                "formfactor": "subchannel_BlattWeisskopf_R(768)_l1"
+              }
+            ],
+            "topology": [[1, 2], 3],
+            "name": "1-(1-+)1+rhopiP"
+          }
+        ]
+      },
+      "variables": [
+        {
+          "mass_phi_costheta": ["m_23", "phi_23", "cos_theta_23"],
+          "node": [2, 3]
+        },
+        {
+          "mass_phi_costheta": ["m_23_1", "phi_23_1", "cos_theta_23_1"],
+          "node": [[2, 3], 1]
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "type": "generic_function",
+      "expression": "1 / (0.7685^2 - m_12_sq - i * 0.7685 * 0.1507 * sqrt(m_12_sq / 4 - 0.13956755^2)^3 / sqrt(0.7685^2 / 4 - 0.13956755^2)^3 * (1+sqrt(0.7685^2 / 4 - 0.13956755^2)^2*4.94^2) / (1+sqrt(m_12_sq / 4 - 0.13956755^2)^2*4.94^2))",
+      "name": "R(768)"
+    },
+    {
+      "type": "BlattWeisskopf",
+      "l": 1,
+      "radius": 4.940711462450593,
+      "name": "X_BlattWeisskopf_L1"
+    },
+    {
+      "type": "BlattWeisskopf",
+      "l": 1,
+      "radius": 4.94,
+      "name": "subchannel_BlattWeisskopf_R(768)_l1"
+    }
+  ],
+  "domains": [
+    {
+      "name": "default",
+      "type": "product_domain",
+      "axes": [
+        {
+          "name": "m_23",
+          "min": -1,
+          "max": 1
+        },
+        {
+          "name": "phi_23",
+          "min": -1,
+          "max": 1
+        },
+        {
+          "name": "cos_theta_23",
+          "min": -1,
+          "max": 1
+        },
+        {
+          "name": "m_23_1",
+          "min": -1,
+          "max": 1
+        },
+        {
+          "name": "phi_23_1",
+          "min": -1,
+          "max": 1
+        },
+        {
+          "name": "cos_theta_23_1",
+          "min": -1,
+          "max": 1
+        }
+      ]
+    }
+  ],
+  "misc": {
+    "amplitude_model_checksums": [
+      {
+        "distribution": "compass_3pi_JP=1-_M=1_1540_1560",
+        "point": "validation_point1",
+        "value": 0.04520470089209502
+      },
+      {
+        "distribution": "compass_3pi_JP=1-_M=1_1540_1560",
+        "point": "validation_point2",
+        "value": 0.010651044852509003
+      },
+      {
+        "distribution": "compass_3pi_JP=1-_M=1_1540_1560",
+        "point": "validation_point3",
+        "value": 0.018570000187847224
+      },
+      {
+        "distribution": "compass_3pi_JP=1-_M=1_1540_1560",
+        "point": "validation_point4",
+        "value": 0.09008391448056484
+      }
+    ]
+  },
+  "parameter_points": [
+    {
+      "name": "validation_point1",
+      "parameters": [
+        {
+          "name": "m_23_1",
+          "value": 1.55
+        },
+        {
+          "name": "phi_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "m_23",
+          "value": 0.5187067892828369
+        },
+        {
+          "name": "phi_23",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23",
+          "value": -0.40000000000000013
+        }
+      ]
+    },
+    {
+      "name": "validation_point2",
+      "parameters": [
+        {
+          "name": "m_23_1",
+          "value": 1.55
+        },
+        {
+          "name": "phi_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "m_23",
+          "value": 0.8604783240386694
+        },
+        {
+          "name": "phi_23",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23",
+          "value": 0.7692574254771216
+        }
+      ]
+    },
+    {
+      "name": "validation_point3",
+      "parameters": [
+        {
+          "name": "m_23_1",
+          "value": 1.55
+        },
+        {
+          "name": "phi_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "m_23",
+          "value": 1.2047645511262774
+        },
+        {
+          "name": "phi_23",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23",
+          "value": -0.5577601618235116
+        }
+      ]
+    },
+    {
+      "name": "validation_point4",
+      "parameters": [
+        {
+          "name": "m_23_1",
+          "value": 1.55
+        },
+        {
+          "name": "phi_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23_1",
+          "value": 0.0
+        },
+        {
+          "name": "m_23",
+          "value": 0.7944181429023822
+        },
+        {
+          "name": "phi_23",
+          "value": 0.0
+        },
+        {
+          "name": "cos_theta_23",
+          "value": -0.6113011797354894
+        }
+      ]
+    }
+  ]
+}
