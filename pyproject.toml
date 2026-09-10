@@ -536,6 +536,7 @@ invalid-key = "ignore"
 
 [[tool.ty.overrides]]
 include = [
+    "docs/collect-wigners.ipynb",
     "docs/comparison/d2kkk.ipynb",
     "docs/comparison/jpsi2phipipi.ipynb",
     "docs/comparison/jpsi2pipipi.ipynb",
