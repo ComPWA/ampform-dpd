@@ -140,6 +140,12 @@
     "ylim",
     "yticks"
   ],
+  "overrides": [
+    {
+      "filename": "tests/io_serialization/compass.json",
+      "words": ["rhopi"]
+    }
+  ],
   "language": "en-US",
   "useGitignore": true,
   "version": "0.2",
