@@ -1,20 +1,87 @@
-# cspell:ignore pksigma
+# cspell:ignore gammapipi pksigma
 from __future__ import annotations
 
+from contextlib import nullcontext as does_not_raise
+from itertools import product
 from typing import TYPE_CHECKING
 
 import attrs
 import pytest
 import qrules
 import sympy as sp
+from ampform.sympy import PoolSum
 
-from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
+from ampform_dpd import (
+    AmplitudeModel,
+    DalitzPlotDecompositionBuilder,
+    DefinedExpression,
+    _get_helicity_range,
+)
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
-from ampform_dpd.decay import ThreeBodyDecay
+from ampform_dpd.decay import (
+    IsobarNode,
+    Particle,
+    State,
+    ThreeBodyDecay,
+    ThreeBodyDecayChain,
+    get_decay_product_ids,
+)
 from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
+from ampform_dpd.spin import create_spin_range, generate_ls_couplings
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
+
+    from ampform_dpd.decay import FinalState, FinalStateID
+
+
+@pytest.fixture(params=[1, 2, 3])
+def jpsi2gammapipi_decay(request):
+    photon_id = request.param
+    parent = State("J/psi", "J/psi", 1, -1, 3.1, 0, index=0)
+    states: dict[FinalStateID, FinalState] = {}
+    for i in (1, 2, 3):
+        states[i] = (
+            State("gamma", "gamma", 1, -1, 0, 0, index=i)
+            if i == photon_id
+            else State(f"pi{i}", f"pi_{i}", 0, -1, 0.14, 0, index=i)
+        )
+    chains = []
+    for k in (1, 2, 3):
+        i, j = get_decay_product_ids(k)
+        resonance_spins = (0, 2) if k == photon_id else (1,)
+        for spin in resonance_spins:
+            resonance = Particle(f"R{k}_{spin}", f"R{k}_{spin}", spin, 1, 1.5, 0.1)
+            production_ls = generate_ls_couplings(1, spin, states[k].spin, max_L=4)
+            decay_ls = generate_ls_couplings(spin, states[i].spin, states[j].spin)
+            for incoming_ls, outgoing_ls in product(production_ls, decay_ls):
+                node = IsobarNode(
+                    parent=resonance,
+                    child1=states[i],
+                    child2=states[j],
+                    interaction=outgoing_ls,
+                )
+                chains.append(
+                    ThreeBodyDecayChain(
+                        IsobarNode(parent, node, states[k], interaction=incoming_ls)
+                    )
+                )
+    return ThreeBodyDecay({0: parent, **states}, chains)  # ty: ignore[invalid-argument-type]
+
+
+@pytest.fixture
+def radiative_decay():
+    parent = State("parent", "P", 0.5, 1, 5, 0, index=0)
+    first = State("first", "a", 0.5, 1, 1, 0, index=1)
+    second = State("second", "b", 0, -1, 1, 0, index=2)
+    photon = State("photon", "g", 1, -1, 0, 0, index=3)
+    resonance = Particle("resonance", "R", 1.5, -1, 3, 0)
+    node = IsobarNode(resonance, first, second, interaction=(2, 0.5))
+    chains = [
+        ThreeBodyDecayChain(IsobarNode(parent, node, photon, interaction=ls))
+        for ls in generate_ls_couplings(parent.spin, resonance.spin, photon.spin)
+    ]
+    return ThreeBodyDecay({s.index: s for s in (parent, first, second, photon)}, chains)  # ty: ignore[invalid-argument-type]
 
 
 def describe_DalitzPlotDecompositionBuilder():
@@ -254,3 +321,133 @@ def _collect_products(amplitudes: list[sp.Expr]) -> list[tuple[sp.Indexed, sp.In
 def _get_physical_amplitudes(model: AmplitudeModel) -> list[sp.Expr]:
     amplitudes = [expr.doit() for expr in model.amplitudes.values()]
     return [expr for expr in amplitudes if expr]
+
+
+def describe_jpsi2gammapipi():
+    @pytest.mark.parametrize(
+        "min_ls",
+        [True, False, (True, True), (True, False), (False, True), (False, False)],
+    )
+    @pytest.mark.parametrize("use_coefficients", [False, True])
+    def it_constructs_only_physical_terms(
+        jpsi2gammapipi_decay, min_ls, use_coefficients
+    ):
+        decay = jpsi2gammapipi_decay
+        builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
+        model = builder.formulate(use_coefficients=use_coefficients)
+        photon = next(state for state in decay.final_state.values() if state.mass == 0)
+        assert isinstance(model.intensity, PoolSum)
+        assert tuple(model.intensity.indices[photon.index][1]) == (-1, 1)
+        assert len(model.amplitudes) == 18
+        assert all(key.indices[photon.index] in {-1, 1} for key in model.amplitudes)
+        assert all(
+            f"zeta^{photon.index}" not in str(symbol) for symbol in model.variables
+        )
+        assert all(
+            not expression.has(PoolSum, sp.KroneckerDelta)
+            for expression in model.amplitudes.values()
+        )
+        coupling_symbols = set().union(
+            *(expression.atoms(sp.Indexed) for expression in model.amplitudes.values())
+        )
+        assert set(model.parameter_defaults) - set(model.masses) == coupling_symbols
+        assert any(model.amplitudes.values())
+
+    @pytest.mark.parametrize("min_ls", [True, False, (True, False), (False, True)])
+    @pytest.mark.parametrize("subsystem", [1, 2, 3])
+    def it_never_constructs_a_longitudinal_photon(
+        jpsi2gammapipi_decay, min_ls, subsystem
+    ):
+        builder = DalitzPlotDecompositionBuilder(jpsi2gammapipi_decay, min_ls=min_ls)
+
+        def unexpected_dynamics(_):
+            pytest.fail("Dynamics must not be constructed for a forbidden helicity")
+
+        for chain in jpsi2gammapipi_decay.chains:
+            builder.dynamics_choices.register_builder(chain, unexpected_dynamics)
+        model = builder.formulate_subsystem_amplitude(
+            sp.S.Zero, sp.S.Zero, sp.S.Zero, sp.S.Zero, subsystem
+        )
+        assert set(model.amplitudes.values()) == {sp.S.Zero}
+        assert not model.parameter_defaults
+
+    def it_preserves_distinct_ls_dynamics(jpsi2gammapipi_decay):
+        photon = next(
+            state
+            for state in jpsi2gammapipi_decay.final_state.values()
+            if state.mass == 0
+        )
+        chains = [
+            chain
+            for chain in jpsi2gammapipi_decay.chains
+            if chain.spectator == photon and chain.resonance.spin == 0
+        ]
+        decay = ThreeBodyDecay(jpsi2gammapipi_decay.states, chains)
+        builder = DalitzPlotDecompositionBuilder(decay, min_ls=False)
+
+        def dynamics(chain):
+            return DefinedExpression(sp.Symbol(f"D{chain.incoming_ls.L}"))
+
+        for chain in chains:
+            builder.dynamics_choices.register_builder(chain, dynamics)
+        helicities = [sp.S.NegativeOne, sp.S.Zero, sp.S.Zero, sp.S.Zero]
+        helicities[photon.index] = sp.S.One
+        model = builder.formulate_subsystem_amplitude(
+            λ0=helicities[0],
+            λ1=helicities[1],
+            λ2=helicities[2],
+            λ3=helicities[3],
+            subsystem_id=photon.index,
+        )
+        expression = next(iter(model.amplitudes.values()))
+        assert all(expression.has(sp.Symbol(f"D{i}")) for i in (0, 1, 2))
+        production = {
+            symbol for symbol in model.parameter_defaults if "production" in str(symbol)
+        }
+        assert len(production) == 3
+
+
+def describe_massless_final_states():
+    @pytest.mark.parametrize("spin", [0, 0.5, 1, 2])
+    @pytest.mark.parametrize("mass", [0, 1])
+    def it_preserves_scalar_and_massive_spin_ranges(radiative_decay, spin, mass):
+        state = attrs.evolve(radiative_decay.final_state[3], spin=spin, mass=mass)
+        expected = (
+            [-sp.Rational(spin), sp.Rational(spin)]
+            if mass == 0 and spin
+            else create_spin_range(spin)
+        )
+        assert _get_helicity_range(state) == expected
+
+    @pytest.mark.parametrize("min_ls", [False, True])
+    def it_restricts_both_helicity_sums(radiative_decay, min_ls):
+        model = DalitzPlotDecompositionBuilder(
+            radiative_decay, min_ls=min_ls
+        ).formulate()
+        assert isinstance(model.intensity, PoolSum)
+        assert tuple(model.intensity.indices[-1][1]) == (-1, 1)
+        assert {key.indices[-1] for key in model.amplitudes} == {-1, 1}
+        aligned = model.intensity.expression.args[0].args[0]
+        assert isinstance(aligned, PoolSum)
+        assert tuple(aligned.indices[-1][1]) == (-1, 1)
+        assert all("zeta^3" not in str(symbol) for symbol in model.variables)
+        assert not model.full_expression.has(sp.nan, sp.zoo)
+
+    @pytest.mark.parametrize("reference", [1, 2, 3])
+    def it_conserves_photon_helicity_across_subsystems(radiative_decay, reference):
+        builder = DalitzPlotDecompositionBuilder(radiative_decay)
+        with (
+            pytest.warns(UserWarning, match="only has subsystem")
+            if reference != 3
+            else does_not_raise()
+        ):
+            amplitude, angles = builder.formulate_aligned_amplitude(
+                λ0=sp.S.Half,
+                λ1=-sp.S.Half,
+                λ2=sp.S.Zero,
+                λ3=sp.S.One,
+                reference_subsystem=reference,
+            )
+        assert all("zeta^3" not in str(symbol) for symbol in angles)
+        assert amplitude.doit().atoms(sp.Indexed)
+        assert {a.indices[-1] for a in amplitude.doit().atoms(sp.Indexed)} == {1}
