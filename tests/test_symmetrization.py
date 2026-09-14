@@ -65,17 +65,18 @@ def _create_intensity_function(decay: ThreeBodyDecay, min_ls=True, **kwargs):
 
 
 def _coupling_value(coupling: sp.Indexed) -> complex | float:
-    """Give each resonance a different production coupling, so that they interfere.
+    """Give every surviving coupling its own value.
 
     The intensity is only sensitive to the exchange signs if the decay chains actually
-    interfere, so the resonances must not all get the same coupling. The value is derived
-    from a checksum of the resonance name, which -- unlike `hash` -- is stable across
-    interpreter runs.
+    interfere, so the couplings must not all be the same. Giving the **decay** couplings
+    distinct values as well is what makes the test sensitive to the ordering of their
+    helicity indices: if a tie maps a coupling onto a symbol that its partner chain does
+    not use, the two chains keep independent parameters and the intensity stops being
+    symmetric. The value is derived from a checksum of the whole symbol, which -- unlike
+    `hash` -- is stable across interpreter runs.
     """
-    if "production" not in str(coupling.base):
-        return 1
-    values = [1.0, 0.8 + 0.6j, -0.5 + 0.9j, 0.3 - 0.7j]
-    checksum = zlib.crc32(str(coupling.indices[0]).encode())
+    values = [1.0, 0.8 + 0.6j, -0.5 + 0.9j, 0.3 - 0.7j, -1.1 + 0.2j]
+    checksum = zlib.crc32(str(coupling).encode())
     return values[checksum % len(values)]
 
 
@@ -289,6 +290,31 @@ def describe_bose_symmetry():
         )
         assert _max_asymmetry(func, decay, grid) < 1e-10
 
+    @pytest.mark.parametrize("reference_subsystem", [1, 2])
+    def it_makes_the_spin1_intensity_symmetric(
+        b2rhorhopi_reaction: ReactionInfo, reference_subsystem: int
+    ):
+        """Identical particles that carry spin.
+
+        The rho(770) mesons have spin 1, so the exchange permutes non-trivial helicities
+        and the alignment Wigner-d functions of the exchanged states are not the identity.
+        """
+        decay = to_three_body_decay(b2rhorhopi_reaction.transitions, min_ls=True)
+        assert {s.spin for s in decay.final_state.values()} == {0, 1}
+        grid = np.linspace(0.9, 20.0, 16)
+        func = _create_intensity_function(
+            decay, reference_subsystem=reference_subsystem
+        )
+        assert _max_asymmetry(func, decay, grid) < 1e-10
+
+    def it_is_violated_for_spin1_without_symmetrization(
+        b2rhorhopi_reaction: ReactionInfo,
+    ):
+        decay = to_three_body_decay(b2rhorhopi_reaction.transitions, min_ls=True)
+        grid = np.linspace(0.9, 20.0, 16)
+        func = _create_intensity_function(decay, symmetrize=False)
+        assert _max_asymmetry(func, decay, grid) > 0.1
+
 
 def describe_coupling_bases():
     """The exchange sign has to land on the vertex that identifies the chain."""
@@ -347,6 +373,44 @@ def describe_coupling_bases():
         assert negated_bases == {expected_carrier}, (
             "only the rho(770) has a negative exchange phase"
         )
+
+
+def describe_parameter_bookkeeping():
+    @pytest.mark.parametrize("min_ls", [True, False])
+    @pytest.mark.parametrize("use_coefficients", [False, True])
+    def it_declares_every_coupling_it_uses(
+        d2pipipi_canonical_reaction: ReactionInfo,
+        xib2pkk_canonical_reaction: ReactionInfo,
+        min_ls: bool,
+        use_coefficients: bool,
+    ):
+        """Every coupling in the amplitudes has to survive as a parameter.
+
+        A tie that maps a coupling onto a symbol its partner chain does not use leaves the
+        expression referring to an undeclared parameter, which is how a silently broken
+        symmetrization shows up.
+        """
+        reactions = [d2pipipi_canonical_reaction, xib2pkk_canonical_reaction]
+        for reaction in reactions:
+            decay = to_three_body_decay(reaction.transitions, min_ls=min_ls)
+            builder = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls)
+            model = builder.formulate(
+                cleanup_summations=True, use_coefficients=use_coefficients
+            )
+            declared = {
+                p for p in model.parameter_defaults if isinstance(p, sp.Indexed)
+            }
+            lambda_r = sp.Symbol(R"\lambda_R", rational=True)
+            used = set()
+            for expression in model.amplitudes.values():
+                used |= {
+                    node
+                    for node in sp.preorder_traversal(expression.doit())
+                    if isinstance(node, sp.Indexed)
+                    and not str(node.base).startswith("A^")
+                    and lambda_r not in node.free_symbols
+                }
+            assert used - declared == set(), "undeclared couplings"
 
 
 def describe_warn_about_missing_exchange_partners():

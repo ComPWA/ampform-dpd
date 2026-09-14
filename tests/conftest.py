@@ -48,6 +48,37 @@ def d2pipipi_canonical_reaction() -> ReactionInfo:
     return permute_equal_final_states(normalize_state_ids(reaction))
 
 
+@pytest.fixture(scope="session")
+def b2rhorhopi_reaction() -> ReactionInfo:
+    """Two **identical particles that carry spin**, recoiling against a spinless one.
+
+    The exchanged rho(770) mesons have spin 1, so the exchange permutes non-trivial
+    helicities and the alignment Wigner-d functions of states 1 and 2 do not collapse to 1.
+    """
+    reaction = qrules.generate_transitions(
+        initial_state="B+",
+        final_state=["rho(770)0", "rho(770)0", "pi+"],
+        allowed_intermediate_particles=["a(1)(1260)+", "a(2)(1320)+"],
+        formalism="helicity",
+        mass_conservation_factor=0,
+        max_angular_momentum=1,
+        max_spin_magnitude=2,
+    )
+    return permute_equal_final_states(normalize_state_ids(reaction))
+
+
+@pytest.fixture(scope="session")
+def xib2pkk_canonical_reaction() -> ReactionInfo:
+    """Identical kaons plus a spin-1/2 initial and final state, with LS couplings."""
+    reaction = qrules.generate_transitions(
+        initial_state="Xi(b)-",
+        final_state=["K-", "K-", "p"],
+        allowed_intermediate_particles=["Lambda(1405)", "Lambda(1520)"],
+        formalism="canonical-helicity",
+    )
+    return permute_equal_final_states(normalize_state_ids(reaction))
+
+
 @pytest.fixture(scope="session", params=["canonical-helicity", "helicity"])
 def jpsi2pksigma_reaction(request: SubRequest) -> ReactionInfo:
     return qrules.generate_transitions(

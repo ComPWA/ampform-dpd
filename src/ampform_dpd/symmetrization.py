@@ -332,13 +332,20 @@ def relate_exchange_couplings(model: AmplitudeModel) -> dict[sp.Indexed, sp.Expr
     substitutions: dict[sp.Indexed, sp.Expr] = {}
     for tie in get_exchange_ties(model.decay):
         sign = get_exchange_sign(tie, basis)
+        reordered = is_reordered(tie)
         label = create_resonance_label(model.decay, tie.chain)
         reference_label = create_resonance_label(model.decay, tie.reference)
         for coupling in couplings:
             match = _match_coupling(coupling, label, tie.chain)
             if match is None:
                 continue
-            target = _relabel_coupling(coupling, label, reference_label)
+            target = _relabel_coupling(
+                coupling,
+                label,
+                reference_label,
+                match,
+                reverse_decay_indices=reordered and basis == "helicity",
+            )
             substituted = (
                 sign * target if match in {sign_carrier, "coefficient"} else target
             )
@@ -474,17 +481,40 @@ def _matches_ls(indices: tuple[sp.Basic, ...], ls: LSCoupling | None) -> bool:
 
 
 def _relabel_coupling(
-    coupling: sp.Indexed, label: Str, reference_label: Str
+    coupling: sp.Indexed,
+    label: Str,
+    reference_label: Str,
+    kind: Literal["production", "decay", "coefficient"],
+    reverse_decay_indices: bool,
 ) -> sp.Indexed:
-    """Rewrite a coupling of one chain as the same coupling of its exchange partner."""
-    for helicity_basis, typ in itertools.product(
-        (True, False), ("production", "decay")
-    ):
-        if coupling.base == _get_coupling_base(helicity_basis, typ):
-            return coupling.base[(reference_label, *coupling.indices[1:])]
+    """Rewrite a coupling of one chain as the same coupling of its exchange partner.
+
+    Both chains of an `ExchangeTie` are written in the cyclic pair ordering of their own
+    subsystem, and when the exchange re-orders the decay vertex (see :func:`is_reordered`)
+    those two orderings are each other's reverse. The helicity indices of the **decay**
+    coupling then have to be reversed as well, because its first slot is the helicity of a
+    different particle in each of the two chains. Getting this wrong produces a coupling
+    symbol that the partner chain never uses, which silently leaves the two chains with
+    independent parameters instead of tying them.
+
+    The indices only have to be reversed if they are helicities. LS couplings are indexed
+    by :math:`(l, S)` and are the same either way round.
+    """
+    if kind == "production":
+        return coupling.base[(reference_label, *coupling.indices[1:])]
+    if kind == "decay":
+        indices = coupling.indices[1:]
+        if reverse_decay_indices:
+            indices = tuple(reversed(indices))
+        return coupling.base[(reference_label, *indices)]
     for production, decay in itertools.product((True, False), repeat=2):
-        if coupling.base == _get_coefficient_base(label, production, decay):
-            base = _get_coefficient_base(reference_label, production, decay)
-            return base[coupling.indices]
+        if coupling.base != _get_coefficient_base(label, production, decay):
+            continue
+        production_indices = coupling.indices[:2]
+        decay_indices = coupling.indices[2:]
+        if decay and reverse_decay_indices:
+            decay_indices = tuple(reversed(decay_indices))
+        base = _get_coefficient_base(reference_label, production, decay)
+        return base[(*production_indices, *decay_indices)]
     msg = f"Cannot relabel coupling {coupling}"
     raise NotImplementedError(msg)
