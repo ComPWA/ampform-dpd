@@ -81,7 +81,9 @@ class DalitzPlotDecompositionBuilder:
                 :math:`LS`-couplings. If setting this boolean with a `tuple`, the first
                 element of the `tuple` defines whether to use helicity couplings on the
                 **production** `.IsobarNode` and the second configures the **decay**
-                `.IsobarNode`.
+                `.IsobarNode`. This choice does not change the physical helicity
+                ranges. LS couplings retain their supplied dynamics and are not
+                automatically reduced to a minimal set of fit parameters.
             all_subsystems: Formulate the amplitude model for all allowed subsystems in
                 the decay, even if they do not exist in the `.ThreeBodyDecay` object.
         """
@@ -107,7 +109,13 @@ class DalitzPlotDecompositionBuilder:
         cleanup_summations: bool = False,
         use_coefficients: bool = False,
     ) -> AmplitudeModel:
-        """Formulate the amplitude model given the configuration of this builder.
+        r"""Formulate the amplitude model given the configuration of this builder.
+
+        Final states with zero mass have only the helicities :math:`\pm s` (or
+        zero for a scalar), in both the intensity and alignment sums. Their alignment
+        conserves helicity: the massless limit of the DPD alignment angle is zero
+        inside physical phase space. The selected helicity or LS basis is used at each
+        vertex, retaining the supplied LS waves and their dynamics.
 
         Args:
             reference_subsystem: The subsystem to use as reference for the alignment of
@@ -125,8 +133,12 @@ class DalitzPlotDecompositionBuilder:
             sp.symbols("lambda:4", rational=True)
         )
         allowed_helicities = {
-            symbol: create_spin_range(self.decay.states[i].spin)  # ty: ignore[invalid-argument-type]
-            for i, symbol in enumerate(helicity_symbols)
+            symbol: _get_helicity_range(state)
+            for symbol, state in zip(
+                helicity_symbols,
+                (self.decay.states[i] for i in (0, 1, 2, 3)),
+                strict=True,
+            )
         }
         amplitude_definitions = {}
         angle_definitions = {}
@@ -193,62 +205,61 @@ class DalitzPlotDecompositionBuilder:
             self.decay.final_state[2].spin,
             self.decay.final_state[3].spin,
         )
-        λR = sp.Symbol(R"\lambda_R", rational=True)
+        λR = λ[0] + λ[k]
         amplitude_sum = DefinedExpression(0)  # ty: ignore[invalid-argument-type]
+        physical_helicities = all(
+            helicity in _get_helicity_range(self.decay.states[state_id])
+            for state_id, helicity in zip((0, 1, 2, 3), λ, strict=True)
+        )
         for chain in self.decay.get_subsystem(subsystem_id).chains:
-            formulate_dynamics = self.dynamics_choices.get_builder(chain.resonance.name)
-            amplitude = formulate_dynamics(chain)
-            resonance_spin = sp.Rational(chain.resonance.spin)
-            resonance_helicities = create_spin_range(resonance_spin)
-            for λR_val in resonance_helicities:
-                if λ[0] != λR_val - λ[k]:  # Kronecker delta
-                    continue
-                scaling_factors = _create_scaling_factors(
-                    chain,
-                    (self.use_production_helicity_couplings, λR_val, λ[k]),
-                    (self.use_decay_helicity_couplings, λ[i], λ[j]),
-                    one_scalar_per_chain=use_coefficients,
-                )
-                if isinstance(scaling_factors, tuple):
-                    h_prod, h_dec = scaling_factors
-                    amplitude.parameters[h_prod] = 1 + 0j
-                    amplitude.parameters[h_dec] = 1
-                else:
-                    amplitude.parameters[scaling_factors] = 1 + 0j
+            resonance_spin = chain.resonance.spin
+            if (
+                not physical_helicities
+                or abs(λR) > resonance_spin
+                or abs(λ[i] - λ[j]) > resonance_spin
+            ):
+                continue
+            recoupling = sp.S.One
+            if not self.use_decay_helicity_couplings:
+                recoupling *= _formulate_clebsch_gordan_factors(
+                    isobar=_order_decay_products(chain.decay_node, first_id=i),
+                    helicities={
+                        self.decay.final_state[i]: λ[i],
+                        self.decay.final_state[j]: λ[j],
+                    },
+                ).doit()
+            if not self.use_production_helicity_couplings:
+                recoupling *= _formulate_clebsch_gordan_factors(
+                    chain.decay,
+                    helicities={
+                        chain.resonance: λR,
+                        self.decay.final_state[k]: λ[k],
+                    },
+                ).doit()
+            if recoupling == 0:
+                continue
             scaling_factors = _create_scaling_factors(
                 chain,
                 (self.use_production_helicity_couplings, λR, λ[k]),
                 (self.use_decay_helicity_couplings, λ[i], λ[j]),
                 one_scalar_per_chain=use_coefficients,
             )
+            formulate_dynamics = self.dynamics_choices.get_builder(chain)
+            amplitude = formulate_dynamics(chain)
+            if isinstance(scaling_factors, tuple):
+                h_prod, h_dec = scaling_factors
+                amplitude.parameters[h_prod] = 1 + 0j
+                amplitude.parameters[h_dec] = 1
+            else:
+                amplitude.parameters[scaling_factors] = 1 + 0j
             amplitude *= (
-                sp.KroneckerDelta(λ[0], λR - λ[k])
-                * (-1) ** (spin[k] - λ[k])
+                (-1) ** (spin[k] - λ[k])
                 * Wigner.d(resonance_spin, λR, λ[i] - λ[j], θij)
                 * _product(scaling_factors)
                 * (-1) ** (spin[j] - λ[j])
+                * recoupling
             )
-            if not self.use_decay_helicity_couplings:
-                amplitude *= _formulate_clebsch_gordan_factors(
-                    isobar=_order_decay_products(chain.decay_node, first_id=i),
-                    helicities={
-                        self.decay.final_state[i]: λ[i],
-                        self.decay.final_state[j]: λ[j],
-                    },
-                )
-            if not self.use_production_helicity_couplings:
-                production_isobar = chain.decay
-                amplitude *= _formulate_clebsch_gordan_factors(
-                    production_isobar,
-                    helicities={
-                        chain.resonance: λR,
-                        self.decay.final_state[k]: λ[k],
-                    },
-                )
-            amplitude_sum += attrs.evolve(
-                amplitude,
-                expression=PoolSum(amplitude.expression, (λR, resonance_helicities)),
-            )
+            amplitude_sum += amplitude
         A = _generate_amplitude_index_bases()
         amp_symbol = A[subsystem_id][λ0, λ1, λ2, λ3]
         return AmplitudeModel(
@@ -271,7 +282,12 @@ class DalitzPlotDecompositionBuilder:
             reference_subsystem = _get_best_reference_subsystems(self.decay)
         else:
             _check_reference_subsystems(self.decay, reference_subsystem)
-        wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
+        wigner_generator = _AlignmentWignerGenerator(
+            reference_subsystem,
+            massless_states={
+                i for i, state in self.decay.final_state.items() if state.mass == 0
+            },
+        )
         _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
         j0, j1, j2, j3 = (self.decay.states[i].spin for i in sorted(self.decay.states))
         A = _generate_amplitude_index_bases()
@@ -284,12 +300,18 @@ class DalitzPlotDecompositionBuilder:
                 * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=k)
                 for k in _get_subsystem_ids(self.decay)
             ),
-            (_λ0, create_spin_range(j0)),
-            (_λ1, create_spin_range(j1)),
-            (_λ2, create_spin_range(j2)),
-            (_λ3, create_spin_range(j3)),
+            (_λ0, _get_helicity_range(self.decay.states[0])),
+            (_λ1, _get_helicity_range(self.decay.states[1])),
+            (_λ2, _get_helicity_range(self.decay.states[2])),
+            (_λ3, _get_helicity_range(self.decay.states[3])),
         )
         return amp_expr, wigner_generator.angle_definitions
+
+
+def _get_helicity_range(state: State) -> list[sp.Rational]:
+    if state.index != 0 and state.mass == 0 and state.spin != 0:
+        return [-state.spin, state.spin]
+    return create_spin_range(state.spin)
 
 
 def _product(obj: Any | Iterable):
@@ -450,7 +472,13 @@ def _generate_amplitude_index_bases() -> dict[FinalStateID, sp.IndexedBase]:
 
 
 class _AlignmentWignerGenerator:
-    def __init__(self, reference_subsystem: FinalStateID = 1) -> None:
+    def __init__(
+        self,
+        reference_subsystem: FinalStateID = 1,
+        *,
+        massless_states: set[int] | None = None,
+    ) -> None:
+        self.massless_states = massless_states or set()
         self.angle_definitions: dict[sp.Symbol, sp.Expr] = {}
         self.reference_subsystem = reference_subsystem
 
@@ -461,9 +489,11 @@ class _AlignmentWignerGenerator:
         m_prime: sp.Rational | sp.Symbol,
         rotated_state: int,
         aligned_subsystem: int,
-    ) -> sp.Rational | WignerD:
+    ) -> sp.Rational | WignerD | sp.KroneckerDelta:
         if j == 0:
             return sp.Rational(1)
+        if rotated_state in self.massless_states:
+            return sp.KroneckerDelta(m, m_prime)
         zeta, zeta_expr = formulate_zeta_angle(
             rotated_state, aligned_subsystem, self.reference_subsystem
         )
@@ -477,8 +507,14 @@ class DynamicsConfigurator:
         self.__dynamics_builders: dict[ThreeBodyDecayChain, DynamicsBuilder] = {}
 
     def register_builder(self, identifier, builder: DynamicsBuilder) -> None:
+        """Assign dynamics to one chain, or to all chains with a resonance name."""
         chain = self.__get_chain(identifier)
-        self.__dynamics_builders[chain] = builder
+        if isinstance(identifier, str):
+            for candidate in self.__decay.chains:
+                if candidate.resonance.name == identifier:
+                    self.__dynamics_builders[candidate] = builder
+        else:
+            self.__dynamics_builders[chain] = builder
 
     def get_builder(self, identifier) -> DynamicsBuilder:
         chain = self.__get_chain(identifier)
