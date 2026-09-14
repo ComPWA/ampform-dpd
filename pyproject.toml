@@ -466,7 +466,6 @@ extend-ignore-names = [
     "builtin-variable-shadowing",
     "undocumented-public-module",
 ]
-"jpsi2ksp.ipynb" = ["import-private-name"]
 "serialization.ipynb" = [
     "ambiguous-variable-name",
     "camelcase-imported-as-lowercase",
@@ -540,9 +539,10 @@ include = [
     "docs/comparison/jpsi2phipipi.ipynb",
     "docs/comparison/jpsi2pipipi.ipynb",
     "docs/index.ipynb",
-    "docs/jpsi2ksp.ipynb",
+    "docs/lb2pkg.ipynb",
     "docs/lc2pkpi.ipynb",
     "docs/serialization.ipynb",
+    "docs/x2pipipi.ipynb",
     "docs/xib2pkk.ipynb",
 ]
 

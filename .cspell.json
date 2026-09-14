@@ -73,6 +73,7 @@
     "ipynb",
     "ipython",
     "ipywidgets",
+    "isfinite",
     "isinstance",
     "isnan",
     "itertools",
