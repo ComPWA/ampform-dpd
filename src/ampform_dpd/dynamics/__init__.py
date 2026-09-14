@@ -51,39 +51,6 @@ class RelativisticBreitWigner(sp.Expr):
 
 
 @unevaluated
-class BreitWignerMinL(sp.Expr):
-    s: Any
-    decaying_mass: Any
-    spectator_mass: Any
-    resonance_mass: Any
-    resonance_width: Any
-    child2_mass: Any
-    child1_mass: Any
-    l_dec: Any
-    l_prod: Any
-    R_dec: Any
-    R_prod: Any
-    phsp_factor: PhaseSpaceFactorProtocol = argument(
-        default=PhaseSpaceFactor, sympify=False
-    )  # ty: ignore[invalid-assignment]
-    _latex_repr_ = R"\mathcal{{R}}^\mathrm{{BW}}_{{{l_dec},{l_prod}}}\left({s}\right)"
-
-    def evaluate(self):  # ruff: ignore[too-many-locals]
-        s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
-        ff_prod = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)  # ty: ignore[unsupported-operator]
-        ff0_prod = FormFactor(m_top**2, m0, m_spec, l_prod, R_prod)  # ty: ignore[unsupported-operator]
-        ff_dec = FormFactor(s, m1, m2, l_dec, R_dec)
-        ff0_dec = FormFactor(m0**2, m1, m2, l_dec, R_dec)  # ty: ignore[unsupported-operator]
-        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec, self.phsp_factor)  # ty: ignore[invalid-argument-type]
-        return sp.Mul(
-            ff_prod / ff0_prod,
-            1 / (m0**2 - s - sp.I * m0 * width),  # ty: ignore[unsupported-operator]
-            ff_dec / ff0_dec,
-            evaluate=False,
-        )
-
-
-@unevaluated
 class BuggBreitWigner(sp.Expr):
     s: Any
     m0: Any
