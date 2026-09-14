@@ -7,6 +7,7 @@ The following notebooks investigate the difference between the amplitude models 
 maxdepth: 1
 ---
 comparison/d2kkk
+comparison/d2pipipi
 comparison/jpsi2pipipi
 comparison/jpsi2phipipi
 ```

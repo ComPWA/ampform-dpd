@@ -81,6 +81,7 @@
     "itertools",
     "kernelspec",
     "kwargs",
+    "leftrightarrow",
     "linestyle",
     "linkcheck",
     "linspace",
