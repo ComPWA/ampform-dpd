@@ -23,7 +23,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "ampform>=0.15.10",  # aslatex with keyword arguments; ampform.sympy.cached module
+    "ampform>=0.16.0",  # BreakupMomentum in ampform.kinematics.phasespace
     "attrs>=20.1.0",  # on_setattr and https://www.attrs.org/en/stable/api.html#next-gen
     "cloudpickle",
     "frozendict",
