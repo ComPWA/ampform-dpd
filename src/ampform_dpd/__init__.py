@@ -111,11 +111,11 @@ class DalitzPlotDecompositionBuilder:
     ) -> AmplitudeModel:
         r"""Formulate the amplitude model given the configuration of this builder.
 
-        Final states with zero mass have only the helicities :math:`\pm s` (or
-        zero for a scalar), in both the intensity and alignment sums. Their alignment
-        conserves helicity: the massless limit of the DPD alignment angle is zero
-        inside physical phase space. The selected helicity or LS basis is used at each
-        vertex, retaining the supplied LS waves and their dynamics.
+        Final states with zero mass have only the helicities :math:`\pm s` (or zero for
+        a scalar), in both the intensity and alignment sums. Their alignment conserves
+        helicity: the massless limit of the DPD alignment angle is zero inside physical
+        phase space. The selected helicity or LS basis is used at each vertex, retaining
+        the supplied LS waves and their dynamics.
 
         Args:
             reference_subsystem: The subsystem to use as reference for the alignment of

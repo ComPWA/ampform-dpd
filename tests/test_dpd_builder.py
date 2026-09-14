@@ -56,7 +56,10 @@ def jpsi2gammapipi_decay(request):
             decay_ls = generate_ls_couplings(spin, states[i].spin, states[j].spin)
             for incoming_ls, outgoing_ls in product(production_ls, decay_ls):
                 node = IsobarNode(
-                    resonance, states[i], states[j], interaction=outgoing_ls
+                    parent=resonance,
+                    child1=states[i],
+                    child2=states[j],
+                    interaction=outgoing_ls,
                 )
                 chains.append(
                     ThreeBodyDecayChain(
@@ -390,7 +393,11 @@ def describe_jpsi2gammapipi():
         helicities = [sp.S.NegativeOne, sp.S.Zero, sp.S.Zero, sp.S.Zero]
         helicities[photon.index] = sp.S.One
         model = builder.formulate_subsystem_amplitude(
-            helicities[0], helicities[1], helicities[2], helicities[3], photon.index
+            λ0=helicities[0],
+            λ1=helicities[1],
+            λ2=helicities[2],
+            λ3=helicities[3],
+            subsystem_id=photon.index,
         )
         expression = next(iter(model.amplitudes.values()))
         assert all(expression.has(sp.Symbol(f"D{i}")) for i in (0, 1, 2))
@@ -435,7 +442,11 @@ def describe_massless_final_states():
             else does_not_raise()
         ):
             amplitude, angles = builder.formulate_aligned_amplitude(
-                sp.S.Half, -sp.S.Half, sp.S.Zero, sp.S.One, reference
+                λ0=sp.S.Half,
+                λ1=-sp.S.Half,
+                λ2=sp.S.Zero,
+                λ3=sp.S.One,
+                reference_subsystem=reference,
             )
         assert all("zeta^3" not in str(symbol) for symbol in angles)
         assert amplitude.doit().atoms(sp.Indexed)

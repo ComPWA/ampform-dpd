@@ -143,9 +143,8 @@ def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positio
     `.DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude`: the couplings and
     dynamics are read from the model definition instead of being generated, but the
     phase conventions and helicity selection are the same. Here a Kronecker delta
-    selects the resonance helicity in a sum; the builder inserts
-    :math:`\lambda_R = \lambda_0 + \lambda_k` directly. The two implementations have
-    to be kept in sync.
+    selects the resonance helicity in a sum; the builder inserts :math:`\lambda_R =
+    \lambda_0 + \lambda_k` directly. The two implementations have to be kept in sync.
     """
     chain_defs = get_decay_chains(model)
     chain_definition = chain_defs[chain_idx]
