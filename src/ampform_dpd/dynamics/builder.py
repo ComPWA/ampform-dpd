@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
 from ampform.dynamics.phasespace import PhaseSpaceFactor, PhaseSpaceFactorProtocol
@@ -17,9 +19,19 @@ from ampform_dpd import DefinedExpression, create_mass_symbol, to_particle
 from ampform_dpd.decay import DecayNode, IsobarNode, State, ThreeBodyDecayChain
 from ampform_dpd.dynamics import RelativisticBreitWigner, SimpleBreitWigner
 
+if TYPE_CHECKING:
+    from tensorwaves.interface import ParameterValue
+
 
 @define
 class BreitWignerBuilder:
+    """Build a lineshape with unnormalized production and decay form factors.
+
+    The production form factor uses the running resonance mass, as in
+    `.BreitWignerMinL`. Unlike `.BreitWignerMinL`, form factors are not normalized at
+    the pole.
+    """
+
     energy_dependent_width: bool = True
     decay_form_factor: bool = True
     production_form_factor: bool = True
@@ -44,27 +56,30 @@ formulate_breit_wigner_with_form_factor = BreitWignerBuilder()
 
 
 def _create_form_factor(s: sp.Symbol, isobar: IsobarNode) -> DefinedExpression:
+    parameter_defaults: dict[sp.Basic, ParameterValue] = {}
     if isinstance(isobar.parent, State):
-        inv_mass = sp.Symbol("m0", nonnegative=True)
+        parent_mass = create_mass_symbol(isobar.parent)
+        invariant_mass_squared = parent_mass**2
+        parameter_defaults[parent_mass] = isobar.parent.mass
     else:
-        inv_mass = get_mandelstam_s(isobar)
-    outgoing_state_mass1 = create_mass_symbol(isobar.child1)
-    outgoing_state_mass2 = create_mass_symbol(isobar.child2)
+        invariant_mass_squared = s
+    outgoing_masses = []
+    for child in isobar.children:
+        if isinstance(child, IsobarNode):
+            outgoing_masses.append(sp.sqrt(s))
+        else:
+            mass = create_mass_symbol(child)
+            outgoing_masses.append(mass)
+            parameter_defaults[mass] = to_particle(child).mass
     meson_radius = _create_meson_radius_symbol(isobar)
     form_factor = FormFactor(
-        s=inv_mass**2,  # ty: ignore[unknown-argument]
-        m1=outgoing_state_mass1,  # ty: ignore[unknown-argument]
-        m2=outgoing_state_mass2,  # ty: ignore[unknown-argument]
+        s=invariant_mass_squared,  # ty: ignore[unknown-argument]
+        m1=outgoing_masses[0],  # ty: ignore[unknown-argument]
+        m2=outgoing_masses[1],  # ty: ignore[unknown-argument]
         angular_momentum=_get_angular_momentum(isobar),  # ty: ignore[unknown-argument]
         meson_radius=meson_radius,  # ty: ignore[unknown-argument]
     )
-    parameter_defaults: dict[sp.Basic, complex | float] = {
-        meson_radius: 1,
-        outgoing_state_mass1: to_particle(isobar.child1).mass,
-        outgoing_state_mass2: to_particle(isobar.child2).mass,
-    }
-    if not inv_mass.name.startswith("s"):
-        parameter_defaults[inv_mass] = to_particle(isobar).mass
+    parameter_defaults[meson_radius] = 1
     return DefinedExpression(form_factor, parameter_defaults)
 
 
