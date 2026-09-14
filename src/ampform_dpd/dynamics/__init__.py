@@ -143,7 +143,7 @@ class MultichannelBreitWigner(sp.Expr):
     factor. This is the convention used by the `amplitude-serialization
     <https://rub-ep1.github.io/amplitude-serialization>`_ models and by
     `HadronicLineshapes.jl
-    <https://mmikhasenko.github.io/HadronicLineshapes.jl/dev/10-breitwigner/#Multichannel-Breit-Wigner-Function>`_.
+    <https://mmikhasenko.github.io/HadronicLineshapes.jl/10-breitwigner/#Multichannel-Breit-Wigner-Function>`_.
 
     .. seealso:: `ComPWA/ampform-dpd#198
         <https://github.com/ComPWA/ampform-dpd/issues/198>`_,
