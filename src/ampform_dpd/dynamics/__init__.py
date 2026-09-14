@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 
 import sympy as sp
 from ampform.dynamics import EnergyDependentWidth
-from ampform.dynamics.form_factor import FormFactor
+from ampform.dynamics.form_factor import FormFactor, SphericalHankel1
 from ampform.dynamics.phasespace import (
     BreakupMomentum,
     PhaseSpaceFactor,
@@ -210,3 +210,21 @@ class SimpleBreitWigner(sp.Expr):
     def evaluate(self):
         s, m0, Γ0 = self.args
         return 1 / (m0**2 - s - sp.I * m0 * Γ0)  # ty: ignore[unsupported-operator]
+
+
+def blatt_weisskopf_normalization(angular_momentum: int) -> sp.Expr:
+    r"""Normalization of AmpForm's `~ampform.dynamics.form_factor.FormFactor`.
+
+    AmpForm normalizes its Blatt--Weisskopf factor to one at :math:`z=1`. Published
+    amplitude models often use the unnormalized convention instead, which is AmpForm's
+    form factor divided by this value.
+
+    >>> blatt_weisskopf_normalization(0)
+    1
+    >>> blatt_weisskopf_normalization(1)
+    sqrt(2)
+    >>> blatt_weisskopf_normalization(2)
+    sqrt(13)
+    """
+    hankel = SphericalHankel1(sp.Integer(angular_momentum), sp.Integer(1))
+    return sp.Abs(hankel.doit())

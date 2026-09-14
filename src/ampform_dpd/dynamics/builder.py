@@ -18,7 +18,11 @@ from attrs.validators import in_
 
 from ampform_dpd import DefinedExpression, create_mass_symbol, to_particle
 from ampform_dpd.decay import DecayNode, IsobarNode, State, ThreeBodyDecayChain
-from ampform_dpd.dynamics import BreitWigner, SimpleBreitWigner
+from ampform_dpd.dynamics import (
+    BreitWigner,
+    SimpleBreitWigner,
+    blatt_weisskopf_normalization,
+)
 
 if TYPE_CHECKING:
     from tensorwaves.interface import ParameterValue
@@ -28,16 +32,23 @@ if TYPE_CHECKING:
 class BreitWignerBuilder:
     """Build chain dynamics with explicit numerator and vertex normalization.
 
-    Production uses the running resonance mass. ``normalize_form_factors`` divides
-    each enabled vertex factor by its value at the resonance pole; it does not
-    change the running width's pole normalization. ``numerator="mass_width"``
-    multiplies the propagator by the pole mass times the pole width.
+    Production uses the running resonance mass. ``normalize_form_factors`` divides each
+    enabled vertex factor by its value at the resonance pole; it does not change the
+    running width's pole normalization. ``numerator="mass_width"`` multiplies the
+    propagator by the pole mass times the pole width.
 
-    External masses are fixed parameter defaults, while Mandelstam invariants are
-    event variables. Decay radii are per resonance; production radii are per parent.
+    ``blatt_weisskopf_convention`` selects the convention of the vertex factors
+    themselves, independently of the pole normalization: ``"normalized"`` keeps
+    AmpForm's factor, which is one at :math:`z=1`, while ``"unnormalized"`` divides it
+    by `.blatt_weisskopf_normalization`, as published amplitude models do. Pole
+    normalization cancels this constant, so the two conventions only differ when
+    ``normalize_form_factors`` is `False`.
+
+    External masses are fixed parameter defaults, while Mandelstam invariants are event
+    variables. Decay radii are per resonance; production radii are per parent.
     ``symbol_mapping`` renames or fixes parameters in expressions and defaults.
-    ``parameter_defaults`` overrides values after mapping, allowing shared radii
-    and downstream naming conventions without changing the lineshape.
+    ``parameter_defaults`` overrides values after mapping, allowing shared radii and
+    downstream naming conventions without changing the lineshape.
     """
 
     energy_dependent_width: bool = True
@@ -47,6 +58,9 @@ class BreitWignerBuilder:
     normalize_form_factors: bool = False
     numerator: Literal["unity", "mass_width"] = field(
         default="unity", validator=in_(("unity", "mass_width"))
+    )
+    blatt_weisskopf_convention: Literal["normalized", "unnormalized"] = field(
+        default="normalized", validator=in_(("normalized", "unnormalized"))
     )
     symbol_mapping: dict[sp.Symbol, sp.Expr] = field(factory=dict)
     parameter_defaults: dict[sp.Basic, complex | float] = field(factory=dict)
@@ -67,13 +81,17 @@ class BreitWignerBuilder:
             expression *= mass * width
         if self.decay_form_factor:
             expression *= _create_form_factor(
-                s, decay_node, pole_mass=mass if self.normalize_form_factors else None
+                s,
+                isobar=decay_node,
+                pole_mass=mass if self.normalize_form_factors else None,
+                convention=self.blatt_weisskopf_convention,
             )
         if self.production_form_factor:
             expression *= _create_form_factor(
                 s,
-                decay_chain.production_node,
+                isobar=decay_chain.production_node,
                 pole_mass=mass if self.normalize_form_factors else None,
+                convention=self.blatt_weisskopf_convention,
             )
         expression.parameters.update({
             create_mass_symbol(state): state.mass
@@ -94,7 +112,11 @@ formulate_breit_wigner_with_form_factor = BreitWignerBuilder()
 
 
 def _create_form_factor(
-    s: sp.Symbol, isobar: IsobarNode, *, pole_mass: sp.Symbol | None = None
+    s: sp.Symbol,
+    isobar: IsobarNode,
+    *,
+    pole_mass: sp.Symbol | None = None,
+    convention: Literal["normalized", "unnormalized"] = "normalized",
 ) -> DefinedExpression:
     if _get_angular_momentum(isobar) == 0:
         return DefinedExpression()
@@ -122,6 +144,8 @@ def _create_form_factor(
         meson_radius=meson_radius,  # ty: ignore[unknown-argument]
     )
     parameter_defaults[meson_radius] = 1
+    if convention == "unnormalized":
+        form_factor /= blatt_weisskopf_normalization(_get_angular_momentum(isobar))
     if pole_mass is not None:
         form_factor /= form_factor.xreplace({s: pole_mass**2})
     return DefinedExpression(form_factor, parameter_defaults)

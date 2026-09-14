@@ -12,7 +12,7 @@ from attrs import evolve
 from ampform_dpd import create_mass_symbol
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
 from ampform_dpd.decay import LSCoupling, ThreeBodyDecayChain
-from ampform_dpd.dynamics import BreitWigner
+from ampform_dpd.dynamics import BreitWigner, blatt_weisskopf_normalization
 from ampform_dpd.dynamics.builder import BreitWignerBuilder, get_mandelstam_s
 
 if TYPE_CHECKING:
@@ -98,6 +98,32 @@ def describe_BreitWignerBuilder():
             sp.simplify(bw.energy_dependent_width().doit().subs(bw.s, bw.mass**2))
             == bw.width
         )
+
+    @pytest.mark.parametrize("normalize", [False, True])
+    def it_applies_the_blatt_weisskopf_convention(reaction, normalize):
+        chain = to_three_body_decay(
+            normalize_state_ids(reaction).transitions, min_ls=True
+        ).chains[0]
+        normalized = BreitWignerBuilder(normalize_form_factors=normalize)(
+            chain
+        ).expression
+        unnormalized = BreitWignerBuilder(
+            normalize_form_factors=normalize, blatt_weisskopf_convention="unnormalized"
+        )(chain).expression
+        assert chain.decay_node.interaction is not None
+        assert chain.production_node.interaction is not None
+        if normalize:
+            expected = sp.S.One  # the constant cancels against the pole value
+        else:
+            expected = 1 / (
+                blatt_weisskopf_normalization(chain.decay_node.interaction.L)
+                * blatt_weisskopf_normalization(chain.production_node.interaction.L)
+            )
+        assert sp.simplify(unnormalized / normalized) == expected
+
+    def it_rejects_unknown_blatt_weisskopf_conventions():
+        with pytest.raises(ValueError, match="blatt_weisskopf_convention"):
+            BreitWignerBuilder(blatt_weisskopf_convention="unknown")  # ty: ignore[invalid-argument-type]
 
     def it_maps_and_fixes_parameters(reaction):
         chain = to_three_body_decay(
