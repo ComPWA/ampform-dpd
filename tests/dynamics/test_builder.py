@@ -11,8 +11,12 @@ from attrs import evolve
 
 from ampform_dpd import create_mass_symbol
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
-from ampform_dpd.decay import LSCoupling, ThreeBodyDecayChain
-from ampform_dpd.dynamics import BreitWignerBuilder, get_mandelstam_s
+from ampform_dpd.decay import LSCoupling, State, ThreeBodyDecayChain
+from ampform_dpd.dynamics import (
+    BreitWignerBuilder,
+    create_meson_radius_symbol,
+    get_mandelstam_s,
+)
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
@@ -127,21 +131,38 @@ def describe_BreitWignerBuilder():
         with pytest.raises(ValueError, match="blatt_weisskopf_convention"):
             BreitWignerBuilder(blatt_weisskopf_convention="unknown")  # ty: ignore[invalid-argument-type]
 
-    def it_maps_and_fixes_parameters(reaction):
+    def it_creates_meson_radii_through_the_hook(reaction):
         chain = to_three_body_decay(
             normalize_state_ids(reaction).transitions, min_ls=True
         ).chains[0]
-        radius = sp.Symbol(Rf"R_{{{chain.resonance.latex}}}", nonnegative=True)
-        shared = sp.Symbol("R_shared")
-        parent_radius = sp.Symbol(Rf"R_{{{chain.parent.latex}}}", nonnegative=True)
+        r_dec, r_prod = sp.symbols("R_dec R_prod", nonnegative=True)
         result = BreitWignerBuilder(
-            symbol_mapping={radius: shared, parent_radius: sp.Integer(5)},
-            parameter_defaults={shared: 1.5},
+            meson_radius=lambda node: (
+                r_prod if isinstance(node.parent, State) else r_dec
+            ),
+            parameter_defaults={r_dec: 1.5},
         )(chain)
-        assert result.parameters[shared] == 1.5
-        assert parent_radius not in result.parameters
-        assert not result.expression.has(radius, parent_radius)
-        assert result.expression.has(shared)
+        (bw,) = result.expression.atoms(BreitWigner)
+        assert bw.meson_radius == r_dec
+        radii = {ff.meson_radius for ff in result.expression.atoms(FormFactor)}
+        assert radii == {r_dec, r_prod}
+        assert result.parameters[r_dec] == 1.5
+        assert result.parameters[r_prod] == 1
+        assert create_meson_radius_symbol(chain.decay_node) not in result.parameters
+
+    def it_fixes_meson_radii_to_numbers(reaction):
+        chain = to_three_body_decay(
+            normalize_state_ids(reaction).transitions, min_ls=True
+        ).chains[0]
+        result = BreitWignerBuilder(meson_radius=lambda _: 5)(chain)
+        (bw,) = result.expression.atoms(BreitWigner)
+        assert bw.meson_radius == 5
+        assert {ff.meson_radius for ff in result.expression.atoms(FormFactor)} == {5}
+        assert not any(str(p).startswith("R_") for p in result.parameters)
+
+    def it_rejects_non_callable_meson_radii():
+        with pytest.raises(TypeError, match="meson_radius"):
+            BreitWignerBuilder(meson_radius={})  # ty: ignore[invalid-argument-type]
 
     @pytest.mark.parametrize("running_width", [False, True])
     def it_omits_unused_s_wave_radii(reaction, running_width):
@@ -152,11 +173,20 @@ def describe_BreitWignerBuilder():
         chain = ThreeBodyDecayChain(
             evolve(chain.production_node, child1=node, interaction=LSCoupling(0, 0))
         )
+        requested_vertices = []
+
+        def meson_radius(node):
+            requested_vertices.append(node)
+            return create_meson_radius_symbol(node)
+
         result = BreitWignerBuilder(
-            energy_dependent_width=running_width, normalize_form_factors=True
+            energy_dependent_width=running_width,
+            normalize_form_factors=True,
+            meson_radius=meson_radius,
         )(chain)
         assert not result.expression.atoms(FormFactor)
         assert not any(str(p).startswith("R_") for p in result.parameters)
+        assert not requested_vertices
 
     def it_gives_different_resonances_independent_radii(reaction):
         chain = to_three_body_decay(
@@ -196,8 +226,8 @@ def describe_BreitWignerBuilder():
             assert chain.production_node.interaction is not None
             l_dec = sp.Integer(chain.decay_node.interaction.L)
             l_prod = sp.Integer(chain.production_node.interaction.L)
-            r_dec = sp.Symbol(Rf"R_{{{chain.resonance.latex}}}", nonnegative=True)
-            r_prod = sp.Symbol(Rf"R_{{{chain.parent.latex}}}", nonnegative=True)
+            r_dec = create_meson_radius_symbol(chain.decay_node)
+            r_prod = create_meson_radius_symbol(chain.production_node)
             expected = {
                 FormFactor(s, m1, m2, l_dec, r_dec),
                 FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, r_prod),

@@ -15,13 +15,32 @@ from ampform.dynamics import BreitWigner, SimpleBreitWigner
 from ampform.dynamics.form_factor import FormFactor
 from ampform.dynamics.phasespace import PhaseSpaceFactor, PhaseSpaceFactorProtocol
 from attrs import define, field
-from attrs.validators import in_
+from attrs.validators import in_, is_callable
 
 from ampform_dpd import DefinedExpression, create_mass_symbol, to_particle
 from ampform_dpd.decay import DecayNode, IsobarNode, State, ThreeBodyDecayChain
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from tensorwaves.interface import ParameterValue
+
+
+def create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:
+    """Name the meson radius of a vertex after the parent of that vertex.
+
+    This is the default ``meson_radius`` hook of `BreitWignerBuilder`: each resonance
+    gets its own decay radius and the parent of the decay chain gets the production
+    radius.
+
+    >>> from ampform_dpd.decay import IsobarNode, Particle, State
+    >>> pi1 = State("pi+", "pi^+", spin=0, parity=-1, mass=0.14, width=0.0, index=1)
+    >>> pi2 = State("pi-", "pi^-", spin=0, parity=-1, mass=0.14, width=0.0, index=2)
+    >>> rho = Particle("rho", "rho", spin=1, parity=-1, mass=0.775, width=0.149)
+    >>> create_meson_radius_symbol(IsobarNode(rho, pi1, pi2))
+    R_{rho}
+    """
+    return sp.Symbol(Rf"R_{{{isobar.parent.latex}}}", nonnegative=True)
 
 
 @define
@@ -41,10 +60,13 @@ class BreitWignerBuilder:
     when ``normalize_form_factors`` is `False`.
 
     External masses are fixed parameter defaults, while Mandelstam invariants are event
-    variables. Decay radii are per resonance; production radii are per parent.
-    ``symbol_mapping`` renames or fixes parameters in expressions and defaults.
-    ``parameter_defaults`` overrides values after mapping, allowing shared radii and
-    downstream naming conventions without changing the lineshape.
+    variables. ``meson_radius`` receives the `.IsobarNode` of each vertex with nonzero
+    orbital angular momentum and returns the radius of that vertex, a symbol or a
+    number; it is not called for :math:`S` waves. The default,
+    `create_meson_radius_symbol`, gives each resonance its own decay radius and the
+    parent a production radius. A custom hook can share radii between resonances or fix
+    them. Free symbols of the returned radius get a suggested value of one, which
+    ``parameter_defaults`` overrides.
     """
 
     energy_dependent_width: bool = True
@@ -58,7 +80,9 @@ class BreitWignerBuilder:
     blatt_weisskopf_convention: Literal["normalized", "unnormalized"] = field(
         default="normalized", validator=in_(("normalized", "unnormalized"))
     )
-    symbol_mapping: dict[sp.Symbol, sp.Expr] = field(factory=dict)
+    meson_radius: Callable[[IsobarNode], sp.Expr | float] = field(
+        default=create_meson_radius_symbol, validator=is_callable()
+    )
     parameter_defaults: dict[sp.Basic, complex | float] = field(factory=dict)
 
     def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
@@ -66,7 +90,9 @@ class BreitWignerBuilder:
         decay_node = decay_chain.decay_node
         s = get_mandelstam_s(decay_node)
         if self.energy_dependent_width:
-            expression = _create_breit_wigner(s, decay_node, self.phsp_factor)
+            expression = _create_breit_wigner(
+                s, decay_node, self.phsp_factor, self.meson_radius
+            )
         else:
             expression = _create_simple_breit_wigner(s, decay_node)
         mass = create_mass_symbol(decay_chain.resonance)
@@ -79,6 +105,7 @@ class BreitWignerBuilder:
             expression *= _create_form_factor(
                 s,
                 isobar=decay_node,
+                meson_radius=self.meson_radius,
                 pole_mass=mass if self.normalize_form_factors else None,
                 convention=self.blatt_weisskopf_convention,
             )
@@ -86,6 +113,7 @@ class BreitWignerBuilder:
             expression *= _create_form_factor(
                 s,
                 isobar=decay_chain.production_node,
+                meson_radius=self.meson_radius,
                 pole_mass=mass if self.normalize_form_factors else None,
                 convention=self.blatt_weisskopf_convention,
             )
@@ -93,15 +121,8 @@ class BreitWignerBuilder:
             create_mass_symbol(state): state.mass
             for state in (decay_chain.parent, *decay_chain.final_state)
         })
-        parameters = {}
-        for symbol, value in expression.parameters.items():
-            mapped = self.symbol_mapping.get(symbol, symbol)
-            if isinstance(mapped, sp.Symbol):
-                parameters[mapped] = value
-        parameters.update(self.parameter_defaults)
-        return DefinedExpression(
-            expression.expression.xreplace(self.symbol_mapping), parameters
-        )
+        expression.parameters.update(self.parameter_defaults)
+        return expression
 
 
 formulate_breit_wigner_with_form_factor = BreitWignerBuilder()
@@ -111,6 +132,7 @@ def _create_form_factor(
     s: sp.Symbol,
     isobar: IsobarNode,
     *,
+    meson_radius: Callable[[IsobarNode], sp.Expr | float],
     pole_mass: sp.Symbol | None = None,
     convention: Literal["normalized", "unnormalized"] = "normalized",
 ) -> DefinedExpression:
@@ -131,47 +153,51 @@ def _create_form_factor(
             mass = create_mass_symbol(child)
             outgoing_masses.append(mass)
             parameter_defaults[mass] = to_particle(child).mass
-    meson_radius = _create_meson_radius_symbol(isobar)
+    radius = _create_meson_radius(isobar, meson_radius)
     form_factor = FormFactor(
         s=invariant_mass_squared,  # ty: ignore[unknown-argument]
         m1=outgoing_masses[0],  # ty: ignore[unknown-argument]
         m2=outgoing_masses[1],  # ty: ignore[unknown-argument]
         angular_momentum=_get_angular_momentum(isobar),  # ty: ignore[unknown-argument]
-        meson_radius=meson_radius,  # ty: ignore[unknown-argument]
+        meson_radius=radius.expression,  # ty: ignore[unknown-argument]
         normalize=convention == "normalized",  # ty: ignore[unknown-argument]
     )
-    parameter_defaults[meson_radius] = 1
+    parameter_defaults.update(radius.parameters)
     if pole_mass is not None:
         form_factor /= form_factor.xreplace({s: pole_mass**2})
     return DefinedExpression(form_factor, parameter_defaults)
 
 
 def _create_breit_wigner(
-    s: sp.Symbol, isobar: DecayNode, phsp_factor: PhaseSpaceFactorProtocol
+    s: sp.Symbol,
+    isobar: DecayNode,
+    phsp_factor: PhaseSpaceFactorProtocol,
+    meson_radius: Callable[[IsobarNode], sp.Expr | float],
 ) -> DefinedExpression:
-    outgoing_state_mass1 = create_mass_symbol(isobar.child1)
-    outgoing_state_mass2 = create_mass_symbol(isobar.child2)
     angular_momentum = _get_angular_momentum(isobar)
-    res_mass = create_mass_symbol(isobar.parent)
-    res_width = sp.Symbol(Rf"\Gamma_{{{isobar.parent.latex}}}", nonnegative=True)
-    meson_radius = _create_meson_radius_symbol(isobar)
+    mass = create_mass_symbol(isobar.parent)
+    width = sp.Symbol(Rf"\Gamma_{{{isobar.parent.latex}}}", nonnegative=True)
+    radius = (
+        _create_meson_radius(isobar, meson_radius)
+        if angular_momentum
+        else DefinedExpression()
+    )
     breit_wigner_expr = BreitWigner(
-        s=s,  # ty: ignore[unknown-argument]
-        mass=res_mass,  # ty: ignore[unknown-argument]
-        width=res_width,  # ty: ignore[unknown-argument]
-        m1=outgoing_state_mass1,  # ty: ignore[unknown-argument]
-        m2=outgoing_state_mass2,  # ty: ignore[unknown-argument]
+        s,
+        mass,
+        width,
+        m1=create_mass_symbol(isobar.child1),  # ty: ignore[unknown-argument]
+        m2=create_mass_symbol(isobar.child2),  # ty: ignore[unknown-argument]
         angular_momentum=angular_momentum,  # ty: ignore[unknown-argument]
-        meson_radius=meson_radius if angular_momentum else 1,  # ty: ignore[unknown-argument]
+        meson_radius=radius.expression,  # ty: ignore[unknown-argument]
         phsp_factor=phsp_factor,  # ty: ignore[unknown-argument]
         numerator="unity",  # ty: ignore[unknown-argument]
     )
     parameter_defaults: dict[sp.Basic, complex | float] = {
-        res_mass: isobar.parent.mass,
-        res_width: isobar.parent.width,
+        mass: isobar.parent.mass,
+        width: isobar.parent.width,
+        **radius.parameters,
     }
-    if angular_momentum:
-        parameter_defaults[meson_radius] = 1
     return DefinedExpression(breit_wigner_expr, parameter_defaults)
 
 
@@ -199,8 +225,11 @@ def _get_angular_momentum(isobar: IsobarNode) -> int:
     return isobar.interaction.L
 
 
-def _create_meson_radius_symbol(isobar: IsobarNode) -> sp.Symbol:
-    return sp.Symbol(Rf"R_{{{isobar.parent.latex}}}", nonnegative=True)
+def _create_meson_radius(
+    isobar: IsobarNode, meson_radius: Callable[[IsobarNode], sp.Expr | float]
+) -> DefinedExpression:
+    radius = sp.sympify(meson_radius(isobar))
+    return DefinedExpression(radius, dict.fromkeys(radius.free_symbols, 1))
 
 
 def get_mandelstam_s(decay: DecayNode) -> sp.Symbol:

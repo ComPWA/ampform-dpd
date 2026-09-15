@@ -587,7 +587,7 @@ def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
     }
 
 
-def create_mass_symbol(particle: IsobarNode | Particle | State) -> sp.Symbol:
+def create_mass_symbol(particle: IsobarNode | Particle | State, /) -> sp.Symbol:
     particle = to_particle(particle)
     if isinstance(particle, State):
         return sp.Symbol(f"m{particle.index}", nonnegative=True)
