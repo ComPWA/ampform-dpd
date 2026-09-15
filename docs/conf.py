@@ -44,6 +44,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
         "obj",
         "ampform_dpd.io.serialization.compiler.CompiledWorkspace",
     ),
+    "ampform_dpd.cparity.CouplingBasis": ("obj", "ampform_dpd.cparity.CouplingBasis"),
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "ampform_dpd.io.serialization.dynamics.T": "typing.TypeVar",
     "dict[~sympy.core.basic.Basic": "dict",
@@ -61,6 +62,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "Node": ("obj", "ampform_dpd.io.serialization.format.Node"),
     "NodeType": "typing.TypeVar",
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
+    "ParticleCollection": "qrules.particle.ParticleCollection",
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "PhaseSpaceFactorProtocol": "ampform.dynamics.phasespace.PhaseSpaceFactorProtocol",
     "PoolSum": "ampform.sympy.PoolSum",
@@ -213,6 +215,7 @@ intersphinx_mapping = {
 linkcheck_anchors = False
 linkcheck_ignore = [
     "https://doi.org/10.1103",
+    "https://github.com/ComPWA/jpsi-nstar",  # private repository
     "https://journals.aps.org/prd",
 ]
 mermaid_height = "auto"  # do not stretch diagrams to the default 500px
