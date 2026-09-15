@@ -6,6 +6,8 @@ import attrs
 import pytest
 import qrules
 
+from ampform_dpd.adapter.qrules import normalize_state_ids, permute_equal_final_states
+
 if TYPE_CHECKING:
     from _pytest.fixtures import SubRequest
     from qrules.transition import ReactionInfo
@@ -19,6 +21,62 @@ def a2pipipi_reaction() -> ReactionInfo:
         allowed_intermediate_particles=["a(0)(980)0"],
         formalism="helicity",
     )
+
+
+@pytest.fixture(scope="session")
+def d2pipipi_reaction() -> ReactionInfo:
+    reaction = qrules.generate_transitions(
+        initial_state="D+",
+        final_state=["pi+", "pi+", "pi-"],
+        allowed_intermediate_particles=["rho(770)0", "f(0)(980)", "f(2)(1270)"],
+        formalism="helicity",
+        mass_conservation_factor=0,
+    )
+    return permute_equal_final_states(normalize_state_ids(reaction))
+
+
+@pytest.fixture(scope="session")
+def d2pipipi_canonical_reaction() -> ReactionInfo:
+    """Same decay as `d2pipipi_reaction`, but with LS couplings."""
+    reaction = qrules.generate_transitions(
+        initial_state="D+",
+        final_state=["pi+", "pi+", "pi-"],
+        allowed_intermediate_particles=["rho(770)0", "f(0)(980)", "f(2)(1270)"],
+        formalism="canonical-helicity",
+        mass_conservation_factor=0,
+    )
+    return permute_equal_final_states(normalize_state_ids(reaction))
+
+
+@pytest.fixture(scope="session")
+def b2rhorhopi_reaction() -> ReactionInfo:
+    """Two **identical particles that carry spin**, recoiling against a spinless one.
+
+    The exchanged rho(770) mesons have spin 1, so the exchange permutes non-trivial
+    helicities and the alignment Wigner-d functions of states 1 and 2 do not collapse to 1.
+    """
+    reaction = qrules.generate_transitions(
+        initial_state="B+",
+        final_state=["rho(770)0", "rho(770)0", "pi+"],
+        allowed_intermediate_particles=["a(1)(1260)+", "a(2)(1320)+"],
+        formalism="helicity",
+        mass_conservation_factor=0,
+        max_angular_momentum=1,
+        max_spin_magnitude=2,
+    )
+    return permute_equal_final_states(normalize_state_ids(reaction))
+
+
+@pytest.fixture(scope="session")
+def xib2pkk_canonical_reaction() -> ReactionInfo:
+    """Identical kaons plus a spin-1/2 initial and final state, with LS couplings."""
+    reaction = qrules.generate_transitions(
+        initial_state="Xi(b)-",
+        final_state=["K-", "K-", "p"],
+        allowed_intermediate_particles=["Lambda(1405)", "Lambda(1520)"],
+        formalism="canonical-helicity",
+    )
+    return permute_equal_final_states(normalize_state_ids(reaction))
 
 
 @pytest.fixture(scope="session", params=["canonical-helicity", "helicity"])
