@@ -331,13 +331,14 @@ def get_c_forbidden_chains(
     relation reads :math:`\mathcal{H}_{\lambda_j\lambda_i} = s\,
     \mathcal{H}_{\lambda_i\lambda_j}`. That is a selection rule only if the decay node
     has a single helicity combination, i.e. if both decay products are spinless (which is
-    the case for :math:`\rho^0 \to \pi^+\pi^-`); otherwise it ties the chain's own decay
-    couplings to their index-reversed partners and forbids no more than the diagonal. Such
-    a chain is reported as a `UserWarning` instead of being returned, because the
-    constraint cannot be applied as a substitution: the helicity indices of the decay
-    coupling are still summation variables of the alignment `~ampform.sympy.PoolSum`, so
-    there is no index to compare. Formulate the decay node with LS couplings to have the
-    constraint imposed.
+    the case for :math:`\rho^0 \to \pi^+\pi^-`). If they are not, **both** signs leave a
+    constraint that this function cannot express as a list of forbidden chains:
+    :math:`s=-1` forbids no more than the diagonal and makes the rest antisymmetric,
+    while :math:`s=+1` is not vacuous either, but requires the couplings to be symmetric
+    under index reversal. Such a chain is reported as a `UserWarning` for either sign
+    and is left untouched, just like the chains that this function does return (see
+    :func:`symmetrize_conjugate_couplings`). Formulate the decay node with LS couplings
+    to reduce the constraint to a selection rule.
     """
     particle_db = _get_particle_db(particle_db)
     state_map = get_conjugate_state_map(decay, particle_db)
@@ -345,17 +346,18 @@ def get_c_forbidden_chains(
     for chain in decay.chains:
         if state_map[chain.spectator.index] != chain.spectator.index:
             continue
-        if get_conjugate_coupling_sign(chain, basis, particle_db) > 0:
-            continue
+        sign = get_conjugate_coupling_sign(chain, basis, particle_db)
         if basis == "helicity" and any(state.spin for state in chain.decay_products):
             msg = (
-                f"Charge conjugation maps decay chain {chain.resonance.name} onto itself"
-                " with a negative sign. In the helicity basis this does not forbid the"
-                " chain: it relates its decay couplings as H[λj,λi] = -H[λi,λj], which"
-                " this module cannot impose. Use LS couplings on the decay node if you"
-                " need this constraint."
+                f"Charge conjugation maps decay chain {chain.resonance.name} onto"
+                " itself. In the helicity basis this does not forbid the chain: it"
+                f" relates its decay couplings as H[λj,λi] = {sign:+d} H[λi,λj], which"
+                " this module does not impose. Use LS couplings on the decay node if"
+                " you need this constraint."
             )
             warn(msg, category=UserWarning, stacklevel=2)
+            continue
+        if sign > 0:
             continue
         forbidden.append(chain)
     return forbidden

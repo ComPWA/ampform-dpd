@@ -234,6 +234,25 @@ def describe_get_c_forbidden_chains():
         forbidden = get_c_forbidden_chains(jpsi2etappbar_isobar_decay)
         assert [c.resonance.name for c in forbidden] == ["f(2)(1270)"]
 
+    def it_warns_for_both_signs_in_the_helicity_basis(
+        jpsi2etappbar_isobar_decay: ThreeBodyDecay,
+    ):
+        """:math:`X \\to p\\bar p` has spinful decay products, so in the helicity basis
+        neither sign reduces to a selection rule: :math:`s=-1` forbids no more than the
+        diagonal, and :math:`s=+1` is not vacuous either, but requires the couplings to
+        be symmetric under index reversal. Both have to be reported, so that a model is
+        never left unconstrained without saying so.
+        """
+        with pytest.warns(UserWarning, match="maps decay chain") as records:
+            forbidden = get_c_forbidden_chains(jpsi2etappbar_isobar_decay, "helicity")
+        assert forbidden == []
+        messages = sorted(str(w.message) for w in records)
+        assert len(messages) == 2
+        assert "chain f(2)(1270) onto itself" in messages[0]
+        assert "H[λj,λi] = -1 H[λi,λj]" in messages[0]
+        assert "chain omega(782) onto itself" in messages[1]
+        assert "H[λj,λi] = +1 H[λi,λj]" in messages[1]
+
     def it_agrees_with_qrules_for_a_fermion_pair(
         jpsi2etappbar_isobar_strong_reaction: ReactionInfo,
     ):
@@ -508,3 +527,39 @@ def describe_symmetrize_conjugate_couplings():
             ValueError, match="does not map the final state onto itself"
         ):
             symmetrize_conjugate_couplings(model)
+
+    def it_warns_about_an_unconstrained_self_mapped_chain(
+        jpsi2etappbar_isobar_strong_reaction: ReactionInfo,
+    ):
+        """The :math:`\\omega \\to p\\bar p` chain has :math:`s=+1`, which is vacuous in
+        the LS basis but not in the helicity basis, where it requires the decay couplings
+        to be symmetric under index reversal. The returned model is therefore not
+        C-symmetric, and it used to say so for :math:`s=-1` only.
+        """
+        transitions = normalize_state_ids(
+            jpsi2etappbar_isobar_strong_reaction.transitions
+        )
+        decay = to_three_body_decay(transitions, min_ls=True)
+        state_map = get_conjugate_state_map(decay)
+        model = DalitzPlotDecompositionBuilder(decay, min_ls=True).formulate(
+            reference_subsystem=1
+        )
+        with pytest.warns(UserWarning, match=r"H\[λj,λi\] = \+1 H\[λi,λj\]"):
+            tied = symmetrize_conjugate_couplings(model)
+        assert _compute_mirror_asymmetry(tied, state_map) > 1e-3
+
+    def it_imposes_the_same_chain_in_the_ls_basis(
+        jpsi2etappbar_isobar_strong_reaction: ReactionInfo,
+    ):
+        """Control: with LS couplings on the decay node, :math:`s=+1` really is vacuous
+        and the very same chain comes out C-symmetric without any constraint."""
+        transitions = normalize_state_ids(
+            jpsi2etappbar_isobar_strong_reaction.transitions
+        )
+        decay = to_three_body_decay(transitions, min_ls=True)
+        state_map = get_conjugate_state_map(decay)
+        model = DalitzPlotDecompositionBuilder(decay, min_ls=False).formulate(
+            reference_subsystem=1
+        )
+        assert get_c_forbidden_chains(decay, "LS") == []
+        assert _compute_mirror_asymmetry(model, state_map) < 1e-12
