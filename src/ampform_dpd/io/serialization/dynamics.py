@@ -4,12 +4,12 @@ import re
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
+from ampform.dynamics import BreitWigner, ChannelArguments
 from ampform.dynamics.form_factor import BreakupMomentumSquared, FormFactor
 from ampform.dynamics.phasespace import PhaseSpaceFactorComplex
 from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import BreitWigner, ChannelArguments
 from ampform_dpd.io.serialization.decay import get_initial_state
 from ampform_dpd.io.serialization.format import (
     BlattWeisskopfDefinition,
@@ -210,7 +210,16 @@ def formulate_breit_wigner(
     angular_momentum = int(function_definition["l"])
     d = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
     return DefinedExpression(
-        expression=BreitWigner(s, mass, width, m1, m2, angular_momentum, d),  # ty: ignore[invalid-argument-type]
+        expression=BreitWigner(
+            s,
+            mass,
+            width,
+            m1,
+            m2,
+            angular_momentum,  # ty: ignore[invalid-argument-type]
+            d,
+            numerator="unity",  # ty: ignore[unknown-argument]
+        ),
         parameters={
             mass: function_definition["mass"],
             width: function_definition["width"],
