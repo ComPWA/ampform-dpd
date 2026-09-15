@@ -12,7 +12,7 @@ from attrs import evolve
 from ampform_dpd import create_mass_symbol
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
 from ampform_dpd.decay import LSCoupling, ThreeBodyDecayChain
-from ampform_dpd.dynamics.builder import BreitWignerBuilder, get_mandelstam_s
+from ampform_dpd.dynamics import BreitWignerBuilder, get_mandelstam_s
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
