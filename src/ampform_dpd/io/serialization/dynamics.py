@@ -4,16 +4,12 @@ import re
 from typing import TYPE_CHECKING, Protocol, TypeVar, cast
 
 import sympy as sp
-from ampform.dynamics.form_factor import (
-    BreakupMomentumSquared,
-    FormFactor,
-    SphericalHankel1,
-)
+from ampform.dynamics import BreitWigner, ChannelArguments
+from ampform.dynamics.form_factor import BreakupMomentumSquared, FormFactor
 from ampform.dynamics.phasespace import PhaseSpaceFactorComplex
 from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import BreitWigner, ChannelArguments
 from ampform_dpd.io.serialization.decay import get_initial_state
 from ampform_dpd.io.serialization.format import (
     BlattWeisskopfDefinition,
@@ -116,32 +112,20 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
             meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
-            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius)  # ty: ignore[invalid-argument-type]
-            / _blatt_weisskopf_normalization(angular_momentum),
+            expression=FormFactor(
+                s,
+                m1,
+                m2,
+                angular_momentum,  # ty: ignore[invalid-argument-type]
+                meson_radius,
+                normalize=False,  # ty: ignore[unknown-argument]
+            ),
             parameters={
                 meson_radius: function_definition["radius"],
             },
         )
     msg = f"No form factor implementation for {function_name!r}"
     raise NotImplementedError(msg)
-
-
-def _blatt_weisskopf_normalization(angular_momentum: int) -> sp.Expr:
-    r"""Undo the normalization of AmpForm's `~ampform.dynamics.form_factor.FormFactor`.
-
-    AmpForm normalizes its Blatt--Weisskopf factor to one at :math:`z=1`, whereas the
-    serialization format uses the unnormalized convention, so the form factor has to be
-    divided by this value.
-
-    >>> _blatt_weisskopf_normalization(0)
-    1
-    >>> _blatt_weisskopf_normalization(1)
-    sqrt(2)
-    >>> _blatt_weisskopf_normalization(2)
-    sqrt(13)
-    """
-    hankel = SphericalHankel1(sp.Integer(angular_momentum), sp.Integer(1))
-    return sp.Abs(hankel.doit())
 
 
 def formulate_generic_function(
@@ -224,15 +208,24 @@ def formulate_breit_wigner(
     m1 = to_mass_symbol(i)
     m2 = to_mass_symbol(j)
     angular_momentum = int(function_definition["l"])
-    d = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
+    meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
     return DefinedExpression(
-        expression=BreitWigner(s, mass, width, m1, m2, angular_momentum, d),  # ty: ignore[invalid-argument-type]
+        expression=BreitWigner(
+            s,
+            mass,
+            width,
+            m1,
+            m2,
+            angular_momentum,  # ty: ignore[invalid-argument-type]
+            meson_radius,
+            numerator="unity",  # ty: ignore[unknown-argument]
+        ),
         parameters={
             mass: function_definition["mass"],
             width: function_definition["width"],
             m1: function_definition["ma"],
             m2: function_definition["mb"],
-            d: function_definition["d"],
+            meson_radius: function_definition["d"],
         },
     )
 

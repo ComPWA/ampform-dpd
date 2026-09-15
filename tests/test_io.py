@@ -3,17 +3,17 @@ from __future__ import annotations
 from textwrap import dedent
 
 import sympy as sp
-from ampform.dynamics import EnergyDependentWidth
+from ampform.dynamics import (
+    BreitWigner,
+    ChannelArguments,
+    EnergyDependentWidth,
+    MultichannelBreitWigner,
+)
 from ampform.dynamics.form_factor import FormFactor, SphericalHankel1
+from ampform.dynamics.phasespace import PhaseSpaceFactor
 from attrs import asdict
 
 from ampform_dpd.decay import IsobarNode, Particle, State
-from ampform_dpd.dynamics import (
-    BreitWigner,
-    ChannelArguments,
-    MultichannelBreitWigner,
-    SimpleBreitWigner,
-)
 from ampform_dpd.io import as_markdown_table, aslatex, unfold_definitions
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
@@ -66,15 +66,24 @@ def test_as_markdown_table_particles():
 
 def describe_unfold_definitions():
     def it_unfolds_recursively():
-        s, m0, Γ0, m1, m2, L, R = sp.symbols("s m0 Gamma0 m1 m2 L R")
-        expression = BreitWigner(s, m0, Γ0, m1, m2, L, R)
+        s, mass, width, m1, m2, L, R = sp.symbols("s m0 Gamma0 m1 m2 L R")
+        expression = BreitWigner(
+            s,
+            mass,
+            width,
+            m1,
+            m2,
+            angular_momentum=L,  # ty: ignore[unknown-argument]
+            meson_radius=R,  # ty: ignore[unknown-argument]
+            numerator="unity",  # ty: ignore[unknown-argument]
+        )
         definitions = unfold_definitions(expression)
         classes = [expr.func for expr in definitions]
         assert classes[:4] == [
             BreitWigner,
-            SimpleBreitWigner,
             EnergyDependentWidth,
             FormFactor,
+            PhaseSpaceFactor,
         ]
         assert len(classes) == len(set(classes))
         assert all(rhs != lhs for lhs, rhs in definitions.items())
