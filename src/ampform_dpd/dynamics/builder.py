@@ -11,6 +11,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 import sympy as sp
+from ampform.dynamics import BreitWigner, SimpleBreitWigner
 from ampform.dynamics.form_factor import FormFactor
 from ampform.dynamics.phasespace import PhaseSpaceFactor, PhaseSpaceFactorProtocol
 from attrs import define, field
@@ -18,11 +19,6 @@ from attrs.validators import in_
 
 from ampform_dpd import DefinedExpression, create_mass_symbol, to_particle
 from ampform_dpd.decay import DecayNode, IsobarNode, State, ThreeBodyDecayChain
-from ampform_dpd.dynamics import (
-    BreitWigner,
-    SimpleBreitWigner,
-    blatt_weisskopf_normalization,
-)
 
 if TYPE_CHECKING:
     from tensorwaves.interface import ParameterValue
@@ -39,10 +35,10 @@ class BreitWignerBuilder:
 
     ``blatt_weisskopf_convention`` selects the convention of the vertex factors
     themselves, independently of the pole normalization: ``"normalized"`` keeps
-    AmpForm's factor, which is one at :math:`z=1`, while ``"unnormalized"`` divides it
-    by `.blatt_weisskopf_normalization`, as published amplitude models do. Pole
-    normalization cancels this constant, so the two conventions only differ when
-    ``normalize_form_factors`` is `False`.
+    AmpForm's factor, which is one at :math:`z=1`, while ``"unnormalized"`` uses
+    ``FormFactor(..., normalize=False)``, as published amplitude models do. Pole
+    normalization cancels the resulting constant, so the two conventions only differ
+    when ``normalize_form_factors`` is `False`.
 
     External masses are fixed parameter defaults, while Mandelstam invariants are event
     variables. Decay radii are per resonance; production radii are per parent.
@@ -142,10 +138,9 @@ def _create_form_factor(
         m2=outgoing_masses[1],  # ty: ignore[unknown-argument]
         angular_momentum=_get_angular_momentum(isobar),  # ty: ignore[unknown-argument]
         meson_radius=meson_radius,  # ty: ignore[unknown-argument]
+        normalize=convention == "normalized",  # ty: ignore[unknown-argument]
     )
     parameter_defaults[meson_radius] = 1
-    if convention == "unnormalized":
-        form_factor /= blatt_weisskopf_normalization(_get_angular_momentum(isobar))
     if pole_mass is not None:
         form_factor /= form_factor.xreplace({s: pole_mass**2})
     return DefinedExpression(form_factor, parameter_defaults)
@@ -169,6 +164,7 @@ def _create_breit_wigner(
         angular_momentum=angular_momentum,  # ty: ignore[unknown-argument]
         meson_radius=meson_radius if angular_momentum else 1,  # ty: ignore[unknown-argument]
         phsp_factor=phsp_factor,  # ty: ignore[unknown-argument]
+        numerator="unity",  # ty: ignore[unknown-argument]
     )
     parameter_defaults: dict[sp.Basic, complex | float] = {
         res_mass: isobar.parent.mass,
@@ -183,7 +179,12 @@ def _create_simple_breit_wigner(s: sp.Symbol, isobar: DecayNode) -> DefinedExpre
     mass = create_mass_symbol(isobar.parent)
     width = sp.Symbol(Rf"\Gamma_{{{isobar.parent.latex}}}", nonnegative=True)
     return DefinedExpression(
-        expression=SimpleBreitWigner(s, mass, width),
+        expression=SimpleBreitWigner(
+            s,
+            mass,
+            width,
+            numerator="unity",  # ty: ignore[unknown-argument]
+        ),
         parameters={
             mass: isobar.parent.mass,
             width: isobar.parent.width,

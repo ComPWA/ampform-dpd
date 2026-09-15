@@ -9,11 +9,7 @@ from ampform.dynamics.phasespace import PhaseSpaceFactorComplex
 from sympy.parsing.sympy_parser import parse_expr
 
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import (
-    BreitWigner,
-    ChannelArguments,
-    blatt_weisskopf_normalization,
-)
+from ampform_dpd.dynamics import BreitWigner, ChannelArguments
 from ampform_dpd.io.serialization.decay import get_initial_state
 from ampform_dpd.io.serialization.format import (
     BlattWeisskopfDefinition,
@@ -116,8 +112,14 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
             meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
         angular_momentum = int(function_definition["l"])
         return DefinedExpression(
-            expression=FormFactor(s, m1, m2, angular_momentum, meson_radius)  # ty: ignore[invalid-argument-type]
-            / blatt_weisskopf_normalization(angular_momentum),
+            expression=FormFactor(
+                s,
+                m1,
+                m2,
+                angular_momentum,  # ty: ignore[invalid-argument-type]
+                meson_radius,
+                normalize=False,  # ty: ignore[unknown-argument]
+            ),
             parameters={
                 meson_radius: function_definition["radius"],
             },
