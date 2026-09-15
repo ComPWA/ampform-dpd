@@ -19,38 +19,6 @@ if TYPE_CHECKING:
 
 
 @unevaluated
-class RelativisticBreitWigner(sp.Expr):
-    s: Any
-    mass0: Any
-    gamma0: Any
-    m1: Any
-    m2: Any
-    angular_momentum: Any
-    meson_radius: Any
-    phsp_factor: PhaseSpaceFactorProtocol = argument(
-        default=PhaseSpaceFactor, sympify=False
-    )  # ty: ignore[invalid-assignment]
-    _latex_repr_ = (
-        R"\mathcal{{R}}_{{{angular_momentum}}}\left({s}, {mass0}, {gamma0}\right)"
-    )
-
-    def evaluate(self):
-        s, m0, w0, m1, m2, angular_momentum, meson_radius = self.args
-        width = EnergyDependentWidth(
-            s=s,  # ty: ignore[unknown-argument]
-            mass0=m0,  # ty: ignore[unknown-argument]
-            gamma0=w0,  # ty: ignore[unknown-argument]
-            m_a=m1,  # ty: ignore[unknown-argument]
-            m_b=m2,  # ty: ignore[unknown-argument]
-            angular_momentum=angular_momentum,  # ty: ignore[unknown-argument]
-            meson_radius=meson_radius,  # ty: ignore[unknown-argument]
-            phsp_factor=self.phsp_factor,  # ty: ignore[unknown-argument]
-            name=Rf"\Gamma_{{{sp.latex(angular_momentum)}}}",  # ty: ignore[unknown-argument]
-        )
-        return (m0 * w0) / (m0**2 - s - width * m0 * sp.I)  # ty: ignore[unsupported-operator]
-
-
-@unevaluated
 class BuggBreitWigner(sp.Expr):
     s: Any
     m0: Any
