@@ -232,6 +232,7 @@ class DalitzPlotDecompositionBuilder:
             for state_id, helicity in zip((0, 1, 2, 3), λ, strict=True)
         )
         for chain in self.decay.get_subsystem(subsystem_id).chains:
+            resonance_label = create_resonance_label(self.decay, chain)
             resonance_spin = chain.resonance.spin
             if (
                 not physical_helicities
