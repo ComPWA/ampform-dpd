@@ -208,7 +208,7 @@ def formulate_breit_wigner(
     m1 = to_mass_symbol(i)
     m2 = to_mass_symbol(j)
     angular_momentum = int(function_definition["l"])
-    d = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
+    meson_radius = sp.Symbol(R"R_\mathrm{res}", nonnegative=True)
     return DefinedExpression(
         expression=BreitWigner(
             s,
@@ -217,7 +217,7 @@ def formulate_breit_wigner(
             m1,
             m2,
             angular_momentum,  # ty: ignore[invalid-argument-type]
-            d,
+            meson_radius,
             numerator="unity",  # ty: ignore[unknown-argument]
         ),
         parameters={
@@ -225,7 +225,7 @@ def formulate_breit_wigner(
             width: function_definition["width"],
             m1: function_definition["ma"],
             m2: function_definition["mb"],
-            d: function_definition["d"],
+            meson_radius: function_definition["d"],
         },
     )
 

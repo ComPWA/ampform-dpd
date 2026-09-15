@@ -66,11 +66,11 @@ def test_as_markdown_table_particles():
 
 def describe_unfold_definitions():
     def it_unfolds_recursively():
-        s, m0, Γ0, m1, m2, L, R = sp.symbols("s m0 Gamma0 m1 m2 L R")
+        s, mass, width, m1, m2, L, R = sp.symbols("s m0 Gamma0 m1 m2 L R")
         expression = BreitWigner(
             s,
-            m0,
-            Γ0,
+            mass,
+            width,
             m1,
             m2,
             angular_momentum=L,  # ty: ignore[unknown-argument]
