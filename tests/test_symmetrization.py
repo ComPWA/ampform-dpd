@@ -15,7 +15,7 @@ from ampform_dpd.adapter.qrules import (
     to_three_body_decay,
 )
 from ampform_dpd.decay import State
-from ampform_dpd.dynamics.builder import BreitWignerBuilder
+from ampform_dpd.dynamics import BreitWignerBuilder
 from ampform_dpd.symmetrization import (
     _get_decay_coupling_basis,
     get_exchange_phase,
