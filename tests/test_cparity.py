@@ -14,10 +14,12 @@ from ampform_dpd.cparity import (
     get_conjugate_chain_pairs,
     get_conjugate_coupling_sign,
     get_conjugate_state_map,
+    get_statistics_sign,
     is_c_symmetric,
     relate_conjugate_couplings,
     symmetrize_conjugate_couplings,
 )
+from ampform_dpd.decay import State
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
@@ -28,6 +30,22 @@ if TYPE_CHECKING:
 @pytest.fixture(scope="session")
 def jpsi2etappbar_decay(jpsi2etappbar_reaction: ReactionInfo) -> ThreeBodyDecay:
     transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
+    return to_three_body_decay(transitions, min_ls=True)
+
+
+@pytest.fixture(scope="session")
+def jpsi2etappbar_nstar32_decay(
+    jpsi2etappbar_nstar32_reaction: ReactionInfo,
+) -> ThreeBodyDecay:
+    transitions = normalize_state_ids(jpsi2etappbar_nstar32_reaction.transitions)
+    return to_three_body_decay(transitions, min_ls=True)
+
+
+@pytest.fixture(scope="session")
+def jpsi2etappbar_isobar_decay(
+    jpsi2etappbar_isobar_reaction: ReactionInfo,
+) -> ThreeBodyDecay:
+    transitions = normalize_state_ids(jpsi2etappbar_isobar_reaction.transitions)
     return to_three_body_decay(transitions, min_ls=True)
 
 
@@ -110,7 +128,18 @@ def _compute_mirror_asymmetry(model, state_map, seed: int = 0) -> float:
     return max(asymmetry)
 
 
-class TestGetAntiparticleName:
+def _negated_bases(model) -> set[str]:
+    """Coupling bases that :func:`relate_conjugate_couplings` puts a minus sign on."""
+    substitutions = relate_conjugate_couplings(model)
+    assert substitutions
+    return {
+        str(symbol.base)
+        for symbol, expression in substitutions.items()
+        if expression.could_extract_minus_sign()
+    }
+
+
+def describe_get_antiparticle_name():
     @pytest.mark.parametrize(
         ("name", "expected"),
         [
@@ -123,132 +152,47 @@ class TestGetAntiparticleName:
             ("rho(770)0", "rho(770)0"),
         ],
     )
-    def test_antiparticle(self, name: str, expected: str):
+    def it_conjugates_the_name(name: str, expected: str):
         assert get_antiparticle_name(name) == expected
 
 
-class TestGetConjugateStateMap:
-    def test_transposition(self, jpsi2etappbar_decay: ThreeBodyDecay):
-        assert get_conjugate_state_map(jpsi2etappbar_decay) == {1: 1, 2: 3, 3: 2}
-        assert is_c_symmetric(jpsi2etappbar_decay)
-
-    def test_map_is_the_same_for_a_single_chain(
-        self, jpsi2etappbar_decay: ThreeBodyDecay
-    ):
-        for chain in jpsi2etappbar_decay.chains:
-            assert get_conjugate_state_map(chain) == {1: 1, 2: 3, 3: 2}
-
-    def test_pipipi(self, jpsi2pipipi_decay: ThreeBodyDecay):
-        assert get_conjugate_state_map(jpsi2pipipi_decay) == {1: 1, 2: 3, 3: 2}
-
-    def test_identity(self, a2pipipi_reaction: ReactionInfo):
-        transitions = normalize_state_ids(a2pipipi_reaction.transitions)
-        decay = to_three_body_decay(transitions)
-        assert get_conjugate_state_map(decay) == {1: 1, 2: 2, 3: 3}
-
-    def test_gate_fails(self, jpsi2pksigma_reaction: ReactionInfo):
-        transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=True)
-        assert not is_c_symmetric(decay)
-        with pytest.raises(
-            ValueError, match="does not map the final state onto itself"
-        ):
-            get_conjugate_state_map(decay)
-
-
-class TestGetConjugateCouplingSign:
-    def test_ls_sign_is_the_parity_of_the_resonance(
-        self, jpsi2etappbar_decay: ThreeBodyDecay
-    ):
-        """For :math:`J/\\psi\\to p\\bar p\\eta`, the LS sign reduces to :math:`P_{N^*}`."""
-        assert _signs(jpsi2etappbar_decay, "LS") == {
-            "N(1535)+": -1,  # 1/2^-
-            "N(1710)+": +1,  # 1/2^+
-        }
-        for chain, _ in get_conjugate_chain_pairs(jpsi2etappbar_decay):
-            assert get_conjugate_coupling_sign(chain, "LS") == chain.resonance.parity
-
-    def test_helicity_sign_differs_from_the_ls_sign(
-        self, jpsi2etappbar_decay: ThreeBodyDecay
-    ):
-        """:math:`s_\\text{hel} = -(-1)^{J-1/2}` is the same for both :math:`J=1/2`."""
-        assert _signs(jpsi2etappbar_decay, "helicity") == {
-            "N(1535)+": -1,
-            "N(1710)+": -1,
-        }
-
-    def test_sign_is_symmetric_within_a_pair(self, jpsi2etappbar_decay: ThreeBodyDecay):
-        for basis in ["LS", "helicity"]:
-            for chain, conjugate_chain in get_conjugate_chain_pairs(
-                jpsi2etappbar_decay
-            ):
-                sign = get_conjugate_coupling_sign(chain, basis)
-                assert get_conjugate_coupling_sign(conjugate_chain, basis) == sign
-
-    def test_rho_pair(self, jpsi2pipipi_decay: ThreeBodyDecay):
-        """Cross-check: isospin gives the same :math:`+1` for the :math:`\\rho^\\pm`."""
-        assert _signs(jpsi2pipipi_decay, "LS") == {"rho(770)+": +1}
-        assert _signs(jpsi2pipipi_decay, "helicity") == {"rho(770)+": +1}
-
-    def test_no_ls_couplings(self, jpsi2etappbar_reaction: ReactionInfo):
-        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=False)
-        chain = next(c for c in decay.chains if c.outgoing_ls is not None)
-        chain = type(chain)(
-            decay=chain.decay.__class__(
-                parent=chain.decay.parent,
-                child1=chain.decay_node.__class__(
-                    parent=chain.resonance,
-                    child1=chain.decay_node.child1,
-                    child2=chain.decay_node.child2,
-                ),
-                child2=chain.spectator,
-                interaction=chain.incoming_ls,
-            )
+def describe_get_statistics_sign():
+    @pytest.mark.parametrize(
+        ("spin", "expected"),
+        [("0", +1), ("1/2", -1), ("1", +1), ("3/2", -1), ("2", +1)],
+    )
+    def it_alternates_with_the_spin(spin: str, expected: int):
+        state = State(
+            name="X",
+            latex="X",
+            spin=sp.Rational(spin),
+            parity=+1,
+            mass=1.0,
+            width=0.0,
+            index=1,
         )
-        with pytest.raises(ValueError, match="no LS coupling on its decay node"):
-            get_conjugate_coupling_sign(chain, "LS")
-        assert get_conjugate_coupling_sign(chain, "helicity") == -1
+        assert get_statistics_sign(state) == expected
 
-
-class TestGetConjugateChainPairs:
-    def test_particle_comes_first(self, jpsi2etappbar_decay: ThreeBodyDecay):
-        pairs = get_conjugate_chain_pairs(jpsi2etappbar_decay)
-        assert [(a.resonance.name, b.resonance.name) for a, b in pairs] == [
-            ("N(1535)+", "N(1535)~-"),
-            ("N(1710)+", "N(1710)~-"),
-        ]
-        for chain, conjugate_chain in pairs:
-            assert chain.spectator.index != conjugate_chain.spectator.index
-            assert chain.incoming_ls == conjugate_chain.incoming_ls
-            assert chain.outgoing_ls == conjugate_chain.outgoing_ls
-
-    def test_self_conjugate_chains_are_not_paired(
-        self, jpsi2pipipi_decay: ThreeBodyDecay
-    ):
-        pairs = get_conjugate_chain_pairs(jpsi2pipipi_decay)
-        assert [(a.resonance.name, b.resonance.name) for a, b in pairs] == [
-            ("rho(770)+", "rho(770)-")
-        ]
-
-    def test_warns_if_a_partner_is_missing(self, jpsi2etappbar_decay: ThreeBodyDecay):
-        decay = type(jpsi2etappbar_decay)(
-            jpsi2etappbar_decay.states,
-            [c for c in jpsi2etappbar_decay.chains if c.spectator.index != 2],
+    def it_is_negative_for_the_proton(jpsi2etappbar_decay: ThreeBodyDecay):
+        proton = next(
+            s for s in jpsi2etappbar_decay.final_state.values() if s.name == "p"
         )
-        with pytest.warns(UserWarning, match="has no charge-conjugate partner"):
-            assert get_conjugate_chain_pairs(decay) == []
+        assert get_statistics_sign(proton) == -1
+
+    def it_is_positive_for_the_pions(jpsi2pipipi_decay: ThreeBodyDecay):
+        for state in jpsi2pipipi_decay.final_state.values():
+            assert get_statistics_sign(state) == +1
 
 
-class TestGetCForbiddenChains:
-    def test_selection_rule(self, jpsi2pipipi_decay: ThreeBodyDecay):
+def describe_get_c_forbidden_chains():
+    def it_applies_the_selection_rule(jpsi2pipipi_decay: ThreeBodyDecay):
         """:math:`X\\to\\pi^+\\pi^-` recoiling against a :math:`\\pi^0` needs
         :math:`C_X = C_\\psi C_{\\pi^0} = -1`, which excludes the :math:`f_2(1270)` and
         allows the :math:`\\rho^0`."""
         forbidden = get_c_forbidden_chains(jpsi2pipipi_decay)
         assert [c.resonance.name for c in forbidden] == ["f(2)(1270)"]
 
-    def test_agrees_with_qrules(self, jpsi2pipipi_reaction: ReactionInfo):
+    def it_agrees_with_qrules(jpsi2pipipi_reaction: ReactionInfo):
         """QRules only generates the :math:`f_2(1270)` chain because the fixture allows
         C-violating interactions; restricting to the strong interaction removes exactly
         the chain that the selection rule forbids."""
@@ -271,37 +215,233 @@ class TestGetCForbiddenChains:
         }
         assert get_c_forbidden_chains(decay) == []
 
-    def test_none_for_a_c_conserving_model(self, jpsi2etappbar_decay: ThreeBodyDecay):
+    def it_returns_nothing_for_a_c_conserving_model(
+        jpsi2etappbar_decay: ThreeBodyDecay,
+    ):
         assert get_c_forbidden_chains(jpsi2etappbar_decay) == []
 
+    def it_applies_the_selection_rule_to_a_fermion_pair(
+        jpsi2etappbar_isobar_decay: ThreeBodyDecay,
+    ):
+        """:math:`X \\to p\\bar p` recoiling against the :math:`\\eta` needs
+        :math:`C_X = C_\\psi C_\\eta = -1`, which allows the :math:`\\omega` and forbids
+        the :math:`f_2(1270)`.
 
-class TestRelateConjugateCouplings:
+        This is the statistics factor at work. Without it, the exchange phase of the
+        :math:`p\\bar p` pair is :math:`-C_X` instead of :math:`C_X` and the rule comes
+        out inverted, which no all-boson channel can reveal.
+        """
+        forbidden = get_c_forbidden_chains(jpsi2etappbar_isobar_decay)
+        assert [c.resonance.name for c in forbidden] == ["f(2)(1270)"]
+
+    def it_agrees_with_qrules_for_a_fermion_pair(
+        jpsi2etappbar_isobar_strong_reaction: ReactionInfo,
+    ):
+        """QRules only generated the :math:`f_2(1270)` chain above because the fixture
+        allows C-violating interactions; restricting to the strong interaction removes
+        exactly the chain that the selection rule forbids."""
+        transitions = normalize_state_ids(
+            jpsi2etappbar_isobar_strong_reaction.transitions
+        )
+        decay = to_three_body_decay(transitions, min_ls=True)
+        assert {c.resonance.name for c in decay.chains} == {"omega(782)"}
+        assert get_c_forbidden_chains(decay) == []
+
+
+def describe_get_conjugate_chain_pairs():
+    def it_puts_the_particle_first(jpsi2etappbar_decay: ThreeBodyDecay):
+        pairs = get_conjugate_chain_pairs(jpsi2etappbar_decay)
+        assert [(a.resonance.name, b.resonance.name) for a, b in pairs] == [
+            ("N(1535)+", "N(1535)~-"),
+            ("N(1710)+", "N(1710)~-"),
+        ]
+        for chain, conjugate_chain in pairs:
+            assert chain.spectator.index != conjugate_chain.spectator.index
+            assert chain.incoming_ls == conjugate_chain.incoming_ls
+            assert chain.outgoing_ls == conjugate_chain.outgoing_ls
+
+    def it_does_not_pair_self_conjugate_chains(jpsi2pipipi_decay: ThreeBodyDecay):
+        pairs = get_conjugate_chain_pairs(jpsi2pipipi_decay)
+        assert [(a.resonance.name, b.resonance.name) for a, b in pairs] == [
+            ("rho(770)+", "rho(770)-")
+        ]
+
+    def it_warns_if_a_partner_is_missing(jpsi2etappbar_decay: ThreeBodyDecay):
+        decay = type(jpsi2etappbar_decay)(
+            jpsi2etappbar_decay.states,
+            [c for c in jpsi2etappbar_decay.chains if c.spectator.index != 2],
+        )
+        with pytest.warns(UserWarning, match="has no charge-conjugate partner"):
+            assert get_conjugate_chain_pairs(decay) == []
+
+
+def describe_get_conjugate_coupling_sign():
+    def it_reduces_to_the_resonance_parity_in_the_ls_basis(
+        jpsi2etappbar_decay: ThreeBodyDecay,
+    ):
+        """For :math:`J/\\psi\\to p\\bar p\\eta`, the LS sign reduces to
+        :math:`-P_{N^*}`, the minus sign being the statistics factor of the
+        :math:`p\\bar p` pair."""
+        assert _signs(jpsi2etappbar_decay, "LS") == {
+            "N(1535)+": +1,  # 1/2^-
+            "N(1710)+": -1,  # 1/2^+
+        }
+        for chain, _ in get_conjugate_chain_pairs(jpsi2etappbar_decay):
+            parity = chain.resonance.parity
+            assert parity is not None
+            assert get_conjugate_coupling_sign(chain, "LS") == -parity
+
+    def it_differs_from_the_ls_sign_in_the_helicity_basis(
+        jpsi2etappbar_decay: ThreeBodyDecay,
+    ):
+        """:math:`s_\\text{hel} = (-1)^{J-1/2}` is the same for both :math:`J=1/2`."""
+        assert _signs(jpsi2etappbar_decay, "helicity") == {
+            "N(1535)+": +1,
+            "N(1710)+": +1,
+        }
+
+    def it_is_symmetric_within_a_pair(jpsi2etappbar_decay: ThreeBodyDecay):
+        for basis in ["LS", "helicity"]:
+            for chain, conjugate_chain in get_conjugate_chain_pairs(
+                jpsi2etappbar_decay
+            ):
+                sign = get_conjugate_coupling_sign(chain, basis)
+                assert get_conjugate_coupling_sign(conjugate_chain, basis) == sign
+
+    def it_is_positive_for_the_rho_pair(jpsi2pipipi_decay: ThreeBodyDecay):
+        """Cross-check: isospin gives the same :math:`+1` for the :math:`\\rho^\\pm`."""
+        assert _signs(jpsi2pipipi_decay, "LS") == {"rho(770)+": +1}
+        assert _signs(jpsi2pipipi_decay, "helicity") == {"rho(770)+": +1}
+
+    def it_requires_ls_couplings_in_the_ls_basis(jpsi2etappbar_reaction: ReactionInfo):
+        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=False)
+        chain = next(c for c in decay.chains if c.outgoing_ls is not None)
+        chain = type(chain)(
+            decay=chain.decay.__class__(
+                parent=chain.decay.parent,
+                child1=chain.decay_node.__class__(
+                    parent=chain.resonance,
+                    child1=chain.decay_node.child1,
+                    child2=chain.decay_node.child2,
+                ),
+                child2=chain.spectator,
+                interaction=chain.incoming_ls,
+            )
+        )
+        with pytest.raises(ValueError, match="no LS coupling on its decay node"):
+            get_conjugate_coupling_sign(chain, "LS")
+        assert get_conjugate_coupling_sign(chain, "helicity") == +1
+
+
+def describe_get_conjugate_state_map():
+    def it_transposes_the_conjugate_states(jpsi2etappbar_decay: ThreeBodyDecay):
+        assert get_conjugate_state_map(jpsi2etappbar_decay) == {1: 1, 2: 3, 3: 2}
+        assert is_c_symmetric(jpsi2etappbar_decay)
+
+    def it_is_the_same_for_a_single_chain(jpsi2etappbar_decay: ThreeBodyDecay):
+        for chain in jpsi2etappbar_decay.chains:
+            assert get_conjugate_state_map(chain) == {1: 1, 2: 3, 3: 2}
+
+    def it_transposes_the_charged_pions(jpsi2pipipi_decay: ThreeBodyDecay):
+        assert get_conjugate_state_map(jpsi2pipipi_decay) == {1: 1, 2: 3, 3: 2}
+
+    def it_is_the_identity_for_a_neutral_final_state(a2pipipi_reaction: ReactionInfo):
+        transitions = normalize_state_ids(a2pipipi_reaction.transitions)
+        decay = to_three_body_decay(transitions)
+        assert get_conjugate_state_map(decay) == {1: 1, 2: 2, 3: 3}
+
+    def it_raises_if_the_decay_is_not_c_symmetric(jpsi2pksigma_reaction: ReactionInfo):
+        transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=True)
+        assert not is_c_symmetric(decay)
+        with pytest.raises(
+            ValueError, match="does not map the final state onto itself"
+        ):
+            get_conjugate_state_map(decay)
+
+
+def describe_mirror_symmetry():
+    """Tying the conjugate couplings has to make the intensity mirror-symmetric.
+
+    Charge conjugation relabels the final state without touching any momentum, so the
+    intensity of a C-conserving model is invariant under the induced permutation of the
+    Mandelstam variables. This does **not** fix the sign of the tie (both signs give a
+    mirror-symmetric intensity, they are the two eigenstates of the tie), but it does
+    check that the couplings are related to the right partner, with the right helicity
+    indices.
+    """
+
     @pytest.mark.parametrize("min_ls", [False, True])
-    def test_production_carries_the_sign(
-        self, jpsi2etappbar_decay: ThreeBodyDecay, min_ls: bool
+    def it_is_restored_by_tying(jpsi2etappbar_reaction: ReactionInfo, min_ls: bool):
+        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=True)
+        decay = type(decay)(
+            decay.states,
+            [c for c in decay.chains if "N(1535)" in c.resonance.name],
+        )
+        state_map = get_conjugate_state_map(decay)
+        model = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls).formulate(
+            reference_subsystem=2
+        )
+        tied = symmetrize_conjugate_couplings(model)
+        assert _compute_mirror_asymmetry(tied, state_map) < 1e-12
+
+    def it_is_broken_by_untied_couplings(jpsi2etappbar_reaction: ReactionInfo):
+        """Control: without the tie, the two subsystems are independent."""
+        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=True)
+        state_map = get_conjugate_state_map(decay)
+        model = DalitzPlotDecompositionBuilder(decay, min_ls=True).formulate(
+            reference_subsystem=2
+        )
+        assert _compute_mirror_asymmetry(model, state_map) > 1e-3
+
+    def it_is_restored_for_different_waves(jpsi2etappbar_reaction: ReactionInfo):
+        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=True)
+        state_map = get_conjugate_state_map(decay)
+        model = DalitzPlotDecompositionBuilder(decay, min_ls=False).formulate(
+            reference_subsystem=2
+        )
+        tied = symmetrize_conjugate_couplings(model)
+        assert _compute_mirror_asymmetry(tied, state_map) < 1e-12
+
+    def it_is_restored_in_the_helicity_basis(jpsi2etappbar_reaction: ReactionInfo):
+        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
+        decay = to_three_body_decay(transitions, min_ls=True)
+        state_map = get_conjugate_state_map(decay)
+        model = DalitzPlotDecompositionBuilder(decay, min_ls=True).formulate(
+            reference_subsystem=2
+        )
+        tied = symmetrize_conjugate_couplings(model)
+        assert _compute_mirror_asymmetry(tied, state_map) < 1e-12
+
+
+def describe_relate_conjugate_couplings():
+    def it_signs_the_decay_coupling_in_the_ls_basis(
+        jpsi2etappbar_decay: ThreeBodyDecay,
+    ):
+        """The sign depends on :math:`(l, S)`, which only the decay coupling carries.
+
+        Several LS combinations of one resonance share a production coupling, so in the
+        LS basis that vertex cannot carry a sign that differs between them.
+        """
+        model = DalitzPlotDecompositionBuilder(
+            jpsi2etappbar_decay, min_ls=False
+        ).formulate(reference_subsystem=2)
+        assert _negated_bases(model) == {R"\mathcal{H}^\mathrm{LS,decay}"}
+
+    def it_signs_the_production_coupling_in_the_helicity_basis(
+        jpsi2etappbar_nstar32_decay: ThreeBodyDecay,
     ):
         model = DalitzPlotDecompositionBuilder(
-            jpsi2etappbar_decay, min_ls=min_ls
+            jpsi2etappbar_nstar32_decay, min_ls=True
         ).formulate(reference_subsystem=2)
-        substitutions = relate_conjugate_couplings(model)
-        assert substitutions
-        expected_signs = {
-            conjugate_chain.resonance.latex: get_conjugate_coupling_sign(
-                chain, "helicity" if min_ls else "LS"
-            )
-            for chain, conjugate_chain in get_conjugate_chain_pairs(jpsi2etappbar_decay)
-        }
-        assert sorted(expected_signs.values()) == ([-1, -1] if min_ls else [-1, +1])
-        for symbol, expression in substitutions.items():
-            latex = next(r for r in expected_signs if r in str(symbol))
-            sign = -1 if expression.could_extract_minus_sign() else +1
-            if "production" in str(symbol.base):
-                assert sign == expected_signs[latex], symbol
-            else:
-                assert sign == +1, symbol
+        assert _negated_bases(model) == {R"\mathcal{H}^\mathrm{production}"}
 
-    def test_helicity_indices_of_the_decay_node_are_swapped(
-        self, jpsi2etappbar_decay: ThreeBodyDecay
+    def it_swaps_the_helicity_indices_of_the_decay_node(
+        jpsi2etappbar_decay: ThreeBodyDecay,
     ):
         model = DalitzPlotDecompositionBuilder(
             jpsi2etappbar_decay, min_ls=True
@@ -321,7 +461,7 @@ class TestRelateConjugateCouplings:
             )
             assert target.indices[1:] == symbol.indices[1:][::-1]
 
-    def test_ls_indices_are_not_swapped(self, jpsi2etappbar_decay: ThreeBodyDecay):
+    def it_does_not_swap_ls_indices(jpsi2etappbar_decay: ThreeBodyDecay):
         model = DalitzPlotDecompositionBuilder(
             jpsi2etappbar_decay, min_ls=False
         ).formulate(reference_subsystem=2)
@@ -333,10 +473,11 @@ class TestRelateConjugateCouplings:
             )
             assert target.indices[1:] == symbol.indices[1:]
 
+
+def describe_symmetrize_conjugate_couplings():
     @pytest.mark.parametrize("min_ls", [False, True, (True, False), (False, True)])
     @pytest.mark.parametrize("use_coefficients", [False, True])
-    def test_all_conjugate_couplings_are_eliminated(
-        self,
+    def it_eliminates_all_conjugate_couplings(
         jpsi2etappbar_decay: ThreeBodyDecay,
         min_ls: bool | tuple[bool, bool],
         use_coefficients: bool,
@@ -357,9 +498,7 @@ class TestRelateConjugateCouplings:
             str(s) for s in tied.parameter_defaults if R"\overline{N}" in str(s)
         ]
 
-    def test_raises_if_the_decay_is_not_c_symmetric(
-        self, jpsi2pksigma_reaction: ReactionInfo
-    ):
+    def it_raises_if_the_decay_is_not_c_symmetric(jpsi2pksigma_reaction: ReactionInfo):
         transitions = normalize_state_ids(jpsi2pksigma_reaction.transitions)
         decay = to_three_body_decay(transitions, min_ls=True)
         model = DalitzPlotDecompositionBuilder(decay, min_ls=True).formulate(
@@ -369,85 +508,3 @@ class TestRelateConjugateCouplings:
             ValueError, match="does not map the final state onto itself"
         ):
             symmetrize_conjugate_couplings(model)
-
-
-class TestMirrorSymmetry:
-    """Tying the conjugate couplings has to make the intensity mirror-symmetric.
-
-    Charge conjugation relabels the final state without touching any momentum, so the
-    intensity of a C-conserving model is invariant under the induced permutation of the
-    Mandelstam variables. This does **not** fix the sign of the tie (both signs give a
-    mirror-symmetric intensity, they are the two eigenstates of the tie), but it does
-    check that the couplings are related to the right partner, with the right helicity
-    indices.
-    """
-
-    @pytest.mark.parametrize("min_ls", [False, True])
-    def test_tying_restores_mirror_symmetry(
-        self, jpsi2etappbar_reaction: ReactionInfo, min_ls: bool
-    ):
-        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=True)
-        decay = type(decay)(
-            decay.states,
-            [c for c in decay.chains if "N(1535)" in c.resonance.name],
-        )
-        state_map = get_conjugate_state_map(decay)
-        model = DalitzPlotDecompositionBuilder(decay, min_ls=min_ls).formulate(
-            reference_subsystem=2
-        )
-        tied = symmetrize_conjugate_couplings(model)
-        assert _compute_mirror_asymmetry(tied, state_map) < 1e-12
-
-    def test_untied_couplings_break_mirror_symmetry(
-        self, jpsi2etappbar_reaction: ReactionInfo
-    ):
-        """Control: without the tie, the two subsystems are independent."""
-        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=True)
-        state_map = get_conjugate_state_map(decay)
-        model = DalitzPlotDecompositionBuilder(decay, min_ls=True).formulate(
-            reference_subsystem=2
-        )
-        assert _compute_mirror_asymmetry(model, state_map) > 1e-3
-
-    @pytest.mark.xfail(
-        reason=(
-            "https://github.com/ComPWA/ampform-dpd/issues/202: in the LS basis, the"
-            " Clebsch-Gordan factors are built from IsobarNode.child1/child2, which"
-            " to_three_body_decay() sorts by final-state ID, while the isobar Wigner-d"
-            " function uses the cyclic pair ordering of get_decay_product_ids(). The two"
-            " differ for subsystem 2, which gives that subsystem an extra exchange phase."
-            " The derived sign is stated in the cyclic ordering, so the tie comes out"
-            " with the wrong relative sign between waves of different l. Reordering the"
-            " decay nodes cyclically makes this test pass; the helicity basis is"
-            " unaffected, see test_mirror_symmetry_is_restored_in_the_helicity_basis."
-        ),
-        strict=True,
-    )
-    def test_tying_restores_mirror_symmetry_for_different_waves(
-        self, jpsi2etappbar_reaction: ReactionInfo
-    ):
-        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=True)
-        state_map = get_conjugate_state_map(decay)
-        model = DalitzPlotDecompositionBuilder(decay, min_ls=False).formulate(
-            reference_subsystem=2
-        )
-        tied = symmetrize_conjugate_couplings(model)
-        assert _compute_mirror_asymmetry(tied, state_map) < 1e-12
-
-    def test_mirror_symmetry_is_restored_in_the_helicity_basis(
-        self, jpsi2etappbar_reaction: ReactionInfo
-    ):
-        """The same model in the helicity basis is unaffected by the ordering problem of
-        :meth:`test_tying_restores_mirror_symmetry_for_different_waves`, because helicity
-        couplings do not involve Clebsch-Gordan factors."""
-        transitions = normalize_state_ids(jpsi2etappbar_reaction.transitions)
-        decay = to_three_body_decay(transitions, min_ls=True)
-        state_map = get_conjugate_state_map(decay)
-        model = DalitzPlotDecompositionBuilder(decay, min_ls=True).formulate(
-            reference_subsystem=2
-        )
-        tied = symmetrize_conjugate_couplings(model)
-        assert _compute_mirror_asymmetry(tied, state_map) < 1e-12

@@ -13,18 +13,33 @@ derives that sign for an **arbitrary** three-body decay (see
 :func:`get_conjugate_coupling_sign`) and applies it to an `.AmplitudeModel` (see
 :func:`symmetrize_conjugate_couplings`).
 
-The sign is the product of exactly three kinds of factors,
+The sign is the product of exactly four kinds of factors,
 
 .. math:: s
     = \underbrace{C_0}_\text{initial state}
     \; \underbrace{\prod_a C_a}_\text{self-conjugate final states}
+    \; \underbrace{(-1)^{2s_a}}_\text{statistics}
     \; \underbrace{\prod_v \eta_v}_\text{re-ordered vertices},
     :label: conjugate-coupling-sign
 
-where :math:`C_0` is the C-parity of the decaying particle, the second product runs over
-the final-state particles that charge conjugation leaves in place, and the third product
+where :math:`C_0` is the C-parity of the decaying particle, the first product runs over
+the final-state particles that charge conjugation leaves in place, and the last product
 runs over the isobar vertices whose two children are written in a different order than
-the order in which charge conjugation delivers them. In the cyclic pair ordering of the
+the order in which charge conjugation delivers them.
+
+The statistics factor is the sign of the transposition that charge conjugation induces on
+the final state: :math:`s_a` is the spin of the particle-antiparticle pair it
+interchanges, so the factor is :math:`-1` for a pair of fermions and :math:`+1` otherwise
+(a final state that charge conjugation leaves in place has no transposition at all).
+Conjugating the state interchanges the creation operators of that pair, and writing them
+back in the order in which the amplitude defines its final state costs the sign of the
+interchange. This factor is easy to lose, because it is what remains of a
+particle-antiparticle pair after its conventional phases have cancelled: it is the
+difference between :math:`C\left(f\bar f\right) = (-1)^{L+S}` and the bare exchange phase
+:math:`\eta^\text{LS} = -(-1)^{L+S}` of the same pair. It is the same factor that
+Bose-Einstein symmetrization applies to an exchange of *identical* particles.
+
+In the cyclic pair ordering of the
 `DPD paper <https://doi.org/10.1103/PhysRevD.101.034033>`_ (Eq. 7), the production vertex
 :math:`0 \to R\,k` always matches, and the decay vertex :math:`R \to i\,j` is re-ordered
 whenever charge conjugation acts non-trivially on :math:`i` or :math:`j`. Its exchange
@@ -41,8 +56,9 @@ resonance. The two bases give different signs (:math:`\eta^\text{LS}` is
 must never be applied to the couplings of the other.
 
 For :math:`J/\psi \to p\bar p\eta`, Equation :eq:`conjugate-coupling-sign` collapses to
-:math:`s = C_\psi C_\eta (-1)^l = P_{N^*}`, that is, :math:`-1` for the
-:math:`\tfrac12^-` states and :math:`+1` for the :math:`\tfrac12^+` states.
+:math:`s = -C_\psi C_\eta (-1)^l = -P_{N^*}`, that is, :math:`+1` for the
+:math:`\tfrac12^-` states and :math:`-1` for the :math:`\tfrac12^+` states. The leading
+minus sign is the statistics factor of the :math:`p\bar p` pair.
 
 .. warning:: Equation :eq:`conjugate-coupling-sign` relates the couplings as they are
     defined on two-particle states in the pair ordering of the DPD paper. An
@@ -81,7 +97,13 @@ import sympy as sp
 from sympy.core.symbol import Str
 
 from ampform_dpd import _get_coefficient_base, _get_coupling_base
-from ampform_dpd.decay import FinalStateID, State, ThreeBodyDecay, ThreeBodyDecayChain
+from ampform_dpd.decay import (
+    FinalStateID,
+    LSCoupling,
+    State,
+    ThreeBodyDecay,
+    ThreeBodyDecayChain,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping
@@ -192,8 +214,11 @@ def get_conjugate_coupling_sign(
     state_map = get_conjugate_state_map(chain, particle_db)
     sign = _get_c_parity(chain.initial_state, particle_db)
     for state in chain.final_state:
-        if state_map[state.index] == state.index:
+        partner_id = state_map[state.index]
+        if partner_id == state.index:
             sign *= _get_c_parity(state, particle_db)
+        elif state.index < partner_id:  # count each interchanged pair once
+            sign *= get_statistics_sign(state)
     child1, child2 = chain.decay_products
     if (
         state_map[child1.index] != child1.index
@@ -201,6 +226,17 @@ def get_conjugate_coupling_sign(
     ):
         sign *= get_exchange_phase(chain, basis)
     return sign
+
+
+def get_statistics_sign(state: State) -> int:
+    r"""Sign that an interchange of two `.State` objects of this spin imposes.
+
+    This is the statistics factor :math:`(-1)^{2s_a}` of Equation
+    :eq:`conjugate-coupling-sign`: :math:`-1` for fermions (Fermi-Dirac) and :math:`+1`
+    for bosons (Bose-Einstein). A particle and its charge conjugate have the same spin, so
+    it does not matter which of the two is passed.
+    """
+    return -1 if int(2 * state.spin) % 2 else 1
 
 
 def get_exchange_phase(chain: ThreeBodyDecayChain, basis: CouplingBasis = "LS") -> int:
@@ -286,19 +322,43 @@ def get_c_forbidden_chains(
 
     A chain that charge conjugation maps onto itself is not tied to another chain.
     Equation :eq:`conjugate-coupling-relation` then relates its couplings to
-    *themselves*, which is a selection rule: the couplings have to vanish unless
-    :math:`s=+1`. For :math:`J/\psi\to p\bar p\eta`, this is the statement that a
-    resonance :math:`X \to p\bar p` recoiling against the :math:`\eta` needs
-    :math:`C_X = C_\psi C_\eta = -1`.
+    *themselves*. In the LS basis that is a selection rule, because each :math:`(l, S)`
+    coupling is mapped onto itself: the couplings have to vanish unless :math:`s=+1`. For
+    :math:`J/\psi\to p\bar p\eta`, this is the statement that a resonance :math:`X \to
+    p\bar p` recoiling against the :math:`\eta` needs :math:`C_X = C_\psi C_\eta = -1`.
+
+    In the helicity basis the decay vertex is re-ordered along with the map, so the
+    relation reads :math:`\mathcal{H}_{\lambda_j\lambda_i} = s\,
+    \mathcal{H}_{\lambda_i\lambda_j}`. That is a selection rule only if the decay node
+    has a single helicity combination, i.e. if both decay products are spinless (which is
+    the case for :math:`\rho^0 \to \pi^+\pi^-`); otherwise it ties the chain's own decay
+    couplings to their index-reversed partners and forbids no more than the diagonal. Such
+    a chain is reported as a `UserWarning` instead of being returned, because the
+    constraint cannot be applied as a substitution: the helicity indices of the decay
+    coupling are still summation variables of the alignment `~ampform.sympy.PoolSum`, so
+    there is no index to compare. Formulate the decay node with LS couplings to have the
+    constraint imposed.
     """
     particle_db = _get_particle_db(particle_db)
     state_map = get_conjugate_state_map(decay, particle_db)
-    return [
-        chain
-        for chain in decay.chains
-        if state_map[chain.spectator.index] == chain.spectator.index
-        and get_conjugate_coupling_sign(chain, basis, particle_db) < 0
-    ]
+    forbidden = []
+    for chain in decay.chains:
+        if state_map[chain.spectator.index] != chain.spectator.index:
+            continue
+        if get_conjugate_coupling_sign(chain, basis, particle_db) > 0:
+            continue
+        if basis == "helicity" and any(state.spin for state in chain.decay_products):
+            msg = (
+                f"Charge conjugation maps decay chain {chain.resonance.name} onto itself"
+                " with a negative sign. In the helicity basis this does not forbid the"
+                " chain: it relates its decay couplings as H[λj,λi] = -H[λi,λj], which"
+                " this module cannot impose. Use LS couplings on the decay node if you"
+                " need this constraint."
+            )
+            warn(msg, category=UserWarning, stacklevel=2)
+            continue
+        forbidden.append(chain)
+    return forbidden
 
 
 def relate_conjugate_couplings(
@@ -309,22 +369,41 @@ def relate_conjugate_couplings(
 
     The returned mapping sends each coupling of the second chain of a conjugate pair
     (see :func:`get_conjugate_chain_pairs`) onto :math:`\\pm` the corresponding coupling
-    of the first chain. By convention, the sign of Equation
-    :eq:`conjugate-coupling-sign` is carried entirely by the **production** coupling:
-    only the product of the couplings along a chain is observable, so distributing the
-    sign over the two vertices is a choice, and putting it on the production coupling
-    keeps the decay couplings of a resonance and its charge conjugate identical.
+    of the first chain.
+
+    Only the product of the couplings along a chain is observable, so which of the two
+    vertices carries the sign is a choice. It is put on the vertex that identifies the
+    decay chain uniquely: on the **production** coupling in the helicity basis, where the
+    sign depends on nothing but the spins, and on the **decay** coupling in the LS basis,
+    where it depends on :math:`(l, S)` and several LS combinations of one resonance can
+    share a production coupling.
 
     Use :func:`symmetrize_conjugate_couplings` to apply these substitutions to a model.
     """
     particle_db = _get_particle_db(particle_db)
     parameters = _collect_couplings(model)
+    basis = _get_decay_coupling_basis(model)
     substitutions: dict[sp.Indexed, sp.Expr] = {}
     for chain, conjugate_chain in get_conjugate_chain_pairs(model.decay, particle_db):
-        substitutions.update(
-            _relate_chain_couplings(chain, conjugate_chain, parameters, particle_db)
-        )
+        for symbol, expression in _relate_chain_couplings(
+            chain, conjugate_chain, parameters, basis, particle_db
+        ).items():
+            _register_substitution(substitutions, symbol, expression)
     return substitutions
+
+
+def _register_substitution(
+    substitutions: dict[sp.Indexed, sp.Expr], coupling: sp.Indexed, value: sp.Expr
+) -> None:
+    existing = substitutions.get(coupling)
+    if existing is not None and existing != value:
+        msg = (
+            f"Coupling {coupling} is tied to two different expressions, {existing} and"
+            f" {value}. The decay chains of this model cannot be tied in this coupling"
+            " basis."
+        )
+        raise ValueError(msg)
+    substitutions[coupling] = value
 
 
 def symmetrize_conjugate_couplings(
@@ -443,6 +522,7 @@ def _relate_chain_couplings(
     chain: ThreeBodyDecayChain,
     conjugate_chain: ThreeBodyDecayChain,
     parameters: Iterable[sp.Indexed],
+    basis: CouplingBasis,
     particle_db: ParticleCollection,
 ) -> dict[sp.Indexed, sp.Expr]:
     latex = Str(chain.resonance.latex)
@@ -450,16 +530,20 @@ def _relate_chain_couplings(
     couplings = {
         symbol: classification
         for symbol in parameters
-        if (classification := _classify_coupling(symbol, conjugate_latex)) is not None
+        if (
+            classification := _classify_coupling(
+                symbol, conjugate_latex, conjugate_chain
+            )
+        )
+        is not None
     }
     if not couplings:
         return {}
-    sign = get_conjugate_coupling_sign(
-        chain, _get_decay_basis(couplings.values()), particle_db
-    )
+    sign = get_conjugate_coupling_sign(chain, basis, particle_db)
+    sign_carrier: _NodeType = "production" if basis == "helicity" else "decay"
     substitutions: dict[sp.Indexed, sp.Expr] = {}
     for symbol, (node_type, prod_helicity, dec_helicity) in couplings.items():
-        factor = sign if node_type in {"production", "chain"} else 1
+        factor = sign if node_type in {sign_carrier, "chain"} else 1
         if node_type == "chain":
             # the resonance is part of the base of a single coefficient per chain
             indices = _swap_decay_indices(symbol.indices, node_type, dec_helicity)
@@ -482,19 +566,51 @@ and the ordering of its indices from the third.
 """
 
 
-def _classify_coupling(symbol: sp.Indexed, latex: Str) -> _Classification | None:
-    """Determine to which vertex of which resonance a coupling symbol belongs."""
+def _classify_coupling(
+    symbol: sp.Indexed, latex: Str, chain: ThreeBodyDecayChain
+) -> _Classification | None:
+    """Determine to which vertex of ``chain`` a coupling symbol belongs, if any.
+
+    An LS coupling is only matched if its :math:`(l, S)` indices are those of the
+    corresponding vertex of the chain, because several LS combinations of one resonance
+    share a resonance label.
+    """
     for helicity_basis in (False, True):
         for node_type in ("production", "decay"):
             if symbol.base != _get_coupling_base(helicity_basis, node_type):
                 continue
             if symbol.indices[0] != latex:
                 return None
+            if helicity_basis:
+                return node_type, helicity_basis, helicity_basis
+            ls = chain.incoming_ls if node_type == "production" else chain.outgoing_ls
+            if not _matches_ls(symbol.indices[1:], ls):
+                return None
             return node_type, helicity_basis, helicity_basis
+    return _classify_coefficient(symbol, latex, chain)
+
+
+def _classify_coefficient(
+    symbol: sp.Indexed, latex: Str, chain: ThreeBodyDecayChain
+) -> _Classification | None:
+    """Classify a symbol of the single-coefficient-per-chain form of `.formulate`."""
     for production_basis, decay_basis in itertools.product((False, True), repeat=2):
-        if symbol.base == _get_coefficient_base(latex, production_basis, decay_basis):
-            return "chain", production_basis, decay_basis
+        if symbol.base != _get_coefficient_base(latex, production_basis, decay_basis):
+            continue
+        if not production_basis and not _matches_ls(
+            symbol.indices[:2], chain.incoming_ls
+        ):
+            return None
+        if not decay_basis and not _matches_ls(symbol.indices[2:], chain.outgoing_ls):
+            return None
+        return "chain", production_basis, decay_basis
     return None
+
+
+def _matches_ls(indices: tuple[sp.Basic, ...], ls: LSCoupling | None) -> bool:
+    if ls is None:
+        return False
+    return tuple(indices) == (sp.sympify(ls.L), sp.sympify(ls.S))
 
 
 def _swap_decay_indices(
@@ -517,34 +633,19 @@ def _swap_decay_indices(
     return indices
 
 
-def _get_decay_basis(classifications: Iterable[_Classification]) -> CouplingBasis:
-    helicity_bases = {
-        decay_basis
-        for node_type, _, decay_basis in classifications
-        if node_type != "production"
-    }
-    if len(helicity_bases) != 1:
-        msg = (
-            "Cannot determine whether the decay node uses helicity couplings or LS"
-            " couplings from the coupling symbols in the model"
-        )
-        raise ValueError(msg)
-    return "helicity" if helicity_bases.pop() else "LS"
-
-
 def _get_decay_coupling_basis(model: AmplitudeModel) -> CouplingBasis:
+    """Basis in which the couplings of the decay vertices of a model are defined."""
+    couplings = _collect_couplings(model)
     for helicity_basis in (False, True):
         base = _get_coupling_base(helicity_basis, "decay")
-        for symbol in model.parameter_defaults:
-            if isinstance(symbol, sp.Indexed) and symbol.base == base:
-                return "helicity" if helicity_basis else "LS"
+        if any(symbol.base == base for symbol in couplings):
+            return "helicity" if helicity_basis else "LS"
     for chain in model.decay.chains:
         latex = Str(chain.resonance.latex)
         for production_basis, decay_basis in itertools.product((False, True), repeat=2):
             base = _get_coefficient_base(latex, production_basis, decay_basis)
-            for symbol in model.parameter_defaults:
-                if isinstance(symbol, sp.Indexed) and symbol.base == base:
-                    return "helicity" if decay_basis else "LS"
+            if any(symbol.base == base for symbol in couplings):
+                return "helicity" if decay_basis else "LS"
     return "LS"
 
 
