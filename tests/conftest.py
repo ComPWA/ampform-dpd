@@ -6,7 +6,11 @@ import attrs
 import pytest
 import qrules
 
-from ampform_dpd.adapter.qrules import normalize_state_ids, permute_equal_final_states
+from ampform_dpd.adapter.qrules import (
+    load_particles,
+    normalize_state_ids,
+    permute_equal_final_states,
+)
 
 if TYPE_CHECKING:
     from _pytest.fixtures import SubRequest
@@ -35,6 +39,70 @@ def jpsi2etappbar_reaction() -> ReactionInfo:
         allowed_intermediate_particles=["N(1535)", "N(1710)"],
         formalism="canonical-helicity",
         mass_conservation_factor=0,
+    )
+
+
+@pytest.fixture(scope="session")
+def jpsi2etappbar_nstar32_reaction() -> ReactionInfo:
+    r""":math:`J/\psi \to \eta\, p\, \bar p` with a :math:`\tfrac32^-` resonance.
+
+    The exchange phase :math:`\eta^\text{helicity} = (-1)^{J-1/2}` is negative for
+    :math:`J=\tfrac32`, so this is a channel in which the helicity-basis sign is
+    :math:`-1` while the LS-basis sign is :math:`+1`.
+    """
+    return qrules.generate_transitions(
+        initial_state="J/psi(1S)",
+        final_state=["eta", "p", "p~"],
+        allowed_interaction_types="strong",
+        allowed_intermediate_particles=["N(1520)"],
+        formalism="canonical-helicity",
+        mass_conservation_factor=0,
+    )
+
+
+def _create_heavy_isobar_particle_db() -> qrules.particle.ParticleCollection:
+    """Move the :math:`X \to p\bar p` candidates above the :math:`p\bar p` threshold.
+
+    QRules does not generate a decay node that it considers kinematically closed, not
+    even with :code:`mass_conservation_factor=0`, and the PDG list has no C-odd neutral
+    meson above :math:`2m_p`. Their C-parities, which are what the selection rule is
+    about, are untouched.
+    """
+    particle_db = load_particles()
+    for name in ("omega(782)", "f(2)(1270)"):
+        heavy = attrs.evolve(particle_db[name], mass=2.0, width=0.1)
+        particle_db.remove(name)
+        particle_db.add(heavy)
+    return particle_db
+
+
+@pytest.fixture(scope="session")
+def jpsi2etappbar_isobar_reaction() -> ReactionInfo:
+    r""":math:`J/\psi \to \eta\, p\, \bar p` with an :math:`X \to p\bar p` isobar.
+
+    Allows C-violating transitions, so that both the :math:`C=-1` :math:`\omega` and the
+    :math:`C=+1` :math:`f_2(1270)` chain are generated. Only the :math:`\omega` chain is
+    allowed by C conservation, since :math:`C_X = C_\psi C_\eta = -1`.
+    """
+    return qrules.generate_transitions(
+        initial_state="J/psi(1S)",
+        final_state=["eta", "p", "p~"],
+        allowed_intermediate_particles=["omega(782)", "f(2)(1270)"],
+        formalism="canonical-helicity",
+        particle_db=_create_heavy_isobar_particle_db(),
+    )
+
+
+@pytest.fixture(scope="session")
+def jpsi2etappbar_isobar_strong_reaction() -> ReactionInfo:
+    """Same as `jpsi2etappbar_isobar_reaction`, but with C conservation imposed by QRules."""
+    return qrules.generate_transitions(
+        initial_state="J/psi(1S)",
+        final_state=["eta", "p", "p~"],
+        allowed_interaction_types="strong",
+        allowed_intermediate_particles=["omega(782)", "f(2)(1270)"],
+        formalism="canonical-helicity",
+        particle_db=_create_heavy_isobar_particle_db(),
     )
 
 
