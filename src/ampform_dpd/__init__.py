@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import functools
 import operator
-from collections import abc
+from collections import abc, defaultdict
 from collections.abc import Callable
 from functools import cache, wraps
 from itertools import product
@@ -108,6 +108,7 @@ class DalitzPlotDecompositionBuilder:
         *,
         cleanup_summations: bool = False,
         use_coefficients: bool = False,
+        symmetrize: bool = True,
     ) -> AmplitudeModel:
         r"""Formulate the amplitude model given the configuration of this builder.
 
@@ -124,7 +125,20 @@ class DalitzPlotDecompositionBuilder:
                 their corresponding state is spinless.
             use_coefficients: Whether to use a single complex coefficient per decay
                 chain, instead of separate coefficients for each helicity coupling.
+            symmetrize: Whether to impose Bose-Einstein (or Fermi-Dirac) symmetry on the
+                couplings of decay chains that are related by an exchange of identical
+                final-state particles. See
+                :func:`~ampform_dpd.symmetrization.symmetrize_identical_particles`. Has
+                no effect if the final state contains no identical particles. Switching
+                this off gives each subsystem its own, independent couplings, which
+                results in a model that violates the symmetry of the final state.
         """
+        from ampform_dpd.symmetrization import (  # ruff: ignore[import-outside-top-level]
+            has_identical_particles,
+            symmetrize_identical_particles,
+            warn_about_missing_exchange_partners,
+        )
+
         if reference_subsystem is None:
             reference_subsystem = _get_best_reference_subsystems(self.decay)
         else:
@@ -172,7 +186,7 @@ class DalitzPlotDecompositionBuilder:
         )
         if cleanup_summations:
             intensity = intensity.cleanup()
-        return AmplitudeModel(
+        model = AmplitudeModel(
             decay=self.decay,
             intensity=PoolSum(
                 sp.Abs(aligned_amp) ** 2,
@@ -184,6 +198,12 @@ class DalitzPlotDecompositionBuilder:
             masses=masses,
             invariants=formulate_invariants(self.decay),
         )
+        if not has_identical_particles(self.decay):
+            return model
+        warn_about_missing_exchange_partners(self.decay)
+        if symmetrize:
+            return symmetrize_identical_particles(model)
+        return model
 
     def formulate_subsystem_amplitude(  # ruff: ignore[too-many-locals]
         self,
@@ -212,6 +232,7 @@ class DalitzPlotDecompositionBuilder:
             for state_id, helicity in zip((0, 1, 2, 3), λ, strict=True)
         )
         for chain in self.decay.get_subsystem(subsystem_id).chains:
+            resonance_label = create_resonance_label(self.decay, chain)
             resonance_spin = chain.resonance.spin
             if (
                 not physical_helicities
@@ -240,6 +261,7 @@ class DalitzPlotDecompositionBuilder:
                 continue
             scaling_factors = _create_scaling_factors(
                 chain,
+                resonance_label,
                 (self.use_production_helicity_couplings, λR, λ[k]),
                 (self.use_decay_helicity_couplings, λ[i], λ[j]),
                 one_scalar_per_chain=use_coefficients,
@@ -345,15 +367,43 @@ def _check_reference_subsystems(
         warn(msg, category=UserWarning)
 
 
+def create_resonance_label(decay: ThreeBodyDecay, chain: ThreeBodyDecayChain) -> Str:
+    """Label that identifies the couplings of a decay chain.
+
+    The label is the LaTeX name of the resonance, but if that same resonance also occurs
+    in another subsystem, the ID of the subsystem is appended to it. Chains that share a
+    resonance then get **distinct** coupling symbols, just as they do in
+    :func:`~ampform_dpd.io.serialization.amplitude.formulate`.
+
+    This matters for decays with identical final-state particles, which are the only
+    decays in which a resonance can occur in more than one subsystem: the two chains are
+    written in opposite pair orderings, so their couplings are related by an exchange
+    phase, not by equality. See :mod:`ampform_dpd.symmetrization`.
+    """
+    latex = chain.resonance.latex
+    if chain.resonance.name in _get_multi_subsystem_resonances(decay):
+        return Str(f"{latex},{chain.spectator.index}")
+    return Str(latex)
+
+
+def _get_multi_subsystem_resonances(decay: ThreeBodyDecay) -> frozenset[str]:
+    """Names of the resonances that occur in more than one subsystem."""
+    subsystem_ids = defaultdict(set)
+    for chain in decay.chains:
+        subsystem_ids[chain.resonance.name].add(chain.spectator.index)
+    return frozenset(name for name, ids in subsystem_ids.items() if len(ids) > 1)
+
+
 def _create_scaling_factors(
     chain: ThreeBodyDecayChain,
+    resonance_label: Str,
     production_subscripts: tuple[bool, sp.Basic, sp.Basic],
     decay_subscripts: tuple[bool, sp.Basic, sp.Basic],
     one_scalar_per_chain: bool,
 ):
     prod_helicity_basis, λR, λk = production_subscripts
     dec_helicity_basis, λi, λj = decay_subscripts
-    R = Str(chain.resonance.latex)
+    R = resonance_label
     h_prod = _create_coupling_symbol(
         prod_helicity_basis,
         resonance=R,
