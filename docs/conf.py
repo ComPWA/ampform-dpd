@@ -198,7 +198,10 @@ html_theme_options = {
 html_title = REPO_TITLE
 intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
-    "ampform": (f"https://ampform.readthedocs.io/{pin('ampform')}", None),
+    # AmpForm is pinned to a Git revision, so its released docs are not available.
+    # Revert to https://ampform.readthedocs.io/{pin('ampform')} once ComPWA/ampform#521
+    # and the PRs below it have been merged and released.
+    "ampform": ("https://ampform--521.org.readthedocs.build/521", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "compwa": ("https://compwa.github.io", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
