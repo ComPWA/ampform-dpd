@@ -8,7 +8,7 @@ from ampform.sympy._cache import get_readable_hash
 
 from ampform_dpd import DalitzPlotDecompositionBuilder
 from ampform_dpd.adapter.qrules import normalize_state_ids, to_three_body_decay
-from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
+from ampform_dpd.dynamics import formulate_breit_wigner_with_form_factor
 
 if TYPE_CHECKING:
     from qrules.transition import ReactionInfo
