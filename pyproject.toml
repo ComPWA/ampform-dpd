@@ -454,6 +454,7 @@ extend-ignore-names = [
     "useless-expression",
     "useless-semicolon",
 ]
+"cparity.ipynb" = ["import-private-name"]
 "docs/*" = [
     "assert",
     "implicit-namespace-package",
@@ -539,6 +540,7 @@ include = [
     "docs/comparison/d2pipipi.ipynb",
     "docs/comparison/jpsi2phipipi.ipynb",
     "docs/comparison/jpsi2pipipi.ipynb",
+    "docs/cparity.ipynb",
     "docs/dynamics.ipynb",
     "docs/index.ipynb",
     "docs/lb2pkg.ipynb",
