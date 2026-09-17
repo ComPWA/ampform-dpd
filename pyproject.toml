@@ -541,6 +541,7 @@ include = [
     "docs/index.ipynb",
     "docs/lb2pkg.ipynb",
     "docs/lc2pkpi.ipynb",
+    "docs/polarization.ipynb",
     "docs/serialization.ipynb",
     "docs/x2pipipi.ipynb",
     "docs/xib2pkk.ipynb",
