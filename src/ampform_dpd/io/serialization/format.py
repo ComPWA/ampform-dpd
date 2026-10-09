@@ -11,10 +11,7 @@ from ampform_dpd.decay import FinalStateID
 if TYPE_CHECKING:
     from ampform_dpd.decay import StateID
 
-if sys.version_info >= (3, 11):
-    from typing import Required
-else:
-    from typing_extensions import Required
+from typing import Required
 
 if sys.version_info >= (3, 13):
     from typing import TypeIs
