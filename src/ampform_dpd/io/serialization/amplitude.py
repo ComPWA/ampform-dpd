@@ -250,33 +250,23 @@ def formulate_aligned_amplitude(
         rotated_state: generators[subsystem_id]
         for rotated_state, subsystem_id in _REFERENCE_SUBSYSTEMS.items()
     }
-    λ0_prime, λ1_prime, λ2_prime, λ3_prime = sp.symbols(
-        R"\lambda_(:4)^{\prime}", rational=True
-    )
+    λ0_, λ1_, λ2_, λ3_ = sp.symbols(R"\lambda_(:4)^{\prime}", rational=True)
     states = get_states(model)
     j0, j1, j2, j3 = (states[i].spin for i in sorted(states))
     A = _generate_amplitude_index_bases()
     amp_expr = PoolSum(
         sum(
-            A[k][λ0_prime, λ1_prime, λ2_prime, λ3_prime]
-            * wigner_generators[0](
-                j0, λ0, λ0_prime, rotated_state=0, aligned_subsystem=k
-            )
-            * wigner_generators[1](
-                j1, λ1_prime, λ1, rotated_state=1, aligned_subsystem=k
-            )
-            * wigner_generators[2](
-                j2, λ2_prime, λ2, rotated_state=2, aligned_subsystem=k
-            )
-            * wigner_generators[3](
-                j3, λ3_prime, λ3, rotated_state=3, aligned_subsystem=k
-            )
+            A[k][λ0_, λ1_, λ2_, λ3_]
+            * wigner_generators[0](j0, λ0, λ0_, rotated_state=0, aligned_subsystem=k)
+            * wigner_generators[1](j1, λ1_, λ1, rotated_state=1, aligned_subsystem=k)
+            * wigner_generators[2](j2, λ2_, λ2, rotated_state=2, aligned_subsystem=k)
+            * wigner_generators[3](j3, λ3_, λ3, rotated_state=3, aligned_subsystem=k)
             for k in get_existing_subsystem_ids(model)
         ),
-        (λ0_prime, create_spin_range(j0)),
-        (λ1_prime, create_spin_range(j1)),
-        (λ2_prime, create_spin_range(j2)),
-        (λ3_prime, create_spin_range(j3)),
+        (λ0_, create_spin_range(j0)),
+        (λ1_, create_spin_range(j1)),
+        (λ2_, create_spin_range(j2)),
+        (λ3_, create_spin_range(j3)),
     )
     angle_definitions = {
         symbol: expression
