@@ -272,22 +272,22 @@ class DalitzPlotDecompositionBuilder:
         else:
             _check_reference_subsystems(self.decay, reference_subsystem)
         wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
-        _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
+        λ0_, λ1_, λ2_, λ3_ = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
         j0, j1, j2, j3 = (self.decay.states[i].spin for i in sorted(self.decay.states))
         A = _generate_amplitude_index_bases()
         amp_expr = PoolSum(
             sum(
-                A[k][_λ0, _λ1, _λ2, _λ3]
-                * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=k)
-                * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=k)
-                * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=k)
-                * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=k)
+                A[k][λ0_, λ1_, λ2_, λ3_]
+                * wigner_generator(j0, λ0, λ0_, rotated_state=0, aligned_subsystem=k)
+                * wigner_generator(j1, λ1_, λ1, rotated_state=1, aligned_subsystem=k)
+                * wigner_generator(j2, λ2_, λ2, rotated_state=2, aligned_subsystem=k)
+                * wigner_generator(j3, λ3_, λ3, rotated_state=3, aligned_subsystem=k)
                 for k in _get_subsystem_ids(self.decay)
             ),
-            (_λ0, create_spin_range(j0)),
-            (_λ1, create_spin_range(j1)),
-            (_λ2, create_spin_range(j2)),
-            (_λ3, create_spin_range(j3)),
+            (λ0_, create_spin_range(j0)),
+            (λ1_, create_spin_range(j1)),
+            (λ2_, create_spin_range(j2)),
+            (λ3_, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions
 

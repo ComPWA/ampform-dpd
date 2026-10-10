@@ -11,10 +11,7 @@ from ampform_dpd.decay import FinalStateID
 if TYPE_CHECKING:
     from ampform_dpd.decay import StateID
 
-if sys.version_info >= (3, 11):
-    from typing import Required
-else:
-    from typing_extensions import Required
+from typing import Required
 
 if sys.version_info >= (3, 13):
     from typing import TypeIs
@@ -226,10 +223,11 @@ def as_final_state_pair(
     >>> as_final_state_pair(1)
     >>> as_final_state_pair((1, (2, 3)))
     """
-    if not is_isobar(node_item):
+    if not is_isobar(node_item) or len(node_item) != 2:  # ruff: ignore[magic-value-comparison]
         return None
-    if len(node_item) == 2 and is_decay_node(node_item):  # ruff: ignore[magic-value-comparison]
-        return tuple(node_item)
+    first, second = node_item
+    if isinstance(first, int) and isinstance(second, int):
+        return first, second
     return None
 
 

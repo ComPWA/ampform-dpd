@@ -34,6 +34,7 @@ from ampform_dpd.io.serialization.format import (
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from ampform_dpd.decay import FinalStateID
     from ampform_dpd.io.serialization.format import Node
 
 T = TypeVar("T")
@@ -207,7 +208,7 @@ def _to_mandelstam_symbol_from_name(variable_name: str) -> sp.Symbol:
     if matches is None:
         msg = f"Cannot convert variable name {variable_name!r} to a Mandelstam symbol"
         raise NotImplementedError(msg)
-    i, j = (int(index) for index in matches.groups())
+    i, j = (cast("FinalStateID", int(index)) for index in matches.groups())
     return to_mass_symbol((i, j))
 
 
