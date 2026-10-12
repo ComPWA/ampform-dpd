@@ -554,7 +554,7 @@ def _relate_chain_couplings(
         else:
             indices = _swap_decay_indices(symbol.indices[1:], node_type, dec_helicity)
             base = _get_coupling_base(prod_helicity, node_type)
-            substitutions[symbol] = factor * base[(latex, *indices)]
+            substitutions[symbol] = factor * base[latex, *indices]
     return substitutions
 
 
