@@ -78,7 +78,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "typing_extensions.Required": ("obj", "typing.Required"),
 }
 api_target_types: dict[str, str] = {}
-author = "Common Partial Wave Analysis"
+author = ""
 autodoc_default_options = {
     "exclude-members": ", ".join([  # ruff: ignore[static-join-to-f-string]
         "default_assumptions",
