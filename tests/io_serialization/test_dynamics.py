@@ -124,12 +124,13 @@ def describe_formulate_form_factor():
     ):
         vertex = get_decay_chains(model_definition)[2]["vertices"][0]
         form_factor = formulate_form_factor(vertex, model_definition)
-        assert sp.sqrt(2) * form_factor.expression == FormFactor(
+        assert form_factor.expression == FormFactor(
             s=sp.Symbol("m0", nonnegative=True) ** 2,  # ty: ignore[unknown-argument]
             m1=sp.sqrt(sp.Symbol("sigma2", nonnegative=True)),  # ty: ignore[unknown-argument]
             m2=sp.Symbol("m2", nonnegative=True),  # ty: ignore[unknown-argument]
             angular_momentum=1,  # ty: ignore[unknown-argument]
             meson_radius=sp.Symbol("R_{Lc}", nonnegative=True),  # ty: ignore[unknown-argument]
+            normalize=False,  # ty: ignore[unknown-argument]
         )
 
 

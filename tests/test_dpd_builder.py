@@ -26,7 +26,7 @@ from ampform_dpd.decay import (
     ThreeBodyDecayChain,
     get_decay_product_ids,
 )
-from ampform_dpd.dynamics.builder import formulate_breit_wigner_with_form_factor
+from ampform_dpd.dynamics import formulate_breit_wigner_with_form_factor
 from ampform_dpd.spin import create_spin_range, generate_ls_couplings
 
 if TYPE_CHECKING:

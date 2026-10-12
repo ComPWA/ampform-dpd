@@ -46,6 +46,8 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     ),
     "ampform_dpd.decay.StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "ampform_dpd.io.serialization.dynamics.T": "typing.TypeVar",
+    "dict[~sympy.core.basic.Basic": "dict",
+    "dict[~sympy.core.symbol.Symbol": "dict",
     "DecayNode": ("obj", "ampform_dpd.decay.DecayNode"),
     "EdgeType": "typing.TypeVar",
     "FinalState": ("obj", "ampform_dpd.decay.FinalState"),
@@ -75,6 +77,8 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "Topology": ("obj", "ampform_dpd.io.serialization.format.Topology"),
     "Workspace": ("obj", "ampform_dpd.io.serialization.workspace.Workspace"),
+    "typing.Literal['normalized'": "typing.Literal",
+    "typing.Literal['unity'": "typing.Literal",
     "typing_extensions.Required": ("obj", "typing.Required"),
 }
 api_target_types: dict[str, str] = {}
@@ -194,7 +198,10 @@ html_theme_options = {
 html_title = REPO_TITLE
 intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
-    "ampform": (f"https://ampform.readthedocs.io/{pin('ampform')}", None),
+    # AmpForm is pinned to a Git revision, so its released docs are not available.
+    # Revert to https://ampform.readthedocs.io/{pin('ampform')} once ComPWA/ampform#521
+    # and the PRs below it have been merged and released.
+    "ampform": ("https://ampform--521.org.readthedocs.build/521", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "compwa": ("https://compwa.github.io", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
