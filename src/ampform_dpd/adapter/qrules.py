@@ -167,7 +167,7 @@ def _to_state(obj: Any, index: StateIDTemplate | None = None):
         parity=int(obj.parity),  # ty: ignore[invalid-argument-type]
         mass=obj.mass,
         width=obj.width,
-        index=index,  # ty: ignore[invalid-argument-type]
+        index=index,
     )
 
 

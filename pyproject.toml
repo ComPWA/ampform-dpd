@@ -1,7 +1,7 @@
 [project]
 name = "ampform-dpd"
 description = "Symbolic expressions for Dalitz-Plot Decomposition"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{ name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de" }]
@@ -13,11 +13,11 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Physics",
     "Typing :: Typed",
@@ -114,6 +114,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.compwa.policy]
+dev-python-version = "3.13"  # TensorFlow provides no wheels for Python 3.14 yet
 repo-name = "ampform-dpd"
 repo-title = "AmpForm-DPD"
 
@@ -264,11 +265,11 @@ positional = true
 [tool.poe.groups.test.tasks.test-all]
 help = "Run all tests on each supported Python version"
 sequence = [
-    "test-py310 ${paths}",
     "test-py311 ${paths}",
     "test-py312 ${paths}",
     "test-py313 ${paths}",
     "test-py314 ${paths}",
+    "test-py315 ${paths}",
 ]
 
 [[tool.poe.groups.test.tasks.test-all.args]]
@@ -276,10 +277,6 @@ default = ""
 multiple = true
 name = "paths"
 positional = true
-
-[tool.poe.groups.test.tasks.test-py310]
-env = { UV_PYTHON = "3.10" }
-ref = "test"
 
 [tool.poe.groups.test.tasks.test-py311]
 env = { UV_PYTHON = "3.11" }
@@ -297,6 +294,10 @@ ref = "test"
 env = { UV_PYTHON = "3.14" }
 ref = "test"
 
+[tool.poe.groups.test.tasks.test-py315]
+env = { UV_PYTHON = "3.15" }
+ref = "test"
+
 [tool.poe.tasks.all]
 help = "Run all continuous integration (CI) tasks locally"
 ignore_fail = "return_non_zero"
@@ -309,17 +310,20 @@ sequence = [
 ]
 
 [tool.poe.tasks.style]
-cmd = "pre-commit run --all-files"
+cmd = "prek run --all-files"
 executor = { group = "style" }
 help = "Perform all linting, formatting, and spelling checks"
 
 [tool.poe.tasks.upgrade]
 executor = { type = "simple" }
 help = "Upgrade lock files"
-parallel = ["_upgrade-precommit", "_upgrade-uv"]
+parallel = [
+    "_upgrade-precommit",
+    "_upgrade-uv",
+]
 
 [tool.poe.tasks._upgrade-precommit]
-cmd = "pre-commit autoupdate -j8"
+cmd = "prek autoupdate"
 executor = { type = "simple" }
 
 [tool.poe.tasks._upgrade-uv]
@@ -524,7 +528,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.7/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.1/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
