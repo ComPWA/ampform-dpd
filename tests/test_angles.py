@@ -52,6 +52,28 @@ def describe_formulate_theta_hat_angle():
 
 
 def describe_formulate_zeta_angle():
+    @pytest.mark.parametrize("rotated_state", [1, 2, 3])
+    @pytest.mark.parametrize("aligned_subsystem", [1, 2, 3])
+    @pytest.mark.parametrize("reference_subsystem", [1, 2, 3])
+    def it_has_zero_massless_limit(
+        rotated_state, aligned_subsystem, reference_subsystem
+    ):
+        masses = {i: sp.S.Zero if i == rotated_state else sp.S.One for i in (1, 2, 3)}
+        energies = {i: sp.sqrt(1 + mass**2) for i, mass in masses.items()}
+        substitutions = {
+            sp.Symbol(f"m{i}", nonnegative=True): mass for i, mass in masses.items()
+        }
+        substitutions[m0] = sum(energies.values())
+        for k in (1, 2, 3):
+            i, j = sorted({1, 2, 3} - {k})
+            substitutions[sp.Symbol(f"sigma{k}", nonnegative=True)] = (
+                masses[i] ** 2 + masses[j] ** 2 + 2 * energies[i] * energies[j] + 1
+            )
+        _, angle = formulate_zeta_angle(
+            rotated_state, aligned_subsystem, reference_subsystem
+        )
+        assert angle.doit().subs(substitutions).simplify() == 0
+
     def it_satisfies_equation_a6():
         """Test Eq. (A6), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=10."""
         for i in [1, 2, 3]:
