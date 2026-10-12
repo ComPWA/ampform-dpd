@@ -501,12 +501,12 @@ def _relabel_coupling(
     by :math:`(l, S)` and are the same either way round.
     """
     if kind == "production":
-        return coupling.base[(reference_label, *coupling.indices[1:])]
+        return coupling.base[reference_label, *coupling.indices[1:]]
     if kind == "decay":
         indices = coupling.indices[1:]
         if reverse_decay_indices:
             indices = tuple(reversed(indices))
-        return coupling.base[(reference_label, *indices)]
+        return coupling.base[reference_label, *indices]
     for production, decay in itertools.product((True, False), repeat=2):
         if coupling.base != _get_coefficient_base(label, production, decay):
             continue
@@ -515,6 +515,6 @@ def _relabel_coupling(
         if decay and reverse_decay_indices:
             decay_indices = tuple(reversed(decay_indices))
         base = _get_coefficient_base(reference_label, production, decay)
-        return base[(*production_indices, *decay_indices)]
+        return base[*production_indices, *decay_indices]
     msg = f"Cannot relabel coupling {coupling}"
     raise NotImplementedError(msg)
