@@ -85,8 +85,8 @@ def formulate(  # ruff: ignore[too-many-locals]
     for helicity_values in product(*allowed_helicities.values()):
         for chain_idx in range(n_chains):
             amp_defs = formulate_chain_amplitude(
-                *helicity_values,  # ty: ignore[invalid-argument-type]
-                model,  # ty: ignore[too-many-positional-arguments]
+                *helicity_values,
+                model,
                 chain_idx,
                 to_latex,
                 additional_builders,
