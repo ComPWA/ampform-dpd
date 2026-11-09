@@ -10,7 +10,8 @@ from ampform_dpd.io.serialization import load_workspace, validate_checksums
 FIXTURE = Path(__file__).with_name("compass.json")
 """Two-chain distribution from the COMPASS model in amplitude-serialization.
 
-Source: https://github.com/RUB-EP1/amplitude-serialization/blob/4bf857c9592a558943c32e42782c5f6cb90224b1/models/x2pipipi-compass-1391643.json
+Source:
+https://github.com/RUB-EP1/amplitude-serialization/blob/4bf857c9592a558943c32e42782c5f6cb90224b1/models/x2pipipi-compass-1391643.json
 """
 
 

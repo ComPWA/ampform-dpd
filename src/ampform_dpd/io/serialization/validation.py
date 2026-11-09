@@ -49,15 +49,13 @@ def validate_checksums(
     Compilation, point conversion, evaluation, and non-finite output failures are
     returned as failed records with diagnostics.
 
-    Args:
-        workspace_or_compiled: Symbolic workspace to compile on demand, or a
-            previously compiled workspace.
-        backend: Numerical backend used when compiling a symbolic workspace.
-        atol: Absolute tolerance for the checksum comparison.
-        rtol: Relative tolerance, scaled by the absolute reference value.
+    :param workspace_or_compiled: Symbolic workspace to compile on demand, or a
+        previously compiled workspace.
+    :param backend: Numerical backend used when compiling a symbolic workspace.
+    :param atol: Absolute tolerance for the checksum comparison.
+    :param rtol: Relative tolerance, scaled by the absolute reference value.
 
-    Returns:
-        An immutable result tuple in serialized checksum order.
+    :returns: An immutable result tuple in serialized checksum order.
     """
     if isinstance(workspace_or_compiled, CompiledWorkspace):
         compiled = workspace_or_compiled

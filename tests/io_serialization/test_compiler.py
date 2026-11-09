@@ -30,7 +30,8 @@ def _get_checksums() -> list[dict[str, Any]]:
 CONSTANT_MODEL = Path(__file__).with_name("constant.json")
 """Single constant chain from the Lambda-b model in amplitude-serialization.
 
-Source: https://github.com/RUB-EP1/amplitude-serialization/blob/4bf857c9592a558943c32e42782c5f6cb90224b1/models/lb2pkg-lhcb-2765817.json
+Source:
+https://github.com/RUB-EP1/amplitude-serialization/blob/4bf857c9592a558943c32e42782c5f6cb90224b1/models/lb2pkg-lhcb-2765817.json
 """
 
 BACKENDS = ("numpy", "jax")

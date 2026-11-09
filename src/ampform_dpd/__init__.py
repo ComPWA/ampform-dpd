@@ -75,15 +75,13 @@ class DalitzPlotDecompositionBuilder:
     ) -> None:
         """Amplitude builder for the helicity formalism with Dalitz-plot decomposition.
 
-        Args:
-            decay: The `.ThreeBodyDecay` over which to formulate the amplitude model.
-            min_ls: Use helicity couplings instead of
-                :math:`LS`-couplings. If setting this boolean with a `tuple`, the first
-                element of the `tuple` defines whether to use helicity couplings on the
-                **production** `.IsobarNode` and the second configures the **decay**
-                `.IsobarNode`.
-            all_subsystems: Formulate the amplitude model for all allowed subsystems in
-                the decay, even if they do not exist in the `.ThreeBodyDecay` object.
+        :param decay: The `.ThreeBodyDecay` over which to formulate the amplitude model.
+        :param min_ls: Use helicity couplings instead of :math:`LS`-couplings. If
+            setting this boolean with a `tuple`, the first element of the `tuple`
+            defines whether to use helicity couplings on the **production**
+            `.IsobarNode` and the second configures the **decay** `.IsobarNode`.
+        :param all_subsystems: Formulate the amplitude model for all allowed subsystems
+            in the decay, even if they do not exist in the `.ThreeBodyDecay` object.
         """
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
@@ -112,8 +110,10 @@ class DalitzPlotDecompositionBuilder:
         Args:
             reference_subsystem: The subsystem to use as reference for the alignment of
                 helicities. If `None`, the subsystem with the most resonances is chosen.
+
             cleanup_summations: Whether to remove helicity indices in the summations if
                 their corresponding state is spinless.
+
             use_coefficients: Whether to use a single complex coefficient per decay
                 chain, instead of separate coefficients for each helicity coupling.
         """
@@ -402,8 +402,8 @@ def _order_decay_products(isobar: DecayNode, first_id: FinalStateID) -> DecayNod
     constructed from `.get_decay_product_ids`, which follows the cyclic pair ordering
     :math:`(23)1, (31)2, (12)3` of `the DPD paper
     <https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033>`_ (Eq. 7), so
-    the node has to be brought into that same ordering before its Clebsch--Gordan factors
-    are formulated.
+    the node has to be brought into that same ordering before its Clebsch--Gordan
+    factors are formulated.
     """
     child1 = to_particle(isobar.child1)
     if isinstance(child1, State) and child1.index == first_id:

@@ -69,8 +69,8 @@ def formulate(  # ruff: ignore[too-many-locals]
     """Formulate the serialized chains with their supplied complex weights.
 
     Coupling symbols include the subsystem when a chain name occurs in multiple
-    subsystems. This preserves distinct serialized weights, including relative
-    signs, without imposing additional symmetry relations between the chains.
+    subsystems. This preserves distinct serialized weights, including relative signs,
+    without imposing additional symmetry relations between the chains.
     """
     states = get_states(model)
     helicity_symbols = sp.symbols("lambda(:4)", rational=True)

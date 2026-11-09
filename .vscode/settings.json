@@ -7,14 +7,12 @@
     "rewrap.wrappingColumn": 72
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.wordWrap": "on"
   },
-  "[jsonc]": {
+  "[json][jsonc][markdown][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.rulers": [],
     "editor.wordWrapColumn": 80,
     "editor.wrappingIndent": "same",
@@ -29,9 +27,6 @@
   },
   "[toml]": {
     "editor.defaultFormatter": "tombi-toml.tombi"
-  },
-  "[yaml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.enabled": true,
   "diffEditor.experimental.showMoves": true,

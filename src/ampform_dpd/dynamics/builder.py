@@ -1,9 +1,11 @@
 """Dynamics builder functions for :meth:`.register_builder`.
 
-.. note:: As opposed to `AmpForm <https://ampform.rtfd.io>`_, AmpForm-DPD defines
-    dynamics over the **entire decay chain**, not a single isobar node. The dynamics
-    classes and the corresponding builders would have to be extended to implement other
-    dynamics lineshapes.
+.. note::
+
+    As opposed to `AmpForm <https://ampform.rtfd.io>`_, AmpForm-DPD defines dynamics
+    over the **entire decay chain**, not a single isobar node. The dynamics classes and
+    the corresponding builders would have to be extended to implement other dynamics
+    lineshapes.
 """
 
 from __future__ import annotations

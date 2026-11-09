@@ -56,13 +56,17 @@ def lambdify(
         expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
             :func:`~tensorwaves.function.sympy.create_function` or
             :func:`~tensorwaves.function.sympy.create_parametrized_function`.
+
         parameters: Specify this argument in order to create a
             `~tensorwaves.function.ParametrizedBackendFunction` instead of a
             `~tensorwaves.function.PositionalArgumentFunction`.
-        backend: The choice of backend for the created numerical function.
-            **WARNING**: this function has only been tested for :code:`backend="jax"`!
 
-    .. seealso:: :mod:`ampform.sympy.cached`
+        backend: The choice of backend for the created numerical function.
+            **WARNING**: this function has only been tested for ``backend="jax"``!
+
+    .. seealso::
+
+        :mod:`ampform.sympy.cached`
     """
     if isinstance(parameters, str):
         backend = parameters
