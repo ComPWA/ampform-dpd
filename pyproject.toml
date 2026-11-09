@@ -148,6 +148,10 @@ cache = true
 cache_exclude_status = "400.."
 # [:] keeps Lychee from extracting regex patterns as URLs.
 exclude = [
+    '^https[:]//journals\.aps\.org/prd/abstract/10\.1103/PhysRevD\.101\.034033$',  # APS rejects automated requests from GitHub Actions
+    '^https[:]//journals\.aps\.org/prd/pdf/10\.1103/PhysRevD\.(?:101\.034033#page=9|104\.052010)$',  # APS rejects automated requests from GitHub Actions
+    '^https[:]//link\.aps\.org/doi/10\.1103/PhysRevD\.95\.032004$',  # APS rejects automated requests from GitHub Actions
+    '^https[:]//doi\.org/10\.1103/PhysRevD\.104\.052010$',  # APS rejects automated requests from GitHub Actions
     "%7B[^/]*%7D",  # URL templates are completed at build or runtime
     "^https[:]//x-access-token/$",  # Token-authenticated Git remote placeholder
     '\$(?:NEXT_[A-Z_]+|PREVIOUS_TAG)',  # Release Drafter substitutes these placeholders at runtime
