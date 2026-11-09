@@ -561,7 +561,7 @@ include = ["pyproject.toml"]
 include = ["docs/serialization.ipynb"]
 
 [tool.ty.overrides.rules]
-invalid-key = "ignore"
+invalid-typed-dict-key = "ignore"
 
 [[tool.ty.overrides]]
 include = [
@@ -581,7 +581,7 @@ invalid-argument-type = "ignore"
 invalid-assignment = "ignore"
 invalid-return-type = "ignore"
 unknown-argument = "ignore"
-unresolved-attribute = "ignore"
+missing-attribute = "ignore"
 unsupported-operator = "ignore"
 
 [tool.ty.rules]
