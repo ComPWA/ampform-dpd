@@ -207,11 +207,6 @@ intersphinx_mapping = {
     "sympy": ("https://docs.sympy.org/latest", None),
     "tensorwaves": (f"https://tensorwaves.readthedocs.io/{pin('tensorwaves')}", None),
 }
-linkcheck_anchors = False
-linkcheck_ignore = [
-    "https://doi.org/10.1103",
-    "https://journals.aps.org/prd",
-]
 mermaid_height = "auto"  # do not stretch diagrams to the default 500px
 mermaid_init_config = {
     "flowchart": {
