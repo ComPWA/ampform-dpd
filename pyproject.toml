@@ -127,7 +127,7 @@ type-checker = ["ty"]
 
 [tool.coverage.report]
 exclude_also = ["if TYPE_CHECKING:"]
-fail_under = 65
+fail_under = 80
 
 [tool.coverage.run]
 branch = true
