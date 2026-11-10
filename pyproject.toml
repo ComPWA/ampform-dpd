@@ -581,8 +581,8 @@ include = [
 invalid-argument-type = "ignore"
 invalid-assignment = "ignore"
 invalid-return-type = "ignore"
-unknown-argument = "ignore"
 missing-attribute = "ignore"
+unknown-argument = "ignore"
 unsupported-operator = "ignore"
 
 [tool.ty.rules]
