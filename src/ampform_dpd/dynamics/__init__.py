@@ -130,7 +130,7 @@ class FlattéSWave(sp.Expr):
 
 @unevaluated
 class MultichannelBreitWigner(sp.Expr):
-    r"""Breit--Wigner with a running width summed over several decay channels.
+    r"""Breit–Wigner with a running width summed over several decay channels.
 
     Each channel is a `ChannelArguments` term :math:`\Gamma_i(s)`, giving the lineshape
 

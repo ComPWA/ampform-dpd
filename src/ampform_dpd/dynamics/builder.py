@@ -28,7 +28,7 @@ class BreitWignerBuilder:
     phsp_factor: PhaseSpaceFactorProtocol = PhaseSpaceFactor  # ty: ignore[invalid-assignment]
 
     def __call__(self, decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
-        """Formulate a (relativistic) Breit-Wigner for this resonance."""
+        """Formulate a (relativistic) Breit–Wigner for this resonance."""
         decay_node = decay_chain.decay_node
         s = get_mandelstam_s(decay_node)
         if self.energy_dependent_width:

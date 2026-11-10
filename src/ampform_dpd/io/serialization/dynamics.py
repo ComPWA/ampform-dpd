@@ -130,7 +130,7 @@ def formulate_form_factor(vertex: Vertex, model: ModelDefinition) -> DefinedExpr
 def _blatt_weisskopf_normalization(angular_momentum: int) -> sp.Expr:
     r"""Undo the normalization of AmpForm's `~ampform.dynamics.form_factor.FormFactor`.
 
-    AmpForm normalizes its Blatt--Weisskopf factor to one at :math:`z=1`, whereas the
+    AmpForm normalizes its Blatt–Weisskopf factor to one at :math:`z=1`, whereas the
     serialization format uses the unnormalized convention, so the form factor has to be
     divided by this value.
 

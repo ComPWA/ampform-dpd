@@ -32,6 +32,7 @@
   "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
   "editor.unicodeHighlight.allowedCharacters": {
+    "–": true,
     "σ": true
   },
   "files.eol": "\n",
