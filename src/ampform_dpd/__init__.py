@@ -136,10 +136,10 @@ class DalitzPlotDecompositionBuilder:
         else:
             subsystem_ids = sorted(_get_subsystem_ids(self.decay))
         for args in product(*allowed_helicities.values()):
-            for sub_system in subsystem_ids:
+            for subsystem_id in subsystem_ids:
                 chain_model = self.formulate_subsystem_amplitude(
                     *args,
-                    sub_system,
+                    subsystem_id,
                     use_coefficients=use_coefficients,
                 )
                 amplitude_definitions.update(chain_model.amplitudes)
