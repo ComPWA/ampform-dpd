@@ -140,8 +140,8 @@ def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positio
     r"""Formulate the amplitude for one decay chain of a serialized model.
 
     This is the serialization counterpart of
-    `.DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude`: the couplings and
-    dynamics are read from the model definition instead of being generated, but the
+    :meth:`.DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude`: the couplings
+    and dynamics are read from the model definition instead of being generated, but the
     phase conventions, the Kronecker delta over the production helicities, and the sum
     over the resonance helicity :math:`\lambda_R` are the same. The two implementations
     have to be kept in sync.

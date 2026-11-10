@@ -21,8 +21,8 @@ if TYPE_CHECKING:
 class ChecksumResult:
     """Structured result of evaluating one serialized checksum.
 
-    A failed result has a diagnostic explaining the failure. Its ``value`` is ``None``
-    if evaluation did not complete, and its ``reference`` is ``None`` if the serialized
+    A failed result has a `diagnostic` explaining the failure. Its `value` is `None` if
+    evaluation did not complete, and its `reference` is `None` if the serialized
     reference could not be converted to a number.
     """
 
