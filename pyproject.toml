@@ -119,6 +119,7 @@ repo-name = "ampform-dpd"
 repo-title = "AmpForm-DPD"
 
 [tool.compwa.policy.github]
+dependabot-assignees = ["redeboer"]
 github-pages = true
 
 [tool.compwa.policy.python]
