@@ -33,12 +33,14 @@ typings/
 pyvenv*/
 
 # Settings
+.idea/
+**.code-workspace
+
+# Agent tooling
 .agents/
 .claude/
 .codex/
-.idea/
+.gemini/
 AGENTS.md
 CLAUDE.md
-**.code-workspace
-AGENTS.md
-CLAUDE.md
+GEMINI.md
