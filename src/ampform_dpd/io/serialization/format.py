@@ -215,8 +215,8 @@ def as_final_state_pair(
 ) -> tuple[FinalStateID, FinalStateID] | None:
     """Convert a node item to a pair of final-state IDs, or `None` if it is not one.
 
-    Serialized nodes are lists, so this also normalizes them to tuples. It returns `None`
-    for a final-state ID and for a node that contains sub-nodes.
+    Serialized nodes are lists, so this also normalizes them to tuples. It returns
+    `None` for a final-state ID and for a node that contains sub-nodes.
 
     >>> as_final_state_pair([2, 3])
     (2, 3)

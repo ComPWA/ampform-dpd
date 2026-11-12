@@ -130,7 +130,7 @@ class FlattéSWave(sp.Expr):
 
 @unevaluated
 class MultichannelBreitWigner(sp.Expr):
-    r"""Breit--Wigner with a running width summed over several decay channels.
+    r"""Breit–Wigner with a running width summed over several decay channels.
 
     Each channel is a `ChannelArguments` term :math:`\Gamma_i(s)`, giving the lineshape
 
@@ -145,8 +145,9 @@ class MultichannelBreitWigner(sp.Expr):
     `HadronicLineshapes.jl
     <https://mmikhasenko.github.io/HadronicLineshapes.jl/10-breitwigner/#Multichannel-Breit-Wigner-Function>`_.
 
-    .. seealso:: `ComPWA/ampform-dpd#198
-        <https://github.com/ComPWA/ampform-dpd/issues/198>`_,
+    .. seealso::
+
+        `ComPWA/ampform-dpd#198 <https://github.com/ComPWA/ampform-dpd/issues/198>`_,
         `RUB-EP1/amplitude-serialization#87
         <https://github.com/RUB-EP1/amplitude-serialization/pull/87>`_, and `#90
         <https://github.com/RUB-EP1/amplitude-serialization/pull/90>`_.

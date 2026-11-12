@@ -74,6 +74,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "StateID": ("obj", "ampform_dpd.decay.StateID"),
     "StateIDTemplate": ("obj", "ampform_dpd.decay.StateID"),
     "Topology": ("obj", "ampform_dpd.io.serialization.format.Topology"),
+    "type": "python:type",
     "Workspace": ("obj", "ampform_dpd.io.serialization.workspace.Workspace"),
     "typing_extensions.Required": ("obj", "typing.Required"),
 }
@@ -106,9 +107,10 @@ default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
     "**.virtual_documents",
+    "**AGENTS.md",
+    "**CLAUDE.md",
+    "**GEMINI.md",
     ".DS_Store",
-    "AGENTS.md",
-    "CLAUDE.md",
     "Thumbs.db",
     "_build",
 ]
@@ -206,11 +208,6 @@ intersphinx_mapping = {
     "sympy": ("https://docs.sympy.org/latest", None),
     "tensorwaves": (f"https://tensorwaves.readthedocs.io/{pin('tensorwaves')}", None),
 }
-linkcheck_anchors = False
-linkcheck_ignore = [
-    "https://doi.org/10.1103",
-    "https://journals.aps.org/prd",
-]
 mermaid_height = "auto"  # do not stretch diagrams to the default 500px
 mermaid_init_config = {
     "flowchart": {
@@ -221,7 +218,9 @@ mermaid_init_config = {
     "startOnLoad": False,
     "themeVariables": {"fontSize": "12px"},
 }
+myst_colon_fence_exact_match = True
 myst_enable_extensions = [
+    "alert",
     "amsmath",
     "colon_fence",
     "dollarmath",

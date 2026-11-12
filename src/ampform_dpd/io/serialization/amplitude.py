@@ -69,8 +69,8 @@ def formulate(  # ruff: ignore[too-many-locals]
     """Formulate the serialized chains with their supplied complex weights.
 
     Coupling symbols include the subsystem when a chain name occurs in multiple
-    subsystems. This preserves distinct serialized weights, including relative
-    signs, without imposing additional symmetry relations between the chains.
+    subsystems. This preserves distinct serialized weights, including relative signs,
+    without imposing additional symmetry relations between the chains.
     """
     states = get_states(model)
     helicity_symbols = sp.symbols("lambda(:4)", rational=True)
@@ -85,8 +85,8 @@ def formulate(  # ruff: ignore[too-many-locals]
     for helicity_values in product(*allowed_helicities.values()):
         for chain_idx in range(n_chains):
             amp_defs = formulate_chain_amplitude(
-                *helicity_values,  # ty: ignore[invalid-argument-type]
-                model,  # ty: ignore[too-many-positional-arguments]
+                *helicity_values,
+                model,
                 chain_idx,
                 to_latex,
                 additional_builders,
@@ -140,8 +140,8 @@ def formulate_chain_amplitude(  # ruff: ignore[too-many-locals, too-many-positio
     r"""Formulate the amplitude for one decay chain of a serialized model.
 
     This is the serialization counterpart of
-    `.DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude`: the couplings and
-    dynamics are read from the model definition instead of being generated, but the
+    :meth:`.DalitzPlotDecompositionBuilder.formulate_subsystem_amplitude`: the couplings
+    and dynamics are read from the model definition instead of being generated, but the
     phase conventions, the Kronecker delta over the production helicities, and the sum
     over the resonance helicity :math:`\lambda_R` are the same. The two implementations
     have to be kept in sync.

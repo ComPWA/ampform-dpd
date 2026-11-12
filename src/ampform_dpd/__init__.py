@@ -75,15 +75,13 @@ class DalitzPlotDecompositionBuilder:
     ) -> None:
         """Amplitude builder for the helicity formalism with Dalitz-plot decomposition.
 
-        Args:
-            decay: The `.ThreeBodyDecay` over which to formulate the amplitude model.
-            min_ls: Use helicity couplings instead of
-                :math:`LS`-couplings. If setting this boolean with a `tuple`, the first
-                element of the `tuple` defines whether to use helicity couplings on the
-                **production** `.IsobarNode` and the second configures the **decay**
-                `.IsobarNode`.
-            all_subsystems: Formulate the amplitude model for all allowed subsystems in
-                the decay, even if they do not exist in the `.ThreeBodyDecay` object.
+        :param decay: The `.ThreeBodyDecay` over which to formulate the amplitude model.
+        :param min_ls: Use helicity couplings instead of :math:`LS`-couplings. If
+            setting this boolean with a `tuple`, the first element of the `tuple`
+            defines whether to use helicity couplings on the **production**
+            `.IsobarNode` and the second configures the **decay** `.IsobarNode`.
+        :param all_subsystems: Formulate the amplitude model for all allowed subsystems
+            in the decay, even if they do not exist in the `.ThreeBodyDecay` object.
         """
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
@@ -112,8 +110,10 @@ class DalitzPlotDecompositionBuilder:
         Args:
             reference_subsystem: The subsystem to use as reference for the alignment of
                 helicities. If `None`, the subsystem with the most resonances is chosen.
+
             cleanup_summations: Whether to remove helicity indices in the summations if
                 their corresponding state is spinless.
+
             use_coefficients: Whether to use a single complex coefficient per decay
                 chain, instead of separate coefficients for each helicity coupling.
         """
@@ -136,10 +136,10 @@ class DalitzPlotDecompositionBuilder:
         else:
             subsystem_ids = sorted(_get_subsystem_ids(self.decay))
         for args in product(*allowed_helicities.values()):
-            for sub_system in subsystem_ids:
+            for subsystem_id in subsystem_ids:
                 chain_model = self.formulate_subsystem_amplitude(
-                    *args,  # ty: ignore[invalid-argument-type]
-                    sub_system,  # ty: ignore[too-many-positional-arguments]
+                    *args,
+                    subsystem_id,
                     use_coefficients=use_coefficients,
                 )
                 amplitude_definitions.update(chain_model.amplitudes)
@@ -397,12 +397,12 @@ def _get_coupling_base(
 def _order_decay_products(isobar: DecayNode, first_id: FinalStateID) -> DecayNode:
     """Write the children of a decay node in the DPD cyclic pair ordering.
 
-    The Clebsch--Gordan factors of an isobar node depend on which of its two children is
+    The Clebsch–Gordan factors of an isobar node depend on which of its two children is
     listed first, and so does the isobar Wigner-:math:`d` function. The latter is
     constructed from `.get_decay_product_ids`, which follows the cyclic pair ordering
     :math:`(23)1, (31)2, (12)3` of `the DPD paper
     <https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033>`_ (Eq. 7), so
-    the node has to be brought into that same ordering before its Clebsch--Gordan factors
+    the node has to be brought into that same ordering before its Clebsch–Gordan factors
     are formulated.
     """
     child1 = to_particle(isobar.child1)

@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ComPWA/qrules/0.10.x/src/qrules/particle-validation.json
 particles:
   - name: Lambda(2000)
     latex: \Lambda(2000)

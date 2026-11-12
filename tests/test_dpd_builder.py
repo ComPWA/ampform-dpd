@@ -188,8 +188,8 @@ def describe_DalitzPlotDecompositionBuilder():
         Which of the two children of an `.IsobarNode` is :attr:`~.IsobarNode.child1` is
         an implementation detail of whoever constructed the `.ThreeBodyDecay`, but the
         Clebsch-Gordan factors of the :math:`LS` basis and the isobar Wigner-:math:`d`
-        function both depend on the ordering of the decay products, so the two have to be
-        brought into the same ordering first.
+        function both depend on the ordering of the decay products, so the two have to
+        be brought into the same ordering first.
         """
         if jpsi2pksigma_reaction.formalism == "helicity":
             pytest.skip("Helicity formalism does not have LS couplings")
